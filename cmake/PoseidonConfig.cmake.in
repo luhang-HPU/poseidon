@@ -1,0 +1,155 @@
+# Exports target POSEIDON::poseidon
+#
+# Creates variables:
+#
+#   POSEIDON_FOUND : If either a static or a shared Microsoft POSEIDON was found
+#   POSEIDON_STATIC_FOUND : If a static Microsoft POSEIDON library was found
+#   POSEIDON_SHARED_FOUND : If a shared Microsoft POSEIDON library was found
+#   POSEIDON_C_FOUND : If a Microsoft POSEIDON C export library was found
+#   POSEIDON_VERSION : The full version number
+#   POSEIDON_VERSION_MAJOR : The major version number
+#   POSEIDON_VERSION_MINOR : The minor version number
+#   POSEIDON_VERSION_PATCH : The patch version number
+#   POSEIDON_DEBUG : Set to non-zero value if library is compiled with extra debugging code (very slow!)
+#   POSEIDON_BUILD_TYPE : The build type (e.g., "Release" or "Debug")
+#
+#   POSEIDON_USE_CXX17 : Set to non-zero value if library is compiled as C++17 instead of C++14
+#   POSEIDON_USE_STD_FOR_EACH_N : Set to non-zero value if library uses std::for_each_n for POSEIDON_ITERATE
+#   POSEIDON_USE_STD_BYTE : Set to non-zero value if library uses poseidon_byte = std::byte as byte type
+#   POSEIDON_USE_IF_CONSTEXPR : Set to non-zero value if library uses if constexpr instead of if
+#   POSEIDON_USE_MAYBE_UNUSED : Set to non-zero value if library uses maybe_unused
+#   POSEIDON_USE_NODISCARD : Set to non-zero value if library uses nodiscard
+#
+#   POSEIDON_THROW_ON_TRANSPARENT_CIPHERTEXT : Set to non-zero value if library is compiled with extra
+#       validation code (little impact on performance)
+#   POSEIDON_USE_GAUSSIAN_NOISE : Set to non-zero value if library is compiled to sample noise from a rounded Gaussian
+#       distribution (slower) instead of a centered binomial distribution (faster)
+#   POSEIDON_AVOID_BRANCHING : Set to non-zero value if library is compiled to eliminate branching in critical conditional move operations.
+#   POSEIDON_DEFAULT_PRNG : The default choice of PRNG (e.g., "Blake2xb" or "Shake256")
+#
+#   POSEIDON_USE_MSGSL : Set to non-zero value if library is compiled with Microsoft GSL support
+#   POSEIDON_USE_ZLIB : Set to non-zero value if library is compiled with ZLIB support
+#   POSEIDON_USE_ZSTD : Set to non-zero value if library is compiled with Zstandard support
+#   POSEIDON_USE_INTEL_HEXL: Set to non-zero value if library is compiled with Intel HEXL support
+#   POSEIDON_CARRY_DEPS : Set to non-zero value if library is configured with POSEIDON_BUILD_DEPS=ON and carries dependencies
+
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+
+macro(poseidon_find_dependency dep)
+    find_dependency(${dep})
+    if(NOT ${dep}_FOUND)
+        if(NOT POSEIDON_FIND_QUIETLY)
+            message(WARNING "Could not find dependency `${dep}` required by this configuration")
+        endif()
+        set(POSEIDON_FOUND FALSE)
+        return()
+    endif()
+endmacro()
+
+set(POSEIDON_FOUND FALSE)
+set(POSEIDON_STATIC_FOUND FALSE)
+set(POSEIDON_SHARED_FOUND FALSE)
+set(POSEIDON_C_FOUND FALSE)
+set(POSEIDON_VERSION @POSEIDON_VERSION@)
+set(POSEIDON_VERSION_MAJOR @POSEIDON_VERSION_MAJOR@)
+set(POSEIDON_VERSION_MINOR @POSEIDON_VERSION_MINOR@)
+set(POSEIDON_VERSION_PATCH @POSEIDON_VERSION_PATCH@)
+set(POSEIDON_DEBUG @POSEIDON_DEBUG@)
+set(POSEIDON_BUILD_TYPE @CMAKE_BUILD_TYPE@)
+
+set(POSEIDON_USE_CXX17 @POSEIDON_USE_CXX17@)
+set(POSEIDON_USE_STD_FOR_EACH_N @POSEIDON_USE_STD_FOR_EACH_N@)
+set(POSEIDON_USE_STD_BYTE @POSEIDON_USE_STD_BYTE@)
+set(POSEIDON_USE_IF_CONSTEXPR @POSEIDON_USE_IF_CONSTEXPR@)
+set(POSEIDON_USE_MAYBE_UNUSED @POSEIDON_USE_MAYBE_UNUSED@)
+set(POSEIDON_USE_NODISCARD @POSEIDON_USE_NODISCARD@)
+
+set(POSEIDON_THROW_ON_TRANSPARENT_CIPHERTEXT @POSEIDON_THROW_ON_TRANSPARENT_CIPHERTEXT@)
+set(POSEIDON_USE_GAUSSIAN_NOISE @POSEIDON_USE_GAUSSIAN_NOISE@)
+set(POSEIDON_AVOID_BRANCHING @POSEIDON_AVOID_BRANCHING@)
+set(POSEIDON_DEFAULT_PRNG @POSEIDON_DEFAULT_PRNG@)
+
+# set(POSEIDON_USE_MSGSL @POSEIDON_USE_MSGSL@)
+set(POSEIDON_USE_ZLIB @POSEIDON_USE_ZLIB@)
+set(POSEIDON_USE_ZSTD @POSEIDON_USE_ZSTD@)
+# set(POSEIDON_USE_INTEL_HEXL @POSEIDON_USE_INTEL_HEXL@)
+set(POSEIDON_CARRY_DEPS @POSEIDON_BUILD_DEPS@)
+
+# If POSEIDON does not carry dependencies, we must look for them
+if(NOT POSEIDON_CARRY_DEPS)
+#    if(POSEIDON_USE_MSGSL)
+#        poseidon_find_dependency(Microsoft.GSL)
+#    endif()
+    if(POSEIDON_USE_ZLIB)
+        poseidon_find_dependency(ZLIB)
+    endif()
+    if(POSEIDON_USE_ZSTD)
+        poseidon_find_dependency(zstd)
+        if(NOT TARGET zstd::libzstd_static)
+            if(TARGET libzstd)
+                get_target_property(libzstd_type libzstd TYPE)
+                if(libzstd_type STREQUAL "SHARED")
+                    set(zstd_static "libzstd")
+                else()
+                    message(FATAL_ERROR "ZSTD must be static")
+                endif()
+            endif()
+        endif()
+    endif()
+#    if(POSEIDON_USE_INTEL_HEXL)
+#        poseidon_find_dependency(HEXL)
+#    endif()
+endif()
+
+# Add the current directory to the module search path
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
+
+set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
+set(THREADS_PREFER_PTHREAD_FLAG TRUE)
+poseidon_find_dependency(Threads)
+
+include(${CMAKE_CURRENT_LIST_DIR}/POSEIDONTargets.cmake)
+
+if(TARGET POSEIDON::poseidon)
+    set(POSEIDON_FOUND TRUE)
+    set(POSEIDON_STATIC_FOUND TRUE)
+endif()
+
+if(TARGET POSEIDON::poseidon_shared)
+    set(POSEIDON_FOUND TRUE)
+    set(POSEIDON_SHARED_FOUND TRUE)
+endif()
+
+if(TARGET POSEIDON::poseidonc)
+    set(POSEIDON_FOUND TRUE)
+    set(POSEIDON_C_FOUND TRUE)
+endif()
+
+if(POSEIDON_FOUND)
+    if(NOT POSEIDON_FIND_QUIETLY)
+        message(STATUS "Microsoft POSEIDON -> Version ${POSEIDON_VERSION} detected")
+    endif()
+    if(POSEIDON_DEBUG AND NOT POSEIDON_FIND_QUIETLY)
+        message(STATUS "Performance warning: Microsoft POSEIDON compiled in debug mode")
+    endif()
+    set(POSEIDON_TARGETS_AVAILABLE "Microsoft POSEIDON -> Targets available:")
+
+    if(POSEIDON_STATIC_FOUND)
+        string(APPEND POSEIDON_TARGETS_AVAILABLE " POSEIDON::poseidon")
+    endif()
+    if(POSEIDON_SHARED_FOUND)
+        string(APPEND POSEIDON_TARGETS_AVAILABLE " POSEIDON::poseidon_shared")
+    endif()
+    if(POSEIDON_C_FOUND)
+        string(APPEND POSEIDON_TARGETS_AVAILABLE " POSEIDON::poseidonc")
+    endif()
+    if(NOT POSEIDON_FIND_QUIETLY)
+        message(STATUS ${POSEIDON_TARGETS_AVAILABLE})
+    endif()
+else()
+    if(NOT POSEIDON_FIND_QUIETLY)
+        message(STATUS "Microsoft POSEIDON -> NOT FOUND")
+    endif()
+endif()
