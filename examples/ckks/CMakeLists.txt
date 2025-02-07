@@ -1,0 +1,28 @@
+cmake_minimum_required(VERSION 3.12)
+
+add_executable(test_ckks_basic test_ckks_basic.cpp)
+target_link_libraries(test_ckks_basic poseidon_shared)
+
+add_executable(test_ckks_bootstrap test_ckks_bootstrap.cpp)
+target_link_libraries(test_ckks_bootstrap poseidon_shared)
+
+add_executable(test_ckks_evaluate_poly_vector test_ckks_evaluate_poly_vector.cpp)
+target_link_libraries(test_ckks_evaluate_poly_vector poseidon_shared)
+
+add_executable(test_ckks_heartstudy test_ckks_heartstudy.cpp)
+target_link_libraries(test_ckks_heartstudy poseidon_shared)
+
+add_executable(test_ckks_pir_demo test_ckks_pir_demo.cpp)
+target_link_libraries(test_ckks_pir_demo poseidon_shared)
+
+add_executable(test_ckks_pir_demo_multi_thread test_ckks_pir_demo_multi_thread.cpp)
+target_link_libraries(test_ckks_pir_demo_multi_thread poseidon_shared)
+
+add_executable(test_ckks_slot_to_coeff test_ckks_slot_to_coeff.cpp)
+target_link_libraries(test_ckks_slot_to_coeff poseidon_shared)
+
+add_executable(test_ckks_dpdk test_ckks_dpdk.cpp)
+target_link_libraries(test_ckks_dpdk poseidon_shared)
+
+add_executable(test_ckks_lrtrain test_ckks_lrtrain.cpp)
+target_link_libraries(test_ckks_lrtrain poseidon_shared)
