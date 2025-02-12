@@ -53,7 +53,7 @@ public:
                               parms_id_type parms_id) const override;
     virtual void rescale(Ciphertext &ciph) const;
     void add_inplace(Ciphertext &ciph1, const Ciphertext &ciph2) const;
-    void apply_galois(const Ciphertext &ciph, Ciphertext &destination, std::uint32_t galois_elt,
+    virtual void apply_galois(const Ciphertext &ciph, Ciphertext &destination, std::uint32_t galois_elt,
                       const GaloisKeys &galois_keys,
                       MemoryPoolHandle pool = MemoryManager::GetPool()) const;
 

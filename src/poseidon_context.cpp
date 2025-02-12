@@ -42,17 +42,10 @@ PoseidonContext::PoseidonContext(const ParametersLiteral &param_literal, bool us
     if (using_hardware)
     {
 #ifdef USING_HARDWARE
-        if (key_switch_variant_ == GHS && scheme_type != CKKS)
+        dpdk_init();
+        if (key_switch_variant_ != BV)
         {
-            POSEIDON_THROW(invalid_argument_error, "hardware don't support BV variant");
-        }
-        else if (key_switch_variant_ == GHS && scheme_type != CKKS)
-        {
-            POSEIDON_THROW(invalid_argument_error, "hardware don't support GHS variant");
-        }
-        else if (key_switch_variant_ == HYBRID)
-        {
-            POSEIDON_THROW(invalid_argument_error, "hardware don't support HYBRID variant");
+            POSEIDON_THROW(invalid_argument_error, "hardware only support BV variant");
         }
 
         hardware_context_ = make_shared<poseidon::HardwareContext>(crt_context_);
