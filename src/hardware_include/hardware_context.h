@@ -15,9 +15,12 @@ public:
     POSEIDON_NODISCARD inline const uint64_t *barrett_k() const { return barrett_k_; };
     POSEIDON_NODISCARD inline const uint64_t *mods() const { return mods_; };
     POSEIDON_NODISCARD inline const uint64_t *qk_inv() const { return qk_inv_; };
+    POSEIDON_NODISCARD inline const uint64_t *qk_inv_qp() const { return qk_inv_qp_; };
     POSEIDON_NODISCARD inline const uint64_t *inv_dm() const { return inv_dm_; };
     POSEIDON_NODISCARD inline const uint64_t *rou() const { return rou_; };
     POSEIDON_NODISCARD inline const uint64_t *inv_rou() const { return inv_rou_; };
+    POSEIDON_NODISCARD inline const uint64_t *barrett_c_plain() const { return barrett_c_plain_; };
+    POSEIDON_NODISCARD inline const uint64_t *barrett_k_plain() const { return barrett_k_plain_; };
     POSEIDON_NODISCARD inline const std::vector<uint32_t> &primes() const { return primes_; };
     POSEIDON_NODISCARD inline const std::vector<uint64_t> &barrett_reduction_c() const
     {
@@ -110,10 +113,13 @@ private:
     uint64_t *barrett_c_{};
     uint64_t *barrett_k_{};
     uint64_t *qk_inv_{};
+    uint64_t *qk_inv_qp_{};
     // inv_degree_modulus
     uint64_t *inv_dm_{};
     uint64_t *rou_{};
     uint64_t *inv_rou_{};
+    uint64_t *barrett_c_plain_{};
+    uint64_t *barrett_k_plain_{};
     // ntt
     std::vector<vector<uint32_t>> rou_src_total_{};
     std::vector<vector<uint32_t>> rou_inv_src_total_{};

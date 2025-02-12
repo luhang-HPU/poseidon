@@ -187,7 +187,7 @@ void KeyGenerator::create_relin_keys(RelinKeys &destination)
         auto literal = context_.parameters_literal();
         auto degree = literal->degree();
         auto rns_max = literal->q().size() + literal->p().size();
-        CKKSHardwareApi::ckks_relin_key_config(destination, rns_max, degree);
+        HardwareApi::relin_key_config(destination, rns_max, degree);
     }
 #endif
 }
@@ -203,8 +203,8 @@ void KeyGenerator::create_galois_keys(GaloisKeys &destination)
         auto degree = literal->degree();
         auto rns_max = literal->q().size() + literal->p().size();
         auto galois_tool = context_.crt_context()->galois_tool();
-        CKKSHardwareApi::ckks_galois_key_config(destination, galois_tool, rns_max, degree);
-        CKKSHardwareApi::permutation_tables_config(destination, galois_tool, rns_max, degree);
+        HardwareApi::galois_key_config(destination, galois_tool, rns_max, degree);
+        HardwareApi::permutation_tables_config(destination, galois_tool, rns_max, degree);
     }
 #endif
 }
