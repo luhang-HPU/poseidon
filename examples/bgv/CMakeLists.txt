@@ -8,3 +8,8 @@ target_link_libraries(test_bgv_multiply_rescale poseidon_shared)
 #test bgv test_bgv_basic
 add_executable(test_bgv_basic test_bgv_basic.cpp)
 target_link_libraries(test_bgv_basic poseidon_shared)
+
+
+#test bgv test_bgv_basic
+add_executable(test_bgv_apply_galois test_bgv_apply_galois.cpp)
+target_link_libraries(test_bgv_apply_galois poseidon_shared)

@@ -111,6 +111,62 @@ public:
         return create_relin_keys(1, true);
     }
 
+    POSEIDON_NODISCARD KSwitchKeys create_switch_key(const SecretKey &prev_secret_key,
+                                                        const SecretKey &new_secret_key) const;
+
+    POSEIDON_NODISCARD inline KSwitchKeys create_switch_key(const SecretKey &prev_key,
+                                                            const PublicKey &new_key) const
+    {
+        return kswitch_gen_->create_switch_key(prev_key, new_key);
+    }
+
+    /**
+    Generates Galois keys and stores the result in destination. Every time
+    this function is called, new Galois keys will be generated.
+
+    This function creates logarithmically many (in degree of the polynomial
+    modulus) Galois keys that is sufficient to apply any Galois automorphism
+    (e.g., rotations) on encrypted data. Most users will want to use this
+    overload of the function.
+
+    Precisely it generates 2*log(n)-1 number of Galois keys where n is the
+    degree of the polynomial modulus. When used with batching, these keys
+    support direct left and right rotations of power-of-2 steps of rows in BFV
+    or vectors in ckks and rotation of columns in BFV or conjugation in ckks.
+
+    @param[out] destination The Galois keys to overwrite with the generated
+    Galois keys
+    @throws std::logic_error if the encryption parameters do not support
+    keyswitching
+    */
+    void create_galois_keys(GaloisKeys &destination);
+
+    /**
+    Generates Galois keys and stores the result in destination. Every time
+    this function is called, new Galois keys will be generated.
+
+    The user needs to give as input a vector of desired Galois rotation step
+    counts, where negative step counts correspond to rotations to the right
+    and positive step counts correspond to rotations to the left. A step
+    count of zero can be used to indicate a column rotation in the BFV scheme
+    and complex conjugation in the ckks scheme.
+
+    @param[in] steps The rotation step counts for which to generate keys
+    @param[out] destination The Galois keys to overwrite with the generated
+    Galois keys
+    @throws std::logic_error if the encryption parameters do not support
+    batching and scheme is scheme_type::BFV
+    @throws std::logic_error if the encryption parameters do not support
+    keyswitching
+    @throws std::invalid_argument if the step counts are not valid
+    */
+    // todo: Only software is allowed to use this function
+    inline void create_galois_keys(const std::vector<int> &steps, GaloisKeys &destination)
+    {
+        destination = create_galois_keys(steps, false);
+    }
+
+private:
     /**
     Generates Galois keys and stores the result in destination. Every time
     this function is called, new Galois keys will be generated.
@@ -137,7 +193,7 @@ public:
     @throws std::invalid_argument if the Galois elements are not valid
     */
     inline void create_galois_keys(const std::vector<std::uint32_t> &galois_elts,
-                                   GaloisKeys &destination)
+                                    GaloisKeys &destination)
     {
         destination = create_galois_keys(galois_elts, false);
     }
@@ -177,39 +233,6 @@ public:
     }
 
     /**
-    Generates Galois keys and stores the result in destination. Every time
-    this function is called, new Galois keys will be generated.
-
-    The user needs to give as input a vector of desired Galois rotation step
-    counts, where negative step counts correspond to rotations to the right
-    and positive step counts correspond to rotations to the left. A step
-    count of zero can be used to indicate a column rotation in the BFV scheme
-    and complex conjugation in the ckks scheme.
-
-    @param[in] steps The rotation step counts for which to generate keys
-    @param[out] destination The Galois keys to overwrite with the generated
-    Galois keys
-    @throws std::logic_error if the encryption parameters do not support
-    batching and scheme is scheme_type::BFV
-    @throws std::logic_error if the encryption parameters do not support
-    keyswitching
-    @throws std::invalid_argument if the step counts are not valid
-    */
-    inline void create_galois_keys(const std::vector<int> &steps, GaloisKeys &destination)
-    {
-        destination = create_galois_keys(steps, false);
-    }
-
-    POSEIDON_NODISCARD KSwitchKeys create_switch_key(const SecretKey &prev_secret_key,
-                                                     const SecretKey &new_secret_key) const;
-
-    POSEIDON_NODISCARD inline KSwitchKeys create_switch_key(const SecretKey &prev_key,
-                                                            const PublicKey &new_key) const
-    {
-        return kswitch_gen_->create_switch_key(prev_key, new_key);
-    }
-
-    /**
     Generates and returns Galois keys as a serializable object. Every time
     this function is called, new Galois keys will be generated.
 
@@ -239,27 +262,6 @@ public:
     }
 
     /**
-    Generates Galois keys and stores the result in destination. Every time
-    this function is called, new Galois keys will be generated.
-
-    This function creates logarithmically many (in degree of the polynomial
-    modulus) Galois keys that is sufficient to apply any Galois automorphism
-    (e.g., rotations) on encrypted data. Most users will want to use this
-    overload of the function.
-
-    Precisely it generates 2*log(n)-1 number of Galois keys where n is the
-    degree of the polynomial modulus. When used with batching, these keys
-    support direct left and right rotations of power-of-2 steps of rows in BFV
-    or vectors in ckks and rotation of columns in BFV or conjugation in ckks.
-
-    @param[out] destination The Galois keys to overwrite with the generated
-    Galois keys
-    @throws std::logic_error if the encryption parameters do not support
-    keyswitching
-    */
-    void create_galois_keys(GaloisKeys &destination);
-
-    /**
     Generates and returns Galois keys as a serializable object. Every time
     this function is called, new Galois keys will be generated.
 
@@ -285,6 +287,29 @@ public:
     {
         return create_galois_keys(context_.crt_context()->galois_tool()->get_elts_all());
     }
+
+    /**
+    Generates and returns Galois keys. This function creates specific Galois
+    keys that can be used to apply specific Galois automorphisms on encrypted
+    data. The user needs to give as input a vector of Galois elements
+    corresponding to the keys that are to be created.
+
+    The Galois elements are odd integers in the interval [1, M-1], where
+    M = 2*N, and N = poly_modulus_degree. Used with batching, a Galois element
+    3^i % M corresponds to a cyclic row rotation i steps to the left, and
+    a Galois element 3^(N/2-i) % M corresponds to a cyclic row rotation i
+    steps to the right. The Galois element M-1 corresponds to a column rotation
+    (row swap) in BFV, and complex conjugation in ckks. In the polynomial view
+    (not batching), a Galois automorphism by a Galois element p changes
+    Enc(plain(x)) to Enc(plain(x^p)).
+
+    @param[in] galois_elts The Galois elements for which to generate keys
+    @param[in] save_seed If true, replace second poly in Ciphertext with seed
+    @throws std::invalid_argument if the Galois elements are not valid
+    */
+    GaloisKeys create_galois_keys(const std::vector<std::uint32_t> &galois_elts,
+                                    bool save_seed) const;
+    GaloisKeys create_galois_keys(const std::vector<int> &step, bool save_seed) const;
 
 private:
     KeyGenerator(const KeyGenerator &copy) = delete;
@@ -321,29 +346,6 @@ private:
     */
     RelinKeys create_relin_keys(std::size_t count, bool save_seed) const;
 
-    /**
-    Generates and returns Galois keys. This function creates specific Galois
-    keys that can be used to apply specific Galois automorphisms on encrypted
-    data. The user needs to give as input a vector of Galois elements
-    corresponding to the keys that are to be created.
-
-    The Galois elements are odd integers in the interval [1, M-1], where
-    M = 2*N, and N = poly_modulus_degree. Used with batching, a Galois element
-    3^i % M corresponds to a cyclic row rotation i steps to the left, and
-    a Galois element 3^(N/2-i) % M corresponds to a cyclic row rotation i
-    steps to the right. The Galois element M-1 corresponds to a column rotation
-    (row swap) in BFV, and complex conjugation in ckks. In the polynomial view
-    (not batching), a Galois automorphism by a Galois element p changes
-    Enc(plain(x)) to Enc(plain(x^p)).
-
-    @param[in] galois_elts The Galois elements for which to generate keys
-    @param[in] save_seed If true, replace second poly in Ciphertext with seed
-    @throws std::invalid_argument if the Galois elements are not valid
-    */
-    GaloisKeys create_galois_keys(const std::vector<std::uint32_t> &galois_elts,
-                                  bool save_seed) const;
-    GaloisKeys create_galois_keys(const std::vector<int> &step, bool save_seed) const;
-
     std::shared_ptr<KSwitchGenBase> kswitch_gen_{nullptr};
     // We use a fresh memory pool with `clear_on_destruction' enabled.
     MemoryPoolHandle pool_ = MemoryManager::GetPool(mm_prof_opt::mm_force_new, true);
@@ -362,4 +364,5 @@ private:
 
     bool using_keyswitch_ = true;
 };
-}  // namespace poseidon
+
+} // namespace poseidon
