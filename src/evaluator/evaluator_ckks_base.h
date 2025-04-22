@@ -86,8 +86,7 @@ public:
     void eval_mod(const Ciphertext &ciph, Ciphertext &result, const EvalModPoly &eva_poly,
                   const RelinKeys &relin_keys, const CKKSEncoder &encoder);
 
-    void bootstrap(const Ciphertext &ciph, Ciphertext &result, const EvalModPoly &eva_poly,
-                   const LinearMatrixGroup &matrix_group0, const LinearMatrixGroup &matrix_group1,
+    void bootstrap(const Ciphertext &ciph, Ciphertext &result,
                    const RelinKeys &relin_keys, const GaloisKeys &galois_keys,
                    const CKKSEncoder &encoder);
 
