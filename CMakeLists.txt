@@ -87,7 +87,7 @@ set(POSEIDON_INCLUDES_INSTALL_DIR ${CMAKE_INSTALL_INCLUDEDIR})
 #########################
 
 # 目前只添加了zstd和zlib两个压缩库
-# [option] POSEIDON_BUILD_DEPS (default: OFF)
+# [option] POSEIDON_BUILD_DEPS (default: ON)
 # Download and build missing dependencies, throw error if disabled.
 set(POSEIDON_BUILD_DEPS_OPTION_STR "Automatically download and build unmet dependencies")
 option(POSEIDON_BUILD_DEPS ${POSEIDON_BUILD_DEPS_OPTION_STR} ON)
@@ -101,9 +101,9 @@ if(POSEIDON_BUILD_DEPS)
     mark_as_advanced(FETCHCONTENT_QUIET)
 endif()
 
-# [option] POSEIDON_USE_ZLIB (default: OFF)
+# [option] POSEIDON_USE_ZLIB (default: ON)
 set(POSEIDON_USE_ZLIB_OPTION_STR "Use ZLIB for compressed serialization")
-option(POSEIDON_USE_ZLIB ${POSEIDON_USE_ZLIB_OPTION_STR} OFF)
+option(POSEIDON_USE_ZLIB ${POSEIDON_USE_ZLIB_OPTION_STR} ON)
 message(STATUS "POSEIDON_USE_ZLIB: ${POSEIDON_USE_ZLIB}")
 
 if(POSEIDON_USE_ZLIB)
@@ -122,9 +122,9 @@ if(POSEIDON_USE_ZLIB)
     endif()
 endif()
 
-# [option] POSEIDON_USE_ZSTD (default: OFF)
+# [option] POSEIDON_USE_ZSTD (default: ON)
 set(POSEIDON_USE_ZSTD_OPTION_STR "Use Zstandard for compressed serialization")
-option(POSEIDON_USE_ZSTD ${POSEIDON_USE_ZSTD_OPTION_STR} OFF)
+option(POSEIDON_USE_ZSTD ${POSEIDON_USE_ZSTD_OPTION_STR} ON)
 message(STATUS "POSEIDON_USE_ZSTD: ${POSEIDON_USE_ZSTD}")
 
 if(POSEIDON_USE_ZSTD)
@@ -185,8 +185,8 @@ if(POSEIDON_USE_MSGSL)
 endif()
 
 
-# [option] POSEIDON_BUILD_EXAMPLES (default: OFF)
-option(POSEIDON_BUILD_EXAMPLES "Build examples for POSEIDON" OFF)
+# [option] POSEIDON_BUILD_EXAMPLES (default: ON)
+option(POSEIDON_BUILD_EXAMPLES "Build examples for POSEIDON" ON)
 message(STATUS "POSEIDON_BUILD_EXAMPLES: ${POSEIDON_BUILD_EXAMPLES}")
 if(POSEIDON_BUILD_EXAMPLES)
     add_subdirectory(examples/bfv)
