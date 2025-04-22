@@ -93,6 +93,16 @@ CrtContext::CrtContext(const std::shared_ptr<const ParametersLiteral> &params,
 
     // Create GaloisTool
     galois_tool_ = allocate<GaloisTool>(pool_, logn, pool_);
+
+    // Set the chain_index for each context_data
+    size_t parms_count = context_data_map_.size();
+    auto context_data_ptr = context_data_map_.at(key_parms_id_);
+    while (context_data_ptr)
+    {
+        // We need to remove constness first to modify this
+        const_pointer_cast<ContextData>(context_data_ptr)->chain_index_ = --parms_count;
+        context_data_ptr = context_data_ptr->next_context_data_;
+    }
 }
 
 CrtContext::ContextData CrtContext::validate(const ParametersLiteral &params,

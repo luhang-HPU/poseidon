@@ -5,6 +5,9 @@ namespace poseidon
 {
 namespace util
 {
+bool LocalTimer::is_timing_ = false;
+std::mutex LocalTimer::mtx_;
+std::map<std::string, uint64_t> LocalTimer::function2time_;
 
 int mod_inv(std::vector<uint32_t> modulus_q, std::vector<uint32_t> &mod_inv_result)
 {

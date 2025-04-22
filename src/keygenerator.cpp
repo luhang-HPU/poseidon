@@ -11,7 +11,6 @@
 #include "key/keyswitch.h"
 #include "src/factory/poseidon_factory.h"
 #include <algorithm>
-
 #ifdef USING_HARDWARE
 #include "poseidon_hardware/hardware_drive/ckks_hardware_api.h"
 #endif
@@ -106,7 +105,6 @@ void KeyGenerator::generate_sk(bool is_initialized)
 
         // Set the parms_id for secret key
         secret_key_.parms_id() = param_id;
-        secret_key_.data().is_ntt_form() = true;
     }
 
     // Set the secret_key_array to have size 1 (first power of secret)
@@ -174,22 +172,13 @@ RelinKeys KeyGenerator::create_relin_keys(std::size_t count, bool save_seed) con
     {
         POSEIDON_THROW(invalid_argument_error, "don't support switch key");
     }
-    return kswitch_gen_->create_relin_keys(count, secret_key_);
+    auto destination = kswitch_gen_->create_relin_keys(count, secret_key_);
+    return destination;
 }
 
 void KeyGenerator::create_relin_keys(RelinKeys &destination)
 {
     destination = create_relin_keys(1, false);
-
-#ifdef USING_HARDWARE
-    if (PoseidonFactory::get_instance()->get_device_type() == DEVICE_TYPE::DEVICE_HARDWARE)
-    {
-        auto literal = context_.parameters_literal();
-        auto degree = literal->degree();
-        auto rns_max = literal->q().size() + literal->p().size();
-        HardwareApi::relin_key_config(destination, rns_max, degree);
-    }
-#endif
 }
 
 void KeyGenerator::create_galois_keys(GaloisKeys &destination)

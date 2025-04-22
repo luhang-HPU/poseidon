@@ -195,13 +195,13 @@ Plaintext &Plaintext::operator=(const string &hex_poly)
 
 void Plaintext::resize(const PoseidonContext &context, parms_id_type parms_id, size_t size)
 {
-    params_id_ = parms_id;
+    parms_id_ = parms_id;
     if (!this->crt_context_)
     {
         this->crt_context_ = context.crt_context();
     }
     resize(size);
-    polys_ = RNSPoly(context, data(), params_id_);
+    polys_ = RNSPoly(context, data(), parms_id_);
 }
 
 void Plaintext::save_members(ostream &stream) const
@@ -212,7 +212,7 @@ void Plaintext::save_members(ostream &stream) const
         // Throw exceptions on std::ios_base::badbit and std::ios_base::failbit
         stream.exceptions(ios_base::badbit | ios_base::failbit);
 
-        stream.write(reinterpret_cast<const char *>(&params_id_), sizeof(parms_id_type));
+        stream.write(reinterpret_cast<const char *>(&parms_id_), sizeof(parms_id_type));
         uint64_t coeff_count64 = static_cast<uint64_t>(coeff_count_);
         stream.write(reinterpret_cast<const char *>(&coeff_count64), sizeof(uint64_t));
         stream.write(reinterpret_cast<const char *>(&scale_), sizeof(double));
@@ -252,7 +252,7 @@ void Plaintext::load_members(const PoseidonContext &context, istream &stream,
         stream.read(reinterpret_cast<char *>(&scale), sizeof(double));
 
         // Set the metadata
-        new_data.params_id_ = parms_id;
+        new_data.parms_id_ = parms_id;
         new_data.coeff_count_ = safe_cast<size_t>(coeff_count64);
         new_data.scale_ = scale;
 

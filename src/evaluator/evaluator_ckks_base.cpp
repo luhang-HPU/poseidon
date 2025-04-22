@@ -1100,14 +1100,9 @@ void EvaluatorCkksBase::add(const poseidon::Ciphertext &ciph1, const poseidon::C
         add_inplace(result, ciph1);
     }
 }
-void EvaluatorCkksBase::multiply_plain(const Ciphertext &ciph, const Plaintext &plain,
-                                       Ciphertext &result) const
-{
-    result = ciph;
-    multiply_plain_inplace(result, plain);
-}
 
-void EvaluatorCkksBase::multiply_plain_inplace(Ciphertext &ciph, const Plaintext &plain) const
+void EvaluatorCkksBase::multiply_plain_inplace(Ciphertext &ciph, const Plaintext &plain,
+                                               MemoryPoolHandle pool) const
 {
     if (!ciph.is_valid())
     {
@@ -1304,7 +1299,11 @@ void EvaluatorCkksBase::multiply(const Ciphertext &ciph1, const Ciphertext &ciph
     }
 }
 
-void EvaluatorCkksBase::square_inplace(Ciphertext &ciph) const { multiply_inplace(ciph, ciph); }
+void EvaluatorCkksBase::square_inplace(Ciphertext &ciph,
+                                       MemoryPoolHandle pool) const
+{
+    multiply_inplace(ciph, ciph);
+}
 
 void EvaluatorCkksBase::multiply_inplace(Ciphertext &ciph1, const Ciphertext &ciph2,
                                          MemoryPoolHandle pool) const

@@ -55,6 +55,7 @@ int main()
     Timestacs timestacs;
     auto message_want = message1;
 
+
     // ROTATE_ROW
     {
         print_example_banner("Example: ROTATE_ROW / ROTATE_ROW in bgv");

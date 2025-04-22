@@ -29,15 +29,14 @@ public:
 
     virtual void add_plain(const Ciphertext &ciph, const Plaintext &plain,
                            Ciphertext &result) const override;
-    virtual void multiply_plain(const Ciphertext &ciph, const Plaintext &plain,
-                                Ciphertext &result) const override;
     virtual void add(const Ciphertext &ciph1, const Ciphertext &ciph2,
                      Ciphertext &result) const override;
     virtual void sub(const Ciphertext &ciph1, const Ciphertext &ciph2,
                      Ciphertext &result) const override;
     virtual void multiply(const Ciphertext &ciph1, const Ciphertext &ciph2,
                           Ciphertext &result) const override;
-    virtual void square_inplace(Ciphertext &ciph) const override;
+    virtual void square_inplace(Ciphertext &ciph,
+                                MemoryPoolHandle pool = MemoryManager::GetPool()) const override;
 
     virtual void relinearize(const Ciphertext &ciph1, Ciphertext &result,
                              const RelinKeys &relin_keys) const override;
@@ -53,6 +52,9 @@ public:
                             const GaloisKeys &galois_keys) const override;
     virtual void drop_modulus(const Ciphertext &ciph, Ciphertext &result,
                               parms_id_type parms_id) const override;
+    virtual void
+    multiply_plain_inplace(Ciphertext &ciph, const Plaintext &plain,
+                           MemoryPoolHandle pool = MemoryManager::GetPool()) const override;
     virtual void multiply_by_diag_matrix_bsgs(const Ciphertext &ciph, const MatrixPlain &plain_mat,
                                               Ciphertext &result,
                                               const GaloisKeys &rot_key) const override;
@@ -63,7 +65,6 @@ public:
                                                          std::vector<int> &ref2,
                                                          std::vector<int> &ref3) const override;
 
-public:
     void drop_modulus(const Ciphertext &ciph, Ciphertext &result, uint32_t level) const;
     void drop_modulus_to_next(const Ciphertext &ciph, Ciphertext &result) const;
 
@@ -158,7 +159,6 @@ private:
     void ckks_multiply(Ciphertext &ciph1, const Ciphertext &ciph2, MemoryPoolHandle pool) const;
     void multiply_inplace(Ciphertext &ciph1, const Ciphertext &ciph2,
                           MemoryPoolHandle pool = MemoryManager::GetPool()) const;
-    void multiply_plain_inplace(Ciphertext &ciph, const Plaintext &plain) const;
 
     std::shared_ptr<KSwitchBase> kswitch_{nullptr};
 
