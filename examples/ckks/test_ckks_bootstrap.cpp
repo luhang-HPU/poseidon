@@ -15,12 +15,10 @@ int main()
     std::cout << "POSEIDON SOFTWARE VERSION:" << POSEIDON_VERSION << std::endl;
     std::cout << "" << std::endl;
 
-    uint32_t q0_bit = 63;
-    auto q_def = 45;
-    ParametersLiteral ckks_param_literal{CKKS, 12, 11, 40, 1, 1, 0, {}, {}};
-    vector<uint32_t> log_q_tmp{31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31,
-                               31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31};
-    vector<uint32_t> log_p_tmp{31};
+    ParametersLiteral ckks_param_literal{CKKS, 15, 15 - 1, 32, 1, 1, 0, {}, {}};
+    vector<uint32_t> log_q_tmp{32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32,
+                               32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32};
+    vector<uint32_t> log_p_tmp{32};
 
     ckks_param_literal.set_log_modulus(log_q_tmp, log_p_tmp);
 
@@ -28,8 +26,6 @@ int main()
     auto context = PoseidonFactory::get_instance()->create_poseidon_context(ckks_param_literal);
     auto ckks_eva = PoseidonFactory::get_instance()->create_ckks_evaluator(context);
 
-    auto q0 = context.crt_context()->q0();
-    // init random data
     std::vector<std::complex<double>> vec_result;
     int mat_size = 1 << ckks_param_literal.log_slots();
 
@@ -49,56 +45,26 @@ int main()
     GaloisKeys rot_keys;
     CKKSEncoder ckks_encoder(context);
 
-    // EvalMod
-    auto level_start = ckks_param_literal.q().size() - 1;
-
-    EvalModPoly eval_mod_poly(context, CosDiscrete, (uint64_t)1 << (q0_bit - 25), level_start - 6,
-                              8, 3, 16, 0, 30);
-
-    auto sc_fac = eval_mod_poly.sc_fac();
-    double k = eval_mod_poly.k();
-    auto q_diff = eval_mod_poly.q_diff();
-    // If the scale used during the EvalMod step is smaller than Q0, then we cannot increase the
-    // scale during the EvalMod step to get message free division by message_ratio, and we need to
-    // do this division (totally or partly) during the CoeffstoSlots step
-
-    auto coeffs_to_slots_scaling = 1.0;
-    coeffs_to_slots_scaling *= eval_mod_poly.q_div() / (k * sc_fac * q_diff);
-
-    auto slots_to_coeffs_scaling = ckks_param_literal.scale();
-    slots_to_coeffs_scaling = slots_to_coeffs_scaling / ((double)eval_mod_poly.scaling_factor() /
-                                                         (double)eval_mod_poly.message_ratio());
-
-    HomomorphicDFTMatrixLiteral d(0, ckks_param_literal.log_n(), ckks_param_literal.log_slots(),
-                                  level_start, vector<uint32_t>(3, 1), true,
-                                  coeffs_to_slots_scaling, false, 1);
-    HomomorphicDFTMatrixLiteral x(1, ckks_param_literal.log_n(), ckks_param_literal.log_slots(), 7,
-                                  vector<uint32_t>(3, 1), true, slots_to_coeffs_scaling, false, 1);
-    LinearMatrixGroup mat_group;
-    LinearMatrixGroup mat_group_dec;
-    d.create(mat_group, ckks_encoder, 2);
-    x.create(mat_group_dec, ckks_encoder, 1);
     // keys
     KeyGenerator kgen(context);
     kgen.create_public_key(public_key);
     kgen.create_relin_keys(relin_keys);
-    kgen.create_galois_keys(mat_group.rot_index(), rot_keys);
+    kgen.create_galois_keys(std::vector<int>{0, 1, 2, 3, 4, 5, 6, 7, 8, 16, 32, 48, 64, 80, 96, 112, 128, 256, 384, 512, 1024, 1536, 2048, 2560, 3072, 3584, 4096, 8192, 12288, 15872, 16000, 16128, 16256, 16368, 16376}, rot_keys);
+    //rotation step {0, 1, 2, 3, 4, 5, 6, 7, 8, 16, 32, 48, 64, 80, 96, 112, 128, 256, 384, 512, 1024, 1536, 2048, 2560, 3072, 3584, 4096, 8192, 12288, 15872, 16000, 16128, 16256, 16368, 16376}
     Encryptor enc(context, public_key, kgen.secret_key());
     Decryptor dec(context, kgen.secret_key());
 
     // encode && encrypt
-    ckks_encoder.encode(message1, (int64_t)1 << q_def, plain);
+    ckks_encoder.encode(message1, (int64_t)1 << 40, plain);
     enc.encrypt(plain, cipher);
 
     // evaluate
-    // scale the message1 to delta = q / message_ratio
     auto start = chrono::high_resolution_clock::now();
     std::cout << "bootstraping start..." << std::endl;
     ckks_eva->multiply_relin(cipher, cipher, cipher, relin_keys);
-    ckks_eva->rescale_dynamic(cipher, cipher, (int64_t)1 << q_def);
+    ckks_eva->rescale_dynamic(cipher, cipher, (int64_t)1 << 45);
 
-    ckks_eva->bootstrap(cipher, cipher, eval_mod_poly, mat_group, mat_group_dec, relin_keys,
-                        rot_keys, ckks_encoder);
+    ckks_eva->bootstrap(cipher, cipher, relin_keys,rot_keys, ckks_encoder);
     auto stop = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
     std::cout << "EXP TIME: " << duration.count() << " microseconds" << std::endl;

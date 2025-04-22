@@ -15,7 +15,7 @@ int main()
     std::cout << "" << std::endl;
 
     ParametersLiteral ckks_param_literal{CKKS, 14, 14 - 1, 20, 5, 0, 0, {}, {}};
-    vector<uint32_t> log_q_tmp{20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 30};
+    vector<uint32_t> log_q_tmp{30, 30, 30, 30, 30, 30, 30};
     vector<uint32_t> log_p_tmp{30};
     ckks_param_literal.set_log_modulus(log_q_tmp, log_p_tmp);
 

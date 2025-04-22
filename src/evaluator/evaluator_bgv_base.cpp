@@ -27,7 +27,68 @@ void EvaluatorBgvBase::rotate(const Ciphertext &ciph, Ciphertext &result, int st
                    "BGV rotate : software don't support, just support rotate_col and rotate_row");
 }
 
-void EvaluatorBgvBase::square_inplace(Ciphertext &ciph) const { multiply_inplace(ciph, ciph); }
+void EvaluatorBgvBase::square_inplace(Ciphertext &ciph, MemoryPoolHandle pool) const
+{
+    if (!ciph.is_ntt_form())
+    {
+        throw invalid_argument("ciph must be in NTT form");
+    }
+
+    // Extract encryption parameters.
+    auto &context_data = *context_.crt_context()->get_context_data(ciph.parms_id());
+    auto &parms = context_data.parms();
+    size_t coeff_count = parms.degree();
+    size_t coeff_modulus_size = parms.coeff_modulus().size();
+    size_t encrypted_size = ciph.size();
+
+    // Optimization implemented currently only for size 2 ciphertexts
+    if (encrypted_size != 2)
+    {
+        multiply_inplace(ciph, ciph, move(pool));
+        return;
+    }
+
+    // Determine destination.size()
+    // Default is 3 (c_0, c_1, c_2)
+    size_t dest_size = sub_safe(add_safe(encrypted_size, encrypted_size), size_t(1));
+
+    // Size check
+    if (!product_fits_in(dest_size, coeff_count, coeff_modulus_size))
+    {
+        throw logic_error("invalid parameters");
+    }
+
+    // Set up iterator for the base
+    auto coff = parms.coeff_modulus();
+    auto coeff_modulus = iter(coff);
+
+    // Prepare destination
+    ciph.resize(context_, context_data.parms_id(), dest_size);
+
+    // Set up iterators for input ciphertext
+    auto ciph_iter = iter(ciph);
+
+    // Allocate temporary space for the result
+    POSEIDON_ALLOCATE_ZERO_GET_POLY_ITER(temp, dest_size, coeff_count, coeff_modulus_size, pool);
+
+    // Compute c1^2
+    dyadic_product_coeffmod(ciph_iter[1], ciph_iter[1], coeff_modulus_size, coeff_modulus,
+                            ciph_iter[2]);
+
+    // Compute 2*c0*c1
+    dyadic_product_coeffmod(ciph_iter[0], ciph_iter[1], coeff_modulus_size, coeff_modulus,
+                            ciph_iter[1]);
+    add_poly_coeffmod(ciph_iter[1], ciph_iter[1], coeff_modulus_size, coeff_modulus,
+                      ciph_iter[1]);
+
+    // Compute c0^2
+    dyadic_product_coeffmod(ciph_iter[0], ciph_iter[0], coeff_modulus_size, coeff_modulus,
+                            ciph_iter[0]);
+
+    // Set the correction factor
+    ciph.correction_factor() = multiply_uint_mod(ciph.correction_factor(), ciph.correction_factor(),
+                                                 parms.plain_modulus());
+}
 
 void EvaluatorBgvBase::multiply_relin(const Ciphertext &ciph1, const Ciphertext &ciph2,
                                       Ciphertext &result, const RelinKeys &relin_keys) const
@@ -198,13 +259,6 @@ void EvaluatorBgvBase::sub_plain(const Ciphertext &ciph, const Plaintext &plain,
     sub_plain_inplace(result, plain);
 }
 
-void EvaluatorBgvBase::multiply_plain(const Ciphertext &ciph, const Plaintext &plain,
-                                      Ciphertext &result) const
-{
-    result = ciph;
-    multiply_plain_inplace(result, plain);
-}
-
 void EvaluatorBgvBase::multiply(const Ciphertext &ciph1, const Ciphertext &ciph2,
                                 Ciphertext &result) const
 {
@@ -242,41 +296,28 @@ void EvaluatorBgvBase::rotate_col(const Ciphertext &ciph, Ciphertext &result,
 void EvaluatorBgvBase::drop_modulus(const Ciphertext &ciph, Ciphertext &result,
                                     parms_id_type parms_id) const
 {
-    if (!ciph.is_valid())
-    {
-        POSEIDON_THROW(invalid_argument_error, "ciph is empty");
-    }
+    result = ciph;
 
-    if (!ciph.is_ntt_form())
-    {
-        POSEIDON_THROW(config_error, "BGV ciph must be in NTT form");
-    }
     auto context_data_ptr = context_.crt_context()->get_context_data(ciph.parms_id());
-    auto &context_data = *context_data_ptr;
-    auto &next_context_data = *context_data.next_context_data();
-    auto &next_parms = next_context_data.parms();
-    auto rns_tool = context_data.rns_tool();
+    auto target_context_data_ptr = context_.crt_context()->get_context_data(parms_id);
+    if (!context_data_ptr)
+    {
+        throw invalid_argument("encrypted is not valid for encryption parameters");
+    }
+    if (!target_context_data_ptr)
+    {
+        throw invalid_argument("parms_id is not valid for encryption parameters");
+    }
+    if (context_data_ptr->chain_index() < target_context_data_ptr->chain_index())
+    {
+        throw invalid_argument("cannot switch to higher level modulus");
+    }
 
-    size_t ciph_size = ciph.size();
-    size_t coeff_count = next_parms.degree();
-    size_t next_coeff_modulus_size = next_context_data.coeff_modulus().size();
+    while (ciph.parms_id() != parms_id)
+    {
+        drop_modulus_to_next(result, result);
+    }
 
-    Ciphertext ciph_copy(pool_);
-    ciph_copy = ciph;
-    POSEIDON_ITERATE(iter(ciph_copy), ciph_size,
-                     [&](auto I)
-                     {
-                         rns_tool->mod_t_and_divide_q_last_ntt_inplace(
-                             I, context_.crt_context()->small_ntt_tables(), pool_);
-                     });
-    result.resize(context_, next_context_data.parms().parms_id(), ciph_size);
-    POSEIDON_ITERATE(iter(ciph_copy, result), ciph_size, [&](auto I)
-                     { set_poly(get<0>(I), coeff_count, next_coeff_modulus_size, get<1>(I)); });
-
-    // Set other attributes
-    result.is_ntt_form() = ciph.is_ntt_form();
-    result.correction_factor() = multiply_uint_mod(
-        ciph.correction_factor(), rns_tool->inv_q_last_mod_t(), next_parms.plain_modulus());
 }
 
 void EvaluatorBgvBase::add_plain_inplace(Ciphertext &ciph, const Plaintext &plain) const
@@ -618,45 +659,6 @@ void EvaluatorBgvBase::multiply_plain_ntt(Ciphertext &ciph_ntt, const Plaintext 
     ciph_ntt.scale() *= plain_ntt.scale();
 }
 
-void EvaluatorBgvBase::transform_from_ntt_inplace(Ciphertext &ciph) const
-{
-    // Verify parameters.
-
-    auto &context_data = *context_.crt_context()->get_context_data(ciph.parms_id());
-    if (!ciph.is_ntt_form())
-    {
-        throw invalid_argument("ciph is not in NTT form");
-    }
-
-    // Extract encryption parameters.
-    auto &parms = context_data.parms();
-    auto &coeff_modulus = context_data.coeff_modulus();
-    size_t coeff_count = parms.degree();
-    size_t coeff_modulus_size = coeff_modulus.size();
-    size_t encrypted_ntt_size = ciph.size();
-
-    auto ntt_table = context_.crt_context()->small_ntt_tables();
-
-    // Size check
-    if (!product_fits_in(coeff_count, coeff_modulus_size))
-    {
-        throw logic_error("invalid parameters");
-    }
-
-    // Transform each polynomial from NTT domain
-    inverse_ntt_negacyclic_harvey(ciph, encrypted_ntt_size, ntt_table);
-
-    // Finally change the is_ntt_transformed flag
-    ciph.is_ntt_form() = false;
-#ifdef SEAL_THROW_ON_TRANSPARENT_CIPHERTEXT
-    // Transparent ciphertext output is not allowed.
-    if (ciph.is_transparent())
-    {
-        throw logic_error("result ciphertext is transparent");
-    }
-#endif
-}
-
 // void EvaluatorBgvBase::multiply_plain_normal(Ciphertext &ciph, const Plaintext &plain,
 //                                            MemoryPoolHandle pool) const
 // {
@@ -813,9 +815,41 @@ void EvaluatorBgvBase::drop_modulus(const Ciphertext &ciph, Ciphertext &result,
 
 void EvaluatorBgvBase::drop_modulus_to_next(const Ciphertext &ciph, Ciphertext &result) const
 {
-    auto level = ciph.level();
-    auto parms_id = context_.crt_context()->parms_id_map().at(level - 1);
-    drop_modulus(ciph, result, parms_id);
+    if (!ciph.is_valid())
+    {
+        POSEIDON_THROW(invalid_argument_error, "ciph is empty");
+    }
+
+    if (!ciph.is_ntt_form())
+    {
+        POSEIDON_THROW(config_error, "BGV ciph must be in NTT form");
+    }
+    auto context_data_ptr = context_.crt_context()->get_context_data(ciph.parms_id());
+    auto &context_data = *context_data_ptr;
+    auto &next_context_data = *context_data.next_context_data();
+    auto &next_parms = next_context_data.parms();
+    auto rns_tool = context_data.rns_tool();
+
+    size_t ciph_size = ciph.size();
+    size_t coeff_count = next_parms.degree();
+    size_t next_coeff_modulus_size = next_context_data.coeff_modulus().size();
+
+    Ciphertext ciph_copy(pool_);
+    ciph_copy = ciph;
+    POSEIDON_ITERATE(iter(ciph_copy), ciph_size,
+                     [&](auto I)
+                     {
+                         rns_tool->mod_t_and_divide_q_last_ntt_inplace(
+                             I, context_.crt_context()->small_ntt_tables(), pool_);
+                     });
+    result.resize(context_, next_context_data.parms().parms_id(), ciph_size);
+    POSEIDON_ITERATE(iter(ciph_copy, result), ciph_size, [&](auto I)
+                     { set_poly(get<0>(I), coeff_count, next_coeff_modulus_size, get<1>(I)); });
+
+    // Set other attributes
+    result.is_ntt_form() = ciph.is_ntt_form();
+    result.correction_factor() = multiply_uint_mod(
+        ciph.correction_factor(), rns_tool->inv_q_last_mod_t(), next_parms.plain_modulus());
 }
 
 }  // namespace poseidon

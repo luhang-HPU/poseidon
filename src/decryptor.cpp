@@ -171,7 +171,6 @@ void Decryptor::ckks_decrypt(const Ciphertext &encrypted, Plaintext &destination
     // Set destination parameters as in encrypted
 
     destination.scale() = encrypted.scale();
-    destination.is_ntt_form() = true;
 }
 
 void Decryptor::bgv_decrypt(const Ciphertext &encrypted, Plaintext &destination,

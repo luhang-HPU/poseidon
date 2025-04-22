@@ -68,6 +68,81 @@ public:
     POSEIDON_NODISCARD inline const vector<Modulus> &q() const { return q_; }
 
     POSEIDON_NODISCARD inline const vector<Modulus> &p() const { return p_; }
+    POSEIDON_NODISCARD inline const vector<Modulus> coeff_modulus() const
+    {
+        vector<Modulus> result(q_.begin(), q_.end());
+        result.insert(result.end(), p_.begin(), p_.end());
+        return result;
+    }
+
+    POSEIDON_NODISCARD inline std::streamoff
+    save_size(compr_mode_type compr_mode = Serialization::compr_mode_default) const
+    {
+        std::size_t coeff_modulus_total_size =
+            coeff_modulus().empty()
+                ? std::size_t(0)
+                : util::safe_cast<std::size_t>(coeff_modulus()[0].save_size(compr_mode_type::none));
+        coeff_modulus_total_size = util::mul_safe(coeff_modulus_total_size, coeff_modulus().size());
+
+        std::size_t members_size = Serialization::ComprSizeEstimate(
+            util::add_safe(
+                sizeof(type_),
+                sizeof(std::uint64_t),  // poly_modulus_degree_
+                sizeof(std::uint64_t),  // coeff_modulus_size
+                coeff_modulus_total_size,
+                util::safe_cast<std::size_t>(plain_modulus_.save_size(compr_mode_type::none))),
+            compr_mode);
+
+        return util::safe_cast<std::streamoff>(
+            util::add_safe(sizeof(Serialization::PoseidonHeader), members_size));
+    }
+
+    /// TODO
+    void save_members(std::ostream &stream) const
+    {
+        std::cout << "save_members" << std::endl;
+        /// TODO:
+    }
+
+    void load_members(std::istream &stream)
+    {
+        std::cout << "load_members" << std::endl;
+        /// TODO:
+    }
+
+    inline std::streamoff save(std::ostream &stream,
+                               compr_mode_type compr_mode = Serialization::compr_mode_default) const
+    {
+        using namespace std::placeholders;
+        return Serialization::Save(std::bind(&ParametersLiteral::save_members, this, _1),
+                                   save_size(compr_mode_type::none), stream, compr_mode, false);
+    }
+
+    inline std::streamoff save(poseidon_byte *out, std::size_t size,
+                               compr_mode_type compr_mode = Serialization::compr_mode_default) const
+    {
+        using namespace std::placeholders;
+        return Serialization::Save(std::bind(&ParametersLiteral::save_members, this, _1),
+                                   save_size(compr_mode_type::none), out, size, compr_mode, false);
+    }
+    inline std::streamoff load(std::istream &stream)
+    {
+        using namespace std::placeholders;
+        ParametersLiteral new_parms;
+        auto in_size = Serialization::Load(
+            std::bind(&ParametersLiteral::load_members, &new_parms, _1), stream, false);
+        std::swap(*this, new_parms);
+        return in_size;
+    }
+    inline std::streamoff load(const poseidon_byte *in, std::size_t size)
+    {
+        using namespace std::placeholders;
+        ParametersLiteral new_parms;
+        auto in_size = Serialization::Load(
+            std::bind(&ParametersLiteral::load_members, &new_parms, _1), in, size, false);
+        std::swap(*this, new_parms);
+        return in_size;
+    }
 
     POSEIDON_NODISCARD inline uint32_t log_scale() const { return log_scale_; }
 

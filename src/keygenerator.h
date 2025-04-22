@@ -112,13 +112,14 @@ public:
     }
 
     POSEIDON_NODISCARD KSwitchKeys create_switch_key(const SecretKey &prev_secret_key,
-                                                        const SecretKey &new_secret_key) const;
+                                                     const SecretKey &new_secret_key) const;
 
     POSEIDON_NODISCARD inline KSwitchKeys create_switch_key(const SecretKey &prev_key,
                                                             const PublicKey &new_key) const
     {
         return kswitch_gen_->create_switch_key(prev_key, new_key);
     }
+
 
     /**
     Generates Galois keys and stores the result in destination. Every time
@@ -193,7 +194,7 @@ private:
     @throws std::invalid_argument if the Galois elements are not valid
     */
     inline void create_galois_keys(const std::vector<std::uint32_t> &galois_elts,
-                                    GaloisKeys &destination)
+                                   GaloisKeys &destination)
     {
         destination = create_galois_keys(galois_elts, false);
     }
@@ -308,7 +309,7 @@ private:
     @throws std::invalid_argument if the Galois elements are not valid
     */
     GaloisKeys create_galois_keys(const std::vector<std::uint32_t> &galois_elts,
-                                    bool save_seed) const;
+                                  bool save_seed) const;
     GaloisKeys create_galois_keys(const std::vector<int> &step, bool save_seed) const;
 
 private:
@@ -346,6 +347,7 @@ private:
     */
     RelinKeys create_relin_keys(std::size_t count, bool save_seed) const;
 
+
     std::shared_ptr<KSwitchGenBase> kswitch_gen_{nullptr};
     // We use a fresh memory pool with `clear_on_destruction' enabled.
     MemoryPoolHandle pool_ = MemoryManager::GetPool(mm_prof_opt::mm_force_new, true);
@@ -364,5 +366,4 @@ private:
 
     bool using_keyswitch_ = true;
 };
-
-} // namespace poseidon
+}  // namespace poseidon

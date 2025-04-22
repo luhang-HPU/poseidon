@@ -186,11 +186,12 @@ void BatchEncoder::encode(const vector<int64_t> &values_matrix, Plaintext &desti
     // Note: We already performed bit-reversal when reading in the matrix
     inverse_ntt_negacyclic_harvey(destination.data(), *crt_context->plain_ntt_tables());
 }
-#undef POSEIDON_USE_MSGSL
+
 #ifdef POSEIDON_USE_MSGSL
 void BatchEncoder::encode(gsl::span<const uint64_t> values_matrix, Plaintext &destination) const
 {
-    auto &context_data = *context_.first_context_data();
+    auto crt_context = context_.crt_context();
+    auto &context_data = *context_.crt_context()->first_context_data();
 
     // Validate input parameters
     size_t values_matrix_size = static_cast<size_t>(values_matrix.size());
@@ -225,12 +226,14 @@ void BatchEncoder::encode(gsl::span<const uint64_t> values_matrix, Plaintext &de
 
     // Transform destination using inverse of negacyclic NTT
     // Note: We already performed bit-reversal when reading in the matrix
-    inverse_ntt_negacyclic_harvey(destination.data(), *context_data.plain_ntt_tables());
+    inverse_ntt_negacyclic_harvey(
+        destination.data(), *crt_context->plain_ntt_tables());
 }
 
 void BatchEncoder::encode(gsl::span<const int64_t> values_matrix, Plaintext &destination) const
 {
-    auto &context_data = *context_.first_context_data();
+    auto crt_context = context_.crt_context();
+    auto &context_data = *context_.crt_context()->first_context_data();
     uint64_t modulus = context_data.parms().plain_modulus().value();
 
     // Validate input parameters
@@ -268,7 +271,7 @@ void BatchEncoder::encode(gsl::span<const int64_t> values_matrix, Plaintext &des
 
     // Transform destination using inverse of negacyclic NTT
     // Note: We already performed bit-reversal when reading in the matrix
-    inverse_ntt_negacyclic_harvey(destination.data(), *context_data.plain_ntt_tables());
+    inverse_ntt_negacyclic_harvey(destination.data(), *crt_context->plain_ntt_tables());
 }
 #endif
 void BatchEncoder::decode(const Plaintext &plain, vector<uint64_t> &destination,
@@ -357,6 +360,7 @@ void BatchEncoder::decode(const Plaintext &plain, vector<int64_t> &destination,
 void BatchEncoder::decode(const Plaintext &plain, gsl::span<uint64_t> destination,
                           MemoryPoolHandle pool) const
 {
+    auto crt_context = context_.crt_context();
     if (plain.is_ntt_form())
     {
         POSEIDON_THROW(invalid_argument_error, "plain cannot be in NTT form");
@@ -366,7 +370,7 @@ void BatchEncoder::decode(const Plaintext &plain, gsl::span<uint64_t> destinatio
         POSEIDON_THROW(invalid_argument_error, "pool is uninitialized");
     }
 
-    auto &context_data = *context_.first_context_data();
+    auto &context_data = *context_.crt_context()->first_context_data();
 
     if (unsigned_gt(destination.size(), numeric_limits<int>::max()) ||
         unsigned_neq(destination.size(), slots_))
@@ -384,7 +388,7 @@ void BatchEncoder::decode(const Plaintext &plain, gsl::span<uint64_t> destinatio
     set_zero_uint(slots_ - plain_coeff_count, temp_dest.get() + plain_coeff_count);
 
     // Transform destination using negacyclic NTT.
-    ntt_negacyclic_harvey(temp_dest.get(), *context_data.plain_ntt_tables());
+    ntt_negacyclic_harvey(temp_dest.get(), *crt_context->plain_ntt_tables());
 
     // Read top row, then bottom row
     for (size_t i = 0; i < slots_; i++)
@@ -405,7 +409,8 @@ void BatchEncoder::decode(const Plaintext &plain, gsl::span<int64_t> destination
         POSEIDON_THROW(invalid_argument_error, "pool is uninitialized");
     }
 
-    auto &context_data = *context_.first_context_data();
+    auto crt_context = context_.crt_context();
+    auto &context_data = *context_.crt_context()->first_context_data();
     uint64_t modulus = context_data.parms().plain_modulus().value();
 
     if (unsigned_gt(destination.size(), numeric_limits<int>::max()) ||
@@ -424,7 +429,7 @@ void BatchEncoder::decode(const Plaintext &plain, gsl::span<int64_t> destination
     set_zero_uint(slots_ - plain_coeff_count, temp_dest.get() + plain_coeff_count);
 
     // Transform destination using negacyclic NTT.
-    ntt_negacyclic_harvey(temp_dest.get(), *context_data.plain_ntt_tables());
+    ntt_negacyclic_harvey(temp_dest.get(), *crt_context->plain_ntt_tables());
 
     // Read top row, then bottom row
     uint64_t plain_modulus_div_two = modulus >> 1;

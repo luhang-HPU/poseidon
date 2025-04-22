@@ -198,7 +198,6 @@ void CKKSEncoder::encode_internal(double value, parms_id_type parms_id, double s
     }
 
     destination.scale() = scale;
-    destination.is_ntt_form() = true;
 }
 
 void CKKSEncoder::encode_internal(int64_t value, parms_id_type parms_id,
@@ -230,7 +229,6 @@ void CKKSEncoder::encode_internal(int64_t value, parms_id_type parms_id,
     }
 
     destination.resize(context_, parms_id, util::mul_safe(coeff_count, coeff_modulus_size));
-    destination.is_ntt_form() = true;
     if (value < 0)
     {
         for (size_t j = 0; j < coeff_modulus_size; j++)
@@ -252,6 +250,5 @@ void CKKSEncoder::encode_internal(int64_t value, parms_id_type parms_id,
     }
 
     destination.scale() = 1.0;
-    destination.is_ntt_form() = true;
 }
 }  // namespace poseidon
