@@ -25,15 +25,16 @@ public:
 
     virtual void add_plain(const Ciphertext &ciph, const Plaintext &plain,
                            Ciphertext &result) const = 0;
-    virtual void multiply_plain(const Ciphertext &ciph, const Plaintext &plain,
-                                Ciphertext &result) const = 0;
+    virtual void multiply_plain(const Ciphertext &ciph, const Plaintext &plain, Ciphertext &result,
+                                MemoryPoolHandle pool = MemoryManager::GetPool()) const;
     virtual void add(const poseidon::Ciphertext &ciph1, const poseidon::Ciphertext &ciph2,
                      poseidon::Ciphertext &result) const = 0;
     virtual void sub(const Ciphertext &ciph1, const Ciphertext &ciph2,
                      Ciphertext &result) const = 0;
     virtual void multiply(const Ciphertext &ciph1, const Ciphertext &ciph2,
                           Ciphertext &result) const = 0;
-    virtual void square_inplace(Ciphertext &ciph) const = 0;
+    virtual void square_inplace(Ciphertext &ciph,
+                                MemoryPoolHandle pool = MemoryManager::GetPool()) const = 0;
     virtual void relinearize(const Ciphertext &ciph, Ciphertext &result,
                              const RelinKeys &relin_keys) const = 0;
     virtual void multiply_relin(const Ciphertext &ciph1, const Ciphertext &ciph2,
@@ -56,13 +57,23 @@ public:
     {
     }
 
+    void square(const Ciphertext &ciph, Ciphertext &result,
+                MemoryPoolHandle pool = MemoryManager::GetPool())
+    {
+        result = ciph;
+        square_inplace(result, pool);
+    }
     virtual void drop_modulus(const Ciphertext &ciph, Ciphertext &result,
                               parms_id_type parms_id) const = 0;
     virtual void drop_modulus(const Ciphertext &ciph, Ciphertext &result, uint32_t level) const;
     virtual void drop_modulus_to_next(const Ciphertext &ciph, Ciphertext &result) const;
     void transform_to_ntt_inplace(Plaintext &plain, parms_id_type parms_id,
                                   MemoryPoolHandle pool = MemoryManager::GetPool()) const;
-    void transform_to_ntt_inplace(Ciphertext &plain) const;
+    void transform_to_ntt_inplace(Ciphertext &ciph) const;
+    void transform_from_ntt_inplace(Ciphertext &ciph) const;
+
+    virtual void multiply_plain_inplace(Ciphertext &ciph, const Plaintext &plain,
+                                       MemoryPoolHandle pool = MemoryManager::GetPool()) const = 0;
 
 protected:
     EvaluatorBase(const PoseidonContext &context, MemoryPoolHandle pool = MemoryManager::GetPool());

@@ -43,7 +43,9 @@ public:
     /**
     The compression mode used by default; prefer Zstandard
     */
-#if defined(POSEIDON_USE_ZLIB)
+#if defined(POSEIDON_USE_ZSTD)
+    static constexpr compr_mode_type compr_mode_default = compr_mode_type::zstd;
+#elif defined(POSEIDON_USE_ZLIB)
     static constexpr compr_mode_type compr_mode_default = compr_mode_type::zlib;
 #else
     static constexpr compr_mode_type compr_mode_default = compr_mode_type::none;
@@ -101,6 +103,10 @@ public:
             /* fall through */
 #ifdef POSEIDON_USE_ZLIB
         case static_cast<std::uint8_t>(compr_mode_type::zlib):
+            /* fall through */
+#endif
+#ifdef POSEIDON_USE_ZSTD
+        case static_cast<std::uint8_t>(compr_mode_type::zstd):
             /* fall through */
 #endif
             return true;

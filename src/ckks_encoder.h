@@ -11,7 +11,6 @@
 #include <type_traits>
 #include <vector>
 
-#undef POSEIDON_USE_MSGSL
 #ifdef POSEIDON_USE_MSGSL
 #include "gsl/span"
 #endif
@@ -558,8 +557,6 @@ private:
                 }
             }
         }
-
-        destination.is_ntt_form() = true;
 
         destination.poly().coeff_to_dot();
         destination.scale() = scale;

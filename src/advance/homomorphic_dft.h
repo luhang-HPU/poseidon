@@ -46,6 +46,11 @@ map<int, vector<complex<double>>> gen_repack_matrix(uint32_t log_l, bool bit_rev
 class HomomorphicDFTMatrixLiteral
 {
 public:
+    HomomorphicDFTMatrixLiteral(LinearType type, uint32_t log_n, uint32_t log_slots,
+                                uint32_t level_start, vector<uint32_t> levels,
+                                bool repack_imag_to_real = false, double scaling = 1.0,
+                                bool bit_reversed = false, uint32_t log_bsgs_ratio = 0);
+
     POSEIDON_NODISCARD LinearType get_type() const;
     POSEIDON_NODISCARD uint32_t get_log_n() const;
     POSEIDON_NODISCARD uint32_t get_log_slots() const;
@@ -57,11 +62,6 @@ public:
     POSEIDON_NODISCARD uint32_t get_log_bsgs_ratio() const;
     vector<map<int, vector<complex<double>>>> gen_matrices();
     void create(LinearMatrixGroup &mat_group, CKKSEncoder &encoder, uint32_t step);
-
-    HomomorphicDFTMatrixLiteral(LinearType type, uint32_t log_n, uint32_t log_slots,
-                                uint32_t level_start, vector<uint32_t> levels,
-                                bool repack_imag_to_real = false, double scaling = 1.0,
-                                bool bit_reversed = false, uint32_t log_bsgs_ratio = 0);
 
 private:
     LinearType type_;

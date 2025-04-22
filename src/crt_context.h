@@ -25,7 +25,13 @@ public:
     public:
         POSEIDON_NODISCARD inline const ParametersLiteral &parms() const noexcept { return parms_; }
 
-        POSEIDON_NODISCARD inline double modulus_data() const { return modulus_data_; }
+        /**
+        Returns the parms_id of the current parameters.
+        */
+        POSEIDON_NODISCARD inline const parms_id_type &parms_id() const noexcept
+        {
+            return parms_.parms_id();
+        }
 
         POSEIDON_NODISCARD inline const std::uint64_t *total_coeff_modulus() const noexcept
         {
@@ -108,6 +114,11 @@ public:
             return using_fast_plain_lift_;
         }
 
+        POSEIDON_NODISCARD inline std::size_t chain_index() const noexcept
+        {
+            return chain_index_;
+        }
+
     private:
         ContextData(ParametersLiteral parms, MemoryPoolHandle pool)
             : pool_(std::move(pool)), parms_(std::move(parms))
@@ -119,7 +130,6 @@ public:
         }
         MemoryPoolHandle pool_;
         ParametersLiteral parms_;
-        double modulus_data_ = 0;
         std::shared_ptr<const ContextData> next_context_data_{nullptr};
         util::Pointer<util::RNSTool> rns_tool_;
         util::Pointer<util::RNSToolQP> rns_tool_qp_tool_;
@@ -133,6 +143,7 @@ public:
         util::Pointer<std::uint64_t> upper_half_increment_;
         util::Pointer<std::uint64_t> plain_upper_half_increment_;
         util::Pointer<util::MultiplyUIntModOperand> coeff_div_plain_modulus_;
+        std::size_t chain_index_ = 0;
     };
 
 public:

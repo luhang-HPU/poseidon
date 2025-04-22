@@ -1,5 +1,6 @@
 #include "evaluator_bfv_base.h"
 #include "src/basics/util/scalingvariant.h"
+#include "src/util/debug.h"
 
 namespace poseidon
 {
@@ -33,6 +34,9 @@ EvaluatorBfvBase::EvaluatorBfvBase(const PoseidonContext &context) : Base(contex
 
 void EvaluatorBfvBase::ntt_fwd(const Plaintext &plain, Plaintext &result, parms_id_type id) const
 {
+#ifdef DEBUG
+    poseidon::util::LocalTimer timer("NTT");
+#endif
     if (id == parms_id_zero && plain.parms_id() != parms_id_zero)
     {
         ntt_fwd_b(plain, result);
@@ -50,17 +54,26 @@ void EvaluatorBfvBase::ntt_fwd(const Plaintext &plain, Plaintext &result, parms_
 
 void EvaluatorBfvBase::ntt_fwd(const Ciphertext &ciph, Ciphertext &result) const
 {
+#ifdef DEBUG
+    poseidon::util::LocalTimer timer("NTT");
+#endif
     ntt_fwd_b(ciph, result);
 }
 
 void EvaluatorBfvBase::ntt_inv(const Ciphertext &ciph, Ciphertext &result) const
 {
+#ifdef DEBUG
+    poseidon::util::LocalTimer timer("INTT");
+#endif
     ntt_inv_b(ciph, result);
 }
 
 void EvaluatorBfvBase::add(const Ciphertext &ciph1, const Ciphertext &ciph2,
                            Ciphertext &result) const
 {
+#ifdef DEBUG
+    poseidon::util::LocalTimer timer("ADD");
+#endif
     if (&result == &ciph1)
     {
         add_inplace(result, ciph2);
@@ -82,6 +95,9 @@ void EvaluatorBfvBase::add_plain(const Ciphertext &ciph, const Plaintext &plain,
 void EvaluatorBfvBase::sub(const Ciphertext &ciph1, const Ciphertext &ciph2,
                            Ciphertext &result) const
 {
+#ifdef DEBUG
+    poseidon::util::LocalTimer timer("SUB");
+#endif
     if (&ciph2 != &result)
     {
         result = ciph1;
@@ -147,6 +163,9 @@ void EvaluatorBfvBase::sub_plain(const Ciphertext &ciph, const Plaintext &plain,
 
 void EvaluatorBfvBase::add_inplace(Ciphertext &ciph1, const Ciphertext &ciph2) const
 {
+#ifdef DEBUG
+    poseidon::util::LocalTimer timer("ADD INPLACE");
+#endif
     // Verify parameters.
     if (ciph1.parms_id() != ciph2.parms_id())
     {
@@ -190,6 +209,9 @@ void EvaluatorBfvBase::add_inplace(Ciphertext &ciph1, const Ciphertext &ciph2) c
 
 void EvaluatorBfvBase::add_plain_inplace(Ciphertext &ciph, const Plaintext &plain) const
 {
+#ifdef DEBUG
+    poseidon::util::LocalTimer timer("ADD PLAIN");
+#endif
     if (!ciph.is_valid())
     {
         POSEIDON_THROW(invalid_argument_error, "add_plain_inplace : Ciphertext is empty!");
@@ -210,6 +232,9 @@ void EvaluatorBfvBase::add_plain_inplace(Ciphertext &ciph, const Plaintext &plai
 
 void EvaluatorBfvBase::sub_plain_inplace(Ciphertext &ciph, const Plaintext &plain) const
 {
+#ifdef DEBUG
+    poseidon::util::LocalTimer timer("SUB PLAIN");
+#endif
     // Verify parameters.
     if (!ciph.is_valid())
     {
@@ -231,6 +256,9 @@ void EvaluatorBfvBase::sub_plain_inplace(Ciphertext &ciph, const Plaintext &plai
 void EvaluatorBfvBase::multiply(const Ciphertext &ciph1, const Ciphertext &ciph2,
                                 Ciphertext &result) const
 {
+#ifdef DEBUG
+    poseidon::util::LocalTimer timer("MULTIPLY");
+#endif
     if (&ciph2 == &result)
     {
         multiply_inplace(result, ciph1);
@@ -242,18 +270,21 @@ void EvaluatorBfvBase::multiply(const Ciphertext &ciph1, const Ciphertext &ciph2
     }
 }
 
-void EvaluatorBfvBase::multiply_plain(const Ciphertext &ciph, const Plaintext &plain,
-                                      Ciphertext &result) const
+void EvaluatorBfvBase::square_inplace(Ciphertext &ciph,
+                                      MemoryPoolHandle pool) const
 {
-    result = ciph;
-    multiply_plain_inplace(result, plain);
+#ifdef DEBUG
+    poseidon::util::LocalTimer timer("SQUARE");
+#endif
+    multiply_inplace(ciph, ciph);
 }
-
-void EvaluatorBfvBase::square_inplace(Ciphertext &ciph) const { multiply_inplace(ciph, ciph); }
 
 void EvaluatorBfvBase::relinearize(const Ciphertext &ciph, Ciphertext &result,
                                    const RelinKeys &relin_keys) const
 {
+#ifdef DEBUG
+    poseidon::util::LocalTimer timer("RELINEARIZE");
+#endif
     kswitch_->relinearize(ciph, result, relin_keys);
 }
 
@@ -273,6 +304,9 @@ void EvaluatorBfvBase::rotate(const Ciphertext &ciph, Ciphertext &result, int st
 void EvaluatorBfvBase::rotate_row(const Ciphertext &ciph, Ciphertext &result, int step,
                                   const GaloisKeys &galois_keys) const
 {
+#ifdef DEBUG
+    poseidon::util::LocalTimer timer("ROTATE_ROW");
+#endif
     result = ciph;
     kswitch_->rotate_internal(result, step, galois_keys, pool_);
 }
@@ -280,13 +314,18 @@ void EvaluatorBfvBase::rotate_row(const Ciphertext &ciph, Ciphertext &result, in
 void EvaluatorBfvBase::rotate_col(const Ciphertext &ciph, Ciphertext &result,
                                   const GaloisKeys &galois_keys) const
 {
+#ifdef DEBUG
+    poseidon::util::LocalTimer timer("ROTATE_COL");
+#endif
     result = ciph;
     kswitch_->conjugate_internal(result, galois_keys, pool_);
 }
 
-void EvaluatorBfvBase::drop_modulus(const Ciphertext &ciph, Ciphertext &result,
-                                    parms_id_type parms_id) const
+void EvaluatorBfvBase::drop_modulus_to_next(const Ciphertext &ciph, Ciphertext &result) const
 {
+#ifdef DEBUG
+    poseidon::util::LocalTimer timer("DROP MODULUS");
+#endif
     if (!ciph.is_valid())
     {
         POSEIDON_THROW(invalid_argument_error, "drop_modulus : Ciphertext is empty!");
@@ -320,10 +359,42 @@ void EvaluatorBfvBase::drop_modulus(const Ciphertext &ciph, Ciphertext &result,
     result.is_ntt_form() = ciph.is_ntt_form();
 }
 
+void EvaluatorBfvBase::drop_modulus(const Ciphertext &ciph, Ciphertext &result,
+                                    parms_id_type parms_id) const
+{
+#ifdef DEBUG
+    poseidon::util::LocalTimer timer("DROP MODULUS");
+#endif
+    result = ciph;
+
+    auto context_data_ptr = context_.crt_context()->get_context_data(ciph.parms_id());
+    auto target_context_data_ptr = context_.crt_context()->get_context_data(parms_id);
+    if (!context_data_ptr)
+    {
+        throw invalid_argument("encrypted is not valid for encryption parameters");
+    }
+    if (!target_context_data_ptr)
+    {
+        throw invalid_argument("parms_id is not valid for encryption parameters");
+    }
+    if (context_data_ptr->chain_index() < target_context_data_ptr->chain_index())
+    {
+        throw invalid_argument("cannot switch to higher level modulus");
+    }
+
+    while (ciph.parms_id() != parms_id)
+    {
+        drop_modulus_to_next(result, result);
+    }
+}
+
 void EvaluatorBfvBase::apply_galois(const Ciphertext &ciph, Ciphertext &destination,
                                     std::uint32_t galois_elt, const GaloisKeys &galois_keys,
                                     MemoryPoolHandle pool) const
 {
+#ifdef DEBUG
+    poseidon::util::LocalTimer timer("APPLY GALOIS");
+#endif
     destination = ciph;
     dynamic_cast<KSwitchBV *>(kswitch_.get())
         ->apply_galois_inplace(destination, galois_elt, galois_keys, std::move(pool));
@@ -333,6 +404,9 @@ void EvaluatorBfvBase::apply_galois(const Ciphertext &ciph, Ciphertext &destinat
 void EvaluatorBfvBase::multiply_inplace(Ciphertext &ciph1, const Ciphertext &ciph2,
                                         MemoryPoolHandle pool) const
 {
+#ifdef DEBUG
+    poseidon::util::LocalTimer timer("MULTIPLY INPLACE");
+#endif
     if (ciph1.parms_id() != ciph2.parms_id())
     {
         POSEIDON_THROW(invalid_argument_error,
@@ -596,7 +670,8 @@ void EvaluatorBfvBase::multiply_inplace(Ciphertext &ciph1, const Ciphertext &cip
                      });
 }
 
-void EvaluatorBfvBase::multiply_plain_inplace(Ciphertext &ciph, const Plaintext &plain) const
+void EvaluatorBfvBase::multiply_plain_inplace(Ciphertext &ciph, const Plaintext &plain,
+                                              MemoryPoolHandle pool) const
 {
     if (!ciph.is_valid())
     {
@@ -604,11 +679,13 @@ void EvaluatorBfvBase::multiply_plain_inplace(Ciphertext &ciph, const Plaintext 
     }
 
     // Verify parameters.
-    if (ciph.is_ntt_form() != plain.is_ntt_form())
+    if (ciph.is_ntt_form() && !plain.is_ntt_form())
     {
-        POSEIDON_THROW(invalid_argument_error, "NTT form mismatch");
+        Plaintext plain_copy = plain;
+        transform_to_ntt_inplace(plain_copy, ciph.parms_id(), pool);
+        multiply_plain_ntt(ciph, plain_copy);
     }
-    if (ciph.is_ntt_form())
+    else if (ciph.is_ntt_form())
     {
         multiply_plain_ntt(ciph, plain);
     }
@@ -628,6 +705,9 @@ void EvaluatorBfvBase::multiply_plain_inplace(Ciphertext &ciph, const Plaintext 
 
 void EvaluatorBfvBase::multiply_plain_ntt(Ciphertext &ciph_ntt, const Plaintext &plain_ntt) const
 {
+#ifdef DEBUG
+    poseidon::util::LocalTimer timer("MULTIPLY PLAIN");
+#endif
     // Verify parameters.
     if (!plain_ntt.is_ntt_form())
     {
@@ -669,6 +749,9 @@ void EvaluatorBfvBase::multiply_plain_ntt(Ciphertext &ciph_ntt, const Plaintext 
 void EvaluatorBfvBase::multiply_plain_normal(Ciphertext &ciph, const Plaintext &plain,
                                              MemoryPoolHandle pool) const
 {
+#ifdef DEBUG
+    poseidon::util::LocalTimer timer("MULTIPLY PLAIN");
+#endif
     auto &context_data = *context_.crt_context()->get_context_data(ciph.parms_id());
     auto &parms = context_data.parms();
     auto &coeff_modulus = context_data.coeff_modulus();

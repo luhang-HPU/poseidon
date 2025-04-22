@@ -48,6 +48,27 @@ int main()
     Timestacs timestacs;
     auto message_want = message1;
 
+    // NTT
+    {
+        print_example_banner("Example: NTT & INTT in bfv");
+        cout << "Before NTT & INTT level : " << ciph1.level() << std::endl;
+        timestacs.start();
+        bfv_eva->transform_to_ntt_inplace(ciph1);
+        bfv_eva->transform_from_ntt_inplace(ciph1);
+        timestacs.end();
+        bfv_eva->read(ciph1);
+        cout << "After NTT & INTT level : " << ciph1.level() << std::endl;
+        timestacs.print_time("TIME : ");
+        decryptor.decrypt(ciph1, plain_res);
+        enc.decode(plain_res, message_res);
+
+        for (auto i = 0; i < message_want.size(); i++)
+        {
+            printf("source_data[%d] : %ld\n", i, message1[i]);
+            printf("result_data[%d] : %ld\n", i, message_res[i]);
+        }
+    }
+
     // Mod Switch
     {
         print_example_banner("Example: Mod Switch / Mod Switch in bfv");

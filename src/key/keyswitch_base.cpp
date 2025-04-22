@@ -1,4 +1,8 @@
 #include "keyswitch_base.h"
+#include "src/factory/poseidon_factory.h"
+#ifdef USING_HARDWARE
+#include "poseidon_hardware/hardware_drive/ckks_hardware_api.h"
+#endif
 
 namespace poseidon
 {
@@ -148,6 +152,16 @@ RelinKeys KSwitchGenBase::create_relin_keys(std::size_t count,
                           static_cast<KSwitchKeys &>(relin_keys));
     // Set the parms_id
     relin_keys.parms_id() = context_data.parms().parms_id();
+
+#ifdef USING_HARDWARE
+    if (PoseidonFactory::get_instance()->get_device_type() == DEVICE_TYPE::DEVICE_HARDWARE)
+    {
+        auto literal = context_.parameters_literal();
+        auto degree = literal->degree();
+        auto rns_max = literal->q().size() + literal->p().size();
+        HardwareApi::relin_key_config(relin_keys, rns_max, degree);
+    }
+#endif
     return relin_keys;
 }
 

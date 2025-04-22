@@ -12,7 +12,6 @@
 #include <stdexcept>
 #include <string>
 
-#undef POSEIDON_USE_MSGSL
 #ifdef POSEIDON_USE_MSGSL
 #include "gsl/span"
 #endif
@@ -461,7 +460,7 @@ public:
         std::size_t sig_coeff_count_compare = compare.significant_coeff_count();
         bool parms_id_compare = ((is_ntt_form() && compare.is_ntt_form()) ||
                                  (!is_ntt_form() && !compare.is_ntt_form())) &&
-                                (params_id_ == compare.params_id_);
+                                (parms_id_ == compare.parms_id_);
         return parms_id_compare && (sig_coeff_count == sig_coeff_count_compare) &&
                std::equal(data_.cbegin(), data_.cbegin() + sig_coeff_count, compare.data_.cbegin(),
                           compare.data_.cbegin() + sig_coeff_count) &&
@@ -567,7 +566,7 @@ public:
     save_size(compr_mode_type compr_mode = Serialization::compr_mode_default) const
     {
         std::size_t members_size = Serialization::ComprSizeEstimate(
-            util::add_safe(sizeof(params_id_),
+            util::add_safe(sizeof(parms_id_),
                            sizeof(std::uint64_t),  // coeff_count_
                            sizeof(scale_),
                            util::safe_cast<std::size_t>(data_.save_size(compr_mode_type::none))),
@@ -706,14 +705,8 @@ public:
     */
     POSEIDON_NODISCARD inline bool is_ntt_form() const noexcept
     {
-        if (params_id_ == parms_id_zero)
-        {
-            return false;
-        }
-        return ntt_form_;
+        return (parms_id_ != parms_id_zero);
     }
-
-    POSEIDON_NODISCARD inline bool &is_ntt_form() noexcept { return ntt_form_; }
 
     /**
     Returns a reference to the scale. This is only needed when using the ckks encryption scheme. The
@@ -727,14 +720,14 @@ public:
     */
     POSEIDON_NODISCARD inline const double &scale() const noexcept { return scale_; }
 
-    POSEIDON_NODISCARD inline const parms_id_type &parms_id() const noexcept { return params_id_; }
+    POSEIDON_NODISCARD inline const parms_id_type &parms_id() const noexcept { return parms_id_; }
 
-    POSEIDON_NODISCARD inline parms_id_type &parms_id() noexcept { return params_id_; }
+    POSEIDON_NODISCARD inline parms_id_type &parms_id() noexcept { return parms_id_; }
 
     POSEIDON_NODISCARD inline bool is_valid(const PoseidonContext &context) const noexcept
     {
         auto &map = context.crt_context()->context_data_map();
-        return map.find(params_id_) != map.end();
+        return map.find(parms_id_) != map.end();
     }
 
     /**
@@ -762,9 +755,8 @@ private:
                       PoseidonVersion version);
 
     std::size_t coeff_count_ = 0;  // degree
-    bool ntt_form_ = false;
     double scale_ = 1.0;  // for ckks
-    parms_id_type params_id_ = parms_id_zero;
+    parms_id_type parms_id_ = parms_id_zero;
     DynArray<pt_coeff_type> data_;
 
     // SecretKey needs access to save_members/load_members

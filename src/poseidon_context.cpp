@@ -42,7 +42,6 @@ PoseidonContext::PoseidonContext(const ParametersLiteral &param_literal, bool us
     if (using_hardware)
     {
 #ifdef USING_HARDWARE
-        dpdk_init();
         if (key_switch_variant_ != BV)
         {
             POSEIDON_THROW(invalid_argument_error, "hardware only support BV variant");

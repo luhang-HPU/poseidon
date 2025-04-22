@@ -30,9 +30,8 @@ public:
                            Ciphertext &result) const override;
     virtual void multiply(const Ciphertext &ciph1, const Ciphertext &ciph2,
                           Ciphertext &result) const override;
-    virtual void multiply_plain(const Ciphertext &ciph, const Plaintext &plain,
-                                Ciphertext &result) const override;
-    virtual void square_inplace(Ciphertext &ciph) const override;
+    virtual void square_inplace(Ciphertext &ciph,
+                                MemoryPoolHandle pool = MemoryManager::GetPool()) const override;
     virtual void relinearize(const Ciphertext &ciph, Ciphertext &result,
                              const RelinKeys &relin_keys) const override;
     virtual void multiply_relin(const Ciphertext &ciph1, const Ciphertext &ciph2,
@@ -48,18 +47,20 @@ public:
                                               const GaloisKeys &rot_key) const override;
     virtual void drop_modulus(const Ciphertext &ciph, Ciphertext &result,
                               parms_id_type parms_id) const override;
+    virtual void drop_modulus_to_next(const Ciphertext &ciph, Ciphertext &result) const override;
 
     void apply_galois(const Ciphertext &ciph, Ciphertext &destination, std::uint32_t galois_elt,
                       const GaloisKeys &galois_keys,
                       MemoryPoolHandle pool = MemoryManager::GetPool()) const;
     void add_inplace(Ciphertext &ciph1, const Ciphertext &ciph2) const;
 
-private:
     void add_plain_inplace(Ciphertext &ciph, const Plaintext &plain) const;
     void sub_plain_inplace(Ciphertext &ciph, const Plaintext &plain) const;
     void multiply_inplace(Ciphertext &ciph1, const Ciphertext &ciph2,
                           MemoryPoolHandle pool = MemoryManager::GetPool()) const;
-    void multiply_plain_inplace(Ciphertext &ciph, const Plaintext &plain) const;
+    virtual void
+    multiply_plain_inplace(Ciphertext &ciph, const Plaintext &plain,
+                           MemoryPoolHandle pool = MemoryManager::GetPool()) const override;
     void multiply_plain_ntt(Ciphertext &ciph_ntt, const Plaintext &plain_ntt) const;
     void multiply_plain_normal(Ciphertext &ciph, const Plaintext &plain,
                                MemoryPoolHandle pool = MemoryManager::GetPool()) const;

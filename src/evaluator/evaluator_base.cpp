@@ -1,4 +1,5 @@
 #include "evaluator_base.h"
+#include "src/util/debug.h"
 
 namespace poseidon
 {
@@ -6,6 +7,13 @@ namespace poseidon
 EvaluatorBase::EvaluatorBase(const PoseidonContext &context, MemoryPoolHandle pool)
     : context_(context), pool_(std::move(pool))
 {
+}
+
+void EvaluatorBase::multiply_plain(const Ciphertext &ciph, const Plaintext &plain,
+                                   Ciphertext &result, MemoryPoolHandle pool) const
+{
+    result = ciph;
+    multiply_plain_inplace(result, plain, pool);
 }
 
 void EvaluatorBase::drop_modulus(const Ciphertext &ciph, Ciphertext &result, uint32_t level) const
@@ -29,7 +37,6 @@ void EvaluatorBase::ntt_fwd_b(const Plaintext &plain, Plaintext &result)
     }
     result = plain;
     result.poly().coeff_to_dot();
-    result.is_ntt_form() = true;
 }
 
 void EvaluatorBase::ntt_fwd_b(const Ciphertext &ciph, Ciphertext &result)
@@ -62,6 +69,10 @@ void EvaluatorBase::ntt_inv_b(const Ciphertext &ciph, Ciphertext &result)
     {
         POSEIDON_THROW(invalid_argument_error, "ntt_inv : Ciphertext is empty!");
     }
+    if (!ciph.is_ntt_form())
+    {
+        return;
+    }
     result = ciph;
     for (auto &p : result.polys())
     {
@@ -73,6 +84,9 @@ void EvaluatorBase::ntt_inv_b(const Ciphertext &ciph, Ciphertext &result)
 void EvaluatorBase::transform_to_ntt_inplace(Plaintext &plain,
                                              parms_id_type parms_id, MemoryPoolHandle pool) const
 {
+#ifdef DEBUG
+    poseidon::util::LocalTimer timer("NTT");
+#endif
     // Verify parameters.
     auto context_data_ptr = context_.crt_context()->get_context_data(parms_id);
     if (!context_data_ptr)
@@ -164,12 +178,13 @@ void EvaluatorBase::transform_to_ntt_inplace(Plaintext &plain,
     ntt_negacyclic_harvey(plain_iter, coeff_modulus_size, ntt_tables);
 
     plain.parms_id() = parms_id;
-    plain.is_ntt_form() = true;
 }
 
 void EvaluatorBase::transform_to_ntt_inplace(Ciphertext &ciph) const
 {
-
+#ifdef DEBUG
+    poseidon::util::LocalTimer timer("NTT");
+#endif
     auto context_data_ptr = context_.crt_context()->get_context_data(ciph.parms_id());
     if (!context_data_ptr)
     {
@@ -186,11 +201,9 @@ void EvaluatorBase::transform_to_ntt_inplace(Ciphertext &ciph) const
     auto &coeff_modulus = context_data.coeff_modulus();
     size_t coeff_count = parms.degree();
     size_t coeff_modulus_size = coeff_modulus.size();
-
-    // size_t encrypted_ntt_size = ciph.size();
+    size_t encrypted_size = ciph.size();
 
     auto ntt_tables = iter(context_.crt_context()->small_ntt_tables());
-    RNSIter ciph_iter(ciph.data(), coeff_count);
     // Size check
     if (!product_fits_in(coeff_count, coeff_modulus_size))
     {
@@ -198,9 +211,49 @@ void EvaluatorBase::transform_to_ntt_inplace(Ciphertext &ciph) const
     }
 
     // Transform each polynomial from NTT domain
-    inverse_ntt_negacyclic_harvey(ciph_iter, coeff_modulus_size, ntt_tables);
+    ntt_negacyclic_harvey(ciph, encrypted_size, ntt_tables);
 
     // Finally change the is_ntt_transformed flag
     ciph.is_ntt_form() = true;
+}
+
+void EvaluatorBase::transform_from_ntt_inplace(Ciphertext &ciph) const
+{
+#ifdef DEBUG
+    poseidon::util::LocalTimer timer("INTT");
+#endif
+    auto &context_data = *context_.crt_context()->get_context_data(ciph.parms_id());
+    if (!ciph.is_ntt_form())
+    {
+        throw invalid_argument("ciph is not in NTT form");
+    }
+
+    // Extract encryption parameters.
+    auto &parms = context_data.parms();
+    auto &coeff_modulus = context_data.coeff_modulus();
+    size_t coeff_count = parms.degree();
+    size_t coeff_modulus_size = coeff_modulus.size();
+    size_t encrypted_ntt_size = ciph.size();
+
+    auto ntt_table = context_.crt_context()->small_ntt_tables();
+
+    // Size check
+    if (!product_fits_in(coeff_count, coeff_modulus_size))
+    {
+        throw logic_error("invalid parameters");
+    }
+
+    // Transform each polynomial from NTT domain
+    inverse_ntt_negacyclic_harvey(ciph, encrypted_ntt_size, ntt_table);
+
+    // Finally change the is_ntt_transformed flag
+    ciph.is_ntt_form() = false;
+#ifdef SEAL_THROW_ON_TRANSPARENT_CIPHERTEXT
+    // Transparent ciphertext output is not allowed.
+    if (ciph.is_transparent())
+    {
+        throw logic_error("result ciphertext is transparent");
+    }
+#endif
 }
 }  // namespace poseidon

@@ -5,7 +5,6 @@
 #include "poseidon_context.h"
 #include <vector>
 
-#undef POSEIDON_USE_MSGSL
 #ifdef POSEIDON_USE_MSGSL
 #include "gsl/span"
 #endif

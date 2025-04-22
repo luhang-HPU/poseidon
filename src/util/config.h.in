@@ -38,7 +38,7 @@
 #cmakedefine POSEIDON_USE_MEMSET_S
 
 // // Third-party dependencies
-// #cmakedefine POSEIDON_USE_MSGSL
-// #cmakedefine POSEIDON_USE_ZLIB
-// #cmakedefine POSEIDON_USE_ZSTD
+#cmakedefine POSEIDON_USE_MSGSL
+#cmakedefine POSEIDON_USE_ZLIB
+#cmakedefine POSEIDON_USE_ZSTD
 // #cmakedefine POSEIDON_USE_INTEL_HEXL

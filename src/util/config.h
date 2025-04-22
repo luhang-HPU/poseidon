@@ -33,6 +33,6 @@
 /* #undef POSEIDON_USE_MEMSET_S */
 
 // Third-party dependencies
-// #define POSEIDON_USE_MSGSL
-// #define POSEIDON_USE_ZLIB
-// #define POSEIDON_USE_ZSTD
+#define POSEIDON_USE_MSGSL
+#define POSEIDON_USE_ZLIB
+#define POSEIDON_USE_ZSTD

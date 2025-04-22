@@ -11,9 +11,7 @@
 #include <limits>
 #include <type_traits>
 
-#undef POSEIDON_USE_MSGSL
 #ifdef POSEIDON_USE_MSGSL
-
 #include "gsl/span"
 #endif
 

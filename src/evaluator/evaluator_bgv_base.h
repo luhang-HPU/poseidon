@@ -25,7 +25,8 @@ public:
                          parms_id_type parms_id = parms_id_zero) const override;
     virtual void ntt_fwd(const Ciphertext &ciph, Ciphertext &result) const override;
     virtual void ntt_inv(const Ciphertext &ciph, Ciphertext &result) const override;
-    virtual void square_inplace(Ciphertext &ciph) const override;
+    virtual void square_inplace(Ciphertext &ciph,
+                                MemoryPoolHandle pool = MemoryManager::GetPool()) const override;
 
     virtual void add(const Ciphertext &ciph1, const Ciphertext &ciph2,
                      Ciphertext &result) const override;
@@ -37,8 +38,6 @@ public:
                            Ciphertext &result) const override;
     virtual void multiply(const Ciphertext &ciph1, const Ciphertext &ciph2,
                           Ciphertext &result) const override;
-    virtual void multiply_plain(const Ciphertext &ciph, const Plaintext &plain,
-                                Ciphertext &result) const override;
     virtual void relinearize(const Ciphertext &ciph1, Ciphertext &result,
                              const RelinKeys &relin_keys) const override;
     virtual void multiply_relin(const Ciphertext &ciph1, const Ciphertext &ciph2,
@@ -56,23 +55,22 @@ public:
     virtual void apply_galois(const Ciphertext &ciph, Ciphertext &destination, std::uint32_t galois_elt,
                       const GaloisKeys &galois_keys,
                       MemoryPoolHandle pool = MemoryManager::GetPool()) const;
-
-private:
     void add_plain_inplace(Ciphertext &ciph, const Plaintext &plain) const;
+
     void sub_plain_inplace(Ciphertext &ciph, const Plaintext &plain) const;
 
     void bgv_multiply(Ciphertext &ciph1, const Ciphertext &ciph2, MemoryPoolHandle pool) const;
     void multiply_inplace(Ciphertext &ciph1, const Ciphertext &ciph2,
                           MemoryPoolHandle pool = MemoryManager::GetPool()) const;
-    void multiply_plain_inplace(Ciphertext &ciph, const Plaintext &plain,
-                                MemoryPoolHandle pool = MemoryManager::GetPool()) const;
+    virtual void
+    multiply_plain_inplace(Ciphertext &ciph, const Plaintext &plain,
+                           MemoryPoolHandle pool = MemoryManager::GetPool()) const override;
     void multiply_plain_ntt(Ciphertext &ciph_ntt, const Plaintext &plain_ntt) const;
-
-    void transform_from_ntt_inplace(Ciphertext &ciph) const;
 
     // void multiply_plain_normal(Ciphertext &ciph, const Plaintext &plain,
     //                            MemoryPoolHandle pool) const;
 
+private:
     std::shared_ptr<KSwitchBase> kswitch_{nullptr};
 };
 }  // namespace poseidon
