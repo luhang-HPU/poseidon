@@ -108,7 +108,6 @@ static_assert(sizeof(unsigned long long) == 8, "Require sizeof(unsigned long lon
 
 // gcc support
 #include "src/basics/util/gcc.h"
-#include "src/util/config.h"
 // Create a true/false value for indicating debug mode
 #ifdef POSEIDON_DEBUG
 #define POSEIDON_DEBUG_V true
