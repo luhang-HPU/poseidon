@@ -9,9 +9,9 @@
 #include "src/util/debug.h"
 #include "src/util/precision.h"
 #include "src/util/random_sample.h"
-#include <limits.h>
-#include <unistd.h>
+
 #include <fstream>
+#include <filesystem>
 
 using namespace std;
 using namespace poseidon;
@@ -21,8 +21,8 @@ using namespace poseidon::util;
 
 const int EPOCHS = 1;
 const double learning_rate = 0.95;
-int m = 5;
-int n = 3;
+int m = 5;      // row size of train set
+int n = 3;      // column size of train set
 
 namespace check
 {
@@ -53,8 +53,8 @@ template <typename T> void print_matrix(const std::vector<std::vector<T>> &matri
 
 }  // namespace check
 
-void read_file(std::vector<std::complex<double>> &matrix, std::string file);
-void read_file(std::vector<std::vector<std::complex<double>>> &matrix, std::string file);
+void read_file(std::vector<std::complex<double>> &matrix, const std::string& file);
+void read_file(std::vector<std::vector<std::complex<double>>> &matrix, const std::string& file);
 Ciphertext encode_and_encrypt(const CKKSEncoder &encoder, const Encryptor &encryptor,
                               std::vector<std::complex<double>> &message, double scale);
 std::vector<Ciphertext> encode_and_encrypt(const CKKSEncoder &encoder, const Encryptor &encryptor,
@@ -89,27 +89,6 @@ void update_weight(const std::vector<std::vector<std::complex<double>>> &x,
                    std::vector<std::complex<double>> &weight);
 void update_weight_approx();
 
-std::string get_executable_directory()
-{
-    char path[PATH_MAX];
-    ssize_t len = readlink("/proc/self/exe", path, sizeof(path) - 1);
-    if (len == -1)
-    {
-        return "";  // 读取失败
-    }
-    path[len] = '\0';
-
-    char *last_slash = strrchr(path, '/');
-    if (last_slash == nullptr)
-    {
-        return "";  // 路径中无 '/'，理论上不可能
-    }
-
-    // 截取目录部分（去掉可执行文件名）
-    *last_slash = '\0';
-    return std::string(path);
-}
-
 int main()
 {
     PoseidonFactory::get_instance()->set_device_type(DEVICE_SOFTWARE);
@@ -121,16 +100,22 @@ int main()
     ckks_param_literal.set_log_modulus(logQTmp, logPTmp);
     auto context = PoseidonFactory::get_instance()->create_poseidon_context(ckks_param_literal);
 
+    // input of trainning set
     vector<vector<complex<double>>> x(m, vector<complex<double>>(m, {0.0, 0.0}));
+    // output
     vector<complex<double>> y(m, {0.0, 0.0});
+    // weight
     vector<complex<double>> weight(m, {0.0, 0.0});
+    // transposed matrix of input
     vector<vector<complex<double>>> x_transpose(m, vector<complex<double>>(m, {0.0, 0.0}));
+    // diagonal transposed matrix of input
     vector<vector<complex<double>>> x_diag_T(m, vector<complex<double>>(m, {0.0, 0.0}));
+    // identity matrix
     vector<vector<complex<double>>> identity_matrix(m, vector<complex<double>>(m, {0.0, 0.0}));
 
-    std::string exe_path_directory = get_executable_directory();
-    read_file(x, exe_path_directory + "/" + "x_train.txt");
-    read_file(y, exe_path_directory + "/" + "y_train.txt");
+    std::filesystem::path current_path(__FILE__);
+    read_file(x, current_path.parent_path().string() + "/" + "x_train.txt");
+    read_file(y, current_path.parent_path().string() + "/" + "y_train.txt");
 
     auto slot_size = 1 << ckks_param_literal.log_slots();
     double scale = std::pow(2.0, q_def);
@@ -141,6 +126,7 @@ int main()
                        "size of matrix * 2 must be smaller than ciphertext slot!");
     }
 
+    // init weight randomly
     srand(0);
     for (int i = 0; i < n; ++i)
     {
@@ -162,6 +148,7 @@ int main()
     GaloisKeys rot_keys;
     CKKSEncoder ckks_encoder(context);
 
+    // init keys
     KeyGenerator kgen(context);
     kgen.create_public_key(public_key);
     kgen.create_relin_keys(relin_keys);
@@ -416,29 +403,37 @@ void print_weight_and_bias(const std::vector<std::complex<double>> &weight)
     std::cout << std::endl;
 }
 
-void read_file(std::vector<std::vector<std::complex<double>>> &matrix, std::string file)
+void read_file(std::vector<std::vector<std::complex<double>>> &matrix, const std::string& file)
 {
-    std::ifstream inFile_X(file, ios::in);
+    std::ifstream in_file(file, ios::in);
+    if (!in_file)
+    {
+        POSEIDON_THROW(config_error, "cannot open file ：" + file);
+    }
     for (int i = 0; i < m; ++i)
     {
         for (auto j = 0; j < n; ++j)
         {
-            if (!(inFile_X >> matrix[i][j]))
+            if (!(in_file >> matrix[i][j]))
             {
-                POSEIDON_THROW(config_error, "无法打开文件：" + file);
+                POSEIDON_THROW(config_error, "read file error ：" + file);
             }
         }
     }
 }
 
-void read_file(std::vector<std::complex<double>> &matrix, std::string file)
+void read_file(std::vector<std::complex<double>> &matrix, const std::string& file)
 {
-    std::ifstream inFile_X(file, ios::in);
+    std::ifstream in_file(file, ios::in);
+    if (!in_file)
+    {
+        POSEIDON_THROW(config_error, "cannot open file ：" + file);
+    }
     for (int i = 0; i < n; ++i)
     {
-        if (!(inFile_X >> matrix[i]))
+        if (!(in_file >> matrix[i]))
         {
-            POSEIDON_THROW(config_error, "无法打开文件：" + file);
+            POSEIDON_THROW(config_error, "read file error ：" + file);
         }
     }
 }
