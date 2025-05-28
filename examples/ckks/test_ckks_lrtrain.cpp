@@ -12,6 +12,7 @@
 
 #include <fstream>
 #include <filesystem>
+#include <unistd.h>
 
 using namespace std;
 using namespace poseidon;
@@ -19,10 +20,10 @@ using namespace poseidon::util;
 
 #define DEBUG_LRTRAIN
 
-const int EPOCHS = 1;
+const int EPOCHS = 5;
 const double learning_rate = 0.95;
-int m = 5;      // row size of train set
-int n = 3;      // column size of train set
+int m = 10;      // row size of train set
+int n = 5;      // column size of train set
 
 namespace check
 {
@@ -51,6 +52,31 @@ template <typename T> void print_matrix(const std::vector<std::vector<T>> &matri
     }
 }
 
+long get_process_memory(int pid)
+{
+    std::string filename = "/proc/" + to_string(pid) + "/status";
+
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        std::cerr << "cannot open file: " << filename << std::endl;
+        return -1;
+    }
+
+    std::string line;
+    while (std::getline(file, line)) {
+        if (line.find("VmRSS:") != std::string::npos) {
+            std::istringstream iss(line);
+            std::string label;
+            long rss;
+            iss >> label >> rss;
+            return rss;
+        }
+    }
+
+    file.close();
+    return -1;
+}
+
 }  // namespace check
 
 void read_file(std::vector<std::complex<double>> &matrix, const std::string& file);
@@ -62,6 +88,9 @@ std::vector<Ciphertext> encode_and_encrypt(const CKKSEncoder &encoder, const Enc
                                            double scale);
 std::vector<std::complex<double>> decrypt_and_decode(const CKKSEncoder &encoder,
                                                      Decryptor &decryptor, const Ciphertext &ciph);
+std::vector<Ciphertext> batch_encode_and_encrypt(const CKKSEncoder &encoder, const Encryptor &encryptor,
+                                                 std::vector<std::vector<std::complex<double>>> &message,
+                                                 double scale);
 double accuracy_of_plain(const std::vector<std::complex<double>> &weight,
                          const std::vector<std::vector<std::complex<double>>> &x,
                          const std::vector<std::complex<double>> &y);
@@ -72,13 +101,15 @@ double accuracy_of_ciph(const Ciphertext &ciph_weight,
 
 void preprocess(const std::vector<std::vector<std::complex<double>>> &x,
                 std::vector<std::vector<std::complex<double>>> &x_transpose,
-                std::vector<std::vector<std::complex<double>>> &x_diag_T,
-                std::vector<std::vector<std::complex<double>>> &identity_matrix);
+                std::vector<std::vector<std::complex<double>>> &x_diag_T);
+
 // ciph.slot[0] = slot[0] + slot[1] + ... + slot[n-1]
 // ciph.slot[x] = 0 , x != 0
 Ciphertext accumulate_top_n(const Ciphertext &ciph, int n, const CKKSEncoder &encoder,
                             const Encryptor &enc, std::shared_ptr<EvaluatorCkksBase> ckks_eva,
-                            const GaloisKeys rot_keys);
+                            const GaloisKeys &rot_keys);
+
+// return the sery expansion of (exp(x) / (1 + exp(x)))
 double sigmoid(double x);
 Ciphertext sigmoid_approx(const Ciphertext &ciph, const PolynomialVector &polys,
                           const CKKSEncoder &encoder, std::shared_ptr<EvaluatorCkksBase> eva,
@@ -87,17 +118,17 @@ Ciphertext sigmoid_approx(const Ciphertext &ciph, const PolynomialVector &polys,
 void update_weight(const std::vector<std::vector<std::complex<double>>> &x,
                    const std::vector<std::complex<double>> &y,
                    std::vector<std::complex<double>> &weight);
-void update_weight_approx();
 
 int main()
 {
+    auto pid = getpid();
     PoseidonFactory::get_instance()->set_device_type(DEVICE_SOFTWARE);
     uint32_t q_def = 32;
 
     ParametersLiteral ckks_param_literal{CKKS, 15, 15 - 1, q_def, 5, 1, 0, {}, {}};
-    vector<uint32_t> logQTmp(20, 32);
-    vector<uint32_t> logPTmp(1, 60);
-    ckks_param_literal.set_log_modulus(logQTmp, logPTmp);
+    vector<uint32_t> log_q(34, 32);
+    vector<uint32_t> log_p(1, 60);
+    ckks_param_literal.set_log_modulus(log_q, log_p);
     auto context = PoseidonFactory::get_instance()->create_poseidon_context(ckks_param_literal);
 
     // input of trainning set
@@ -110,12 +141,11 @@ int main()
     vector<vector<complex<double>>> x_transpose(m, vector<complex<double>>(m, {0.0, 0.0}));
     // diagonal transposed matrix of input
     vector<vector<complex<double>>> x_diag_T(m, vector<complex<double>>(m, {0.0, 0.0}));
-    // identity matrix
-    vector<vector<complex<double>>> identity_matrix(m, vector<complex<double>>(m, {0.0, 0.0}));
 
     std::filesystem::path current_path(__FILE__);
-    read_file(x, current_path.parent_path().string() + "/" + "x_train.txt");
-    read_file(y, current_path.parent_path().string() + "/" + "y_train.txt");
+    read_file(x,current_path.parent_path().string() + "/x_train.txt");
+    read_file(y,current_path.parent_path().string() + "/y_train.txt");
+    std::cout << current_path.parent_path().string() << std::endl;
 
     auto slot_size = 1 << ckks_param_literal.log_slots();
     double scale = std::pow(2.0, q_def);
@@ -140,7 +170,7 @@ int main()
     }
     auto _weight = weight;
 
-    preprocess(x, x_transpose, x_diag_T, identity_matrix);
+    preprocess(x, x_transpose, x_diag_T);
 
     PublicKey public_key;
     RelinKeys relin_keys;
@@ -152,7 +182,9 @@ int main()
     KeyGenerator kgen(context);
     kgen.create_public_key(public_key);
     kgen.create_relin_keys(relin_keys);
+    std::cout << "Before create galois keys : " << check::get_process_memory(pid) << std::endl;
     kgen.create_galois_keys(rot_keys);
+    std::cout << "After create galois keys : " << check::get_process_memory(pid) << std::endl;
 
     Encryptor enc(context, public_key, kgen.secret_key());
     Decryptor dec(context, kgen.secret_key());
@@ -164,6 +196,7 @@ int main()
     Ciphertext ciph_y = encode_and_encrypt(ckks_encoder, enc, y, scale);
     Ciphertext ciph_weight = encode_and_encrypt(ckks_encoder, enc, weight, scale);
 
+    std::cout << "After encode and encrypt : " << check::get_process_memory(pid) << std::endl;
     vector<complex<double>> buffer(4, 0);
     buffer[0] = 0.5;
     buffer[1] = 0.197;
@@ -182,39 +215,52 @@ int main()
 
     PolynomialVector polys(poly_v, slots_index);
 
-    util::Timestacs timer;
-    timer.start();
+    std::cout << "After init poly : " << check::get_process_memory(pid) << std::endl;
     for (auto epoch = 0; epoch < EPOCHS; ++epoch)
     {
-        // used for diagnoal matrix multiplication
-        Ciphertext ciph_weight_shift;
+        util::Timestacs timer;
+        timer.start();
+
+        Ciphertext ciph_weight_shift;       // used for diagnoal matrix multiplication [w1, w2, ..., wn, w1, w2, ..., wn, 0, 0, 0, ...]
         ckks_eva->rotate(ciph_weight, ciph_weight_shift, -m, rot_keys);
         ckks_eva->add(ciph_weight, ciph_weight_shift, ciph_weight_shift);
 
         Ciphertext ciph_tmp;
-        enc.encrypt_zero(ciph_tmp);
-        // ensure the scale and paramId of ciph_tmp = ciph_result
-        ckks_eva->multiply_relin(ciph_tmp, ciph_weight, ciph_tmp, relin_keys);
 
-        // calculate ciph_tmp = (theta * x1, theta * x2, ... , theta * xm, ...)
+        // calculate ciph_tmp = (weight * x[0], weight * x[1], ... , weight * x[m], ...)
         for (auto i = 0; i < m; ++i)
         {
             Ciphertext ciph_result;
             Ciphertext ciph_weight_rotated;
             ckks_eva->rotate(ciph_weight_shift, ciph_weight_rotated, i, rot_keys);
-            ckks_eva->multiply_relin(ciph_x_diag_T[i], ciph_weight_rotated, ciph_result,
+
+            Ciphertext ciph_x_diag_T_tmp;
+            if (ciph_x_diag_T[i].level() > ciph_weight_rotated.level())
+            {
+                ckks_eva->drop_modulus(ciph_x_diag_T[i], ciph_x_diag_T_tmp, ciph_weight_rotated.parms_id());
+            }
+            else
+            {
+                ciph_x_diag_T_tmp = ciph_x_diag_T[i];
+            }
+
+            ckks_eva->multiply_relin(ciph_x_diag_T_tmp, ciph_weight_rotated, ciph_result,
                                      relin_keys);
-            ckks_eva->add(ciph_tmp, ciph_result, ciph_tmp);
+            if (i == 0)
+            {
+                ciph_tmp = ciph_result;
+            }
+            else
+            {
+                ckks_eva->add(ciph_tmp, ciph_result, ciph_tmp);
+            }
         }
-        ckks_eva->rescale(ciph_tmp, ciph_tmp);
+        ckks_eva->rescale_dynamic(ciph_tmp, ciph_tmp, scale);
 
 #ifdef DEBUG_LRTRAIN
         // check theta^T * x
         std::vector<std::complex<double>> dot_product;
         {
-            check::print_matrix(x);
-            check::print_matrix(x_diag_T);
-            check::print_vector(weight);
             std::vector<double> _dot_product;
             for (auto i = 0; i < m; ++i)
             {
@@ -227,7 +273,7 @@ int main()
             }
 
             dot_product = decrypt_and_decode(ckks_encoder, dec, ciph_tmp);
-            std::cout << "fhe value  |  perdict value" << std::endl;
+            std::cout << "fhe value  |  expected value" << std::endl;
             for (auto i = 0; i < m; ++i)
             {
                 std::cout << dot_product[i].real() << " " << _dot_product[i] << std::endl;
@@ -244,6 +290,8 @@ int main()
         // calculate sigmoid(theta^T x)
         Ciphertext ciph_sigmoid =
             sigmoid_approx(ciph_tmp, polys, ckks_encoder, ckks_eva, relin_keys);
+        std::cout << ciph_sigmoid.scale() << "   " << ciph_y.scale() << std::endl;
+        ciph_sigmoid.scale() = ciph_y.scale();
 
 #ifdef DEBUG_LRTRAIN
         // check sigmoid
@@ -254,7 +302,7 @@ int main()
             {
                 perdict_sigmoid[i] = sigmoid(dot_product[i].real());
             }
-            std::cout << "fhe sigmoid  |  perdict sigmoid" << std::endl;
+            std::cout << "fhe sigmoid  |  expected sigmoid" << std::endl;
             for (auto i = 0; i < m; ++i)
             {
                 std::cout << res[i] << " " << perdict_sigmoid[i] << std::endl;
@@ -264,21 +312,27 @@ int main()
 
         // calculate gradient
         ckks_eva->sub_dynamic(ciph_sigmoid, ciph_y, ciph_sigmoid, ckks_encoder);
+
         Ciphertext ciph_sum;
         Ciphertext ciph_accumulate;
         for (auto j = 0; j < m; ++j)
         {
-            ckks_eva->drop_modulus(ciph_x_transpose[j], ciph_x_transpose[j],
+            Ciphertext ciph_x_transpose_tmp;
+            ckks_eva->drop_modulus(ciph_x_transpose[j], ciph_x_transpose_tmp,
                                    ciph_sigmoid.parms_id());
-            ckks_eva->multiply_relin(ciph_sigmoid, ciph_x_transpose[j], ciph_accumulate,
+
+            ckks_eva->multiply_relin(ciph_sigmoid, ciph_x_transpose_tmp, ciph_accumulate,
                                      relin_keys);
             ckks_eva->rescale_dynamic(ciph_accumulate, ciph_accumulate, scale);
             ciph_accumulate =
                 accumulate_top_n(ciph_accumulate, m, ckks_encoder, enc, ckks_eva, rot_keys);
 
             Plaintext plain_mask;
-            ckks_encoder.encode(identity_matrix[0], ciph_accumulate.parms_id(),
+            std::vector<std::complex<double>> vec_mask(m, {0.0, 0.0});
+            vec_mask[0] = {1.0, 0.0};
+            ckks_encoder.encode(vec_mask, ciph_accumulate.parms_id(),
                                 ciph_accumulate.scale(), plain_mask);
+
             ckks_eva->multiply_plain(ciph_accumulate, plain_mask, ciph_accumulate);
             ckks_eva->rotate(ciph_accumulate, ciph_accumulate, -j, rot_keys);
             if (j == 0)
@@ -291,8 +345,8 @@ int main()
             ckks_eva->add(ciph_sum, ciph_accumulate, ciph_sum);
         }
         ckks_eva->rescale_dynamic(ciph_sum, ciph_tmp, scale);
-
         Ciphertext ciph_gradient;
+
         ckks_eva->multiply_const(ciph_tmp, 1.0 / m, ciph_tmp.scale(), ciph_gradient, ckks_encoder);
         ckks_eva->rescale_dynamic(ciph_gradient, ciph_gradient, scale);
 
@@ -310,7 +364,7 @@ int main()
                 perdict_gradient[j] = sum / m;
             }
             auto res = decrypt_and_decode(ckks_encoder, dec, ciph_gradient);
-            std::cout << "fhe gradient  |  perdict gradient" << std::endl;
+            std::cout << "fhe gradient  |  expected gradient" << std::endl;
             for (auto j = 0; j < m; ++j)
             {
                 std::cout << res[j].real() << " " << perdict_gradient[j] << std::endl;
@@ -321,34 +375,46 @@ int main()
         // update ciph_weight
         ckks_eva->multiply_const(ciph_gradient, learning_rate, ciph_gradient.scale(), ciph_tmp,
                                  ckks_encoder);
-        ckks_eva->rescale_dynamic(ciph_gradient, ciph_gradient, scale);
         ckks_eva->sub_dynamic(ciph_weight, ciph_tmp, ciph_weight, ckks_encoder);
+        ckks_eva->rescale_dynamic(ciph_weight, ciph_weight, scale);
 
         // check weight updated begin
         update_weight(x, y, _weight);
-        std::cout << "fhe weight  |  perdict weight" << std::endl;
+        std::cout << "fhe weight  |  expected weight" << std::endl;
         auto res = decrypt_and_decode(ckks_encoder, dec, ciph_weight);
         for (auto i = 0; i < n; ++i)
         {
             std::cout << res[i].real() << " " << _weight[i].real() << std::endl;
         }
-    }
+        timer.end();
+        std::cout << "epoch " << epoch+1;
+        timer.print_time(" lr train time: ");
 
-    timer.end();
-    timer.print_time("lr train time: ");
+        // bootstrap
+        if(ciph_weight.level() < 10){
+            auto start = chrono::high_resolution_clock::now();
+            std::cout << "bootstraping start..." << std::endl;
+            ckks_eva->bootstrap(ciph_weight, ciph_weight, relin_keys,rot_keys, ckks_encoder);
+            auto stop = chrono::high_resolution_clock::now();
+            auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
+            std::cout << "bootstraping TIME: " << duration.count() << " microseconds" << std::endl;
+        }
+    }
 
     Plaintext plain_weight;
     dec.decrypt(ciph_weight, plain_weight);
     ckks_encoder.decode(plain_weight, weight);
 
-    std::cout << "accuracy of ciph: " << accuracy_of_plain(weight, x, y) << std::endl;
+    std::cout << "fhe training accuracy : " << accuracy_of_plain(weight, x, y) << std::endl;
+#ifdef DEBUG_LRTRAIN
+    std::cout << "expected training accuracy : " << accuracy_of_plain(_weight, x, y) << std::endl;
+#endif
 
     return 0;
 }
 
 double sigmoid(double x)
 {
-    // return(exp(x) / (1 + exp(x)));
     return (0.5 + 0.197 * x - 0.004 * x * x * x);
 }
 
@@ -408,7 +474,7 @@ void read_file(std::vector<std::vector<std::complex<double>>> &matrix, const std
     std::ifstream in_file(file, ios::in);
     if (!in_file)
     {
-        POSEIDON_THROW(config_error, "cannot open file ：" + file);
+        POSEIDON_THROW(config_error, "cannot open file: " + file);
     }
     for (int i = 0; i < m; ++i)
     {
@@ -416,7 +482,7 @@ void read_file(std::vector<std::vector<std::complex<double>>> &matrix, const std
         {
             if (!(in_file >> matrix[i][j]))
             {
-                POSEIDON_THROW(config_error, "read file error ：" + file);
+                POSEIDON_THROW(config_error, "read file error: " + file);
             }
         }
     }
@@ -427,21 +493,20 @@ void read_file(std::vector<std::complex<double>> &matrix, const std::string& fil
     std::ifstream in_file(file, ios::in);
     if (!in_file)
     {
-        POSEIDON_THROW(config_error, "cannot open file ：" + file);
+        POSEIDON_THROW(config_error, "cannot open file: " + file);
     }
     for (int i = 0; i < n; ++i)
     {
         if (!(in_file >> matrix[i]))
         {
-            POSEIDON_THROW(config_error, "read file error ：" + file);
+            POSEIDON_THROW(config_error, "read file error: " + file);
         }
     }
 }
 
 void preprocess(const std::vector<std::vector<std::complex<double>>> &x,
                 std::vector<std::vector<std::complex<double>>> &x_transpose,
-                std::vector<std::vector<std::complex<double>>> &x_diag_T,
-                std::vector<std::vector<std::complex<double>>> &identity_matrix)
+                std::vector<std::vector<std::complex<double>>> &x_diag_T)
 {
     for (int i = 0; i < m; ++i)
     {
@@ -457,15 +522,11 @@ void preprocess(const std::vector<std::vector<std::complex<double>>> &x,
             x_diag_T[i][j] = x[j][(i + j) % m];
         }
     }
-    for (int i = 0; i < m; ++i)
-    {
-        identity_matrix[i][i] = 1.0;
-    }
 }
 
 Ciphertext accumulate_top_n(const Ciphertext &ciph, int n, const CKKSEncoder &encoder,
                             const Encryptor &enc, std::shared_ptr<EvaluatorCkksBase> ckks_eva,
-                            const GaloisKeys rot_keys)
+                            const GaloisKeys &rot_keys)
 {
     if (n <= 0)
     {
