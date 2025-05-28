@@ -21,8 +21,8 @@ target_link_libraries(test_ckks_pir_demo_multi_thread poseidon_shared)
 add_executable(test_ckks_slot_to_coeff test_ckks_slot_to_coeff.cpp)
 target_link_libraries(test_ckks_slot_to_coeff poseidon_shared)
 
-add_executable(test_ckks_dpdk test_ckks_dpdk.cpp)
-target_link_libraries(test_ckks_dpdk poseidon_shared)
-
 add_executable(test_ckks_lrtrain test_ckks_lrtrain.cpp)
 target_link_libraries(test_ckks_lrtrain poseidon_shared)
+
+add_executable(ckks_lrtrain_opt ckks_lrtrain_opt.cpp batch_handler.h batch_handler.cpp)
+target_link_libraries(ckks_lrtrain_opt poseidon_shared)

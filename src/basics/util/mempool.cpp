@@ -85,7 +85,7 @@ MemoryPoolHeadMT::~MemoryPoolHeadMT() noexcept
         for (auto &alloc : allocs_)
         {
             size_t curr_alloc_byte_count = mul_safe(item_byte_count_, alloc.size);
-            seal_memzero(alloc.data_ptr, curr_alloc_byte_count);
+            poseidon_memzero(alloc.data_ptr, curr_alloc_byte_count);
 
             // Delete this allocation
             POSEIDON_FREE(alloc.data_ptr);
@@ -229,7 +229,7 @@ MemoryPoolHeadST::~MemoryPoolHeadST() noexcept
         for (auto &alloc : allocs_)
         {
             size_t curr_alloc_byte_count = mul_safe(item_byte_count_, alloc.size);
-            seal_memzero(alloc.data_ptr, curr_alloc_byte_count);
+            poseidon_memzero(alloc.data_ptr, curr_alloc_byte_count);
 
             // Delete this allocation
             POSEIDON_FREE(alloc.data_ptr);

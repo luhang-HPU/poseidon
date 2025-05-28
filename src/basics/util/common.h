@@ -10,6 +10,7 @@
 #include <type_traits>
 #include <utility>
 #include <vector>
+#include <iostream>
 
 namespace poseidon
 {
@@ -20,10 +21,10 @@ template <typename... Ts> struct VoidType
     using type = void;
 };
 
-template <typename... Ts> using seal_void_t = typename VoidType<Ts...>::type;
+template <typename... Ts> using poseidon_void_t = typename VoidType<Ts...>::type;
 
 template <typename ForwardIt, typename Size, typename Func>
-inline ForwardIt seal_for_each_n(ForwardIt first, Size size, Func &&func)
+inline ForwardIt poseidon_for_each_n(ForwardIt first, Size size, Func &&func)
 {
     for (; size--; (void)++first)
     {
@@ -33,16 +34,16 @@ inline ForwardIt seal_for_each_n(ForwardIt first, Size size, Func &&func)
 }
 
 template <typename Func, typename Tuple, std::size_t... Is>
-inline decltype(auto) seal_apply_impl(Func &&func, Tuple &&tp, std::index_sequence<Is...>)
+inline decltype(auto) poseidon_apply_impl(Func &&func, Tuple &&tp, std::index_sequence<Is...>)
 {
     return func(std::get<Is>(std::forward<Tuple>(tp))...);
 }
 
 template <typename Func, typename Tuple, std::size_t... Is>
-inline decltype(auto) seal_apply(Func &&func, Tuple &&tp)
+inline decltype(auto) poseidon_apply(Func &&func, Tuple &&tp)
 {
     using iseq_t = std::make_index_sequence<std::tuple_size<std::decay_t<Tuple>>::value>;
-    return seal_apply_impl(std::forward<Func>(func), std::forward<Tuple>(tp), iseq_t{});
+    return poseidon_apply_impl(std::forward<Func>(func), std::forward<Tuple>(tp), iseq_t{});
 }
 
 template <typename T, typename...>
@@ -567,11 +568,11 @@ template <typename T, typename = std::enable_if_t<std::is_floating_point<T>::val
 POSEIDON_NODISCARD inline bool are_approximate(T value1, T value2) noexcept
 {
     double scale_factor = std::max<T>({value1, value2, T{1.0}});
-    if (scale_factor < T{1e10})
+    if (scale_factor < T{1e9})
     {
         return are_close(value1, value2);
     }
-    return std::fabs(value1 - value2) < scale_factor / T{100000.0};
+    return std::fabs(value1 - value2) < scale_factor / T{1000.0};
 }
 
 template <typename T, typename = std::enable_if_t<std::is_integral<T>::value>>
@@ -580,6 +581,6 @@ POSEIDON_NODISCARD inline constexpr bool is_zero(T value) noexcept
     return value == T{0};
 }
 
-void seal_memzero(void *data, std::size_t size);
+void poseidon_memzero(void *data, std::size_t size);
 }  // namespace util
 }  // namespace poseidon

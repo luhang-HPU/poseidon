@@ -928,6 +928,7 @@ void EvaluatorCkksBase::eval_mod(const Ciphertext &ciph, Ciphertext &result,
     double prev_scale_ct = result.scale();
     result.scale() = eva_poly.scaling_factor();
 
+    double pre_min_scale = min_scale_;
     set_min_scale(eva_poly.scaling_factor());
     auto target_scale = eva_poly.scaling_factor();
     vector<Polynomial> poly_sin{eva_poly.sine_poly()};
@@ -972,6 +973,8 @@ void EvaluatorCkksBase::eval_mod(const Ciphertext &ciph, Ciphertext &result,
     rescale_dynamic(result, result, eva_poly.scaling_factor());
 
     result.scale() = prev_scale_ct;
+
+    set_min_scale(pre_min_scale);
 }
 
 void EvaluatorCkksBase::rescale_for_bootstrap(Ciphertext &ciph)

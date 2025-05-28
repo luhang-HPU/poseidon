@@ -1,6 +1,5 @@
 #pragma once
 
-#include "config.h"
 #include "exception.h"
 #include "src/basics/util/defines.h"
 

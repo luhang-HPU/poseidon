@@ -15,7 +15,7 @@ namespace poseidon
 {
 namespace util
 {
-void seal_memzero(void *data, size_t size)
+void poseidon_memzero(void *data, size_t size)
 {
 #if (POSEIDON_SYSTEM == POSEIDON_SYSTEM_WINDOWS)
     SecureZeroMemory(data, size);

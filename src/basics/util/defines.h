@@ -108,7 +108,6 @@ static_assert(sizeof(unsigned long long) == 8, "Require sizeof(unsigned long lon
 
 // gcc support
 #include "src/basics/util/gcc.h"
-#include "src/util/config.h"
 // Create a true/false value for indicating debug mode
 #ifdef POSEIDON_DEBUG
 #define POSEIDON_DEBUG_V true
@@ -161,7 +160,7 @@ enum class poseidon_byte : unsigned char
 
 // C++14 does not have std::for_each_n so we use a custom implementation
 #ifndef POSEIDON_USE_STD_FOR_EACH_N
-#define POSEIDON_ITERATE poseidon::util::seal_for_each_n
+#define POSEIDON_ITERATE poseidon::util::poseidon_for_each_n
 #else
 #define POSEIDON_ITERATE std::for_each_n
 #endif
