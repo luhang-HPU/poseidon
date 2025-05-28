@@ -248,7 +248,7 @@ public:
 
     @param[in] assign The plaintext to copy from
     */
-    Plaintext &operator=(const Plaintext &assign) = default;
+    Plaintext &operator=(const Plaintext &assign);
 
     /**
     Moves a given plaintext to the current one.

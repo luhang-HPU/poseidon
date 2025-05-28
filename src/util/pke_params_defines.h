@@ -1,16 +1,17 @@
 #pragma once
 
-enum SchemeType
+enum SchemeType : std::uint8_t
 {
-    CKKS,
-    BFV,
-    BGV
+    default_type = 0x0,
+    CKKS = 0x1,
+    BFV = 0x2,
+    BGV = 0x3
 };
 
-enum KeySwitchVariant
+enum KeySwitchVariant : std::uint8_t
 {
-    GHS,
-    BV,
-    HYBRID,
-    none
+    none = 0x0,
+    GHS = 0x1,
+    BV = 0x2,
+    HYBRID = 0x3
 };

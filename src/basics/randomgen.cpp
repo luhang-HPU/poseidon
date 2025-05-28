@@ -218,7 +218,7 @@ void Shake256PRNG::refill_buffer()
     shake256(reinterpret_cast<uint8_t *>(buffer_begin_), buffer_size_,
              reinterpret_cast<const uint8_t *>(seed_ext.data()),
              seed_ext.size() * bytes_per_uint64);
-    seal_memzero(seed_ext.data(), seed_ext.size() * bytes_per_uint64);
+    poseidon_memzero(seed_ext.data(), seed_ext.size() * bytes_per_uint64);
     counter_++;
 }
 }  // namespace poseidon

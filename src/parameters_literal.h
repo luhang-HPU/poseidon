@@ -97,18 +97,9 @@ public:
             util::add_safe(sizeof(Serialization::PoseidonHeader), members_size));
     }
 
-    /// TODO
-    void save_members(std::ostream &stream) const
-    {
-        std::cout << "save_members" << std::endl;
-        /// TODO:
-    }
+    void save_members(std::ostream &stream) const;
 
-    void load_members(std::istream &stream)
-    {
-        std::cout << "load_members" << std::endl;
-        /// TODO:
-    }
+    void load_members(std::istream &stream);
 
     inline std::streamoff save(std::ostream &stream,
                                compr_mode_type compr_mode = Serialization::compr_mode_default) const

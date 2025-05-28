@@ -24,7 +24,6 @@ int main()
 
     Plaintext plain1, plain2, plain_res;
     Ciphertext ciph1, ciph2, ciph_res;
-    auto slot_num = bfv_param_literal.slot();
     vector<uint64_t> message1 = {1, 2, 3};
     vector<uint64_t> message2 = {4, 5, 6};
     vector<uint64_t> message_res;
