@@ -17,6 +17,130 @@ ParametersLiteral::ParametersLiteral(SchemeType type, uint32_t log_n, uint32_t l
     compute_params_id();
 }
 
+void ParametersLiteral::save_members(std::ostream &stream) const
+{
+    // TODO: need test
+    // Throw exceptions on std::ios_base::badbit and std::ios_base::failbit
+    auto old_except_mask = stream.exceptions();
+    try
+    {
+        stream.exceptions(ios_base::badbit | ios_base::failbit);
+        uint8_t type = static_cast<uint8_t>(type_);
+        int sec_level = static_cast<int>(sec_level_);
+        uint32_t log_n = static_cast<uint32_t>(log_n_);
+        uint32_t log_slots = static_cast<uint32_t>(log_slots_);
+        uint32_t log_scale = static_cast<uint32_t>(log_scale_);
+        uint32_t hamming_weight = static_cast<uint32_t>(hamming_weight_);
+        uint32_t q0_level = static_cast<uint32_t>(q0_level_);
+
+        stream.write(reinterpret_cast<const char *>(&type), sizeof(uint8_t));
+        stream.write(reinterpret_cast<const char *>(&sec_level), sizeof(int));
+        stream.write(reinterpret_cast<const char *>(&log_n), sizeof(uint32_t));
+        stream.write(reinterpret_cast<const char *>(&log_slots), sizeof(uint32_t));
+        stream.write(reinterpret_cast<const char *>(&log_scale), sizeof(uint32_t));
+        stream.write(reinterpret_cast<const char *>(&hamming_weight), sizeof(uint32_t));
+        stream.write(reinterpret_cast<const char *>(&q0_level), sizeof(uint32_t));
+
+        uint64_t q_size64 = static_cast<uint64_t>(q_.size());
+        uint64_t p_size64 = static_cast<uint64_t>(p_.size());
+
+        stream.write(reinterpret_cast<const char *>(&q_size64), sizeof(uint64_t));
+        stream.write(reinterpret_cast<const char *>(&p_size64), sizeof(uint64_t));
+        for (const auto &q : q_)
+        {
+            q.save(stream, compr_mode_type::none);
+        }
+        for (const auto &p : p_)
+        {
+            p.save(stream, compr_mode_type::none);
+        }
+
+        // Only BFV and BGV uses plain_modulus but save it in any case for simplicity
+        plain_modulus_.save(stream, compr_mode_type::none);
+    }
+    catch (const ios_base::failure &)
+    {
+        stream.exceptions(old_except_mask);
+        throw runtime_error("I/O error");
+    }
+    catch (...)
+    {
+        stream.exceptions(old_except_mask);
+        throw;
+    }
+    stream.exceptions(old_except_mask);
+}
+
+void ParametersLiteral::load_members(std::istream &stream)
+{
+    // Throw exceptions on std::ios_base::badbit and std::ios_base::failbit
+    auto old_except_mask = stream.exceptions();
+    try
+    {
+        stream.exceptions(ios_base::badbit | ios_base::failbit);
+
+        // Read the scheme identifier
+        uint8_t type;
+        int sec_level;
+        uint32_t log_n;
+        uint32_t log_slots;
+        uint32_t log_scale;
+        uint32_t hamming_weight;
+        uint32_t q0_level;
+
+        stream.read(reinterpret_cast<char *>(&type), sizeof(uint8_t));
+        stream.read(reinterpret_cast<char *>(&sec_level), sizeof(int));
+        stream.read(reinterpret_cast<char *>(&log_n), sizeof(uint32_t));
+        stream.read(reinterpret_cast<char *>(&log_slots), sizeof(uint32_t));
+        stream.read(reinterpret_cast<char *>(&log_scale), sizeof(uint32_t));
+        stream.read(reinterpret_cast<char *>(&hamming_weight), sizeof(uint32_t));
+        stream.read(reinterpret_cast<char *>(&q0_level), sizeof(uint32_t));
+
+        uint64_t q_size64;
+        uint64_t p_size64;
+        vector<Modulus> q;
+        vector<Modulus> p;
+
+        stream.read(reinterpret_cast<char *>(&q_size64), sizeof(uint64_t));
+        stream.read(reinterpret_cast<char *>(&p_size64), sizeof(uint64_t));
+        for (uint64_t i = 0; i < q_size64; i++)
+        {
+            q.emplace_back();
+            q.back().load(stream);
+        }
+
+        for (uint64_t i = 0; i < p_size64; i++)
+        {
+            p.emplace_back();
+            p.back().load(stream);
+        }
+        // Read the plain_modulus
+        Modulus plain_modulus;
+        plain_modulus.load(stream);
+
+        // This constructor will throw if scheme is invalid
+        ParametersLiteral parms(static_cast<SchemeType>(type), log_n, log_slots, log_scale,
+                                hamming_weight, q0_level, plain_modulus, q, p,
+                                static_cast<poseidon::sec_level_type>(sec_level));
+
+        // Set the loaded parameters
+        swap(*this, parms);
+
+        stream.exceptions(old_except_mask);
+    }
+    catch (const ios_base::failure &)
+    {
+        stream.exceptions(old_except_mask);
+        throw runtime_error("I/O error");
+    }
+    catch (...)
+    {
+        stream.exceptions(old_except_mask);
+        throw;
+    }
+    stream.exceptions(old_except_mask);
+}
+
 void ParametersLiteral::set_poly_modulus_degree(std::size_t poly_modulus_degree)
 {
     if (poly_modulus_degree)
@@ -422,29 +546,29 @@ void ParametersLiteralDefault::init(SchemeType scheme_type, uint32_t degree,
         switch (sec_level_)
         {
         case sec_level_type::none:
+            log_scale_ = std::get<2>(GetDefaultLogCoeffModulus128().at(degree));
             set_log_modulus(std::get<0>(GetDefaultLogCoeffModulus128().at(degree)),
                             std::get<1>(GetDefaultLogCoeffModulus128().at(degree)));
-            log_scale_ = std::get<2>(GetDefaultLogCoeffModulus128().at(degree));
             break;
         case sec_level_type::tc128:
+            log_scale_ = std::get<2>(GetDefaultLogCoeffModulus128().at(degree));
             set_log_modulus(std::get<0>(GetDefaultLogCoeffModulus128().at(degree)),
                             std::get<1>(GetDefaultLogCoeffModulus128().at(degree)));
-            log_scale_ = std::get<2>(GetDefaultLogCoeffModulus128().at(degree));
             break;
         case sec_level_type::tc192:
+            log_scale_ = std::get<2>(GetDefaultLogCoeffModulus192().at(degree));
             set_log_modulus(std::get<0>(GetDefaultLogCoeffModulus192().at(degree)),
                             std::get<1>(GetDefaultLogCoeffModulus192().at(degree)));
-            log_scale_ = std::get<2>(GetDefaultLogCoeffModulus192().at(degree));
             break;
         case sec_level_type::tc256:
+            log_scale_ = std::get<2>(GetDefaultLogCoeffModulus256().at(degree));
             set_log_modulus(std::get<0>(GetDefaultLogCoeffModulus256().at(degree)),
                             std::get<1>(GetDefaultLogCoeffModulus256().at(degree)));
-            log_scale_ = std::get<2>(GetDefaultLogCoeffModulus256().at(degree));
             break;
         default:
+            log_scale_ = std::get<2>(GetDefaultLogCoeffModulus128().at(degree));
             set_log_modulus(std::get<0>(GetDefaultLogCoeffModulus128().at(degree)),
                             std::get<1>(GetDefaultLogCoeffModulus128().at(degree)));
-            log_scale_ = std::get<2>(GetDefaultLogCoeffModulus128().at(degree));
         }
     }
     else if (scheme_type == BFV)
@@ -455,29 +579,29 @@ void ParametersLiteralDefault::init(SchemeType scheme_type, uint32_t degree,
         switch (sec_level_)
         {
         case sec_level_type::none:
+            log_scale_ = std::get<2>(GetDefaultCoeffModulus128().at(degree));
             set_modulus(std::get<0>(GetDefaultCoeffModulus128().at(degree)),
                         std::get<1>(GetDefaultCoeffModulus128().at(degree)));
-            log_scale_ = std::get<2>(GetDefaultCoeffModulus128().at(degree));
             break;
         case sec_level_type::tc128:
+            log_scale_ = std::get<2>(GetDefaultCoeffModulus128().at(degree));
             set_modulus(std::get<0>(GetDefaultCoeffModulus128().at(degree)),
                         std::get<1>(GetDefaultCoeffModulus128().at(degree)));
-            log_scale_ = std::get<2>(GetDefaultCoeffModulus128().at(degree));
             break;
         case sec_level_type::tc192:
+            log_scale_ = std::get<2>(GetDefaultCoeffModulus192().at(degree));
             set_modulus(std::get<0>(GetDefaultCoeffModulus192().at(degree)),
                         std::get<1>(GetDefaultCoeffModulus192().at(degree)));
-            log_scale_ = std::get<2>(GetDefaultCoeffModulus192().at(degree));
             break;
         case sec_level_type::tc256:
+            log_scale_ = std::get<2>(GetDefaultCoeffModulus256().at(degree));
             set_modulus(std::get<0>(GetDefaultCoeffModulus256().at(degree)),
                         std::get<1>(GetDefaultCoeffModulus256().at(degree)));
-            log_scale_ = std::get<2>(GetDefaultCoeffModulus256().at(degree));
             break;
         default:
+            log_scale_ = std::get<2>(GetDefaultCoeffModulus128().at(degree));
             set_modulus(std::get<0>(GetDefaultCoeffModulus128().at(degree)),
                         std::get<1>(GetDefaultCoeffModulus128().at(degree)));
-            log_scale_ = std::get<2>(GetDefaultCoeffModulus128().at(degree));
         }
     }
     else if (scheme_type == BGV)
@@ -494,29 +618,29 @@ void ParametersLiteralDefault::init(SchemeType scheme_type, uint32_t degree,
         switch (sec_level_)
         {
         case sec_level_type::none:
+            log_scale_ = std::get<2>(GetDefaultCoeffModulus128().at(degree));
             set_modulus(std::get<0>(GetDefaultCoeffModulus128().at(degree)),
                         std::get<1>(GetDefaultCoeffModulus128().at(degree)));
-            log_scale_ = std::get<2>(GetDefaultCoeffModulus128().at(degree));
             break;
         case sec_level_type::tc128:
+            log_scale_ = std::get<2>(GetDefaultCoeffModulus128().at(degree));
             set_modulus(std::get<0>(GetDefaultCoeffModulus128().at(degree)),
                         std::get<1>(GetDefaultCoeffModulus128().at(degree)));
-            log_scale_ = std::get<2>(GetDefaultCoeffModulus128().at(degree));
             break;
         case sec_level_type::tc192:
+            log_scale_ = std::get<2>(GetDefaultCoeffModulus192().at(degree));
             set_modulus(std::get<0>(GetDefaultCoeffModulus192().at(degree)),
                         std::get<1>(GetDefaultCoeffModulus192().at(degree)));
-            log_scale_ = std::get<2>(GetDefaultCoeffModulus192().at(degree));
             break;
         case sec_level_type::tc256:
+            log_scale_ = std::get<2>(GetDefaultCoeffModulus256().at(degree));
             set_modulus(std::get<0>(GetDefaultCoeffModulus256().at(degree)),
                         std::get<1>(GetDefaultCoeffModulus256().at(degree)));
-            log_scale_ = std::get<2>(GetDefaultCoeffModulus256().at(degree));
             break;
         default:
+            log_scale_ = std::get<2>(GetDefaultCoeffModulus128().at(degree));
             set_modulus(std::get<0>(GetDefaultCoeffModulus128().at(degree)),
                         std::get<1>(GetDefaultCoeffModulus128().at(degree)));
-            log_scale_ = std::get<2>(GetDefaultCoeffModulus128().at(degree));
         }
     }
 }

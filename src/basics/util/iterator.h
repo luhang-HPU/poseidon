@@ -29,7 +29,7 @@ throughout Poseidon for easier iteration over ciphertext polynomials, their RNS
 components, and the coefficients in the RNS components. All POSEIDON iterators satisfy the C++
 LegacyRandomAccessIterator requirements. POSEIDON iterators are ideal to use with the
 POSEIDON_ITERATE macro, which expands to std::for_each_n in C++17 and to
-poseidon::util::seal_for_each_n in C++14. All POSEIDON iterators derive from POSEIDONIterBase.
+poseidon::util::poseidon_for_each_n in C++14. All POSEIDON iterators derive from POSEIDONIterBase.
 
 The most important POSEIDON iterator classes behave as illustrated by the following diagram:
 
@@ -195,7 +195,7 @@ objects.
 @par POSEIDON_ITERATE
 POSEIDON iterators are made to be used with the POSEIDON_ITERATE macro to iterate over a certain
 number of steps, and for each step call a given lambda function. In C++17 POSEIDON_ITERATE expands
-to std::for_each_n, and in C++14 it expands to poseidon::util::seal_for_each_n -- a custom
+to std::for_each_n, and in C++14 it expands to poseidon::util::poseidon_for_each_n -- a custom
 implementation. For example, the following snippet appears in Evaluator::bfv_multiply:
 
 POSEIDON_ITERATE(
@@ -1768,7 +1768,7 @@ public:
 
     template <typename... Ts>
     IterTuple(const std::tuple<Ts...> &tp)
-        : IterTuple(seal_apply([](auto &&...args) -> IterTuple
+        : IterTuple(poseidon_apply([](auto &&...args) -> IterTuple
                                { return {std::forward<decltype(args)>(args)...}; },
                                std::forward<decltype(tp)>(tp)))
     {
@@ -1778,7 +1778,7 @@ public:
 
     template <typename... Ts>
     IterTuple(std::tuple<Ts...> &&tp)
-        : IterTuple(seal_apply([](auto &&...args) -> IterTuple &&
+        : IterTuple(poseidon_apply([](auto &&...args) -> IterTuple &&
                                { return {std::forward<decltype(args)>(args)...}; },
                                std::forward<decltype(tp)>(tp)))
     {
@@ -1792,7 +1792,7 @@ public:
 
     POSEIDON_NODISCARD inline value_type operator*() const noexcept
     {
-        return seal_apply(
+        return poseidon_apply(
             [this](auto &&...args) -> value_type {
                 return {*first_, std::forward<decltype(args)>(args)...};
             },
@@ -2133,7 +2133,7 @@ POSEIDON_NODISCARD inline auto get(const IterTuple<POSEIDONIters...> &it) noexce
 
 template <typename T, typename... Rest>
 struct IterType<
-    seal_void_t<std::enable_if_t<(sizeof...(Rest) > 0)>, typename IterType<void, T>::type,
+    poseidon_void_t<std::enable_if_t<(sizeof...(Rest) > 0)>, typename IterType<void, T>::type,
                 typename IterType<void, Rest...>::type>,
     T, Rest...>
 {

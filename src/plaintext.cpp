@@ -79,6 +79,19 @@ int get_plus(const char *poly)
 }
 }  // namespace
 
+Plaintext &Plaintext::operator= (const Plaintext &assign)
+{
+    coeff_count_ = assign.coeff_count_;
+    scale_ = assign.scale_;
+    parms_id_ = assign.parms_id_;
+    crt_context_ = assign.crt_context_;
+    need_resize_ = assign.need_resize_;
+    data_ = assign.data_;
+
+    polys_ = RNSPoly(crt_context_, data_.begin(), parms_id_);
+    return *this;
+}
+
 Plaintext &Plaintext::operator=(const string &hex_poly)
 {
     if (is_ntt_form())

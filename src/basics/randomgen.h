@@ -111,7 +111,7 @@ public:
     void clear() noexcept
     {
         type_ = prng_type::unknown;
-        util::seal_memzero(seed_.data(), prng_seed_byte_count);
+        util::poseidon_memzero(seed_.data(), prng_seed_byte_count);
     }
 
     /**
