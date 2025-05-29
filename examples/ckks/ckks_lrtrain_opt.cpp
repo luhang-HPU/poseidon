@@ -24,8 +24,8 @@ using namespace poseidon::util;
 
 const int EPOCHS = 5;
 const double learning_rate = 0.95;
-int m = 5;      // row size of train set
-int n = 3;      // column size of train set
+int m = 780;      // row size of train set
+int n = 10;      // column size of train set
 
 namespace check
 {
@@ -144,7 +144,7 @@ int main()
     auto pid = getpid();
     PoseidonFactory::get_instance()->set_device_type(DEVICE_SOFTWARE);
     uint32_t q_def = 32;
-    uint32_t log_degree = 15;
+    uint32_t log_degree = 16;
 
     ParametersLiteral ckks_param_literal{CKKS, log_degree, log_degree - 1, q_def, 5, 1, 0, {}, {}};
     vector<uint32_t> log_q(44, 32);
@@ -355,7 +355,30 @@ int main()
         }
 
         // TODO scale loss
-        ciph_y_tmp.scale() = ciph_sigmoid.scale();
+        if(!util::are_approximate(ciph_y_tmp.scale(), ciph_sigmoid.scale()))
+        {
+            std::vector<std::complex<double>> vec_tmp(slot_size, {1.0, 0.0});
+            Plaintext plt_tmp;
+
+            if (ciph_y_tmp.scale() > ciph_sigmoid.scale())
+            {
+                auto coeff = ciph_y_tmp.scale() / ciph_sigmoid.scale();
+                ckks_encoder.encode(vec_tmp, coeff, plt_tmp);
+                ckks_eva->multiply_plain(ciph_sigmoid, plt_tmp, ciph_sigmoid);
+                ckks_eva->rescale(ciph_sigmoid, ciph_sigmoid);
+                ckks_eva->drop_modulus_to_next(ciph_y_tmp, ciph_y_tmp);
+            }
+            else
+            {
+                auto coeff = ciph_sigmoid.scale() / ciph_y_tmp.scale();
+                ckks_encoder.encode(vec_tmp, coeff, plt_tmp);
+                ckks_eva->multiply_plain(ciph_y_tmp, plt_tmp, ciph_y_tmp);
+                ckks_eva->rescale(ciph_y_tmp, ciph_y_tmp);
+                ckks_eva->drop_modulus_to_next(ciph_sigmoid, ciph_sigmoid);
+            }
+        }
+
+//        ciph_y_tmp.scale() = ciph_sigmoid.scale();
         ckks_eva->sub_dynamic(ciph_sigmoid, ciph_y_tmp, ciph_sigmoid, ckks_encoder);
 
         Ciphertext ciph_gradient;
@@ -450,7 +473,29 @@ int main()
 
         // update ciph_weight
         // TODO scale loss
-        ciph_gradient_shift.scale() = ciph_weight.scale();
+        if(!util::are_approximate(ciph_gradient_shift.scale(), ciph_weight.scale()))
+        {
+            std::vector<std::complex<double>> vec_tmp(slot_size, {1.0, 0.0});
+            Plaintext plt_tmp;
+
+            if (ciph_gradient_shift.scale() > ciph_weight.scale())
+            {
+                auto coeff = ciph_gradient_shift.scale() / ciph_weight.scale();
+                ckks_encoder.encode(vec_tmp, coeff, plt_tmp);
+                ckks_eva->multiply_plain(ciph_weight, plt_tmp, ciph_weight);
+                ckks_eva->rescale(ciph_weight, ciph_weight);
+                ckks_eva->drop_modulus_to_next(ciph_gradient_shift, ciph_gradient_shift);
+            }
+            else
+            {
+                auto coeff = ciph_weight.scale() / ciph_gradient_shift.scale();
+                ckks_encoder.encode(vec_tmp, coeff, plt_tmp);
+                ckks_eva->multiply_plain(ciph_gradient_shift, plt_tmp, ciph_gradient_shift);
+                ckks_eva->rescale(ciph_gradient_shift, ciph_gradient_shift);
+                ckks_eva->drop_modulus_to_next(ciph_weight, ciph_weight);
+            }
+        }
+//        ciph_gradient_shift.scale() = ciph_weight.scale();
         ckks_eva->sub_dynamic(ciph_weight, ciph_gradient_shift, ciph_weight, ckks_encoder);
 
 #ifdef DEBUG_LRTRAIN
