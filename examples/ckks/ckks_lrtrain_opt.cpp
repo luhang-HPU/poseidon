@@ -25,7 +25,7 @@ using namespace poseidon::util;
 const int EPOCHS = 5;
 const double learning_rate = 0.95;
 int m = 780;      // row size of train set
-int n = 10;      // column size of train set
+int n = 9;      // column size of train set
 
 namespace check
 {
@@ -357,6 +357,10 @@ int main()
         // TODO scale loss
         if(!util::are_approximate(ciph_y_tmp.scale(), ciph_sigmoid.scale()))
         {
+            std::cout << "the first multiply" << std::endl;
+            std::cout << "before c1.scale = " << ciph_y_tmp.scale() << " c1.level = " << ciph_y_tmp.level() << std::endl;
+            std::cout << "before c2.scale = " << ciph_sigmoid.scale() << " c2.level = " << ciph_sigmoid.level() << std::endl;
+
             std::vector<std::complex<double>> vec_tmp(slot_size, {1.0, 0.0});
             Plaintext plt_tmp;
 
@@ -376,6 +380,8 @@ int main()
                 ckks_eva->rescale(ciph_y_tmp, ciph_y_tmp);
                 ckks_eva->drop_modulus_to_next(ciph_sigmoid, ciph_sigmoid);
             }
+            std::cout << "after c1.scale = " << ciph_y_tmp.scale() << " c1.level = " << ciph_y_tmp.level() << std::endl;
+            std::cout << "after c2.scale = " << ciph_sigmoid.scale() << " c2.level = " << ciph_sigmoid.level() << std::endl;
         }
 
 //        ciph_y_tmp.scale() = ciph_sigmoid.scale();
@@ -475,6 +481,10 @@ int main()
         // TODO scale loss
         if(!util::are_approximate(ciph_gradient_shift.scale(), ciph_weight.scale()))
         {
+            std::cout << "the second multiply" << std::endl;
+            std::cout << "before c1.scale = " << ciph_gradient_shift.scale() << " c1.level = " << ciph_gradient_shift.level() << std::endl;
+            std::cout << "before c2.scale = " << ciph_weight.scale() << " c2.level = " << ciph_weight.level() << std::endl;
+
             std::vector<std::complex<double>> vec_tmp(slot_size, {1.0, 0.0});
             Plaintext plt_tmp;
 
@@ -494,6 +504,8 @@ int main()
                 ckks_eva->rescale(ciph_gradient_shift, ciph_gradient_shift);
                 ckks_eva->drop_modulus_to_next(ciph_weight, ciph_weight);
             }
+            std::cout << "after c1.scale = " << ciph_gradient_shift.scale() << " c1.level = " << ciph_gradient_shift.level() << std::endl;
+            std::cout << "after c2.scale = " << ciph_weight.scale() << " c2.level = " << ciph_weight.level() << std::endl;
         }
 //        ciph_gradient_shift.scale() = ciph_weight.scale();
         ckks_eva->sub_dynamic(ciph_weight, ciph_gradient_shift, ciph_weight, ckks_encoder);
