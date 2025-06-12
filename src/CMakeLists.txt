@@ -14,6 +14,5 @@ add_subdirectory(factory)
 add_subdirectory(key)
 add_subdirectory(basics)
 add_subdirectory(util)
-add_subdirectory(hardware_include)
 
 set(POSEIDON_SOURCE_FILES ${POSEIDON_SOURCE_FILES} PARENT_SCOPE)

@@ -36,6 +36,8 @@
 // Are we in debug mode?
 #cmakedefine POSEIDON_DEBUG
 
+#cmakedefine USING_HARDWARE
+
 // // Third-party dependencies
 #cmakedefine POSEIDON_USE_MSGSL
 #cmakedefine POSEIDON_USE_ZLIB

@@ -157,7 +157,7 @@ endif()
 option(POSEIDON_USE_HARDWARE OFF)
 message(STATUS "POSEIDON_USE_HARDWARE: ${POSEIDON_USE_HARDWARE}")
 if(POSEIDON_USE_HARDWARE)
-    add_definitions(-DUSING_HARDWARE)
+    set(USING_HARDWARE ON)
 endif()
 add_subdirectory(src)
 
