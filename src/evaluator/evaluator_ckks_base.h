@@ -88,7 +88,7 @@ public:
 
     void bootstrap(const Ciphertext &ciph, Ciphertext &result,
                    const RelinKeys &relin_keys, const GaloisKeys &galois_keys,
-                   const CKKSEncoder &encoder);
+                   const CKKSEncoder &encoder, EvalModPoly &eval_mod_poly);
 
     void multiply_const_direct(const Ciphertext &ciph, int const_data, Ciphertext &result,
                                const CKKSEncoder &encoder) const;

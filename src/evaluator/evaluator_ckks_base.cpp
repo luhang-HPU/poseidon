@@ -998,11 +998,8 @@ void EvaluatorCkksBase::rescale_for_bootstrap(Ciphertext &ciph)
 
 void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
                                   const RelinKeys &relin_keys, const GaloisKeys &galois_keys,
-                                  const CKKSEncoder &encoder)
+                                  const CKKSEncoder &encoder, EvalModPoly &eval_mod_poly)
 {
-    EvalModPoly eval_mod_poly(context_, CosDiscrete, (uint64_t)1 << 34, 1,
-                              9, 3, 16, 0, 30);
-
     auto tmp = ciph;
     rescale_for_bootstrap(tmp);
 
@@ -1054,7 +1051,6 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
     Ciphertext res;
 
     auto coeffs_to_slots_scaling = eval_mod_poly.q_div() / (eval_mod_poly.k() * eval_mod_poly.sc_fac() * eval_mod_poly.q_diff());
-//    std::cout << "before coeffs_to_slots(), ciphertext modulus num: " << ciph_raise.level() << std::endl;
 
     HomomorphicDFTMatrixLiteral tmp_matrix(0, context_.parameters_literal()->log_n(), context_.parameters_literal()->log_slots(),
                                     static_cast<uint32_t>(context_.parameters_literal()->q().size() - 1), vector<uint32_t>(3, 1), true,
@@ -1063,16 +1059,11 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
     tmp_matrix.create(coeff_to_slot_dft_matrix, const_cast<CKKSEncoder &>(encoder), 2);
 
     coeff_to_slot(ciph_raise, coeff_to_slot_dft_matrix, ciph_real, ciph_imag, galois_keys, encoder);
-//    std::cout << "after coeffs_to_slots(), real ciphertext modulus num: " << ciph_real.level() << std::endl;
 
     eval_mod_poly.set_level_start(static_cast<uint32_t>(context_.crt_context()->get_context_data(ciph_real.parms_id())->level()));
-//    std::cout << "before eval_mod(), imag ciphertext modulus num: " << ciph_imag.level() << std::endl;
     eval_mod(ciph_imag, ciph_imag_mod, eval_mod_poly, relin_keys, encoder);
-//    std::cout << "after eval_mod(), imag ciphertext modulus num: " << ciph_imag_mod.level() << std::endl;
-
-//    std::cout << "before eval_mod(), real ciphertext modulus num: " << ciph_real.level() << std::endl;
     eval_mod(ciph_real, ciph_real_mod, eval_mod_poly, relin_keys, encoder);
-//    std::cout << "after eval_mod(), real ciphertext modulus num: " << ciph_real_mod.level() << std::endl;
+
     ciph_imag_mod.scale() = context_.parameters_literal()->scale();
     ciph_real_mod.scale() = context_.parameters_literal()->scale();
 
@@ -1082,9 +1073,8 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
                                                                              vector<uint32_t>(3, 1), true, slots_to_coeffs_scaling, false, 1);
     LinearMatrixGroup slot_to_coeff_dft_matrix;
     tmp_matrix_inverse.create(slot_to_coeff_dft_matrix, const_cast<CKKSEncoder &>(encoder), 1);
-//    std::cout << "before slots_to_coeffs(), ciphertext modulus num: " << ciph_imag_mod.level() << std::endl;
+
     slot_to_coeff(ciph_real_mod, ciph_imag_mod, slot_to_coeff_dft_matrix, result, galois_keys, encoder);
-//    std::cout << "after slots_to_coeffs(), ciphertext modulus num: " << result.level() << std::endl;
 }
 
 void EvaluatorCkksBase::ntt_fwd(const Plaintext &plain, Plaintext &result,
