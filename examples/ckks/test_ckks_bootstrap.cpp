@@ -49,8 +49,7 @@ int main()
     KeyGenerator kgen(context);
     kgen.create_public_key(public_key);
     kgen.create_relin_keys(relin_keys);
-    kgen.create_galois_keys(std::vector<int>{0, 1, 2, 3, 4, 5, 6, 7, 8, 16, 32, 48, 64, 80, 96, 112, 128, 256, 384, 512, 1024, 1536, 2048, 2560, 3072, 3584, 4096, 8192, 12288, 15872, 16000, 16128, 16256, 16368, 16376}, rot_keys);
-    //rotation step {0, 1, 2, 3, 4, 5, 6, 7, 8, 16, 32, 48, 64, 80, 96, 112, 128, 256, 384, 512, 1024, 1536, 2048, 2560, 3072, 3584, 4096, 8192, 12288, 15872, 16000, 16128, 16256, 16368, 16376}
+    kgen.create_galois_keys(rot_keys);
     Encryptor enc(context, public_key, kgen.secret_key());
     Decryptor dec(context, kgen.secret_key());
 
@@ -64,7 +63,9 @@ int main()
     ckks_eva->multiply_relin(cipher, cipher, cipher, relin_keys);
     ckks_eva->rescale_dynamic(cipher, cipher, (int64_t)1 << 45);
 
-    ckks_eva->bootstrap(cipher, cipher, relin_keys,rot_keys, ckks_encoder);
+    EvalModPoly eval_mod_poly(context, CosDiscrete, (uint64_t)1 << 40, 1,
+                              9, 3, 16, 0, 30);
+    ckks_eva->bootstrap(cipher, cipher, relin_keys,rot_keys, ckks_encoder, eval_mod_poly);
     auto stop = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
     std::cout << "EXP TIME: " << duration.count() << " microseconds" << std::endl;
