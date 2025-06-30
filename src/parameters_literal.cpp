@@ -574,7 +574,14 @@ void ParametersLiteralDefault::init(SchemeType scheme_type, uint32_t degree,
     else if (scheme_type == BFV)
     {
         log_slots_ = log_n_;
-        plain_modulus_ = 65537;
+        if (degree < 65536)
+        {
+            plain_modulus_ = 65537;
+        }
+        else
+        {
+            plain_modulus_ = PlainModulus::Batching(degree, 20);
+        }
 
         switch (sec_level_)
         {
