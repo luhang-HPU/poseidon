@@ -14,7 +14,7 @@ int main()
     std::cout << "" << std::endl;
 
     ParametersLiteralDefault ckks_param_literal(CKKS, 16384, poseidon::sec_level_type::tc128);
-    PoseidonFactory::get_instance()->set_device_type(DEVICE_SOFTWARE);
+    PoseidonFactory::get_instance()->set_device_type(DEVICE_HARDWARE);
     auto context = PoseidonFactory::get_instance()->create_poseidon_context(ckks_param_literal);
     auto ckks_eva = PoseidonFactory::get_instance()->create_ckks_evaluator(context);
 
@@ -53,25 +53,25 @@ int main()
     encryptor.encrypt(plaintext2, ct2);
 
     Timestacs timestacs;
-    // DROP MODULUS
-    print_example_banner("Example: Drop Modulus in CKKS");
-    timestacs.start();
-    ckks_eva->drop_modulus_to_next(ct, ct_res);
-    timestacs.end();
-    ckks_eva->read(ct_res);
+//     // DROP MODULUS
+//     print_example_banner("Example: Drop Modulus in CKKS");
+//     timestacs.start();
+//     ckks_eva->drop_modulus_to_next(ct, ct_res);
+//     timestacs.end();
+//     ckks_eva->read(ct_res);
 
-    timestacs.print_time("Drop Modulus TIME: ");
-    decryptor.decrypt(ct_res, plaintext_res);
-    enc.decode(plaintext_res, message_res);
+//     timestacs.print_time("Drop Modulus TIME: ");
+//     decryptor.decrypt(ct_res, plaintext_res);
+//     enc.decode(plaintext_res, message_res);
 
-    for (auto i = 0; i < 4; i++)
-    {
-        printf("source_data[%d] : %.10lf + %.10lf I\n", i, message_want[i].real(),
-               message_want[i].imag());
-        printf("result_data[%d] : %.10lf + %.10lf I\n", i, message_res[i].real(),
-               message_res[i].imag());
-    }
-    util::GetPrecisionStats(message_want, message_res);
+//     for (auto i = 0; i < 4; i++)
+//     {
+//         printf("source_data[%d] : %.10lf + %.10lf I\n", i, message_want[i].real(),
+//                message_want[i].imag());
+//         printf("result_data[%d] : %.10lf + %.10lf I\n", i, message_res[i].real(),
+//                message_res[i].imag());
+//     }
+//     util::GetPrecisionStats(message_want, message_res);
 
     // ADD
     print_example_banner("Example: ADD / ADD in CKKS");

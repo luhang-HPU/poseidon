@@ -27,8 +27,9 @@ int main()
     */
 
     ParametersLiteralDefault bgv_param_literal(BGV, 16384, poseidon::sec_level_type::tc128);
+    bgv_param_literal.set_plain_modulus(PlainModulus::Batching(16384, 30));
 
-    PoseidonFactory::get_instance()->set_device_type(DEVICE_SOFTWARE);
+    PoseidonFactory::get_instance()->set_device_type(DEVICE_HARDWARE);
     PoseidonContext context =
         PoseidonFactory::get_instance()->create_poseidon_context(bgv_param_literal);
     std::shared_ptr<EvaluatorBgvBase> bgv_eva =

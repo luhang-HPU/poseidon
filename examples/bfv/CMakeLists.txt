@@ -8,3 +8,6 @@ target_link_libraries(test_bfv_basic poseidon_shared)
 
 add_executable(test_bfv_mult_matrix test_bfv_mult_matrix.cpp)
 target_link_libraries(test_bfv_mult_matrix poseidon_shared)
+
+add_executable(test_multiply_hard test_multiply_hard.cpp)
+target_link_libraries(test_multiply_hard poseidon_shared)
