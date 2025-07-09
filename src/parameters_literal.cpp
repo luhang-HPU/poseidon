@@ -173,11 +173,10 @@ void ParametersLiteral::set_log_modulus(const vector<uint32_t> &log_q,
     //<prime_size, primes_num>
     auto factor = (uint64_t)2 << log_n_;
     //<prime_size, primes_vector>
-    unordered_map<uint32_t, vector<Modulus>> primes_map;
-    unordered_map<uint32_t, int> primes_num_map;
+    map<uint32_t, vector<Modulus>> primes_map;
+    map<uint32_t, int> primes_num_map;
     for (unsigned int i : log_q)
     {
-        // unordered_map<uint32_t, int>::iterator f = primes_num_map.find(log_q[i]);
         auto f = primes_num_map.find(i);
         if (f != primes_num_map.end())
         {
@@ -209,15 +208,17 @@ void ParametersLiteral::set_log_modulus(const vector<uint32_t> &log_q,
         primes_map[p.first] = get_primes_raise_no_check(factor, safe_cast<int>(p.first), p.second);
     }
 
-    for (auto p : log_q)
+    p_.clear();
+    q_.clear();
+    for (auto bit_len : log_q)
     {
-        q_.push_back(primes_map[p][0]);
-        primes_map[p].erase(primes_map[p].begin());
+        q_.push_back(primes_map[bit_len][0]);
+        primes_map[bit_len].erase(primes_map[bit_len].begin());
     }
-    for (auto p : log_p)
+    for (auto bit_len : log_p)
     {
-        p_.push_back(primes_map[p][0]);
-        primes_map[p].erase(primes_map[p].begin());
+        p_.push_back(primes_map[bit_len][0]);
+        primes_map[bit_len].erase(primes_map[bit_len].begin());
     }
     compute_params_id();
 }
