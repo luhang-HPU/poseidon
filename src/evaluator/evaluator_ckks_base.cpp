@@ -982,11 +982,12 @@ void EvaluatorCkksBase::rescale_for_bootstrap(Ciphertext &ciph)
     auto context_data = context_.crt_context()->get_context_data(ciph.parms_id());
     auto &modulus = context_data->coeff_modulus();
     auto new_level = modulus.size() - 1;
-    while (ciph.scale() > 1.80145e+16)
+    while (ciph.scale() > pow(2, 54))
     {
         if (ciph.scale() / safe_cast<double>(modulus[new_level].value()) > 1.6e+07)
         {
             rescale(ciph, ciph);
+            new_level--;
         }
         else
         {
