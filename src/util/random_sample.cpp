@@ -63,6 +63,7 @@ int sample_triangle(int *uniform_res, int num_samples)
 
 void sample_random_complex_vector(vector<complex<double>> &vec, int length)
 {
+    srand(time(NULL));
     vec.resize(length);
     for (int i = 0; i < length; i++)
     {
