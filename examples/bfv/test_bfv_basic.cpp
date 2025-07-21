@@ -21,7 +21,7 @@ int main()
     std::shared_ptr<EvaluatorBfvBase> bfv_eva =
         PoseidonFactory::get_instance()->create_bfv_evaluator(context);
 
-    BatchEncoder enc(context);
+    BatchEncoder encoder(context);
     KeyGenerator keygen(context);
     PublicKey public_key;
     GaloisKeys galois_keys;
@@ -30,81 +30,80 @@ int main()
     keygen.create_galois_keys(galois_keys);
     keygen.create_relin_keys(relin_keys);
 
-    Encryptor encryptor(context, public_key);
-    Decryptor decryptor(context, keygen.secret_key());
+    Encryptor enc(context, public_key);
+    Decryptor dec(context, keygen.secret_key());
 
-    Plaintext plain1, plain2, plain_res;
-    Ciphertext ciph1, ciph2;
-    vector<uint64_t> message1 = {77, 2, 3};
-    vector<uint64_t> message2 = {11, 33, 22};
-    vector<uint64_t> message_res;
+    Plaintext plt1, plt2, plt_res;
+    Ciphertext ct1, ct2;
+    vector<uint64_t> msg1 = {77, 2, 3};
+    vector<uint64_t> msg2 = {11, 33, 22};
+    vector<uint64_t> msg_res, msg_expect;
 
-    enc.encode(message1, plain1);
-    enc.encode(message2, plain2);
-    encryptor.encrypt(plain1, ciph1);
-    encryptor.encrypt(plain2, ciph2);
+    encoder.encode(msg1, plt1);
+    encoder.encode(msg2, plt2);
+    enc.encrypt(plt1, ct1);
+    enc.encrypt(plt2, ct2);
 
     Timestacs timestacs;
-    auto message_want = message1;
 
     // NTT
     {
         print_example_banner("Example: NTT & INTT in bfv");
-        cout << "Before NTT & INTT level : " << ciph1.level() << std::endl;
+        cout << "Before NTT & INTT level : " << ct1.level() << std::endl;
         timestacs.start();
-        bfv_eva->transform_to_ntt_inplace(ciph1);
-        bfv_eva->transform_from_ntt_inplace(ciph1);
+        bfv_eva->transform_to_ntt_inplace(ct1);
+        bfv_eva->transform_from_ntt_inplace(ct1);
         timestacs.end();
-        bfv_eva->read(ciph1);
-        cout << "After NTT & INTT level : " << ciph1.level() << std::endl;
+        bfv_eva->read(ct1);
+        cout << "After NTT & INTT level : " << ct1.level() << std::endl;
         timestacs.print_time("TIME : ");
-        decryptor.decrypt(ciph1, plain_res);
-        enc.decode(plain_res, message_res);
-
-        for (auto i = 0; i < message_want.size(); i++)
+        dec.decrypt(ct1, plt_res);
+        encoder.decode(plt_res, msg_res);
+        msg_expect = msg1;
+        for (auto i = 0; i < msg_expect.size(); i++)
         {
-            printf("source_data[%d] : %ld\n", i, message1[i]);
-            printf("result_data[%d] : %ld\n", i, message_res[i]);
+            printf("source_data[%d] : %ld\n", i, msg1[i]);
+            printf("result_data[%d] : %ld\n", i, msg_res[i]);
         }
     }
 
     // Mod Switch
     {
         print_example_banner("Example: Mod Switch / Mod Switch in bfv");
-        cout << "Before Mod Switch level : " << ciph1.level() << std::endl;
+        cout << "Before Mod Switch level : " << ct1.level() << std::endl;
         timestacs.start();
-        bfv_eva->drop_modulus_to_next(ciph1, ciph1);
+        bfv_eva->drop_modulus_to_next(ct1, ct1);
         timestacs.end();
-        bfv_eva->read(ciph1);
-        cout << "After  Mod Switch level : " << ciph1.level() << std::endl;
+        bfv_eva->read(ct1);
+        cout << "After Mod Switch level : " << ct1.level() << std::endl;
         timestacs.print_time("TIME : ");
-        decryptor.decrypt(ciph1, plain_res);
-        enc.decode(plain_res, message_res);
+        dec.decrypt(ct1, plt_res);
+        encoder.decode(plt_res, msg_res);
 
-        for (auto i = 0; i < message_want.size(); i++)
+        for (auto i = 0; i < msg_expect.size(); i++)
         {
-            printf("source_data[%d] : %ld\n", i, message1[i]);
-            printf("result_data[%d] : %ld\n", i, message_res[i]);
+            printf("source_data[%d] : %ld\n", i, msg1[i]);
+            printf("result_data[%d] : %ld\n", i, msg_res[i]);
         }
     }
 
     // Mod Switch
     {
         print_example_banner("Example: Mod Switch / Mod Switch in bfv");
-        cout << "Before Mod Switch level : " << ciph2.level() << std::endl;
+        cout << "Before Mod Switch level : " << ct2.level() << std::endl;
         timestacs.start();
-        bfv_eva->drop_modulus_to_next(ciph2, ciph2);
+        bfv_eva->drop_modulus_to_next(ct2, ct2);
         timestacs.end();
-        bfv_eva->read(ciph2);
-        cout << "After  Mod Switch level : " << ciph2.level() << std::endl;
+        bfv_eva->read(ct2);
+        cout << "After Mod Switch level : " << ct2.level() << std::endl;
         timestacs.print_time("TIME : ");
-        decryptor.decrypt(ciph2, plain_res);
-        enc.decode(plain_res, message_res);
+        dec.decrypt(ct2, plt_res);
+        encoder.decode(plt_res, msg_res);
 
-        for (auto i = 0; i < message_want.size(); i++)
+        for (auto i = 0; i < msg_expect.size(); i++)
         {
-            printf("source_data[%d] : %ld\n", i, message2[i]);
-            printf("result_data[%d] : %ld\n", i, message_res[i]);
+            printf("source_data[%d] : %ld\n", i, msg2[i]);
+            printf("result_data[%d] : %ld\n", i, msg_res[i]);
         }
     }
 
@@ -112,43 +111,42 @@ int main()
     {
         print_example_banner("Example: ADD / ADD in bfv");
         timestacs.start();
-        bfv_eva->add(ciph1, ciph2, ciph1);
+        bfv_eva->add(ct1, ct2, ct1);
         timestacs.end();
-        bfv_eva->read(ciph1);
+        bfv_eva->read(ct1);
         timestacs.print_time("TIME : ");
-        decryptor.decrypt(ciph1, plain_res);
-        enc.decode(plain_res, message_res);
-        for (auto i = 0; i < message_want.size(); i++)
+        dec.decrypt(ct1, plt_res);
+        encoder.decode(plt_res, msg_res);
+        for (auto i = 0; i < msg_expect.size(); i++)
         {
-            message_want[i] += message2[i];
+            msg_expect[i] += msg2[i];
         }
-        for (auto i = 0; i < message_want.size(); i++)
+        for (auto i = 0; i < msg_expect.size(); i++)
         {
-            printf("source_data[%d] : %ld\n", i, message_want[i]);
-            printf("result_data[%d] : %ld\n", i, message_res[i]);
+            printf("source_data[%d] : %ld\n", i, msg_expect[i]);
+            printf("result_data[%d] : %ld\n", i, msg_res[i]);
         }
     }
 
     // SUB
     {
-
         print_example_banner("Example: SUB / SUB in bfv");
         timestacs.start();
-        bfv_eva->sub(ciph1, ciph2, ciph1);
+        bfv_eva->sub(ct1, ct2, ct1);
         timestacs.end();
-        bfv_eva->read(ciph1);
+        bfv_eva->read(ct1);
         timestacs.print_time("TIME : ");
-        decryptor.decrypt(ciph1, plain_res);
-        enc.decode(plain_res, message_res);
+        dec.decrypt(ct1, plt_res);
+        encoder.decode(plt_res, msg_res);
 
-        for (auto i = 0; i < message_want.size(); i++)
+        for (auto i = 0; i < msg_expect.size(); i++)
         {
-            message_want[i] -= message2[i];
+            msg_expect[i] -= msg2[i];
         }
-        for (auto i = 0; i < message_want.size(); i++)
+        for (auto i = 0; i < msg_expect.size(); i++)
         {
-            printf("source_data[%d] : %ld\n", i, message_want[i]);
-            printf("result_data[%d] : %ld\n", i, message_res[i]);
+            printf("source_data[%d] : %ld\n", i, msg_expect[i]);
+            printf("result_data[%d] : %ld\n", i, msg_res[i]);
         }
     }
 
@@ -156,38 +154,38 @@ int main()
     {
         print_example_banner("Example: NTT / NTT in bfv");
         timestacs.start();
-        bfv_eva->ntt_fwd(ciph1, ciph1);
-        bfv_eva->ntt_inv(ciph1, ciph1);
+        bfv_eva->ntt_fwd(ct1, ct1);
+        bfv_eva->ntt_inv(ct1, ct1);
         timestacs.end();
-        bfv_eva->read(ciph1);
+        bfv_eva->read(ct1);
         timestacs.print_time("TIME : ");
-        decryptor.decrypt(ciph1, plain_res);
-        enc.decode(plain_res, message_res);
+        dec.decrypt(ct1, plt_res);
+        encoder.decode(plt_res, msg_res);
 
-        for (auto i = 0; i < message_want.size(); i++)
+        for (auto i = 0; i < msg_expect.size(); i++)
         {
-            printf("source_data[%d] : %ld\n", i, message_want[i]);
-            printf("result_data[%d] : %ld\n", i, message_res[i]);
+            printf("source_data[%d] : %ld\n", i, msg_expect[i]);
+            printf("result_data[%d] : %ld\n", i, msg_res[i]);
         }
     }
 
     // Mod Switch
     {
         print_example_banner("Example: Mod Switch / Mod Switch in bfv");
-        cout << "Before Mod Switch level : " << ciph1.level() << std::endl;
+        cout << "Before Mod Switch level : " << ct1.level() << std::endl;
         timestacs.start();
-        bfv_eva->drop_modulus_to_next(ciph1, ciph1);
+        bfv_eva->drop_modulus_to_next(ct1, ct1);
         timestacs.end();
-        bfv_eva->read(ciph1);
-        cout << "After  Mod Switch level : " << ciph1.level() << std::endl;
+        bfv_eva->read(ct1);
+        cout << "After  Mod Switch level : " << ct1.level() << std::endl;
         timestacs.print_time("TIME : ");
-        decryptor.decrypt(ciph1, plain_res);
-        enc.decode(plain_res, message_res);
+        dec.decrypt(ct1, plt_res);
+        encoder.decode(plt_res, msg_res);
 
-        for (auto i = 0; i < message_want.size(); i++)
+        for (auto i = 0; i < msg_expect.size(); i++)
         {
-            printf("source_data[%d] : %ld\n", i, message_want[i]);
-            printf("result_data[%d] : %ld\n", i, message_res[i]);
+            printf("source_data[%d] : %ld\n", i, msg_expect[i]);
+            printf("result_data[%d] : %ld\n", i, msg_res[i]);
         }
     }
 
@@ -195,22 +193,22 @@ int main()
     {
         print_example_banner("Example: MULTIPLY_PLAIN / MULTIPLY_PLAIN in bfv");
         timestacs.start();
-        bfv_eva->multiply_plain(ciph1, plain1, ciph1);
+        bfv_eva->multiply_plain(ct1, plt1, ct1);
         timestacs.end();
-        bfv_eva->read(ciph1);
+        bfv_eva->read(ct1);
         timestacs.print_time("TIME : ");
-        decryptor.decrypt(ciph1, plain_res);
-        enc.decode(plain_res, message_res);
+        dec.decrypt(ct1, plt_res);
+        encoder.decode(plt_res, msg_res);
 
-        for (auto i = 0; i < message_want.size(); i++)
+        for (auto i = 0; i < msg_expect.size(); i++)
         {
-            message_want[i] *= message1[i];
-            message_want[i] %= 65537;
+            msg_expect[i] *= msg1[i];
+            msg_expect[i] %= 65537;
         }
-        for (auto i = 0; i < message_want.size(); i++)
+        for (auto i = 0; i < msg_expect.size(); i++)
         {
-            printf("source_data[%d] : %ld\n", i, message_want[i]);
-            printf("result_data[%d] : %ld\n", i, message_res[i]);
+            printf("source_data[%d] : %ld\n", i, msg_expect[i]);
+            printf("result_data[%d] : %ld\n", i, msg_res[i]);
         }
     }
 
@@ -218,45 +216,22 @@ int main()
     {
         print_example_banner("Example: MULTIPLY / MULTIPLY in bfv");
         timestacs.start();
-        bfv_eva->multiply_relin(ciph1, ciph1, ciph1, relin_keys);
+        bfv_eva->multiply_relin(ct1, ct1, ct1, relin_keys);
         timestacs.end();
-        bfv_eva->read(ciph1);
+        bfv_eva->read(ct1);
         timestacs.print_time("TIME : ");
-        decryptor.decrypt(ciph1, plain_res);
-        enc.decode(plain_res, message_res);
+        dec.decrypt(ct1, plt_res);
+        encoder.decode(plt_res, msg_res);
 
-        for (auto i = 0; i < message_want.size(); i++)
+        for (auto i = 0; i < msg_expect.size(); i++)
         {
-            message_want[i] *= message_want[i];
-            message_want[i] %= 65537;
+            msg_expect[i] *= msg_expect[i];
+            msg_expect[i] %= 65537;
         }
-        for (auto i = 0; i < message_want.size(); i++)
+        for (auto i = 0; i < msg_expect.size(); i++)
         {
-            printf("source_data[%d] : %ld\n", i, message_want[i]);
-            printf("result_data[%d] : %ld\n", i, message_res[i]);
-        }
-    }
-
-    // MULTIPLY
-    {
-        print_example_banner("Example: MULTIPLY / MULTIPLY in bfv");
-        timestacs.start();
-        bfv_eva->multiply_relin(ciph1, ciph1, ciph1, relin_keys);
-        timestacs.end();
-        bfv_eva->read(ciph1);
-        timestacs.print_time("TIME : ");
-        decryptor.decrypt(ciph1, plain_res);
-        enc.decode(plain_res, message_res);
-
-        for (auto i = 0; i < message_want.size(); i++)
-        {
-            message_want[i] *= message_want[i];
-            message_want[i] %= 65537;
-        }
-        for (auto i = 0; i < message_want.size(); i++)
-        {
-            printf("source_data[%d] : %ld\n", i, message_want[i]);
-            printf("result_data[%d] : %ld\n", i, message_res[i]);
+            printf("source_data[%d] : %ld\n", i, msg_expect[i]);
+            printf("result_data[%d] : %ld\n", i, msg_res[i]);
         }
     }
 
@@ -264,59 +239,59 @@ int main()
     {
         print_example_banner("Example: ROTATE_ROW / ROTATE_ROW in bfv");
         timestacs.start();
-        bfv_eva->rotate_row(ciph1, ciph1, 1, galois_keys);
+        bfv_eva->rotate_row(ct1, ct1, 1, galois_keys);
         timestacs.end();
-        bfv_eva->read(ciph1);
+        bfv_eva->read(ct1);
         timestacs.print_time("TIME : ");
-        decryptor.decrypt(ciph1, plain_res);
-        enc.decode(plain_res, message_res);
+        dec.decrypt(ct1, plt_res);
+        encoder.decode(plt_res, msg_res);
 
-        for (auto i = 0; i < message_want.size(); i++)
+        for (auto i = 0; i < msg_expect.size(); i++)
         {
-            printf("source_data[%d] : %ld\n", i, message_want[i]);
-            printf("result_data[%d] : %ld\n", i, message_res[i]);
+            printf("source_data[%d] : %ld\n", i, msg_expect[i]);
+            printf("result_data[%d] : %ld\n", i, msg_res[i]);
         }
-        bfv_eva->rotate_row(ciph1, ciph1, -1, galois_keys);
+        bfv_eva->rotate_row(ct1, ct1, -1, galois_keys);
     }
 
     // ROTATE_COL
     {
         print_example_banner("Example: ROTATE_COL / ROTATE_COL in bfv");
         timestacs.start();
-        bfv_eva->rotate_col(ciph1, ciph1, galois_keys);
+        bfv_eva->rotate_col(ct1, ct1, galois_keys);
         timestacs.end();
-        bfv_eva->read(ciph1);
+        bfv_eva->read(ct1);
         timestacs.print_time("TIME : ");
-        decryptor.decrypt(ciph1, plain_res);
-        enc.decode(plain_res, message_res);
+        dec.decrypt(ct1, plt_res);
+        encoder.decode(plt_res, msg_res);
 
-        for (auto i = 0; i < message_want.size(); i++)
+        for (auto i = 0; i < msg_expect.size(); i++)
         {
-            printf("source_data[%d] : %ld\n", i, message_want[i]);
-            printf("result_data[%d] : %ld\n", i, message_res[i]);
+            printf("source_data[%d] : %ld\n", i, msg_expect[i]);
+            printf("result_data[%d] : %ld\n", i, msg_res[i]);
         }
-        bfv_eva->rotate_col(ciph1, ciph1, galois_keys);
+        bfv_eva->rotate_col(ct1, ct1, galois_keys);
     }
 
     // ADD_PLAIN
     {
         print_example_banner("Example: ADD_PLAIN / ADD_PLAIN in bfv");
         timestacs.start();
-        bfv_eva->add_plain(ciph1, plain1, ciph1);
+        bfv_eva->add_plain(ct1, plt1, ct1);
         timestacs.end();
         timestacs.print_time("TIME : ");
-        bfv_eva->read(ciph1);
-        decryptor.decrypt(ciph1, plain_res);
-        enc.decode(plain_res, message_res);
+        bfv_eva->read(ct1);
+        dec.decrypt(ct1, plt_res);
+        encoder.decode(plt_res, msg_res);
 
-        for (auto i = 0; i < message_want.size(); i++)
+        for (auto i = 0; i < msg_expect.size(); i++)
         {
-            message_want[i] += message1[i];
+            msg_expect[i] += msg1[i];
         }
-        for (auto i = 0; i < message_want.size(); i++)
+        for (auto i = 0; i < msg_expect.size(); i++)
         {
-            printf("source_data[%d] : %ld\n", i, message_want[i]);
-            printf("result_data[%d] : %ld\n", i, message_res[i]);
+            printf("source_data[%d] : %ld\n", i, msg_expect[i]);
+            printf("result_data[%d] : %ld\n", i, msg_res[i]);
         }
     }
     return 0;

@@ -1,8 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
 
-add_executable(test_bfv_add test_bfv_add.cpp)
-target_link_libraries(test_bfv_add poseidon_shared)
-
 add_executable(test_bfv_basic test_bfv_basic.cpp)
 target_link_libraries(test_bfv_basic poseidon_shared)
 
