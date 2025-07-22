@@ -102,8 +102,7 @@ void CKKSEncoder::encode_internal(double value, parms_id_type parms_id, double s
 
     // Compute the scaled value
     value *= scale;
-
-    int coeff_bit_count = static_cast<int>(log2(fabs(value))) + 2;
+    auto coeff_bit_count = static_cast<uint32_t>(log2(fabs(value))) + 2;
     if (coeff_bit_count >= context_data.total_coeff_modulus_bit_count())
     {
         POSEIDON_THROW(invalid_argument_error, "encoded value is too large");
