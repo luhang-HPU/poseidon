@@ -263,7 +263,7 @@ GetDefaultCoeffModulus128()
             Modulus count: 3
             Total bit count: 109 = 2 * 36 + 37
             */
-            {4096, {{0xffffee001, 0xffffc4001}, {0x1ffffe0001}, 1}},
+            {4096, {{0xffffee001, 0xffffc4001}, {0x1ffffe0001}, 25}},
 
             /*
             Polynomial modulus: 1x^8192 + 1
@@ -271,7 +271,7 @@ GetDefaultCoeffModulus128()
             Total bit count: 218 = 2 * 43 + 3 * 44
             */
             {8192,
-             {{0x7fffffd8001, 0x7fffffc8001, 0xfffffffc001, 0xffffff6c001}, {0xfffffebc001}, 1}},
+             {{0x7fffffd8001, 0x7fffffc8001, 0xfffffffc001, 0xffffff6c001}, {0xfffffebc001}, 32}},
 
             /*
             Polynomial modulus: 1x^16384 + 1
@@ -282,7 +282,7 @@ GetDefaultCoeffModulus128()
              {{0xfffffffd8001, 0xfffffffa0001, 0xfffffff00001, 0x1fffffff68001, 0x1fffffff50001,
                0x1ffffffee8001, 0x1ffffffea0001, 0x1ffffffe88001},
               {0x1ffffffe48001},
-              1}},
+              32}},
 
             /*
             Polynomial modulus: 1x^32768 + 1
@@ -295,7 +295,23 @@ GetDefaultCoeffModulus128()
                0x7fffffff770001, 0x7fffffff380001, 0x7fffffff330001, 0x7fffffff2d0001,
                0x7fffffff170001, 0x7fffffff150001, 0x7ffffffef00001},
               {0xfffffffff70001},
-              1}}};
+              40}},
+
+            /*
+            Polynomial modulus: 1x^65536 + 1
+            Modulus count: 32
+            Total bit count: 1857 = 31 * 58 + 59
+            */
+            {65536,
+            {{ 0x3fffffffa320001, 0x3fffffffa800001, 0x3fffffffaa20001, 0x3fffffffaa40001, 0x3fffffffad20001,
+               0x3fffffffaf20001, 0x3fffffffb4a0001, 0x3fffffffbb20001, 0x3fffffffbbc0001, 0x3fffffffc600001,
+               0x3fffffffc8a0001, 0x3fffffffcb20001, 0x3fffffffcc00001, 0x3fffffffcca0001, 0x3fffffffce80001,
+               0x3fffffffd3c0001, 0x3fffffffd900001, 0x3fffffffdc80001, 0x3fffffffdd80001, 0x3fffffffdfe0001,
+               0x3fffffffe2c0001, 0x3fffffffe320001, 0x3fffffffe440001, 0x3fffffffe800001, 0x3fffffffea00001,
+               0x3fffffffeb00001, 0x3fffffffed00001, 0x3fffffffed60001, 0x3ffffffff040001, 0x3ffffffff3a0001,
+               0x3ffffffffbe0001},
+              {0x7ffffffffcc0001},
+              40}}};
 
     return default_coeff_modulus_128;
 }
@@ -311,14 +327,14 @@ GetDefaultCoeffModulus192()
             Modulus count: 3
             Total bit count: 75 = 3 * 25
             */
-            {4096, {{0x1fce001, 0x1fc0001}, {0x1ffc001}, 1}},
+            {4096, {{0x1fce001, 0x1fc0001}, {0x1ffc001}, 25}},
 
             /*
             Polynomial modulus: 1x^8192 + 1
             Modulus count: 4
             Total bit count: 152 = 4 * 38
             */
-            {8192, {{0x3ffff54001, 0x3ffff48001, 0x3ffff28001}, {0x3ffffac001}, 1}},
+            {8192, {{0x3ffff54001, 0x3ffff48001, 0x3ffff28001}, {0x3ffffac001}, 32}},
 
             /*
             Polynomial modulus: 1x^16384 + 1
@@ -328,7 +344,7 @@ GetDefaultCoeffModulus192()
             {16384,
              {{0x3ffffffd48001, 0x3ffffffd20001, 0x3ffffffd18001, 0x3ffffffcd0001, 0x3ffffffc70001},
               {0x3ffffffdf0001},
-              1}},
+              32}},
 
             /*
             Polynomial modulus: 1x^32768 + 1
@@ -340,7 +356,7 @@ GetDefaultCoeffModulus192()
                0x3fffffff550001, 0x7fffffffbf0001, 0x7fffffffbd0001, 0x7fffffffba0001,
                0x7fffffffaa0001, 0x7fffffffa50001},
               {0x7fffffffe90001},
-              1}}};
+              32}}};
 
     return default_coeff_modulus_192;
 }
@@ -356,14 +372,14 @@ GetDefaultCoeffModulus256()
             Modulus count: 1
             Total bit count: 58
             */
-            {4096, {{0x3ffffffff040001}, {}, 1}},
+            {4096, {{0x3ffffffff040001}, {}, 32}},
 
             /*
             Polynomial modulus: 1x^8192 + 1
             Modulus count: 3
             Total bit count: 118 = 2 * 39 + 40
             */
-            {8192, {{0x7ffffec001, 0x7ffffb0001}, {0xfffffdc001}, 1}},
+            {8192, {{0x7ffffec001, 0x7ffffb0001}, {0xfffffdc001}, 32}},
 
             /*
             Polynomial modulus: 1x^16384 + 1
@@ -373,7 +389,7 @@ GetDefaultCoeffModulus256()
             {16384,
              {{0x7ffffffc8001, 0x7ffffff00001, 0x7fffffe70001, 0xfffffffa0001},
               {0xfffffffd8001},
-              1}},
+              32}},
 
             /*
             Polynomial modulus: 1x^32768 + 1
@@ -384,7 +400,7 @@ GetDefaultCoeffModulus256()
              {{0xffffffff00001, 0x1fffffffe30001, 0x1fffffffd10001, 0x1fffffffc50001,
                0x1fffffffbf0001, 0x1fffffffb90001, 0x1fffffffb60001, 0x1fffffffa50001},
               {0x1fffffffd80001},
-              1}}};
+              40}}};
 
     return default_coeff_modulus_256;
 }
@@ -399,28 +415,36 @@ GetDefaultLogCoeffModulus128()
             Modulus count: 3
             Total bit count: 109 = 2 * 36 + 37
             */
-            {4096, {{36, 36}, {37}, 1}},
+            {4096, {{36, 36}, {37}, 32}},
 
             /*
             Polynomial modulus: 1x^8192 + 1
             Modulus count: 5
             Total bit count: 218 = 2 * 43 + 3 * 44
             */
-            {8192, {{43, 43, 43, 43}, {44}, 1}},
+            {8192, {{43, 43, 43, 43}, {44}, 32}},
 
             /*
             Polynomial modulus: 1x^16384 + 1
             Modulus count: 9
             Total bit count: 438 = 3 * 48 + 6 * 49
             */
-            {16384, {{48, 48, 48, 48, 48, 48, 48, 48}, {50}, 1}},
+            {16384, {{48, 48, 48, 48, 48, 48, 48, 48}, {50}, 40}},
 
             /*
             Polynomial modulus: 1x^32768 + 1
             Modulus count: 16
             Total bit count: 881 = 15 * 55 + 56
             */
-            {32768, {{55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55}, {56}, 1}}};
+            {32768, {{55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55}, {56}, 40}},
+
+            /*
+            Polynomial modulus: 1x^65536 + 1
+            Modulus count: 32
+            Total bit count: 1857 = 31 * 58 + 59
+            */
+            {65536, {{58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58,
+                  58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58}, {59}, 40}}};
 
     return default_log_coeff_modulus_128;
 }
@@ -449,21 +473,21 @@ GetDefaultLogCoeffModulus192()
             Modulus count: 3
             Total bit count: 75 = 3 * 25
             */
-            {4096, {{25, 25}, {25}, 31}},
+            {4096, {{25, 25}, {25}, 25}},
 
             /*
             Polynomial modulus: 1x^8192 + 1
             Modulus count: 4
             Total bit count: 152 = 4 * 38
             */
-            {8192, {{38, 38, 38}, {38}, 31}},
+            {8192, {{38, 38, 38}, {38}, 32}},
 
             /*
             Polynomial modulus: 1x^16384 + 1
             Modulus count: 6
             Total bit count: 300 = 6 * 50
             */
-            {16384, {{50, 50, 50, 50, 50}, {50}, 40}},
+            {16384, {{50, 50, 50, 50, 50}, {50}, 32}},
 
             /*
             Polynomial modulus: 1x^32768 + 1
