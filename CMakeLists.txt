@@ -97,9 +97,9 @@ if(POSEIDON_BUILD_DEPS)
     mark_as_advanced(FETCHCONTENT_QUIET)
 endif()
 
-# [option] POSEIDON_USE_ZLIB (default: OFF)
+# [option] POSEIDON_USE_ZLIB (default: ON)
 set(POSEIDON_USE_ZLIB_OPTION_STR "Use ZLIB for compressed serialization")
-option(POSEIDON_USE_ZLIB ${POSEIDON_USE_ZLIB_OPTION_STR} OFF)
+option(POSEIDON_USE_ZLIB ${POSEIDON_USE_ZLIB_OPTION_STR} ON)
 message(STATUS "POSEIDON_USE_ZLIB: ${POSEIDON_USE_ZLIB}")
 
 if(POSEIDON_USE_ZLIB)
@@ -118,9 +118,9 @@ if(POSEIDON_USE_ZLIB)
     endif()
 endif()
 
-# [option] POSEIDON_USE_ZSTD (default: OFF)
+# [option] POSEIDON_USE_ZSTD (default: ON)
 set(POSEIDON_USE_ZSTD_OPTION_STR "Use Zstandard for compressed serialization")
-option(POSEIDON_USE_ZSTD ${POSEIDON_USE_ZSTD_OPTION_STR} OFF)
+option(POSEIDON_USE_ZSTD ${POSEIDON_USE_ZSTD_OPTION_STR} ON)
 message(STATUS "POSEIDON_USE_ZSTD: ${POSEIDON_USE_ZSTD}")
 
 if(POSEIDON_USE_ZSTD)
@@ -161,9 +161,9 @@ if(POSEIDON_USE_HARDWARE)
 endif()
 add_subdirectory(src)
 
-# [option] POSEIDON_USE_MSGSL (default: OFF)
+# [option] POSEIDON_USE_MSGSL (default: ON)
 set(POSEIDON_USE_MSGSL_OPTION_STR "Use Microsoft GSL")
-option(POSEIDON_USE_MSGSL ${POSEIDON_USE_MSGSL_OPTION_STR} OFF)
+option(POSEIDON_USE_MSGSL ${POSEIDON_USE_MSGSL_OPTION_STR} ON)
 message(STATUS "POSEIDON_USE_MSGSL: ${POSEIDON_USE_MSGSL}")
 
 if(POSEIDON_USE_MSGSL)
@@ -181,8 +181,8 @@ if(POSEIDON_USE_MSGSL)
 endif()
 
 
-# [option] POSEIDON_BUILD_EXAMPLES (default: OFF)
-option(POSEIDON_BUILD_EXAMPLES "Build examples for POSEIDON" OFF)
+# [option] POSEIDON_BUILD_EXAMPLES (default: ON)
+option(POSEIDON_BUILD_EXAMPLES "Build examples for POSEIDON" ON)
 message(STATUS "POSEIDON_BUILD_EXAMPLES: ${POSEIDON_BUILD_EXAMPLES}")
 if(POSEIDON_BUILD_EXAMPLES)
     add_subdirectory(examples/bfv)
@@ -224,6 +224,15 @@ if(BUILD_SHARED_LIBS)
         target_include_directories(poseidon_shared PRIVATE $<BUILD_INTERFACE:${zstd_SOURCE_DIR}/lib>)
         target_include_directories(poseidon_shared PRIVATE $<BUILD_INTERFACE:${zstd_SOURCE_DIR}/lib/common>)
         target_link_libraries(poseidon_shared PRIVATE ${zstd_static})
+    endif()
+endif()
+
+if(POSEIDON_BUILD_DEPS)
+    # MSGSL
+    if(POSEIDON_USE_MSGSL)
+        install(
+            DIRECTORY ${msgsl_SOURCE_DIR}/include/gsl
+            DESTINATION ${POSEIDON_INCLUDES_INSTALL_DIR})
     endif()
 endif()
 
