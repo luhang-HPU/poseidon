@@ -36,46 +36,12 @@ void EvaluatorCkksBase::drop_modulus_to_next(const Ciphertext &ciph, Ciphertext 
     drop_modulus(ciph, result, parms_id);
 }
 
-template <typename T, typename>
-void EvaluatorCkksBase::multiply_const(const Ciphertext &ciph, T const_data, double scale,
-                                       Ciphertext &result, const CKKSEncoder &encoder) const
-{
-
-    if (const_data == 0.0 || const_data == complex<double>(0.0, 0.0))
-    {
-        multiply_const_direct(ciph, 0, result, encoder);
-    }
-    else
-    {
-        Plaintext tmp;
-        encoder.encode(const_data, ciph.parms_id(), scale, tmp);
-        multiply_plain(ciph, tmp, result);
-    }
-}
-
 void EvaluatorCkksBase::multiply_const_direct(const Ciphertext &ciph, int const_data,
                                               Ciphertext &result, const CKKSEncoder &encoder) const
 {
     Plaintext tmp;
     encoder.encode(const_data, ciph.parms_id(), tmp);
     multiply_plain(ciph, tmp, result);
-}
-
-template <typename T, typename>
-void EvaluatorCkksBase::add_const(const Ciphertext &ciph, T const_data, Ciphertext &result,
-                                  const CKKSEncoder &encoder) const
-{
-
-    if (const_data == 0.0 || const_data == complex<double>(0.0, 0.0))
-    {
-        Plaintext tmp;
-        encoder.encode(0, ciph.parms_id(), tmp);
-        add_plain(ciph, tmp, result);
-        return;
-    }
-    Plaintext tmp;
-    encoder.encode(const_data, ciph.parms_id(), ciph.scale(), tmp);
-    add_plain(ciph, tmp, result);
 }
 
 void EvaluatorCkksBase::multiply_dynamic(const Ciphertext &ciph1, const Ciphertext &ciph2,

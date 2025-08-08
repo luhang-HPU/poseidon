@@ -97,13 +97,38 @@ public:
                               std::is_same<std::remove_cv_t<T>, double>::value ||
                               std::is_same<std::remove_cv_t<T>, std::complex<double>>::value>>
     void multiply_const(const Ciphertext &ciph, T const_data, double scale, Ciphertext &result,
-                        const CKKSEncoder &encoder) const;
+                        const CKKSEncoder &encoder) const
+    {
+        if (const_data == 0.0 || const_data == complex<double>(0.0, 0.0))
+        {
+            multiply_const_direct(ciph, 0, result, encoder);
+        }
+        else
+        {
+            Plaintext tmp;
+            encoder.encode(const_data, ciph.parms_id(), scale, tmp);
+            multiply_plain(ciph, tmp, result);
+        }
+    }
 
     template <typename T, typename = std::enable_if_t<
                               std::is_same<std::remove_cv_t<T>, double>::value ||
                               std::is_same<std::remove_cv_t<T>, std::complex<double>>::value>>
     void add_const(const Ciphertext &ciph, T const_data, Ciphertext &result,
-                   const CKKSEncoder &encoder) const;
+                   const CKKSEncoder &encoder) const
+    {
+
+        if (const_data == 0.0 || const_data == complex<double>(0.0, 0.0))
+        {
+            Plaintext tmp;
+            encoder.encode(0, ciph.parms_id(), tmp);
+            add_plain(ciph, tmp, result);
+            return;
+        }
+        Plaintext tmp;
+        encoder.encode(const_data, ciph.parms_id(), ciph.scale(), tmp);
+        add_plain(ciph, tmp, result);
+    }
 
     virtual void ntt_fwd(const Plaintext &plain, Plaintext &result) const;
     virtual void ntt_inv(const Plaintext &plain, Plaintext &result) const;
