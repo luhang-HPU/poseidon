@@ -46,6 +46,12 @@ public:
     {
         std::cout << str << microseconds()/1000/1000 << " s" << endl;
     }
+    inline std::string get_time_s(const std::string &prefix = "")
+    {
+        std::ostringstream oss;
+        oss << prefix << static_cast<double>(microseconds()) / 1000000.0 << " s";
+        return oss.str();
+    }
 };
 
 class LocalTimer
