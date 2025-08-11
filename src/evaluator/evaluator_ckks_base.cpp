@@ -909,15 +909,6 @@ void EvaluatorCkksBase::eval_mod(const Ciphertext &ciph, Ciphertext &result,
                                  const EvalModPoly &eva_poly, const RelinKeys &relin_keys,
                                  const CKKSEncoder &encoder)
 {
-    if (!ciph.is_valid())
-    {
-        POSEIDON_THROW(invalid_argument_error, "eval_mod : ciph is empty!");
-    }
-
-    if (ciph.level() != eva_poly.level_start())
-    {
-        POSEIDON_THROW(invalid_argument_error, "eval_mod : level start not match!");
-    }
     result = ciph;
 
     auto context_data = context_.crt_context()->get_context_data(ciph.parms_id());
@@ -1121,24 +1112,6 @@ void EvaluatorCkksBase::add(const poseidon::Ciphertext &ciph1, const poseidon::C
 void EvaluatorCkksBase::multiply_plain_inplace(Ciphertext &ciph, const Plaintext &plain,
                                                MemoryPoolHandle pool) const
 {
-    if (!ciph.is_valid())
-    {
-        POSEIDON_THROW(invalid_argument_error, "multiply_plain_inplace : Ciphertext is empty!");
-    }
-
-    if (!ciph.is_ntt_form())
-    {
-        POSEIDON_THROW(invalid_argument_error, "ckks ciph must be in NTT form");
-    }
-    if (!plain.is_ntt_form())
-    {
-        POSEIDON_THROW(invalid_argument_error, "ckks plain must be in NTT form");
-    }
-    if (ciph.parms_id() != plain.parms_id())
-    {
-        POSEIDON_THROW(invalid_argument_error, "ciph and plain parameter mismatch");
-    }
-
     auto &context_data = *context_.crt_context()->get_context_data(ciph.parms_id());
     auto scale_bit_count_bound = context_data.total_coeff_modulus_bit_count();
     auto ciph_size = ciph.size();
@@ -1157,27 +1130,6 @@ void EvaluatorCkksBase::multiply_plain_inplace(Ciphertext &ciph, const Plaintext
 
 void EvaluatorCkksBase::add_plain_inplace(Ciphertext &ciph, const Plaintext &plain) const
 {
-    if (!ciph.is_valid())
-    {
-        POSEIDON_THROW(invalid_argument_error, "multiply_plain_inplace : Ciphertext is empty!");
-    }
-    // Verify parameters.
-    if (!ciph.is_ntt_form())
-    {
-        POSEIDON_THROW(invalid_argument_error, "ckks ciph must be in NTT form");
-    }
-    if (!plain.is_ntt_form())
-    {
-        POSEIDON_THROW(invalid_argument_error, "ckks plain must be in NTT form");
-    }
-    if (ciph.parms_id() != plain.parms_id())
-    {
-        POSEIDON_THROW(invalid_argument_error, "ciph and plain parameter mismatch");
-    }
-    if (!util::are_approximate<double>(ciph.scale(), plain.scale()))
-    {
-        POSEIDON_THROW(invalid_argument_error, "add_plain_inplace : scale mismatch");
-    }
     ciph[0].add(plain.poly(), ciph[0]);
 }
 
@@ -1200,23 +1152,6 @@ void EvaluatorCkksBase::sub(const Ciphertext &ciph1, const Ciphertext &ciph2,
     if (&ciph2 != &result)
     {
         result = ciph1;
-    }
-
-    if (!ciph1.is_valid() || !ciph2.is_valid())
-    {
-        POSEIDON_THROW(invalid_argument_error, "sub : ciph1 and ciph2 parameter mismatch");
-    }
-    if (ciph1.parms_id() != ciph2.parms_id())
-    {
-        POSEIDON_THROW(invalid_argument_error, "sub : ciph1 and ciph2 parameter mismatch");
-    }
-    if (ciph1.is_ntt_form() != ciph2.is_ntt_form())
-    {
-        POSEIDON_THROW(invalid_argument_error, "sub : NTT form mismatch");
-    }
-    if (!util::are_approximate<double>(ciph1.scale(), ciph2.scale()))
-    {
-        POSEIDON_THROW(invalid_argument_error, "sub : scale mismatch");
     }
 
     // Extract encryption parameters.
@@ -1256,20 +1191,6 @@ void EvaluatorCkksBase::sub(const Ciphertext &ciph1, const Ciphertext &ciph2,
 void EvaluatorCkksBase::add_inplace(poseidon::Ciphertext &ciph1,
                                     const poseidon::Ciphertext &ciph2) const
 {
-    // Verify parameters.
-    if (ciph1.parms_id() != ciph2.parms_id())
-    {
-        POSEIDON_THROW(invalid_argument_error, "add_inplace : ciph1 and ciph2 parameter mismatch");
-    }
-    if (ciph1.is_ntt_form() != ciph2.is_ntt_form())
-    {
-        POSEIDON_THROW(invalid_argument_error, "NTT form mismatch");
-    }
-    if (!util::are_approximate<double>(ciph1.scale(), ciph2.scale()))
-    {
-        POSEIDON_THROW(invalid_argument_error, "add_inplace : scale mismatch");
-    }
-
     auto &context_data = *context_.crt_context()->get_context_data(ciph1.parms_id());
     auto &parms = context_data.parms();
     size_t coeff_count = parms.degree();
@@ -1556,15 +1477,6 @@ void EvaluatorCkksBase::conjugate(const Ciphertext &ciph, const GaloisKeys &galo
 void EvaluatorCkksBase::rescale_inplace(const Ciphertext &ciph, Ciphertext &result,
                                         MemoryPoolHandle pool) const
 {
-    if (!ciph.is_valid())
-    {
-        POSEIDON_THROW(invalid_argument_error, "rescale_inplace : ciph is empty");
-    }
-    if (!ciph.is_ntt_form())
-    {
-        POSEIDON_THROW(invalid_argument_error, "rescale_inplace : ckks ciph must be in NTT form");
-    }
-
     auto context_data_ptr = context_.crt_context()->get_context_data(ciph.parms_id());
     auto &context_data = *context_data_ptr;
     auto &next_context_data = *context_data.next_context_data();
@@ -1598,11 +1510,6 @@ void EvaluatorCkksBase::rescale(const Ciphertext &ciph, Ciphertext &result) cons
 void EvaluatorCkksBase::rescale_dynamic(const Ciphertext &ciph, Ciphertext &result,
                                         double min_scale) const
 {
-    if (!ciph.is_ntt_form())
-    {
-        POSEIDON_THROW(invalid_argument_error, "ckks ciph must be in NTT form");
-    }
-
     auto context_data = context_.crt_context()->get_context_data(ciph.parms_id());
     auto min_scaling_facor_div2 = (min_scale + 1) / 2;
     auto result_scale = ciph.scale();
@@ -1645,11 +1552,6 @@ void EvaluatorCkksBase::rescale_dynamic(const Ciphertext &ciph, Ciphertext &resu
 void EvaluatorCkksBase::drop_modulus(const Ciphertext &ciph, Ciphertext &result,
                                      parms_id_type parms_id) const
 {
-    if (!ciph.is_valid())
-    {
-        POSEIDON_THROW(invalid_argument_error, "drop_modulus : Ciphertext is empty");
-    }
-
     auto ciph_size = ciph.size();
     auto context_data = context_.crt_context()->get_context_data(parms_id);
     auto coeff_modulus_size = context_data->coeff_modulus().size();
