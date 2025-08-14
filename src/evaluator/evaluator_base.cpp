@@ -31,12 +31,20 @@ void EvaluatorBase::drop_modulus_to_next(const Ciphertext &ciph, Ciphertext &res
 
 void EvaluatorBase::ntt_fwd_b(const Plaintext &plain, Plaintext &result)
 {
+    if (!plain.is_valid())
+    {
+        POSEIDON_THROW(invalid_argument_error, "ntt_fwd : Plaintext is empty!");
+    }
     result = plain;
     result.poly().coeff_to_dot();
 }
 
 void EvaluatorBase::ntt_fwd_b(const Ciphertext &ciph, Ciphertext &result)
 {
+    if (!ciph.is_valid())
+    {
+        POSEIDON_THROW(invalid_argument_error, "ntt_fwd : Ciphertext is empty!");
+    }
     result = ciph;
     for (auto &p : result.polys())
     {
@@ -47,12 +55,24 @@ void EvaluatorBase::ntt_fwd_b(const Ciphertext &ciph, Ciphertext &result)
 
 void EvaluatorBase::ntt_inv_b(const Plaintext &plain, Plaintext &result)
 {
+    if (!plain.is_valid())
+    {
+        POSEIDON_THROW(invalid_argument_error, "ntt_inv : Plaintext is empty!");
+    }
     result = plain;
     result.poly().dot_to_coeff();
 }
 
 void EvaluatorBase::ntt_inv_b(const Ciphertext &ciph, Ciphertext &result)
 {
+    if (!ciph.is_valid())
+    {
+        POSEIDON_THROW(invalid_argument_error, "ntt_inv : Ciphertext is empty!");
+    }
+    if (!ciph.is_ntt_form())
+    {
+        return;
+    }
     result = ciph;
     for (auto &p : result.polys())
     {
