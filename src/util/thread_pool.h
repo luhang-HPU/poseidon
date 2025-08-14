@@ -9,7 +9,8 @@
 #include <stdexcept>
 #include <thread>
 #include <vector>
-
+namespace poseidon
+{
 class ThreadPool
 {
 public:
@@ -126,4 +127,5 @@ inline void ThreadPool::wait_all()
 {
     std::unique_lock<std::mutex> lock(queue_mutex);
     complete_condition.wait(lock, [this] { return tasks.empty() && active_tasks == 0; });
+}
 }
