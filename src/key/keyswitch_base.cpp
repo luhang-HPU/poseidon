@@ -226,6 +226,7 @@ GaloisKeys KSwitchGenBase::create_galois_keys(const std::vector<uint32_t> &galoi
         // Initialize Galois key
         // This is the location in the galois_keys vector
         size_t index = GaloisKeys::get_index(galois_elt);
+
         // Create Galois keys.
         generate_one_kswitch_key(prev_secret_key, rotated_secret_key, galois_keys.data()[index]);
         // Set the parms_id
