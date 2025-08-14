@@ -1,5 +1,6 @@
 #include "keyswitch_base.h"
 #include "src/factory/poseidon_factory.h"
+#include "src/util/thread_pool.h"
 #ifdef USING_HARDWARE
 #include "poseidon_hardware/hardware_drive/ckks_hardware_api.h"
 #endif
@@ -60,7 +61,8 @@ secret_key_array_type KSwitchGenBase::compute_secret_key_array(const SecretKey &
     // one we simply need to compute a dyadic product of the last one with the first one [which is
     // equal to NTT(secret_key_)].
     POSEIDON_ITERATE(iter(secret_key_power, next_secret_key_power), new_size - old_size,
-                     [&](auto I) {
+                     [&](auto I)
+                     {
                          dyadic_product_coeffmod(get<0>(I), secret_key, coeff_modulus_size,
                                                  coeff_modulus, get<1>(I));
                      });
@@ -235,6 +237,85 @@ GaloisKeys KSwitchGenBase::create_galois_keys(const std::vector<uint32_t> &galoi
     return galois_keys;
 }
 
+GaloisKeys KSwitchGenBase::create_galois_keys_mt(const std::vector<uint32_t> &galois_elts,
+                                              const SecretKey &prev_secret_key) const
+{
+    // TODO: maybe need fix
+    // Check to see if secret key and public key have been generated
+
+    // Extract encryption parameters.
+    auto &context_data = *context_.crt_context()->key_context_data();
+    auto &parms = context_data.parms();
+    auto &coeff_modulus = context_data.coeff_modulus();
+    auto galois_tool = context_.crt_context()->galois_tool();
+    size_t coeff_count = parms.degree();
+    size_t coeff_modulus_size = coeff_modulus.size();
+
+    // Size check
+    if (!product_fits_in(coeff_count, coeff_modulus_size, size_t(2)))
+    {
+        throw logic_error("invalid parameters");
+    }
+
+    // Create the GaloisKeys object to return
+    GaloisKeys galois_keys;
+
+    // The max number of keys is equal to number of coefficients
+    galois_keys.data().resize(coeff_count);
+
+    int num_threads = 8;
+    ThreadPool thread_pool(num_threads);
+    std::mutex mtx;  // 如果需要保护共享资源才用
+
+    const int work_load = (galois_elts.size() + num_threads - 1) / num_threads;
+
+    for (int t = 0; t < num_threads; ++t)
+    {
+        int s = t * work_load;
+        int e = std::min<int>(galois_elts.size(), s + work_load);
+
+        thread_pool.enqueue(
+            [&, s, e]()
+            {
+                for (int i = s; i < e; ++i)
+                {
+                    auto galois_elt = galois_elts[i];
+
+                    // Verify coprime conditions.
+                    if (!(galois_elt & 1) || (galois_elt >= (coeff_count << 1)))
+                    {
+                        POSEIDON_THROW(invalid_argument_error, "Galois element is not valid");
+                    }
+
+                    // Do we already have the key?
+                    if (galois_keys.has_key(galois_elt))
+                    {
+                        continue;
+                    }
+
+                    // Rotate secret key for each coeff_modulus
+                    POSEIDON_ALLOCATE_GET_RNS_ITER(rotated_secret_key, coeff_count,
+                                                   coeff_modulus_size, pool_);
+                    ConstRNSIter secret_key(prev_secret_key.data().data(), coeff_count);
+                    galois_tool->apply_galois_ntt(secret_key, coeff_modulus_size, galois_elt,
+                                                  rotated_secret_key);
+
+                    // Initialize Galois key
+                    size_t index = GaloisKeys::get_index(galois_elt);
+
+                    // 如果每个 index 都是唯一的，可以不用锁
+                    generate_one_kswitch_key(prev_secret_key, rotated_secret_key,
+                                             galois_keys.data()[index]);
+                }
+            });
+    }
+
+    // Set the parms_id
+    galois_keys.parms_id() = context_data.parms().parms_id();
+
+    return galois_keys;
+}
+
 void KSwitchGenBase::generate_kswitch_keys(const SecretKey &prev_secret_key, ConstPolyIter new_keys,
                                            size_t num_keys, KSwitchKeys &destination) const
 {
@@ -250,8 +331,7 @@ void KSwitchGenBase::generate_kswitch_keys(const SecretKey &prev_secret_key, Con
     }
 
     destination.data().resize(num_keys);
-    POSEIDON_ITERATE(iter(new_keys, destination.data()), num_keys,
-                     [&](auto I)
+    POSEIDON_ITERATE(iter(new_keys, destination.data()), num_keys, [&](auto I)
                      { this->generate_one_kswitch_key(prev_secret_key, get<0>(I), get<1>(I)); });
 }
 
