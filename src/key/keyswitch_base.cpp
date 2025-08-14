@@ -229,15 +229,18 @@ GaloisKeys KSwitchGenBase::create_galois_keys(const std::vector<uint32_t> &galoi
 
         // Create Galois keys.
         generate_one_kswitch_key(prev_secret_key, rotated_secret_key, galois_keys.data()[index]);
-        // Set the parms_id
-        galois_keys.parms_id() = context_data.parms().parms_id();
-
-        return galois_keys;
     }
+
+    // Set the parms_id
+    galois_keys.parms_id() = context_data.parms().parms_id();
+
+    return galois_keys;
+}
 
 GaloisKeys KSwitchGenBase::create_galois_keys_mt(const std::vector<uint32_t> &galois_elts,
                                               const SecretKey &prev_secret_key) const
 {
+    // TODO: maybe need fix
     // Check to see if secret key and public key have been generated
 
     // Extract encryption parameters.
