@@ -203,33 +203,6 @@ GaloisKeys KSwitchGenBase::create_galois_keys(const std::vector<uint32_t> &galoi
     // The max number of keys is equal to number of coefficients
     galois_keys.data().resize(coeff_count);
 
-    // for (auto galois_elt : galois_elts)
-    // {
-    //     // Verify coprime conditions.
-    //     if (!(galois_elt & 1) || (galois_elt >= coeff_count << 1))
-    //     {
-    //         POSEIDON_THROW(invalid_argument_error, "Galois element is not valid");
-    //     }
-
-    //     // Do we already have the key?
-    //     if (galois_keys.has_key(galois_elt))
-    //     {
-    //         continue;
-    //     }
-
-    //     // Rotate secret key for each coeff_modulus
-    //     POSEIDON_ALLOCATE_GET_RNS_ITER(rotated_secret_key, coeff_count, coeff_modulus_size,
-    //     pool_); ConstRNSIter secret_key(prev_secret_key.data().data(), coeff_count);
-    //     galois_tool->apply_galois_ntt(secret_key, coeff_modulus_size, galois_elt,
-    //                                   rotated_secret_key);
-
-    //     // Initialize Galois key
-    //     // This is the location in the galois_keys vector
-    //     size_t index = GaloisKeys::get_index(galois_elt);
-
-    //     // Create Galois keys.
-    //     generate_one_kswitch_key(prev_secret_key, rotated_secret_key, galois_keys.data()[index]);
-    // }
     int num_threads = 8;
     ThreadPool thread_pool(num_threads);
     std::mutex mtx;  // 如果需要保护共享资源才用
