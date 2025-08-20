@@ -1,11 +1,11 @@
 
-#include "src/advance/homomorphic_dft.h"
-#include "src/decryptor.h"
-#include "src/encryptor.h"
-#include "src/factory/poseidon_factory.h"
-#include "src/keygenerator.h"
-#include "src/util/debug.h"
-#include "src/util/random_sample.h"
+#include "poseidon/advance/homomorphic_dft.h"
+#include "poseidon/decryptor.h"
+#include "poseidon/encryptor.h"
+#include "poseidon/factory/poseidon_factory.h"
+#include "poseidon/keygenerator.h"
+#include "poseidon/util/debug.h"
+#include "poseidon/util/random_sample.h"
 
 using namespace poseidon;
 using namespace poseidon::util;

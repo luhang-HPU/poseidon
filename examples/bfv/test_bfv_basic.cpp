@@ -1,9 +1,9 @@
 
-#include "src/decryptor.h"
-#include "src/encryptor.h"
-#include "src/factory/poseidon_factory.h"
-#include "src/keygenerator.h"
-#include "src/util/debug.h"
+#include "poseidon/decryptor.h"
+#include "poseidon/encryptor.h"
+#include "poseidon/factory/poseidon_factory.h"
+#include "poseidon/keygenerator.h"
+#include "poseidon/util/debug.h"
 
 using namespace poseidon;
 using namespace poseidon::util;
