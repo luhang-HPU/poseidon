@@ -10,7 +10,7 @@ install (
     FILES
         ${POSEIDON_ADVANCE_UTIL_HRADER_FILES}
     DESTINATION
-        ${POSEIDON_INCLUDES_INSTALL_DIR}/poseidon/src/advance/util
+        ${POSEIDON_INCLUDES_INSTALL_DIR}/poseidon/advance/util
 )
 
 set(POSEIDON_SOURCE_FILES ${POSEIDON_SOURCE_FILES} PARENT_SCOPE)

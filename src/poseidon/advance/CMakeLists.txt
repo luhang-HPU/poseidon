@@ -10,7 +10,7 @@ install (
     FILES
         ${POSEIDON_ADVANCE_HRADER_FILES}
     DESTINATION
-        ${POSEIDON_INCLUDES_INSTALL_DIR}/poseidon/src/advance
+        ${POSEIDON_INCLUDES_INSTALL_DIR}/poseidon/advance
 )
 
 add_subdirectory(util)

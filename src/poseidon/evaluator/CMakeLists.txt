@@ -10,7 +10,7 @@ install (
     FILES
         ${POSEIDON_EVALUATOR_HRADER_FILES}
     DESTINATION
-        ${POSEIDON_INCLUDES_INSTALL_DIR}/poseidon/src/evaluator
+        ${POSEIDON_INCLUDES_INSTALL_DIR}/poseidon/evaluator
 )
 
 add_subdirectory(software)

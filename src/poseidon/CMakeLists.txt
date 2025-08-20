@@ -5,7 +5,7 @@ set(POSEIDON_SOURCE_FILES ${POSEIDON_ALL_SOURCE_FILES}
 file(GLOB POSEIDON_ALL_HRADER_FILES "*.h")
 install (FILES ${POSEIDON_ALL_HRADER_FILES}
     DESTINATION
-        ${POSEIDON_INCLUDES_INSTALL_DIR}/poseidon/src/poseidon
+        ${POSEIDON_INCLUDES_INSTALL_DIR}/poseidon/
 )
 
 add_subdirectory(advance)

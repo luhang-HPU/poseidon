@@ -10,7 +10,7 @@ install (
     FILES
         ${POSEIDON_SEAL_HRADER_FILES}
     DESTINATION
-        ${POSEIDON_INCLUDES_INSTALL_DIR}/poseidon/src/basics
+        ${POSEIDON_INCLUDES_INSTALL_DIR}/poseidon/basics
 )
 
 add_subdirectory(util)

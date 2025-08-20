@@ -10,7 +10,7 @@ install (
     FILES
         ${POSEIDON_EVALUATOR_SOFTWARE_HRADER_FILES}
     DESTINATION
-        ${POSEIDON_INCLUDES_INSTALL_DIR}/poseidon/src/evaluator/software
+        ${POSEIDON_INCLUDES_INSTALL_DIR}/poseidon/evaluator/software
 )
 
 set(POSEIDON_SOURCE_FILES ${POSEIDON_SOURCE_FILES} PARENT_SCOPE)
