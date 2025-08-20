@@ -63,14 +63,14 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 # Source Tree
 set(POSEIDON_INCLUDES_DIR ${CMAKE_CURRENT_LIST_DIR})
-set(POSEIDON_CONFIG_H_IN_FILENAME ${POSEIDON_INCLUDES_DIR}/src/util/config.h.in)
+set(POSEIDON_CONFIG_H_IN_FILENAME ${POSEIDON_INCLUDES_DIR}/src/poseidon/util/config.h.in)
 
 # Build tree
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${OUTLIB_PATH})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${OUTLIB_PATH})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 set(POSEIDON_CONFIG_FILENAME ${CMAKE_CURRENT_BINARY_DIR}/cmake/POSEIDONConfig.cmake)
-set(POSEIDON_CONFIG_H_FILENAME ${CMAKE_CURRENT_BINARY_DIR}/src/util/config.h)
+set(POSEIDON_CONFIG_H_FILENAME ${CMAKE_CURRENT_BINARY_DIR}/poseidon/util/config.h)
 set(POSEIDON_THIRDPARTY_DIR ${CMAKE_CURRENT_BINARY_DIR}/thirdparty)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
@@ -159,7 +159,7 @@ message(STATUS "POSEIDON_USE_HARDWARE: ${POSEIDON_USE_HARDWARE}")
 if(POSEIDON_USE_HARDWARE)
     set(USING_HARDWARE ON)
 endif()
-add_subdirectory(src)
+add_subdirectory(src/poseidon)
 
 # [option] POSEIDON_USE_MSGSL (default: ON)
 set(POSEIDON_USE_MSGSL_OPTION_STR "Use Microsoft GSL")
@@ -180,7 +180,6 @@ if(POSEIDON_USE_MSGSL)
     endif()
 endif()
 
-
 # [option] POSEIDON_BUILD_EXAMPLES (default: ON)
 option(POSEIDON_BUILD_EXAMPLES "Build examples for POSEIDON" ON)
 message(STATUS "POSEIDON_BUILD_EXAMPLES: ${POSEIDON_BUILD_EXAMPLES}")
@@ -194,13 +193,13 @@ endif()
 configure_file(${POSEIDON_CONFIG_H_IN_FILENAME} ${POSEIDON_CONFIG_H_FILENAME})
 install(
     FILES ${POSEIDON_CONFIG_H_FILENAME}
-    DESTINATION ${POSEIDON_INCLUDES_INSTALL_DIR}/poseidon/src/util)
+    DESTINATION ${POSEIDON_INCLUDES_INSTALL_DIR}/poseidon/src/poseidon/util)
 
 set(BUILD_SHARED_LIBS_STR "Build shared library")
 option(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_STR} ON)
 if(BUILD_SHARED_LIBS)
     add_library(poseidon_shared SHARED ${POSEIDON_SOURCE_FILES})    
-    target_include_directories(poseidon_shared PUBLIC ${POSEIDON_INCLUDES_DIR})
+    target_include_directories(poseidon_shared PUBLIC ${POSEIDON_INCLUDES_DIR}/src)
     target_link_libraries(poseidon_shared PRIVATE gmp)
     if(POSEIDON_USE_HARDWARE)    
         target_link_libraries(poseidon_shared PUBLIC poseidon_hardware)
