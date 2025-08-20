@@ -1,0 +1,16 @@
+# Source files in this directory
+file(GLOB POSEIDON_UTIL_SOURCE_FILES "*.cpp" "*.c")
+set(POSEIDON_SOURCE_FILES  ${POSEIDON_SOURCE_FILES} 
+        ${POSEIDON_UTIL_SOURCE_FILES}
+)
+
+# Add header files for installation
+file(GLOB POSEIDON_UTIL_HRADER_FILES "*.h")
+install (
+    FILES
+        ${POSEIDON_UTIL_HRADER_FILES}
+    DESTINATION
+        ${POSEIDON_INCLUDES_INSTALL_DIR}/poseidon/util
+)
+
+set(POSEIDON_SOURCE_FILES ${POSEIDON_SOURCE_FILES} PARENT_SCOPE)
