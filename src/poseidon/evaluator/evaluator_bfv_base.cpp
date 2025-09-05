@@ -887,14 +887,12 @@ void EvaluatorBfvBase::multiply_by_diag_matrix_bsgs(const Ciphertext &ciph,
                                                     Ciphertext &result,
                                                     const GaloisKeys &rot_key) const
 {
-    auto poly_modulus_degree = ciph.poly_modulus_degree();
-    auto poly_modulus_degree_div2 = poly_modulus_degree >> 1;
+    auto degree_div2 = ciph.poly_modulus_degree() >> 1;
     auto [index, _, rot_n2] =
         bsgs_index(plain_mat.plain_vec, 1 << plain_mat.log_slots, plain_mat.n1);
     map<int, Ciphertext> rot_ciph;
-    Ciphertext ciph_inner_sum, ciph_inner, ciph_inner_tmp;
-    Ciphertext ciph_rrr;
-    int z = 0;
+    Ciphertext ciph_inner_tmp;
+    rot_ciph[0] = ciph;
     for (auto j : rot_n2)
     {
         if (j != 0)
@@ -903,88 +901,46 @@ void EvaluatorBfvBase::multiply_by_diag_matrix_bsgs(const Ciphertext &ciph,
         }
     }
 
-    int cnt0 = 0;
     for (const auto &j : index)
     {
-        int cnt1 = 0;
+        Ciphertext ciph_inner_sum, ciph_inner;
         for (auto i : index[j.first])
         {
-            if (i == 0)
+            multiply_plain(rot_ciph[i], plain_mat.plain_vec.at(i + j.first), ciph_inner);
+            if (!ciph_inner_sum.is_valid())
             {
-                if (cnt1 == 0)
-                {
-                    if (cnt0 == 0)
-                    {
-                        multiply_plain(ciph, plain_mat.plain_vec.at(j.first), result);
-                    }
-                    else
-                    {
-                        multiply_plain(ciph, plain_mat.plain_vec.at(j.first), ciph_inner_sum);
-                    }
-                }
-                else
-                {
-                    multiply_plain(ciph, plain_mat.plain_vec.at(j.first), ciph_inner);
-                    if (cnt0 == 0)
-                    {
-                        add(result, ciph_inner, result);
-                    }
-                    else
-                    {
-                        add(ciph_inner_sum, ciph_inner, ciph_inner_sum);
-                    }
-                }
+                ciph_inner_sum = ciph_inner;
             }
             else
             {
-                if (cnt1 == 0)
-                {
-                    if (cnt0 == 0)
-                    {
-                        multiply_plain(rot_ciph[i], plain_mat.plain_vec.at(i + j.first), result);
-                    }
-                    else
-                    {
-                        multiply_plain(rot_ciph[i], plain_mat.plain_vec.at(i + j.first),
-                                       ciph_inner_sum);
-                    }
-                }
-                else
-                {
-
-                    multiply_plain(rot_ciph[i], plain_mat.plain_vec.at(i + j.first), ciph_inner);
-                    if (cnt0 == 0)
-                    {
-                        add(result, ciph_inner, result);
-                    }
-                    else
-                    {
-                        add(ciph_inner_sum, ciph_inner, ciph_inner_sum);
-                    }
-                }
+                add(ciph_inner_sum, ciph_inner, ciph_inner_sum);
             }
-            cnt1++;
         }
-        if (cnt0 != 0)
+
+        auto step_src = j.first;
+        if (j.first == (degree_div2))
         {
-            auto step_src = j.first;
-            if (j.first == (poly_modulus_degree_div2))
-            {
-                rotate_col(ciph_inner_sum, ciph_inner, rot_key);
-            }
-            else if (j.first > poly_modulus_degree_div2)
-            {
-                rotate_col(ciph_inner_sum, ciph_inner_tmp, rot_key);
-                auto step = j.first - poly_modulus_degree_div2;
-                rotate_row(ciph_inner_tmp, ciph_inner, step, rot_key);
-            }
-            else
-            {
-                rotate_row(ciph_inner_sum, ciph_inner, step_src, rot_key);
-            }
+            rotate_col(ciph_inner_sum, ciph_inner, rot_key);
+        }
+        else if (j.first > degree_div2)
+        {
+            rotate_col(ciph_inner_sum, ciph_inner_tmp, rot_key);
+            auto step = j.first - degree_div2;
+            rotate_row(ciph_inner_tmp, ciph_inner, step, rot_key);
+        }
+        else
+        {
+            rotate_row(ciph_inner_sum, ciph_inner, step_src, rot_key);
+        }
+
+        if (!result.is_valid())
+        {
+            result = ciph_inner;
+        }
+        else
+        {
             add(result, ciph_inner, result);
         }
-        cnt0++;
     }
 }
 
