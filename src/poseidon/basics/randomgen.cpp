@@ -5,24 +5,9 @@
 #include <algorithm>
 #include <iostream>
 #include <random>
-//#if (SEAL_SYSTEM == SEAL_SYSTEM_WINDOWS)
-//#include <Windows.h>
-//#include <bcrypt.h>
-//#pragma comment(lib, "bcrypt")
-//#endif
 
 using namespace std;
 using namespace poseidon::util;
-
-//#if (SEAL_SYSTEM == SEAL_SYSTEM_WINDOWS)
-//
-// constexpr auto RTL_GENRANDOM = "SystemFunction036";
-//
-//// Preserve error codes to diagnose in case of failure
-// NTSTATUS last_bcrypt_error = 0;
-// DWORD last_genrandom_error = 0;
-//
-//#endif
 
 namespace poseidon
 {

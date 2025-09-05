@@ -248,12 +248,12 @@ void EvaluatorBase::transform_from_ntt_inplace(Ciphertext &ciph) const
 
     // Finally change the is_ntt_transformed flag
     ciph.is_ntt_form() = false;
-#ifdef SEAL_THROW_ON_TRANSPARENT_CIPHERTEXT
+#ifdef POSEIDON_THROW_ON_TRANSPARENT_CIPHERTEXT
     // Transparent ciphertext output is not allowed.
-    if (ciph.is_transparent())
-    {
-        throw logic_error("result ciphertext is transparent");
-    }
+    // if (ciph.is_transparent())
+    // {
+    //     throw logic_error("result ciphertext is transparent");
+    // }
 #endif
 }
 }  // namespace poseidon
