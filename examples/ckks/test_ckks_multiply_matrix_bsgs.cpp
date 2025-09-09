@@ -26,8 +26,8 @@ int main()
     // init random data
     int mat_size = 1 << ckks_param_literal.log_slots();
     std::vector<vector<std::complex<double>>> mat(mat_size, vector<complex<double>>(mat_size, 0));
-    std::vector<vector<std::complex<double>>> mat_t(mat_size);
-    std::vector<vector<std::complex<double>>> mat_t1;
+    std::vector<vector<std::complex<double>>> mat_diag(mat_size);
+    std::vector<vector<std::complex<double>>> mat_transpose;
     // create message
     vector<complex<double>> message1(mat_size, 0);
     message1[1] = 1;
@@ -48,13 +48,13 @@ int main()
     }
     auto &modulus = context.crt_context()->first_context_data()->coeff_modulus();
     int level = modulus.size() - 1;
-    matrix_operations::transpose_matrix(mat, mat_t1);
+    matrix_operations::transpose_matrix(mat, mat_transpose);
     for (int i = 0; i < mat.size(); i++)
     {
-        matrix_operations::diagonal(mat_t1, i, mat_t[i]);
+        matrix_operations::diagonal(mat_transpose, i, mat_diag[i]);
     }
 
-    gen_matrix_form_bsgs(matrix_plain, matrix_plain.rot_index, ckks_encoder, mat_t, level,
+    gen_matrix_form_bsgs(matrix_plain, matrix_plain.rot_index, ckks_encoder, mat_diag, level,
                          safe_cast<double>(modulus.back().value()), 1,
                          ckks_param_literal.log_slots());
 
