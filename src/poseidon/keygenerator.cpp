@@ -9,7 +9,6 @@
 #include "basics/util/uintarithsmallmod.h"
 #include "basics/util/uintcore.h"
 #include "key/keyswitch.h"
-#include "poseidon/factory/poseidon_factory.h"
 #include <algorithm>
 #ifdef USING_HARDWARE
 #include "poseidon_hardware/hardware_drive/ckks_hardware_api.h"

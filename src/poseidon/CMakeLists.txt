@@ -8,9 +8,9 @@ install (FILES ${POSEIDON_ALL_HRADER_FILES}
         ${POSEIDON_INCLUDES_INSTALL_DIR}/poseidon/
 )
 
-add_subdirectory(advance)
-add_subdirectory(evaluator)
-add_subdirectory(factory)
+# add_subdirectory(advance)
+# add_subdirectory(evaluator)
+# add_subdirectory(factory)
 add_subdirectory(key)
 add_subdirectory(basics)
 add_subdirectory(util)
