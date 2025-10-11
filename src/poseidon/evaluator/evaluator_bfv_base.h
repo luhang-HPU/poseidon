@@ -56,7 +56,7 @@ public:
 
     void add_plain_inplace(Ciphertext &ciph, const Plaintext &plain) const;
     void sub_plain_inplace(Ciphertext &ciph, const Plaintext &plain) const;
-    void multiply_inplace(Ciphertext &ciph1, const Ciphertext &ciph2,
+    virtual void multiply_inplace(Ciphertext &ciph1, const Ciphertext &ciph2,
                           MemoryPoolHandle pool = MemoryManager::GetPool()) const;
     virtual void
     multiply_plain_inplace(Ciphertext &ciph, const Plaintext &plain,

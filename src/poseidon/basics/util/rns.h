@@ -139,6 +139,11 @@ public:
 
     POSEIDON_NODISCARD inline const RNSBase &obase() const noexcept { return obase_; }
 
+    POSEIDON_NODISCARD inline const Pointer<Pointer<std::uint64_t>> &base_change_matrix() const noexcept
+    {
+        return base_change_matrix_;
+    }
+
     void fast_convert(ConstCoeffIter in, CoeffIter out, MemoryPoolHandle pool) const;
 
     void fast_convert_array(ConstRNSIter in, RNSIter out, MemoryPoolHandle pool) const;
@@ -259,6 +264,56 @@ public:
     POSEIDON_NODISCARD inline const uint64_t &q_last_mod_t() const noexcept
     {
         return q_last_mod_t_;
+    }
+
+    POSEIDON_NODISCARD inline const Pointer<BaseConverter> &base_q_to_bsk_conv() const noexcept
+    {
+        return base_q_to_bsk_conv_;
+    }
+
+    POSEIDON_NODISCARD inline const Pointer<BaseConverter> &base_q_to_m_tilde_conv() const noexcept
+    {
+        return base_q_to_m_tilde_conv_;
+    }
+
+    POSEIDON_NODISCARD inline const Pointer<BaseConverter> &base_b_to_q_conv() const noexcept
+    {
+        return base_b_to_q_conv_;
+    }
+
+    POSEIDON_NODISCARD inline const Pointer<BaseConverter> &base_b_to_m_sk_conv() const noexcept
+    {
+        return base_b_to_m_sk_conv_;
+    }
+
+    POSEIDON_NODISCARD inline auto &neg_inv_prod_q_mod_m_tilde() const noexcept
+    {
+        return neg_inv_prod_q_mod_m_tilde_;
+    }
+
+    POSEIDON_NODISCARD inline auto &prod_q_mod_bsk() const noexcept
+    {
+        return prod_q_mod_bsk_;
+    }
+
+    POSEIDON_NODISCARD inline auto &inv_m_tilde_mod_bsk() const noexcept
+    {
+        return inv_m_tilde_mod_bsk_;
+    }
+
+    POSEIDON_NODISCARD inline auto &inv_prod_q_mod_bsk() const noexcept
+    {
+        return inv_prod_q_mod_bsk_;
+    }
+
+    POSEIDON_NODISCARD inline auto &inv_prod_b_mod_m_sk() const noexcept
+    {
+        return inv_prod_b_mod_m_sk_;
+    }
+
+    POSEIDON_NODISCARD inline auto &prod_b_mod_q() const noexcept
+    {
+        return prod_b_mod_q_;
     }
 
 private:

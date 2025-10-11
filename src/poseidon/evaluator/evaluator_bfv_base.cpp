@@ -475,12 +475,13 @@ void EvaluatorBfvBase::multiply_inplace(Ciphertext &ciph1, const Ciphertext &cip
     // It performs steps (1)-(3) of the BEHZ multiplication (see above) on the given input
     // polynomial (given as an RNSIter or ConstRNSIter) and writes the results in base q and base
     // Bsk to the given output iterators.
+   
     auto behz_extend_base_convert_to_ntt = [&](auto I)
     {
         // Make copy of input polynomial (in base q) and convert to NTT form
         // Lazy reduction
         set_poly(get<0>(I), coeff_count, base_q_size, get<1>(I));
-        ntt_negacyclic_harvey_lazy(get<1>(I), base_q_size, base_q_ntt_tables);
+        ntt_negacyclic_harvey(get<1>(I), base_q_size, base_q_ntt_tables);
 
         // Allocate temporary space for a polynomial in the Bsk U {m_tilde} base
         POSEIDON_ALLOCATE_GET_RNS_ITER(temp, coeff_count, base_bsk_m_tilde_size, pool);
@@ -493,9 +494,8 @@ void EvaluatorBfvBase::multiply_inplace(Ciphertext &ciph1, const Ciphertext &cip
 
         // Transform to NTT form in base Bsk
         // Lazy reduction
-        ntt_negacyclic_harvey_lazy(get<2>(I), base_bsk_size, base_bsk_ntt_tables);
+        ntt_negacyclic_harvey(get<2>(I), base_bsk_size, base_bsk_ntt_tables);
     };
-
     // Allocate space for a base q output of behz_extend_base_convert_to_ntt for ciph1
     POSEIDON_ALLOCATE_GET_POLY_ITER(ciph1_q, ciph1_size, coeff_count, base_q_size, pool);
 
@@ -516,7 +516,6 @@ void EvaluatorBfvBase::multiply_inplace(Ciphertext &ciph1, const Ciphertext &cip
     POSEIDON_ALLOCATE_ZERO_GET_POLY_ITER(temp_dest_q, dest_size, coeff_count, base_q_size, pool);
     POSEIDON_ALLOCATE_ZERO_GET_POLY_ITER(temp_dest_bsk, dest_size, coeff_count, base_bsk_size,
                                          pool);
-
     if (is_square)
     {
         // Perform BEHZ step (4): dyadic multiplication on arbitrary size ciphs
@@ -692,6 +691,9 @@ void EvaluatorBfvBase::multiply_plain_inplace(Ciphertext &ciph, const Plaintext 
     else
     {
         multiply_plain_normal(ciph, plain);
+        // static int hardware_cnt = 0;
+        // hardware_cnt++;
+        // printf("hardware_cnt = %d\r\n", hardware_cnt);
     }
 
 #ifdef POSEIDON_THROW_ON_TRANSPARENT_CIPHERTEXT

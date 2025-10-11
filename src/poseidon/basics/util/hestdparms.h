@@ -29,6 +29,8 @@ POSEIDON_NODISCARD constexpr int seal_he_std_parms_128_tc(std::size_t poly_modul
         return 438;
     case std::size_t(32768):
         return 881;
+    case std::size_t(65536):
+        return 1860;
     }
     return 0;
 }
@@ -92,6 +94,8 @@ POSEIDON_NODISCARD constexpr int seal_he_std_parms_128_tq(std::size_t poly_modul
         return 411;
     case std::size_t(32768):
         return 827;
+    case std::size_t(65536):
+        return 1860;
     }
     return 0;
 }

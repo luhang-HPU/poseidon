@@ -193,7 +193,8 @@ void KeyGenerator::create_galois_keys(GaloisKeys &destination)
         auto rns_max = literal->q().size() + literal->p().size();
         auto galois_tool = context_.crt_context()->galois_tool();
         HardwareApi::galois_key_config(destination, galois_tool, rns_max, degree);
-        HardwareApi::permutation_tables_config(destination, galois_tool, rns_max, degree);
+        if(literal->scheme() != BFV)
+            HardwareApi::permutation_tables_config(destination, galois_tool, rns_max, degree);
     }
 #endif
 }

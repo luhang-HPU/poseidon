@@ -748,7 +748,7 @@ void RNSTool::initialize(size_t poly_modulus_degree, const RNSBase &q, const Mod
     POSEIDON_ITERATE(iter(prod_b_mod_q_, base_q_->base()), base_q_size,
                      [&](auto I)
                      { get<0>(I) = modulo_uint(base_b_->base_prod(), base_b_size, get<1>(I)); });
-
+    // printf("prod_B_mod_q_%llx\r\n",prod_b_mod_q_[0]);
     uint64_t temp;
 
     // Compute prod(q)^(-1) mod Bsk
@@ -1017,13 +1017,18 @@ void RNSTool::fastbconv_sk(ConstRNSIter input, RNSIter destination, MemoryPoolHa
     size_t base_b_size = base_b_->size();
 
     // Fast convert B -> q; input is in Bsk but we only use B
-    base_b_to_q_conv_->fast_convert_array(input, destination, pool);
 
+    uint64_t *res1;
+    base_b_to_q_conv_->fast_convert_array(input, destination, pool);
+    // res1 = *destination;
+    // printf("destination = %llx\r\n", res1[0]);
+    // printf("destination = %llx\r\n", res1[4096]);
     // Compute alpha_sk
     // Fast convert B -> {m_sk}; input is in Bsk but we only use B
     POSEIDON_ALLOCATE_GET_COEFF_ITER(temp, coeff_count_, pool);
     base_b_to_m_sk_conv_->fast_convert_array(input, RNSIter(temp, coeff_count_), pool);
-
+   
+    // printf("temp = %llx\r\n", *(temp));
     // Take the m_sk part of input, subtract from temp, and multiply by inv_prod_b_mod_m_sk_
     // Note: input_sk is allocated in input[base_b_size]
     POSEIDON_ALLOCATE_GET_COEFF_ITER(alpha_sk, coeff_count_, pool);
@@ -1035,7 +1040,7 @@ void RNSTool::fastbconv_sk(ConstRNSIter input, RNSIter destination, MemoryPoolHa
                          get<0>(I) = multiply_uint_mod(get<1>(I) + (m_sk_.value() - get<2>(I)),
                                                        inv_prod_b_mod_m_sk_, m_sk_);
                      });
-
+    // printf("alpha_sk = %llx\r\n", *(alpha_sk));               
     // alpha_sk is now ready for the Shenoy-Kumaresan conversion; however, note that our
     // alpha_sk here is not a centered reduction, so we need to apply a correction below.
     const uint64_t m_sk_div_2 = m_sk_.value() >> 1;
@@ -1052,25 +1057,26 @@ void RNSTool::fastbconv_sk(ConstRNSIter input, RNSIter destination, MemoryPoolHa
                          POSEIDON_ITERATE(iter(alpha_sk, get<2>(I)), coeff_count_,
                                           [&](auto J)
                                           {
-                                              // Correcting alpha_sk since it represents a negative
-                                              // value
-                                              if (get<0>(J) > m_sk_div_2)
-                                              {
-                                                  get<1>(J) = multiply_add_uint_mod(
-                                                      negate_uint_mod(get<0>(J), m_sk_),
-                                                      prod_b_mod_q_elt, get<1>(J), get<1>(I));
-                                              }
-                                              // No correction needed
-                                              else
-                                              {
+                                             // Correcting alpha_sk since it represents a negative
+                                             // value
+                                            //   if (get<0>(J) > m_sk_div_2)
+                                            //   {
+                                            //       get<1>(J) = multiply_add_uint_mod(
+                                            //           negate_uint_mod(get<0>(J), m_sk_),
+                                            //           prod_b_mod_q_elt, get<1>(J), get<1>(I));
+                                            //   }
+                                            //   // No correction needed
+                                            //   else
+                                            //   {
                                                   // It is not necessary for the negation to be
                                                   // reduced modulo the small prime
                                                   get<1>(J) = multiply_add_uint_mod(
                                                       get<0>(J), neg_prod_b_mod_q_elt, get<1>(J),
                                                       get<1>(I));
-                                              }
+                                            //   }
                                           });
-                     });
+                     });              
+
 }
 
 void RNSTool::sm_mrq(ConstRNSIter input, RNSIter destination, MemoryPoolHandle pool) const
@@ -1111,9 +1117,18 @@ void RNSTool::sm_mrq(ConstRNSIter input, RNSIter destination, MemoryPoolHandle p
 
     // Compute r_m_tilde
     POSEIDON_ALLOCATE_GET_COEFF_ITER(r_m_tilde, coeff_count_, pool);
+    // printf("input_m_tilde =%llx\r\n", *input_m_tilde);
     multiply_poly_scalar_coeffmod(input_m_tilde, coeff_count_, neg_inv_prod_q_mod_m_tilde_,
                                   m_tilde_, r_m_tilde);
-
+    // printf("r_m_tilde =%llx\r\n", r_m_tilde[0]);
+    // printf("r_m_tilde =%llx\r\n", r_m_tilde[1]);     
+    // printf("r_m_tilde =%llx\r\n", r_m_tilde[2]); 
+    // printf("inv_m_tilde_mod_bsk_ =%llx\r\n", inv_m_tilde_mod_bsk_[0]);   
+    // printf("inv_m_tilde_mod_bsk_ =%llx\r\n", inv_m_tilde_mod_bsk_[1]);   
+    // printf("inv_m_tilde_mod_bsk_ =%llx\r\n", inv_m_tilde_mod_bsk_[2]);     
+    // printf("prod_q_mod_bsk_ =%llx\r\n", prod_q_mod_bsk_[0]);   
+    // printf("prod_q_mod_bsk_ =%llx\r\n", prod_q_mod_bsk_[1]);   
+    // printf("prod_q_mod_bsk_ =%llx\r\n", prod_q_mod_bsk_[2]);    
     POSEIDON_ITERATE(
         iter(input, prod_q_mod_bsk_, inv_m_tilde_mod_bsk_, base_bsk_->base(), destination),
         base_bsk_size,
@@ -1128,11 +1143,10 @@ void RNSTool::sm_mrq(ConstRNSIter input, RNSIter destination, MemoryPoolHandle p
                     // We need centered reduction of r_m_tilde modulo Bsk. Note that m_tilde is
                     // chosen to be a power of two so we have '>=' below.
                     uint64_t temp = get<1>(J);
-                    if (temp >= m_tilde_div_2)
-                    {
-                        temp += get<3>(I).value() - m_tilde_.value();
-                    }
-
+                    // if (temp >= m_tilde_div_2)
+                    // {
+                    //     temp += get<3>(I).value() - m_tilde_.value();
+                    // }
                     // Compute (input + q*r_m_tilde)*m_tilde^(-1) mod Bsk
                     get<2>(J) = multiply_uint_mod(
                         multiply_add_uint_mod(temp, prod_q_mod_bsk_elt, get<0>(J), get<3>(I)),
@@ -1176,9 +1190,9 @@ void RNSTool::fast_floor(ConstRNSIter input, RNSIter destination, MemoryPoolHand
 
     // Convert q -> Bsk
     base_q_to_bsk_conv_->fast_convert_array(input, destination, pool);
-
     // Move input pointer to past the base q components
     input += base_q_size;
+    
     POSEIDON_ITERATE(
         iter(input, inv_prod_q_mod_bsk_, base_bsk_->base(), destination), base_bsk_size,
         [&](auto I)
@@ -1192,6 +1206,7 @@ void RNSTool::fast_floor(ConstRNSIter input, RNSIter destination, MemoryPoolHand
                                      multiply_uint_mod(get<0>(J) + (get<2>(I).value() - get<1>(J)),
                                                        get<1>(I), get<2>(I));
                              });
+            // printf("inv_prod_q_mod_bsk_ = %llx\r\n", get<1>(I));
         });
 }
 
@@ -1236,12 +1251,18 @@ void RNSTool::fastbconv_m_tilde(ConstRNSIter input, RNSIter destination,
     // we could not use the BaseConverter as below without modifications.
     POSEIDON_ALLOCATE_GET_RNS_ITER(temp, coeff_count_, base_q_size, pool);
     multiply_poly_scalar_coeffmod(input, base_q_size, m_tilde_.value(), base_q_->base(), temp);
-
+    // printf("m_tilde_.value() = %llx\r\n", m_tilde_.value());
+    // printf("(*temp)[0] = %llx\r\n", (*temp)[0]);
     // Now convert to Bsk
     base_q_to_bsk_conv_->fast_convert_array(temp, destination, pool);
-
+    // printf("(*destination)[0] = %llx\r\n", *(destination[0]));
+    // printf("(*destination)[1] = %llx\r\n", *(destination[1]));
+    // printf("(*destination)[2] = %llx\r\n", *(destination[2]));
     // Finally convert to {m_tilde}
     base_q_to_m_tilde_conv_->fast_convert_array(temp, destination + base_bsk_size, pool);
+    // printf("res = %llx\r\n", (*(destination+base_bsk_size)[0]));
+    // printf("res = %llx\r\n", (*(destination+base_bsk_size)[1]));
+    // printf("res = %llx\r\n", (*(destination+base_bsk_size)[2]));
 }
 
 void RNSTool::decrypt_scale_and_round(ConstRNSIter input, CoeffIter destination,

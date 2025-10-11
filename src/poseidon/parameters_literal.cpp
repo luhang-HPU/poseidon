@@ -640,12 +640,14 @@ void ParametersLiteralDefault::init(SchemeType scheme_type, uint32_t degree,
     {
         log_slots_ = log_n_;
 
-        if (degree <= 1024)
-            plain_modulus_ = 1038337;
-        else if (degree == 16384 || degree == 32768)
-            plain_modulus_ = 786433;
+        if (degree < 65536)
+        {
+            plain_modulus_ = 65537;
+        }
         else
-            plain_modulus_ = 1032193;
+        {
+            plain_modulus_ = PlainModulus::Batching(degree, 20);
+        }
 
         switch (sec_level_)
         {
