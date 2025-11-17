@@ -10,6 +10,7 @@
 #include <stdexcept>
 
 #include "poseidon/houmo_simulator.h"
+//#define HOUMO
 
 namespace poseidon
 {
@@ -125,12 +126,12 @@ public:
                     for (auto j = 0; j < gap; j++)
                     {
                         vec_x[j] = arithmetic_.guard(*x);
-                        vec_y[j] = arithmetic.mul_root(*y, r);
+                        vec_y[j] = arithmetic_.mul_root(*y, r);
                     }
                     Houmo hm;
-                    vec_x = hm.float_add(vec_x, vec_y, gap);
+                    vec_x = hm.float_add<ValueType>(vec_x, vec_y, gap);
                     // TODO vec_x mod
-                    vec_y = hm.float_sub(vec_x, vec_y, gap);
+                    vec_y = hm.float_sub<ValueType>(vec_x, vec_y, gap);
                     // TODO vec_y mod
                     for (auto j = 0; j < gap; j++)
                     {
@@ -165,9 +166,9 @@ public:
                         vec_y[j] = arithmetic_.mul_root(*y, r);
                     }
                     Houmo hm;
-                    vec_x = hm.float_add(vec_x, vec_y, gap);
+                    vec_x = hm.float_add<ValueType>(vec_x, vec_y, gap);
                     // TODO vec_x mod
-                    vec_y = hm.float_sub(vec_x, vec_y, gap);
+                    vec_y = hm.float_sub<ValueType>(vec_x, vec_y, gap);
                     // TODO vec_y mod
                     for (auto j = 0; j < gap; j++)
                     {
@@ -222,9 +223,9 @@ public:
                 values += 2;
             }
             Houmo hm;
-            vec_x = hm.float_add(vec_x, vec_y);
+            vec_x = hm.float_add<ValueType>(vec_x, vec_y, m);
             // TODO vec_x mod
-            vec_y = hm.float_sub(vec_x, vec_y);
+            vec_y = hm.float_sub<ValueType>(vec_x, vec_y, m);
             // TODO vec_y mod
 
             values -= 2 * m;
@@ -262,9 +263,9 @@ public:
                 values += 2;
             }
             Houmo hm;
-            vec_x = hm.float_add(vec_x, vec_y);
+            vec_x = hm.float_add<ValueType>(vec_x, vec_y, m);
             // TODO vec_x mod
-            vec_y = hm.float_sub(vec_x, vec_y);
+            vec_y = hm.float_sub<ValueType>(vec_x, vec_y, m);
             // TODO vec_y mod
 
             values -= 2 * m;

@@ -415,7 +415,7 @@ GetDefaultLogCoeffModulus128()
             Modulus count: 3
             Total bit count: 109 = 2 * 36 + 37
             */
-            {4096, {{36, 36}, {37}, 32}},
+            {4096, {{20, 20, 20}, {21}, 20}},
 
             /*
             Polynomial modulus: 1x^8192 + 1

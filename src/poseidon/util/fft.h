@@ -71,31 +71,5 @@ public:
 using ComplexArith = util::Arithmetic<std::complex<double>, std::complex<double>, double>;
 using FFTHandler = util::DWTHandler<std::complex<double>, std::complex<double>, double>;
 
-class FFT
-{
-public:
-    explicit FFT(size_t coeff_count, MemoryPoolHandle pool = MemoryManager::GetPool());
-    void embedding_inv(const std::vector<std::complex<double>> &vec,
-                       std::vector<std::complex<double>> &vec_res) const;
-    void embedding(const std::vector<std::complex<double>> &vec,
-                   std::vector<std::complex<double>> &vec_res) const;
-
-private:
-    uint32_t coeff_count_ = 0;
-    std::shared_ptr<util::ComplexRoots> complex_roots_;
-
-    // Holds 1~(n-1)-th powers of root in bit-reversed order, the 0-th power is left unset.
-    util::Pointer<std::complex<double>> root_powers_;
-
-    // Holds 1~(n-1)-th powers of inverse root in scrambled order, the 0-th power is left unset.
-    util::Pointer<std::complex<double>> inv_root_powers_;
-
-    util::Pointer<std::size_t> matrix_reps_index_map_;
-
-    ComplexArith complex_arith_;
-
-    FFTHandler fft_handler_;
-    MemoryPoolHandle pool_;
-};
 }  // namespace util
 }  // namespace poseidon
