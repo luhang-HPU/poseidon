@@ -2,8 +2,7 @@
 
 #include "exception.h"
 #include "poseidon/basics/util/defines.h"
-
-#define BANNER                                                                                     \
+#define BANNER_x                                                                                     \
     "                   /\\\n"                                                                     \
     "                  /__\\\n"                                                                    \
     "                   ||\n"                                                                      \
@@ -29,6 +28,22 @@
     "                  |__| \n"                                                                    \
     "                  /  \\\n"                                                                    \
     "                  \\__/ \n"
+
+
+#define BANNER                                                                                     \
+    "                  /\\\n"                                                                     \
+    "                 /__\\\n"                                                                    \
+    "          /|      ||      |\\\n"                                                            \
+    "         /_|      ||      |_\\\n"                                                           \
+    "         | |     /  \\     | |\n"                                                           \
+    "        |__|____|____|____|__|\n"                                                          \
+    "        \\____________________/ \n"                                                         \
+    "                 |  | \n"                                                                    \
+    "                 |  | \n"                                                                    \
+    "                 |  | \n"                                                                    \
+    "                 |__| \n"                                                                    \
+    "                 /  \\\n"                                                                    \
+    "                 \\__/ \n"
 
 #define BANNER2                                                                                    \
     "                     __ \n"                                                                   \
