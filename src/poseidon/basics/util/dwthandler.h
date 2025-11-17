@@ -9,6 +9,8 @@
 #include "poseidon/basics/util/uintcore.h"
 #include <stdexcept>
 
+#include "poseidon/houmo_simulator.h"
+
 namespace poseidon
 {
 namespace util
@@ -117,6 +119,25 @@ public:
                     r = *++roots;
                     x = values + offset;
                     y = x + gap;
+#ifdef HOUMO
+                    std::vector<ValueType> vec_x(gap);
+                    std::vector<ValueType> vec_y(gap);
+                    for (auto j = 0; j < gap; j++)
+                    {
+                        vec_x[j] = arithmetic_.guard(*x);
+                        vec_y[j] = arithmetic.mul_root(*y, r);
+                    }
+                    Houmo hm;
+                    vec_x = hm.float_add(vec_x, vec_y, gap);
+                    // TODO vec_x mod
+                    vec_y = hm.float_sub(vec_x, vec_y, gap);
+                    // TODO vec_y mod
+                    for (auto j = 0; j < gap; j++)
+                    {
+                        *x++ = vec_x[j];
+                        *y++ = vec_y[j];
+                    }
+#else
                     for (std::size_t j = 0; j < gap; j++)
                     {
                         u = arithmetic_.guard(*x);
@@ -124,6 +145,7 @@ public:
                         *x++ = arithmetic_.add(u, v);
                         *y++ = arithmetic_.sub(u, v);
                     }
+#endif
                     offset += gap << 1;
                 }
             }
@@ -134,6 +156,25 @@ public:
                     r = *++roots;
                     x = values + offset;
                     y = x + gap;
+#ifdef HOUMO
+                    std::vector<ValueType> vec_x(gap);
+                    std::vector<ValueType> vec_y(gap);
+                    for (auto j = 0; j < gap; ++j)
+                    {
+                        vec_x[j] = arithmetic_.guard(*x);
+                        vec_y[j] = arithmetic_.mul_root(*y, r);
+                    }
+                    Houmo hm;
+                    vec_x = hm.float_add(vec_x, vec_y, gap);
+                    // TODO vec_x mod
+                    vec_y = hm.float_sub(vec_x, vec_y, gap);
+                    // TODO vec_y mod
+                    for (auto j = 0; j < gap; j++)
+                    {
+                        *x++ = vec_x[j];
+                        *y++ = vec_y[j];
+                    }
+#else
                     for (std::size_t j = 0; j < gap; j += 4)
                     {
                         u = arithmetic_.guard(*x);
@@ -156,6 +197,7 @@ public:
                         *x++ = arithmetic_.add(u, v);
                         *y++ = arithmetic_.sub(u, v);
                     }
+#endif
                     offset += gap << 1;
                 }
             }
@@ -165,6 +207,34 @@ public:
         if (scalar != nullptr)
         {
             RootType scaled_r;
+
+#ifdef HOUMO
+            std::vector<ValueType> vec_x(m);
+            std::vector<ValueType> vec_y(m);
+            for (auto i = 0; i < m; ++i)
+            {
+                r = *++roots;
+                scaled_r = arithmetic_.mul_root_scalar(r, *scalar);
+                u = arithmetic_.mul_scalar(arithmetic_.guard(values[0]), *scalar);
+                v = arithmetic_.mul_root(values[1], scaled_r);
+                vec_x[i] = u;
+                vec_y[i] = v;
+                values += 2;
+            }
+            Houmo hm;
+            vec_x = hm.float_add(vec_x, vec_y);
+            // TODO vec_x mod
+            vec_y = hm.float_sub(vec_x, vec_y);
+            // TODO vec_y mod
+
+            values -= 2 * m;
+            for (auto i = 0; i < m; ++i)
+            {
+                values[0] = vec_x[i];
+                values[1] = vec_y[i];
+                values += 2;
+            }
+#else
             for (std::size_t i = 0; i < m; i++)
             {
                 r = *++roots;
@@ -175,9 +245,36 @@ public:
                 values[1] = arithmetic_.sub(u, v);
                 values += 2;
             }
+#endif
         }
         else
         {
+#ifdef HOUMO
+            std::vector<ValueType> vec_x(m);
+            std::vector<ValueType> vec_y(m);
+            for (auto i = 0; i < m; ++i)
+            {
+                r = *++roots;
+                u = arithmetic_.guard(values[0]);
+                v = arithmetic_.mul_root(values[1], r);
+                vec_x[i] = u;
+                vec_y[i] = v;
+                values += 2;
+            }
+            Houmo hm;
+            vec_x = hm.float_add(vec_x, vec_y);
+            // TODO vec_x mod
+            vec_y = hm.float_sub(vec_x, vec_y);
+            // TODO vec_y mod
+
+            values -= 2 * m;
+            for (auto i = 0; i < m; ++i)
+            {
+                values[0] = vec_x[i];
+                values[1] = vec_y[i];
+                values += 2;
+            }
+#else
             for (std::size_t i = 0; i < m; i++)
             {
                 r = *++roots;
@@ -187,6 +284,7 @@ public:
                 values[1] = arithmetic_.sub(u, v);
                 values += 2;
             }
+#endif
         }
     }
 
