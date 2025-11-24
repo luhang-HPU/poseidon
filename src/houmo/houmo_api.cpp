@@ -1,0 +1,234 @@
+#include "src/houmo/houmo_api.h"
+
+HOUMO_API::HOUMO_API()
+{
+    module_add_ = tcim::Module::LoadFromFile(path_add);
+    module_sub_ = tcim::Module::LoadFromFile(path_sub);
+    module_mul_ = tcim::Module::LoadFromFile(path_mul);
+}
+
+
+void HOUMO_API::houmo_add(const int16_t* op1, const int16_t* op2, int16_t* res, int size)
+{
+    tcim::Status stat;
+
+    std::map<std::string, tcim::Tensor> input_map;
+    // Get the total number of inputs
+    int input_num = module.GetInputNum();
+
+    // For each input:
+    for (int idx = 0; idx < input_num; idx++)
+    {
+        // Get the name of the input
+        auto input_name = module.GetInputName(idx);
+        // Get input data information
+        auto input_info = module.GetInputInfo(input_name).AsContiguous();
+        // Allocate memory on host CPU for storing input data
+        auto input_tensor = tcim::Tensor::CreateHostTensor(input_info, 2 * size);
+        // Create a map between input name and input tensor
+        input_map.insert(std::pair<std::string, tcim::Tensor>(input_name, input_tensor));
+    }
+
+    // create buffer on host, and transfer data
+    tcim::Buffer input_x_buf = tcim::Buffer::CreateHostBuffer(2 * size, &op1);
+    tcim::Buffer input_y_buf = tcim::Buffer::CreateHostBuffer(2 * size, &op2);
+    tcim::Buffer output_buf = tcim::Buffer::CreateHostBuffer(2 * size);
+
+    // copy buffer to tensor buffer
+    stat = input_x_buf.CopyTo(input_op1_tensor_.Buffer());
+    std::cout << "copy1 status: " << stat << std::endl;
+    stat = input_y_buf.CopyTo(input_op2_tensor_.Buffer());
+    std::cout << "copy2 status: " << stat << std::endl;
+
+    // Loop through each key-value pair in the input_map
+    for (const auto& input : input_map)
+    {
+        // Set each input with the key-value pair from the input_map
+        module.SetInput(input.first, input.second);
+    }
+
+    module_add_.Run();
+    module_add_.Sync();
+
+    // Create a map to store output data
+    std::map<std::string, tcim::Tensor> output_map;
+
+    // Get total number of outputs
+    int output_num = module.GetOutputNum();
+    //For each output:
+    for (int idx = 0; idx < output_num; idx++)
+    {
+        // Get the name of the output
+        auto output_name = module.GetOutputName(idx);
+        // Get the information of the output
+        auto output_info = module.GetOutputInfo(output_name).AsContiguous();
+        // Allocate memory on host CPU for storing output data
+        auto output_tensor = tcim::Tensor::CreateHostTensor(output_info, 2 * size);
+        // Insert the output name and tensor into the output map
+        output_map.insert(std::pair<std::string, tcim::Tensor>(output_name, output_tensor));
+    }
+
+    // Loop through each key-value pair in the output_map
+    for (auto& output : output_map)
+    {
+        // Get each output with the key-value pair from the output_map
+        module.GetOutput(output.first, output.second);
+    }
+
+
+    for (auto &output: output_map)
+    {
+        output.second.Buffer().CopyTo(output_buf, 2 * size);
+        output_buf.CopyToHost(res, 2 * size);
+    }
+}
+
+void HOUMO_API::houmo_sub(const int16_t* op1, const int16_t* op2, int16_t* res, int size)
+{
+    tcim::Status stat;
+
+    std::map<std::string, tcim::Tensor> input_map;
+    // Get the total number of inputs
+    int input_num = module.GetInputNum();
+
+    // For each input:
+    for (int idx = 0; idx < input_num; idx++)
+    {
+        // Get the name of the input
+        auto input_name = module.GetInputName(idx);
+        // Get input data information
+        auto input_info = module.GetInputInfo(input_name).AsContiguous();
+        // Allocate memory on host CPU for storing input data
+        auto input_tensor = tcim::Tensor::CreateHostTensor(input_info, 2 * size);
+        // Create a map between input name and input tensor
+        input_map.insert(std::pair<std::string, tcim::Tensor>(input_name, input_tensor));
+    }
+
+    // create buffer on host, and transfer data
+    tcim::Buffer input_x_buf = tcim::Buffer::CreateHostBuffer(2 * size, &op1);
+    tcim::Buffer input_y_buf = tcim::Buffer::CreateHostBuffer(2 * size, &op2);
+    tcim::Buffer output_buf = tcim::Buffer::CreateHostBuffer(2 * size);
+
+    // copy buffer to tensor buffer
+    stat = input_x_buf.CopyTo(input_op1_tensor_.Buffer());
+    std::cout << "copy1 status: " << stat << std::endl;
+    stat = input_y_buf.CopyTo(input_op2_tensor_.Buffer());
+    std::cout << "copy2 status: " << stat << std::endl;
+
+    // Loop through each key-value pair in the input_map
+    for (const auto& input : input_map)
+    {
+        // Set each input with the key-value pair from the input_map
+        module.SetInput(input.first, input.second);
+    }
+
+    module_sub_.Run();
+    module_sub_.Sync();
+
+    // Create a map to store output data
+    std::map<std::string, tcim::Tensor> output_map;
+
+    // Get total number of outputs
+    int output_num = module.GetOutputNum();
+    //For each output:
+    for (int idx = 0; idx < output_num; idx++)
+    {
+        // Get the name of the output
+        auto output_name = module.GetOutputName(idx);
+        // Get the information of the output
+        auto output_info = module.GetOutputInfo(output_name).AsContiguous();
+        // Allocate memory on host CPU for storing output data
+        auto output_tensor = tcim::Tensor::CreateHostTensor(output_info, 2 * size);
+        // Insert the output name and tensor into the output map
+        output_map.insert(std::pair<std::string, tcim::Tensor>(output_name, output_tensor));
+    }
+
+    // Loop through each key-value pair in the output_map
+    for (auto& output : output_map)
+    {
+        // Get each output with the key-value pair from the output_map
+        module.GetOutput(output.first, output.second);
+    }
+
+
+    for (auto &output: output_map)
+    {
+        output.second.Buffer().CopyTo(output_buf, 2 * size);
+        output_buf.CopyToHost(res, 2 * size);
+    }
+}
+
+void HOUMO_API::houmo_mul(const int16_t* op1, const int16_t* op2, int16_t* res, int size)
+{
+    tcim::Status stat;
+
+    std::map<std::string, tcim::Tensor> input_map;
+    // Get the total number of inputs
+    int input_num = module.GetInputNum();
+
+    // For each input:
+    for (int idx = 0; idx < input_num; idx++)
+    {
+        // Get the name of the input
+        auto input_name = module.GetInputName(idx);
+        // Get input data information
+        auto input_info = module.GetInputInfo(input_name).AsContiguous();
+        // Allocate memory on host CPU for storing input data
+        auto input_tensor = tcim::Tensor::CreateHostTensor(input_info, 2 * size);
+        // Create a map between input name and input tensor
+        input_map.insert(std::pair<std::string, tcim::Tensor>(input_name, input_tensor));
+    }
+
+    // create buffer on host, and transfer data
+    tcim::Buffer input_x_buf = tcim::Buffer::CreateHostBuffer(2 * size, &op1);
+    tcim::Buffer input_y_buf = tcim::Buffer::CreateHostBuffer(2 * size, &op2);
+    tcim::Buffer output_buf = tcim::Buffer::CreateHostBuffer(2 * size);
+
+    // copy buffer to tensor buffer
+    stat = input_x_buf.CopyTo(input_op1_tensor_.Buffer());
+    std::cout << "copy1 status: " << stat << std::endl;
+    stat = input_y_buf.CopyTo(input_op2_tensor_.Buffer());
+    std::cout << "copy2 status: " << stat << std::endl;
+
+    // Loop through each key-value pair in the input_map
+    for (const auto& input : input_map)
+    {
+        // Set each input with the key-value pair from the input_map
+        module.SetInput(input.first, input.second);
+    }
+
+    module_mul_.Run();
+    module_mul_.Sync();
+
+    // Create a map to store output data
+    std::map<std::string, tcim::Tensor> output_map;
+
+    // Get total number of outputs
+    int output_num = module.GetOutputNum();
+    //For each output:
+    for (int idx = 0; idx < output_num; idx++)
+    {
+        // Get the name of the output
+        auto output_name = module.GetOutputName(idx);
+        // Get the information of the output
+        auto output_info = module.GetOutputInfo(output_name).AsContiguous();
+        // Allocate memory on host CPU for storing output data
+        auto output_tensor = tcim::Tensor::CreateHostTensor(output_info, 2 * size);
+        // Insert the output name and tensor into the output map
+        output_map.insert(std::pair<std::string, tcim::Tensor>(output_name, output_tensor));
+    }
+
+    // Loop through each key-value pair in the output_map
+    for (auto& output : output_map)
+    {
+        // Get each output with the key-value pair from the output_map
+        module.GetOutput(output.first, output.second);
+    }
+
+
+    for (auto &output: output_map)
+    {
+        output.second.Buffer().CopyTo(output_buf, 2 * size);
+        output_buf.CopyToHost(res, 2 * size);
+    }
+}
