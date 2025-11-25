@@ -7,8 +7,55 @@ HOUMO_API::HOUMO_API()
     module_mul_ = tcim::Module::LoadFromFile(path_mul);
 }
 
+void HOUMO_API::houmo_add(const int16_t *op1, const int16_t *op2, int16_t *res, int size)
+{
+    if (size <= 2048)
+    {
+        houmo_add_less_2048(op1, op2, res, size);
+    }
+    else
+    {
+        for(int i = 0; i < size; i += 2048)
+        {
+            int current_size = std::min(2048, size - i);
+            houmo_add_less_2048(op1 + i, op2 + i, res + i, current_size);
+        }
+    }
+}
 
-void HOUMO_API::houmo_add(const int16_t* op1, const int16_t* op2, int16_t* res, int size)
+void HOUMO_API::houmo_sub(const int16_t *op1, const int16_t *op2, int16_t *res, int size)
+{
+    if (size <= 2048)
+    {
+        houmo_sub_less_2048(op1, op2, res, size);
+    }
+    else
+    {
+        for (int i = 0; i < size; i += 2048)
+        {
+            int current_size = std::min(2048, size - i);
+            houmo_sub_less_2048(op1 + i, op2 + i, res + i, current_size);
+        }
+    }
+}
+
+void HOUMO_API::houmo_mul(const int16_t *op1, const int16_t *op2, int16_t *res, int size)
+{
+    if (size <= 2048)
+    {
+        houmo_mul_less_2048(op1, op2, res, size);
+    }
+    else
+    {
+        for (int i = 0; i < size; i += 2048)
+        {
+            int current_size = std::min(2048, size - i);
+            houmo_mul_less_2048(op1 + i, op2 + i, res + i, current_size);
+        }
+    }
+}
+
+void HOUMO_API::houmo_add_less_2048(const int16_t *op1, const int16_t *op2, int16_t *res, int size)
 {
     tcim::Status stat;
 
@@ -87,7 +134,7 @@ void HOUMO_API::houmo_add(const int16_t* op1, const int16_t* op2, int16_t* res, 
     }
 }
 
-void HOUMO_API::houmo_sub(const int16_t* op1, const int16_t* op2, int16_t* res, int size)
+void HOUMO_API::houmo_sub_less_2048(const int16_t *op1, const int16_t *op2, int16_t *res, int size)
 {
     tcim::Status stat;
 
@@ -165,7 +212,7 @@ void HOUMO_API::houmo_sub(const int16_t* op1, const int16_t* op2, int16_t* res, 
     }
 }
 
-void HOUMO_API::houmo_mul(const int16_t* op1, const int16_t* op2, int16_t* res, int size)
+void HOUMO_API::houmo_mul_less_2048(const int16_t *op1, const int16_t *op2, int16_t *res, int size)
 {
     tcim::Status stat;
 

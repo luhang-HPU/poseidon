@@ -15,14 +15,20 @@ public:
     HOUMO_API();
 
     // res = op1 + op2
-    void houmo_add(const int16_t* op1, const int16_t* op2, int16_t* res, int size);
+    void houmo_add(const int16_t *op1, const int16_t *op2, int16_t *res, int size);
+    // res = op1 - op2
+    void houmo_sub(const int16_t *op1, const int16_t *op2, int16_t *res, int size);
+    // res = op1 * p2
+    void houmo_mul(const int16_t *op1, const int16_t *op2, int16_t *res, int size);
+
+    // res = op1 + op2
+    void houmo_add_less_2048(const int16_t* op1, const int16_t* op2, int16_t* res, int size = 2048);
 
     // res = op1 - op2
-    void houmo_sub(const int16_t* op1, const int16_t* op2, int16_t* res, int size);
+    void houmo_sub_less_2048(const int16_t *op1, const int16_t *op2, int16_t *res, int size = 2048);
 
     // res = op1 * p2
-    void houmo_mul(const int16_t* op1, const int16_t* op2, int16_t* res, int size);
-
+    void houmo_mul_less_2048(const int16_t *op1, const int16_t *op2, int16_t *res, int size = 2048);
 
 private:
     const int size_ = 1024;
