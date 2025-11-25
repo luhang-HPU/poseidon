@@ -15,13 +15,13 @@ public:
     HOUMO_API();
 
     // res = op1 + op2
-    static void houmo_add(const int16_t* op1, const int16_t* op2, int16_t* res, int size);
+    void houmo_add(const int16_t* op1, const int16_t* op2, int16_t* res, int size);
 
     // res = op1 - op2
-    static void houmo_sub(const int16_t* op1, const int16_t* op2, int16_t* res, int size);
+    void houmo_sub(const int16_t* op1, const int16_t* op2, int16_t* res, int size);
 
     // res = op1 * p2
-    static void houmo_mul(const int16_t* op1, const int16_t* op2, int16_t* res, int size);
+    void houmo_mul(const int16_t* op1, const int16_t* op2, int16_t* res, int size);
 
 
 private:

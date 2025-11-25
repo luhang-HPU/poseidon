@@ -1,4 +1,4 @@
-#include "src/houmo/houmo_api.h"
+#include "houmo_api.h"
 
 HOUMO_API::HOUMO_API()
 {
@@ -13,16 +13,17 @@ void HOUMO_API::houmo_add(const int16_t* op1, const int16_t* op2, int16_t* res, 
     tcim::Status stat;
 
     std::map<std::string, tcim::Tensor> input_map;
+    
     // Get the total number of inputs
-    int input_num = module.GetInputNum();
+    int input_num = module_add_.GetInputNum();
 
     // For each input:
     for (int idx = 0; idx < input_num; idx++)
     {
         // Get the name of the input
-        auto input_name = module.GetInputName(idx);
+        auto input_name = module_add_.GetInputName(idx);
         // Get input data information
-        auto input_info = module.GetInputInfo(input_name).AsContiguous();
+        auto input_info = module_add_.GetInputInfo(input_name).AsContiguous();
         // Allocate memory on host CPU for storing input data
         auto input_tensor = tcim::Tensor::CreateHostTensor(input_info, 2 * size);
         // Create a map between input name and input tensor
@@ -44,7 +45,7 @@ void HOUMO_API::houmo_add(const int16_t* op1, const int16_t* op2, int16_t* res, 
     for (const auto& input : input_map)
     {
         // Set each input with the key-value pair from the input_map
-        module.SetInput(input.first, input.second);
+        module_add_.SetInput(input.first, input.second);
     }
 
     module_add_.Run();
@@ -54,14 +55,14 @@ void HOUMO_API::houmo_add(const int16_t* op1, const int16_t* op2, int16_t* res, 
     std::map<std::string, tcim::Tensor> output_map;
 
     // Get total number of outputs
-    int output_num = module.GetOutputNum();
+    int output_num = module_add_.GetOutputNum();
     //For each output:
     for (int idx = 0; idx < output_num; idx++)
     {
         // Get the name of the output
-        auto output_name = module.GetOutputName(idx);
+        auto output_name = module_add_.GetOutputName(idx);
         // Get the information of the output
-        auto output_info = module.GetOutputInfo(output_name).AsContiguous();
+        auto output_info = module_add_.GetOutputInfo(output_name).AsContiguous();
         // Allocate memory on host CPU for storing output data
         auto output_tensor = tcim::Tensor::CreateHostTensor(output_info, 2 * size);
         // Insert the output name and tensor into the output map
@@ -72,7 +73,7 @@ void HOUMO_API::houmo_add(const int16_t* op1, const int16_t* op2, int16_t* res, 
     for (auto& output : output_map)
     {
         // Get each output with the key-value pair from the output_map
-        module.GetOutput(output.first, output.second);
+        module_add_.GetOutput(output.first, output.second);
     }
 
 
@@ -89,15 +90,15 @@ void HOUMO_API::houmo_sub(const int16_t* op1, const int16_t* op2, int16_t* res, 
 
     std::map<std::string, tcim::Tensor> input_map;
     // Get the total number of inputs
-    int input_num = module.GetInputNum();
+    int input_num = module_sub_.GetInputNum();
 
     // For each input:
     for (int idx = 0; idx < input_num; idx++)
     {
         // Get the name of the input
-        auto input_name = module.GetInputName(idx);
+        auto input_name = module_sub_.GetInputName(idx);
         // Get input data information
-        auto input_info = module.GetInputInfo(input_name).AsContiguous();
+        auto input_info = module_sub_.GetInputInfo(input_name).AsContiguous();
         // Allocate memory on host CPU for storing input data
         auto input_tensor = tcim::Tensor::CreateHostTensor(input_info, 2 * size);
         // Create a map between input name and input tensor
@@ -119,7 +120,7 @@ void HOUMO_API::houmo_sub(const int16_t* op1, const int16_t* op2, int16_t* res, 
     for (const auto& input : input_map)
     {
         // Set each input with the key-value pair from the input_map
-        module.SetInput(input.first, input.second);
+        module_sub_.SetInput(input.first, input.second);
     }
 
     module_sub_.Run();
@@ -129,14 +130,14 @@ void HOUMO_API::houmo_sub(const int16_t* op1, const int16_t* op2, int16_t* res, 
     std::map<std::string, tcim::Tensor> output_map;
 
     // Get total number of outputs
-    int output_num = module.GetOutputNum();
+    int output_num = module_sub_.GetOutputNum();
     //For each output:
     for (int idx = 0; idx < output_num; idx++)
     {
         // Get the name of the output
-        auto output_name = module.GetOutputName(idx);
+        auto output_name = module_sub_.GetOutputName(idx);
         // Get the information of the output
-        auto output_info = module.GetOutputInfo(output_name).AsContiguous();
+        auto output_info = module_sub_.GetOutputInfo(output_name).AsContiguous();
         // Allocate memory on host CPU for storing output data
         auto output_tensor = tcim::Tensor::CreateHostTensor(output_info, 2 * size);
         // Insert the output name and tensor into the output map
@@ -147,7 +148,7 @@ void HOUMO_API::houmo_sub(const int16_t* op1, const int16_t* op2, int16_t* res, 
     for (auto& output : output_map)
     {
         // Get each output with the key-value pair from the output_map
-        module.GetOutput(output.first, output.second);
+        module_sub_.GetOutput(output.first, output.second);
     }
 
 
@@ -164,15 +165,15 @@ void HOUMO_API::houmo_mul(const int16_t* op1, const int16_t* op2, int16_t* res, 
 
     std::map<std::string, tcim::Tensor> input_map;
     // Get the total number of inputs
-    int input_num = module.GetInputNum();
+    int input_num = module_mul_.GetInputNum();
 
     // For each input:
     for (int idx = 0; idx < input_num; idx++)
     {
         // Get the name of the input
-        auto input_name = module.GetInputName(idx);
+        auto input_name = module_mul_.GetInputName(idx);
         // Get input data information
-        auto input_info = module.GetInputInfo(input_name).AsContiguous();
+        auto input_info = module_mul_.GetInputInfo(input_name).AsContiguous();
         // Allocate memory on host CPU for storing input data
         auto input_tensor = tcim::Tensor::CreateHostTensor(input_info, 2 * size);
         // Create a map between input name and input tensor
@@ -194,7 +195,7 @@ void HOUMO_API::houmo_mul(const int16_t* op1, const int16_t* op2, int16_t* res, 
     for (const auto& input : input_map)
     {
         // Set each input with the key-value pair from the input_map
-        module.SetInput(input.first, input.second);
+        module_mul_.SetInput(input.first, input.second);
     }
 
     module_mul_.Run();
@@ -204,14 +205,14 @@ void HOUMO_API::houmo_mul(const int16_t* op1, const int16_t* op2, int16_t* res, 
     std::map<std::string, tcim::Tensor> output_map;
 
     // Get total number of outputs
-    int output_num = module.GetOutputNum();
+    int output_num = module_mul_.GetOutputNum();
     //For each output:
     for (int idx = 0; idx < output_num; idx++)
     {
         // Get the name of the output
-        auto output_name = module.GetOutputName(idx);
+        auto output_name = module_mul_.GetOutputName(idx);
         // Get the information of the output
-        auto output_info = module.GetOutputInfo(output_name).AsContiguous();
+        auto output_info = module_mul_.GetOutputInfo(output_name).AsContiguous();
         // Allocate memory on host CPU for storing output data
         auto output_tensor = tcim::Tensor::CreateHostTensor(output_info, 2 * size);
         // Insert the output name and tensor into the output map
@@ -222,7 +223,7 @@ void HOUMO_API::houmo_mul(const int16_t* op1, const int16_t* op2, int16_t* res, 
     for (auto& output : output_map)
     {
         // Get each output with the key-value pair from the output_map
-        module.GetOutput(output.first, output.second);
+        module_mul_.GetOutput(output.first, output.second);
     }
 
 
