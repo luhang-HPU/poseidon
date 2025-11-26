@@ -83,12 +83,12 @@ void HOUMO_API::houmo_add_less_2048(const int16_t *op1, const int16_t *op2, int1
         if (idx == 0)
         {
             stat = input_x_buf.CopyTo(input_tensor.Buffer());
-            std::cout << "copy1 status: " << stat << std::endl;
+            // std::cout << "copy1 status: " << stat << std::endl;
         }
         else if (idx == 1)
         {
             stat = input_y_buf.CopyTo(input_tensor.Buffer());
-            std::cout << "copy2 status: " << stat << std::endl;
+            // std::cout << "copy2 status: " << stat << std::endl;
         }
 
         // Create a map between input name and input tensor
@@ -99,7 +99,13 @@ void HOUMO_API::houmo_add_less_2048(const int16_t *op1, const int16_t *op2, int1
     for (const auto& input : input_map)
     {
         // Set each input with the key-value pair from the input_map
-        module_add_.SetInput(input.first, input.second);
+        auto status = module_add_.SetInput(input.first, input.second);
+        if(status != tcim::Status::OK)
+        {
+            std::cout << "Failed to set input: " << input.first << std::endl;
+            std::cout << "add setinput status: " << status << std::endl;
+        }
+            
     }
 
     module_add_.Run();
@@ -161,12 +167,12 @@ void HOUMO_API::houmo_sub_less_2048(const int16_t *op1, const int16_t *op2, int1
         if (idx == 0)
         {
             stat = input_x_buf.CopyTo(input_tensor.Buffer());
-            std::cout << "copy1 status: " << stat << std::endl;
+            // std::cout << "copy1 status: " << stat << std::endl;
         }
         else if (idx == 1)
         {
             stat = input_y_buf.CopyTo(input_tensor.Buffer());
-            std::cout << "copy2 status: " << stat << std::endl;
+            // std::cout << "copy2 status: " << stat << std::endl;
         }
 
         // Create a map between input name and input tensor
@@ -177,7 +183,12 @@ void HOUMO_API::houmo_sub_less_2048(const int16_t *op1, const int16_t *op2, int1
     for (const auto& input : input_map)
     {
         // Set each input with the key-value pair from the input_map
-        module_sub_.SetInput(input.first, input.second);
+        auto status = module_sub_.SetInput(input.first, input.second);
+        if (status != tcim::Status::OK)
+        {
+            std::cout << "Failed to set input: " << input.first << std::endl;
+            std::cout << "sub setinput status: " << status << std::endl;
+        }
     }
 
     module_sub_.Run();
@@ -240,12 +251,12 @@ void HOUMO_API::houmo_mul_less_2048(const int16_t *op1, const int16_t *op2, int1
         if (idx == 0)
         {
             stat = input_x_buf.CopyTo(input_tensor.Buffer());
-            std::cout << "copy1 status: " << stat << std::endl;
+            // std::cout << "copy1 status: " << stat << std::endl;
         }
         else if (idx == 1)
         {
             stat = input_y_buf.CopyTo(input_tensor.Buffer());
-            std::cout << "copy2 status: " << stat << std::endl;
+            // std::cout << "copy2 status: " << stat << std::endl;
         }
 
         // Create a map between input name and input tensor
@@ -256,7 +267,12 @@ void HOUMO_API::houmo_mul_less_2048(const int16_t *op1, const int16_t *op2, int1
     for (const auto& input : input_map)
     {
         // Set each input with the key-value pair from the input_map
-        module_mul_.SetInput(input.first, input.second);
+        auto status = module_mul_.SetInput(input.first, input.second);
+        if (status != tcim::Status::OK)
+        {
+            std::cout << "Failed to set input: " << input.first << std::endl;
+            std::cout << "mul setinput status: " << status << std::endl;
+        }
     }
 
     module_mul_.Run();

@@ -1,6 +1,7 @@
 #include "poseidon/basics/util/polyarithsmallmod.h"
 #include "poseidon/basics/util/uintarith.h"
 #include "poseidon/basics/util/uintcore.h"
+#include "poseidon/houmo/houmo_api.h"
 
 #ifdef POSEIDON_USE_INTEL_HEXL
 #include "hexl/hexl.hpp"
@@ -12,6 +13,11 @@ namespace poseidon
 {
 namespace util
 {
+// #define POSEIDON_HOUMO1
+#define POSEIDON_HOUMO2
+#define POSEIDON_HOUMO3
+#define POSEIDON_HOUMO4
+#define POSEIDON_HOUMO5
 void modulo_poly_coeffs(ConstCoeffIter poly, std::size_t coeff_count, const Modulus &modulus,
                         CoeffIter result)
 {
@@ -38,6 +44,56 @@ void modulo_poly_coeffs(ConstCoeffIter poly, std::size_t coeff_count, const Modu
 #endif
 }
 
+std::vector<float> operator+(const std::vector<float> &a, const std::vector<float> &b)
+{
+    std::vector<float> result(a.size());
+    for (size_t i = 0; i < a.size(); i++)
+    {
+        result[i] = a[i] + b[i];
+    }
+    return result;
+}
+std::vector<float> operator*(const std::vector<float> &a, const std::vector<float> &b)
+{
+    std::vector<float> result(a.size());
+    for (size_t i = 0; i < a.size(); i++)
+    {
+        result[i] = a[i] * b[i];
+    }
+    return result;
+}
+
+std::vector<uint64_t> operator*(const std::vector<uint64_t> &a, const std::vector<uint64_t> &b)
+{
+    std::vector<uint64_t> result(a.size());
+    for (size_t i = 0; i < a.size(); i++)
+    {
+        result[i] = a[i] * b[i];
+    }
+    return result;
+}
+
+std::vector<uint64_t> float_to_int_vector_mod(const std::vector<float> &a, const uint64_t&modulu)
+{
+    std::vector<uint64_t> result(a.size());
+    for (size_t i = 0; i < a.size(); i++)
+    {
+        result[i] = static_cast<uint64_t>(std::round(a[i])) % modulu;
+    }
+    return result;
+}
+
+uint64_t mod_128_by_64(uint64_t hw, uint64_t lw, uint64_t modulus_value)
+{
+    if (modulus_value == 0)
+        return 0;
+
+    uint128_t const_ratio = (static_cast<uint128_t>(hw) << 64) + static_cast<uint128_t>(lw);
+    uint128_t res_tmp = const_ratio % static_cast<uint128_t>(modulus_value);
+    uint64_t res = static_cast<uint64_t>(res_tmp);
+    return res;
+}
+
 void add_poly_coeffmod(ConstCoeffIter operand1, ConstCoeffIter operand2, std::size_t coeff_count,
                        const Modulus &modulus, CoeffIter result)
 {
@@ -60,7 +116,20 @@ void add_poly_coeffmod(ConstCoeffIter operand1, ConstCoeffIter operand2, std::si
     }
 #endif
     const uint64_t modulus_value = modulus.value();
+    std::cout << "add used" << std::endl;
+        
+#ifdef POSEIDON_HOUMO1
+    HOUMO_API houmo_api;
+    std::vector<int16_t> temp1(operand1, operand1 + coeff_count);
+    std::vector<int16_t> temp2(operand2, operand2 + coeff_count);
+    std::vector<int16_t> temp_result(coeff_count);
+    houmo_api.houmo_add(temp1.data(), temp2.data(), temp_result.data(), coeff_count);
 
+    for (size_t i = 0; i < coeff_count; i++)
+    {
+        result[i] = temp_result[i];
+    }
+#else
 #ifdef POSEIDON_USE_INTEL_HEXL
     intel::hexl::EltwiseAddMod(&result[0], &operand1[0], &operand2[0], coeff_count, modulus_value);
 #else
@@ -84,6 +153,7 @@ void add_poly_coeffmod(ConstCoeffIter operand1, ConstCoeffIter operand2, std::si
                          get<2>(I) =
                              POSEIDON_COND_SELECT(sum >= modulus_value, sum - modulus_value, sum);
                      });
+#endif
 #endif
 }
 
@@ -109,6 +179,20 @@ void sub_poly_coeffmod(ConstCoeffIter operand1, ConstCoeffIter operand2, std::si
     }
 #endif
 
+#ifdef POSEIDON_HOUMO2
+    HOUMO_API houmo_api;
+
+    std::vector<int16_t> temp1(operand1, operand1 + coeff_count);
+    std::vector<int16_t> temp2(operand2, operand2 + coeff_count);
+    std::vector<int16_t> temp_result(coeff_count);
+    houmo_api.houmo_sub(temp1.data(), temp2.data(), temp_result.data(), coeff_count);
+
+    for (size_t i = 0; i < coeff_count; i++)
+    {
+        result[i] = temp_result[i];
+    }
+    std::cout << "houmo sub used" << std::endl;
+#else
     const uint64_t modulus_value = modulus.value();
 #ifdef POSEIDON_USE_INTEL_HEXL
     intel::hexl::EltwiseSubMod(result, operand1, operand2, coeff_count, modulus_value);
@@ -131,6 +215,7 @@ void sub_poly_coeffmod(ConstCoeffIter operand1, ConstCoeffIter operand2, std::si
                          get<2>(I) =
                              temp_result + (modulus_value & static_cast<std::uint64_t>(-borrow));
                      });
+#endif
 #endif
 }
 
@@ -155,6 +240,19 @@ void add_poly_scalar_coeffmod(ConstCoeffIter poly, size_t coeff_count, uint64_t 
         POSEIDON_THROW(invalid_argument_error, "scalar");
     }
 #endif
+#ifdef POSEIDON_HOUMO3
+    HOUMO_API houmo_api;
+
+    std::vector<int16_t> temp1(poly, poly + coeff_count);
+    std::vector<int16_t> temp2(coeff_count, static_cast<int16_t>(scalar));
+    std::vector<int16_t> temp_result(coeff_count);
+    houmo_api.houmo_add(temp1.data(), temp2.data(), temp_result.data(), coeff_count);
+
+    for (size_t i = 0; i < coeff_count; i++)
+    {
+        result[i] = temp_result[i];
+    }
+#else
 
 #ifdef POSEIDON_USE_INTEL_HEXL
     intel::hexl::EltwiseAddMod(result, poly, scalar, coeff_count, modulus.value());
@@ -166,11 +264,24 @@ void add_poly_scalar_coeffmod(ConstCoeffIter poly, size_t coeff_count, uint64_t 
                          get<1>(I) = add_uint_mod(x, scalar, modulus);
                      });
 #endif
+#endif
 }
 
 void sub_poly_scalar_coeffmod(ConstCoeffIter poly, size_t coeff_count, uint64_t scalar,
                               const Modulus &modulus, CoeffIter result)
 {
+#ifdef POSEIDON_HOUMO4
+    HOUMO_API houmo_api;
+    std::vector<int16_t> temp1(poly, poly + coeff_count);
+    std::vector<int16_t> temp2(coeff_count, static_cast<int16_t>(scalar));
+    std::vector<int16_t> temp_result(coeff_count);
+    houmo_api.houmo_sub(temp1.data(), temp2.data(), temp_result.data(), coeff_count);
+
+    for (size_t i = 0; i < coeff_count; i++)
+    {
+        result[i] = temp_result[i];
+    }
+#else
 #ifdef POSEIDON_DEBUG
     if (!poly && coeff_count > 0)
     {
@@ -200,6 +311,7 @@ void sub_poly_scalar_coeffmod(ConstCoeffIter poly, size_t coeff_count, uint64_t 
                          get<1>(I) = sub_uint_mod(x, scalar, modulus);
                      });
 #endif
+#endif
 }
 
 void multiply_poly_scalar_coeffmod(ConstCoeffIter poly, size_t coeff_count,
@@ -221,6 +333,20 @@ void multiply_poly_scalar_coeffmod(ConstCoeffIter poly, size_t coeff_count,
     }
 #endif
 
+#ifdef POSEIDON_HOUMO5
+    HOUMO_API houmo_api;
+
+    std::vector<int16_t> temp1(poly, poly + coeff_count);
+    std::vector<int16_t> temp2(coeff_count, static_cast<int16_t>(scalar.quotient));
+    std::vector<int16_t> temp_result(coeff_count);
+    houmo_api.houmo_mul(temp1.data(), temp2.data(), temp_result.data(), coeff_count);
+
+    for (size_t i = 0; i < coeff_count; i++)
+    {
+        result[i] = temp_result[i];
+    }
+#else
+
 #ifdef POSEIDON_USE_INTEL_HEXL
     intel::hexl::EltwiseFMAMod(&result[0], &poly[0], scalar.operand, nullptr, coeff_count,
                                modulus.value(), 8);
@@ -231,6 +357,7 @@ void multiply_poly_scalar_coeffmod(ConstCoeffIter poly, size_t coeff_count,
                          const uint64_t x = get<0>(I);
                          get<1>(I) = multiply_uint_mod(x, scalar, modulus);
                      });
+#endif
 #endif
 }
 
