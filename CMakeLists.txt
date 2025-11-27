@@ -99,7 +99,7 @@ endif()
 
 # [option] POSEIDON_USE_ZLIB (default: ON)
 set(POSEIDON_USE_ZLIB_OPTION_STR "Use ZLIB for compressed serialization")
-option(POSEIDON_USE_ZLIB ${POSEIDON_USE_ZLIB_OPTION_STR} ON)
+option(POSEIDON_USE_ZLIB ${POSEIDON_USE_ZLIB_OPTION_STR} OFF)
 message(STATUS "POSEIDON_USE_ZLIB: ${POSEIDON_USE_ZLIB}")
 
 if(POSEIDON_USE_ZLIB)
@@ -120,7 +120,7 @@ endif()
 
 # [option] POSEIDON_USE_ZSTD (default: ON)
 set(POSEIDON_USE_ZSTD_OPTION_STR "Use Zstandard for compressed serialization")
-option(POSEIDON_USE_ZSTD ${POSEIDON_USE_ZSTD_OPTION_STR} ON)
+option(POSEIDON_USE_ZSTD ${POSEIDON_USE_ZSTD_OPTION_STR} OFF)
 message(STATUS "POSEIDON_USE_ZSTD: ${POSEIDON_USE_ZSTD}")
 
 if(POSEIDON_USE_ZSTD)
@@ -221,6 +221,10 @@ if(POSEIDON_USE_ZSTD)
     target_include_directories(poseidon_shared PRIVATE $<BUILD_INTERFACE:${zstd_SOURCE_DIR}/lib/common>)
     target_link_libraries(poseidon_shared PRIVATE ${zstd_static})
 endif()
+
+set(TCIM_LITE_LIB_DIR /usr/local/lib/python3.9/dist-packages/tcim_lite/lib)
+target_link_directories(poseidon_shared PUBLIC ${TCIM_LITE_LIB_DIR})
+target_link_libraries(poseidon_shared PUBLIC tcim_runtime_lite)
 
 if(POSEIDON_BUILD_DEPS)
     # MSGSL
