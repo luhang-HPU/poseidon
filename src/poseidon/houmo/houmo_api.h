@@ -122,11 +122,11 @@ public:
     // res = op1 - op2
     void houmo_sub_less_2048(const int16_t *op1, const int16_t *op2, int16_t *res, int size = 2048);
 
-    // res = op1 * p2
+    // res = op1 * op2
     void houmo_mul_less_2048(const int16_t *op1, const int16_t *op2, int16_t *res, int size = 2048);
 
 private:
-    const int size_ = 1024;
+    const int size_ = 2048;
     const std::string path_add = "./add.hmm";
     const std::string path_sub = "./sub.hmm";
     const std::string path_mul = "./mul.hmm";

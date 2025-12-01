@@ -1,5 +1,7 @@
 #include "houmo_api.h"
 
+#include <cstring>
+
 HOUMO_API::HOUMO_API()
 {
     module_add_ = tcim::Module::LoadFromFile(path_add);
@@ -57,17 +59,27 @@ void HOUMO_API::houmo_mul(const int16_t *op1, const int16_t *op2, int16_t *res, 
 
 void HOUMO_API::houmo_add_less_2048(const int16_t *op1, const int16_t *op2, int16_t *res, int size)
 {
-    tcim::Status stat;
+    int16_t x[size_];
+    int16_t y[size_];
+    int16_t z[size_];
 
+    memset(x, 0, size_);
+    memset(y, 0, size_);
+    memset(z, 0, size_);
+
+    memcpy(x, op1, 2 * size);
+    memcpy(y, op2, 2 * size);
+
+    tcim::Status stat;
     std::map<std::string, tcim::Tensor> input_map;
     
     // Get the total number of inputs
     int input_num = module_add_.GetInputNum();
 
     // create buffer on host, and transfer data
-    tcim::Buffer input_x_buf = tcim::Buffer::CreateHostBuffer(2 * size, &op1);
-    tcim::Buffer input_y_buf = tcim::Buffer::CreateHostBuffer(2 * size, &op2);
-    tcim::Buffer output_buf = tcim::Buffer::CreateHostBuffer(2 * size);
+    tcim::Buffer input_x_buf = tcim::Buffer::CreateHostBuffer(2 * size_, x);
+    tcim::Buffer input_y_buf = tcim::Buffer::CreateHostBuffer(2 * size_, y);
+    tcim::Buffer output_buf = tcim::Buffer::CreateHostBuffer(2 * size_);
 
     // For each input:
     for (int idx = 0; idx < input_num; idx++)
@@ -77,7 +89,7 @@ void HOUMO_API::houmo_add_less_2048(const int16_t *op1, const int16_t *op2, int1
         // Get input data information
         auto input_info = module_add_.GetInputInfo(input_name).AsContiguous();
         // Allocate memory on host CPU for storing input data
-        auto input_tensor = tcim::Tensor::CreateHostTensor(input_info, 2 * size);
+        auto input_tensor = tcim::Tensor::CreateHostTensor(input_info, 2 * size_);
 
         // copy buffer to tensor buffer
         if (idx == 0)
@@ -124,7 +136,7 @@ void HOUMO_API::houmo_add_less_2048(const int16_t *op1, const int16_t *op2, int1
         // Get the information of the output
         auto output_info = module_add_.GetOutputInfo(output_name).AsContiguous();
         // Allocate memory on host CPU for storing output data
-        auto output_tensor = tcim::Tensor::CreateHostTensor(output_info, 2 * size);
+        auto output_tensor = tcim::Tensor::CreateHostTensor(output_info, 2 * size_);
         // Insert the output name and tensor into the output map
         output_map.insert(std::pair<std::string, tcim::Tensor>(output_name, output_tensor));
     }
@@ -135,23 +147,35 @@ void HOUMO_API::houmo_add_less_2048(const int16_t *op1, const int16_t *op2, int1
         // Get each output with the key-value pair from the output_map
         module_add_.GetOutput(output.first, output.second);
 
-        output.second.Buffer().CopyTo(output_buf, 2 * size);
-        output_buf.CopyToHost(res, 2 * size);
+        output.second.Buffer().CopyTo(output_buf, 2 * size_);
+        output_buf.CopyToHost(z, 2 * size_);
     }
+
+    memcpy(res, z, 2 * size);
 }
 
 void HOUMO_API::houmo_sub_less_2048(const int16_t *op1, const int16_t *op2, int16_t *res, int size)
 {
-    tcim::Status stat;
+    int16_t x[size_];
+    int16_t y[size_];
+    int16_t z[size_];
 
+    memset(x, 0, size_);
+    memset(y, 0, size_);
+    memset(z, 0, size_);
+
+    memcpy(x, op1, 2 * size);
+    memcpy(y, op2, 2 * size);
+
+    tcim::Status stat;
     std::map<std::string, tcim::Tensor> input_map;
     // Get the total number of inputs
     int input_num = module_sub_.GetInputNum();
 
     // create buffer on host, and transfer data
-    tcim::Buffer input_x_buf = tcim::Buffer::CreateHostBuffer(2 * size, &op1);
-    tcim::Buffer input_y_buf = tcim::Buffer::CreateHostBuffer(2 * size, &op2);
-    tcim::Buffer output_buf = tcim::Buffer::CreateHostBuffer(2 * size);
+    tcim::Buffer input_x_buf = tcim::Buffer::CreateHostBuffer(2 * size_, &op1);
+    tcim::Buffer input_y_buf = tcim::Buffer::CreateHostBuffer(2 * size_, &op2);
+    tcim::Buffer output_buf = tcim::Buffer::CreateHostBuffer(2 * size_);
 
     // For each input:
     for (int idx = 0; idx < input_num; idx++)
@@ -161,7 +185,7 @@ void HOUMO_API::houmo_sub_less_2048(const int16_t *op1, const int16_t *op2, int1
         // Get input data information
         auto input_info = module_sub_.GetInputInfo(input_name).AsContiguous();
         // Allocate memory on host CPU for storing input data
-        auto input_tensor = tcim::Tensor::CreateHostTensor(input_info, 2 * size);
+        auto input_tensor = tcim::Tensor::CreateHostTensor(input_info, 2 * size_);
 
         // copy buffer to tensor buffer
         if (idx == 0)
@@ -207,7 +231,7 @@ void HOUMO_API::houmo_sub_less_2048(const int16_t *op1, const int16_t *op2, int1
         // Get the information of the output
         auto output_info = module_sub_.GetOutputInfo(output_name).AsContiguous();
         // Allocate memory on host CPU for storing output data
-        auto output_tensor = tcim::Tensor::CreateHostTensor(output_info, 2 * size);
+        auto output_tensor = tcim::Tensor::CreateHostTensor(output_info, 2 * size_);
         // Insert the output name and tensor into the output map
         output_map.insert(std::pair<std::string, tcim::Tensor>(output_name, output_tensor));
     }
@@ -218,23 +242,35 @@ void HOUMO_API::houmo_sub_less_2048(const int16_t *op1, const int16_t *op2, int1
         // Get each output with the key-value pair from the output_map
         module_sub_.GetOutput(output.first, output.second);
 
-        output.second.Buffer().CopyTo(output_buf, 2 * size);
-        output_buf.CopyToHost(res, 2 * size);
+        output.second.Buffer().CopyTo(output_buf, 2 * size_);
+        output_buf.CopyToHost(z, 2 * size_);
     }
+
+    memcpy(res, z, 2 * size);
 }
 
 void HOUMO_API::houmo_mul_less_2048(const int16_t *op1, const int16_t *op2, int16_t *res, int size)
 {
-    tcim::Status stat;
+    int16_t x[size_];
+    int16_t y[size_];
+    int16_t z[size_];
 
+    memset(x, 0, size_);
+    memset(y, 0, size_);
+    memset(z, 0, size_);
+
+    memcpy(x, op1, 2 * size);
+    memcpy(y, op2, 2 * size);
+
+    tcim::Status stat;
     std::map<std::string, tcim::Tensor> input_map;
     // Get the total number of inputs
     int input_num = module_mul_.GetInputNum();
 
     // create buffer on host, and transfer data
-    tcim::Buffer input_x_buf = tcim::Buffer::CreateHostBuffer(2 * size, &op1);
-    tcim::Buffer input_y_buf = tcim::Buffer::CreateHostBuffer(2 * size, &op2);
-    tcim::Buffer output_buf = tcim::Buffer::CreateHostBuffer(2 * size);
+    tcim::Buffer input_x_buf = tcim::Buffer::CreateHostBuffer(2 * size_, &op1);
+    tcim::Buffer input_y_buf = tcim::Buffer::CreateHostBuffer(2 * size_, &op2);
+    tcim::Buffer output_buf = tcim::Buffer::CreateHostBuffer(2 * size_);
 
 
     // For each input:
@@ -245,7 +281,7 @@ void HOUMO_API::houmo_mul_less_2048(const int16_t *op1, const int16_t *op2, int1
         // Get input data information
         auto input_info = module_mul_.GetInputInfo(input_name).AsContiguous();
         // Allocate memory on host CPU for storing input data
-        auto input_tensor = tcim::Tensor::CreateHostTensor(input_info, 2 * size);
+        auto input_tensor = tcim::Tensor::CreateHostTensor(input_info, 2 * size_);
 
         // copy buffer to tensor buffer
         if (idx == 0)
@@ -291,7 +327,7 @@ void HOUMO_API::houmo_mul_less_2048(const int16_t *op1, const int16_t *op2, int1
         // Get the information of the output
         auto output_info = module_mul_.GetOutputInfo(output_name).AsContiguous();
         // Allocate memory on host CPU for storing output data
-        auto output_tensor = tcim::Tensor::CreateHostTensor(output_info, 2 * size);
+        auto output_tensor = tcim::Tensor::CreateHostTensor(output_info, 2 * size_);
         // Insert the output name and tensor into the output map
         output_map.insert(std::pair<std::string, tcim::Tensor>(output_name, output_tensor));
     }
@@ -302,7 +338,9 @@ void HOUMO_API::houmo_mul_less_2048(const int16_t *op1, const int16_t *op2, int1
         // Get each output with the key-value pair from the output_map
         module_mul_.GetOutput(output.first, output.second);
 
-        output.second.Buffer().CopyTo(output_buf, 2 * size);
-        output_buf.CopyToHost(res, 2 * size);
+        output.second.Buffer().CopyTo(output_buf, 2 * size_);
+        output_buf.CopyToHost(z, 2 * size_);
     }
+
+    memcpy(res, z, 2 * size);
 }
