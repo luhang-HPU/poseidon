@@ -145,6 +145,7 @@ void regevEncSK_Value(regevCiphertext& ct, const int msg, const regevSK& sk, con
 // map 2^9 to 2^16
 regevPK regevGenerateSquareRootInput(const regevParam& param, const regevSK& sk, const int plaintextSpace = 512, const int errorRange = 128){
     regevPK pk(param.m);
+    // 加密0 - 511
     for(int i = 0; i < param.m; i++){
         int val = i % plaintextSpace; // the value to encrypt
         regevEncSK_Value(pk[i], val, sk, param, errorRange);
@@ -183,11 +184,13 @@ void regevDec_Value(vector<int>& msg, const vector<regevCiphertext>& ct, const r
             mul_tmp = mul_tmp < 0 ? mul_tmp + q : mul_tmp;
             temp = (temp + (int) mul_tmp) % q;
         }
-        // b 在加密时被构造为 b = m·q/t - a·s + e (mod q)。
-        temp = (ct[i].b + temp) % q;
-        // 将大空间 q 映射到小空间 t
-        temp = (temp + errorRange/2) % q; // +-64 is error bound for 2^9
-        msg[i] = temp / errorRange;
+        
+        int r = (int)ct[i].b - temp;
+        // 确保结果在 [0, q-1] 范围内
+        r = (r % q + q) % q; 
+        // 将大空间 q 映射到小空间 t，使用四舍五入偏移
+        r = (r + errorRange/2) % q; 
+        msg[i] = r / errorRange;
     }
     cout << endl;
 }

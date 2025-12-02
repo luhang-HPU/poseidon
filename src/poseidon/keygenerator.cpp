@@ -143,8 +143,6 @@ void KeyGenerator::generate_sk(bool is_initialized)
 void KeyGenerator::generate_sk_n(bool is_initialized, const int n)
 {
     // 关键参数
-    std::cout << "146" << std::endl;
-
     auto scheme = context_.parameters_literal()->scheme();
     auto global_context_data = context_.crt_context();
     auto &context_data = *context_.crt_context()->key_context_data();
@@ -154,7 +152,6 @@ void KeyGenerator::generate_sk_n(bool is_initialized, const int n)
     size_t coeff_count = parms.degree();
     size_t coeff_modulus_size = coeff_modulus.size();
 
-    std::cout << "154" << std::endl;
 
     if (!is_initialized)
     {
