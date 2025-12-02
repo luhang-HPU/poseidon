@@ -34,6 +34,8 @@ public:
                                 MemoryPoolHandle pool = MemoryManager::GetPool()) const override;
     virtual void relinearize(const Ciphertext &ciph, Ciphertext &result,
                              const RelinKeys &relin_keys) const override;
+    void switch_key(const Ciphertext &ciph, Ciphertext &result,
+                    const KSwitchKeys &kswitch_keys) const;
     virtual void multiply_relin(const Ciphertext &ciph1, const Ciphertext &ciph2,
                                 Ciphertext &result, const RelinKeys &relin_keys) const override;
     virtual void rotate(const Ciphertext &ciph, Ciphertext &result, int step,

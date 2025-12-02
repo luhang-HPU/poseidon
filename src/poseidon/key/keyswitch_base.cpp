@@ -338,6 +338,7 @@ void KSwitchGenBase::generate_kswitch_keys(const SecretKey &prev_secret_key, Con
 void KSwitchBase::switch_key(const Ciphertext &encrypted, const KSwitchKeys &switch_keys,
                              Ciphertext &destination) const
 {
+    switch_key_inplace(destination, switch_keys, pool_);
 }
 
 void KSwitchBase::rotate(const Ciphertext &encrypted, Ciphertext &destination, int steps,

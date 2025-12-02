@@ -5,3 +5,6 @@ target_link_libraries(test_bfv_basic poseidon_shared)
 
 add_executable(test_bfv_mult_matrix test_bfv_mult_matrix.cpp)
 target_link_libraries(test_bfv_mult_matrix poseidon_shared)
+
+add_executable(athena Athena.cpp)
+target_link_libraries(athena poseidon_shared)

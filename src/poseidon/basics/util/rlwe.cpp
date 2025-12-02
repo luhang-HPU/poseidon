@@ -39,6 +39,65 @@ void sample_poly_ternary(shared_ptr<UniformRandomGenerator> prng, const Poseidon
                      });
 }
 
+void sample_poly_ternary_n_grouped(shared_ptr<UniformRandomGenerator> prng, const PoseidonContext &context,
+                                   parms_id_type id, uint64_t *destination)
+{
+    auto context_data = context.crt_context()->get_context_data(id);
+    auto &parms = context_data->parms();
+    auto coeff_modulus = context_data->coeff_modulus();
+    size_t coeff_modulus_size = coeff_modulus.size();
+    size_t coeff_count = parms.degree();
+    int n = 1024; // 组大小
+
+    // 检查：n 必须小于等于 coeff_count
+    if (static_cast<size_t>(n) > coeff_count) {
+        n = static_cast<int>(coeff_count);
+    }
+
+    RandomToStandardAdapter engine(prng);
+    uniform_int_distribution<uint64_t> dist(0, 2);
+
+    // 1. 生成 n 个基本随机值
+    // 使用 std::vector 确保分配和初始化
+    std::vector<uint64_t> base_rands(n);
+    for (int i = 0; i < n; ++i) {
+        base_rands[i] = dist(engine);
+    }
+
+    // 2. 替换 POSEIDON_ITERATE 为标准的 for 循环以获取索引
+    for (size_t coeff_index = 0; coeff_index < coeff_count; ++coeff_index)
+    {
+        // 确定当前系数对应的基础随机数索引
+        int base_index = coeff_index % n;
+        uint64_t rand = base_rands[base_index];
+
+        // 核心转换逻辑
+        uint64_t flag = static_cast<uint64_t>(-static_cast<int64_t>(rand == 0));
+
+        // 3. 替换内部的 POSEIDON_ITERATE
+        // 假设 destination 是以 {c0[q0], c0[q1], ..., c1[q0], c1[q1], ...} 的形式存储 (连续存储)
+        // 实际上 FHE 库通常是以系数为外循环，模数为内循环，并使用 CRT 形式存储。
+        
+        // FHE 库通常是按 (coeff_modulus_size * coeff_count) 的内存布局，
+        // 且模数通常是连续存储的 (CT_q0, CT_q1, ...)
+        
+        // 假设您的库使用 BFV/CKKS 的 NTT 友好存储布局：
+        // destination[i + j * coeff_count] 是第 i 个系数在第 j 个模数上的值。
+        
+        for (size_t mod_index = 0; mod_index < coeff_modulus_size; ++mod_index)
+        {
+            // 获取当前模数 q_j 的值
+            uint64_t q_i_value = coeff_modulus[mod_index].value(); 
+            
+            // 计算结果: rand 映射到 {-1, 0, 1}
+            uint64_t result = rand + (flag & q_i_value) - 1;
+
+            // 写入目标位置：第 coeff_index 个系数，在第 mod_index 个模数上
+            destination[coeff_index + mod_index * coeff_count] = result;
+        }
+    }
+}
+
 void sample_poly_ternary_with_hamming(shared_ptr<UniformRandomGenerator> prng,
                                       const PoseidonContext &context, parms_id_type id,
                                       uint64_t *destination)

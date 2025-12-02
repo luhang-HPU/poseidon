@@ -524,4 +524,13 @@ void KSwitchBV::switch_key_inplace(Ciphertext &encrypted, ConstRNSIter target_it
         });
 }
 
+void KSwitchBV::switch_key_internal(Ciphertext &encrypted, const KSwitchKeys &switch_keys, 
+                                    MemoryPoolHandle pool) const {
+    Ciphertext copy = encrypted;
+    auto ct_in_iter = util::iter(copy);
+    ct_in_iter += encrypted.size() - 1;
+    poseidon::util::set_zero_poly(encrypted.poly_modulus_degree(), 1, encrypted.data(1)); 
+    switch_key_inplace(encrypted, *ct_in_iter, static_cast<const KSwitchKeys &>(switch_keys), 0);
+}
+
 }  // namespace poseidon

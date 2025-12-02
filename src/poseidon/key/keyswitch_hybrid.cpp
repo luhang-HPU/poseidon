@@ -353,4 +353,13 @@ void KSwitchHybrid::switch_key_inplace(Ciphertext &encrypted, RNSPoly &poly,
         encrypted[1].copy(ciph_tmp[1]);
     }
 }
+
+void KSwitchHybrid::switch_key_internal(Ciphertext &encrypted, const KSwitchKeys &switch_keys, 
+                                        MemoryPoolHandle pool) const {
+    // Ciphertext copy = encrypted;
+    // auto ct_in_iter = util::iter(copy);
+    // ct_in_iter += encrypted.size() - 1;
+    // poseidon::util::set_zero_poly(encrypted.poly_modulus_degree(), 1, encrypted.data(1)); // notice that the coeff_mod.size() is hardcoded to 1, thus this needs to be performed on the last level
+    // switch_key_inplace(encrypted, *ct_in_iter, static_cast<const KSwitchKeys &>(switch_keys), 0);
+}
 }  // namespace poseidon

@@ -35,6 +35,9 @@ public:
     void apply_galois_inplace(Ciphertext &encrypted, uint32_t galois_elt,
                               const GaloisKeys &galois_keys, MemoryPoolHandle pool) const override;
 
+    void switch_key_internal(Ciphertext &encrypted, const KSwitchKeys &switch_keys, 
+                            MemoryPoolHandle pool) const override;
+    
 private:
     void switch_key_inplace(Ciphertext &encrypted, util::ConstRNSIter target_iter,
                             const KSwitchKeys &kswitch_keys, std::size_t key_index,

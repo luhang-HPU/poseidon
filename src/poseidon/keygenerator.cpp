@@ -67,6 +67,30 @@ KeyGenerator::KeyGenerator(const PoseidonContext &context, const SecretKey &secr
     generate_sk(sk_generated_);
 }
 
+KeyGenerator::KeyGenerator(const PoseidonContext &context, const int n) : context_(context)
+{
+    auto kswitch_variant = context.key_switch_variant();
+    using_keyswitch_ = context.crt_context()->using_keyswitch();
+    if (kswitch_variant == BV)
+    {
+        this->kswitch_gen_ = make_shared<KSwitchGenBV>(context);
+    }
+    else if (kswitch_variant == GHS)
+    {
+        this->kswitch_gen_ = make_shared<KSwitchGenGHS>(context);
+    }
+    else if (kswitch_variant == HYBRID)
+    {
+        this->kswitch_gen_ = make_shared<KSwitchGenHybrid>(context);
+    }
+    // Secret key has not been generated
+    sk_generated_ = false;
+
+    // Generate the secret and public key
+    generate_sk_n(sk_generated_, n);
+}
+
+
 void KeyGenerator::generate_sk(bool is_initialized)
 {
     // Extract encryption parameters.
@@ -108,6 +132,53 @@ void KeyGenerator::generate_sk(bool is_initialized)
     }
 
     // Set the secret_key_array to have size 1 (first power of secret)
+    secret_key_array_ = allocate_poly(coeff_count, coeff_modulus_size, pool_);
+    set_poly(secret_key_.data().data(), coeff_count, coeff_modulus_size, secret_key_array_.get());
+    secret_key_array_size_ = 1;
+
+    // Secret key has been generated
+    sk_generated_ = true;
+}
+
+void KeyGenerator::generate_sk_n(bool is_initialized, const int n)
+{
+    // 关键参数
+    std::cout << "146" << std::endl;
+
+    auto scheme = context_.parameters_literal()->scheme();
+    auto global_context_data = context_.crt_context();
+    auto &context_data = *context_.crt_context()->key_context_data();
+    auto param_id = context_.crt_context()->key_parms_id();
+    auto &parms = context_data.parms();
+    auto &coeff_modulus = context_data.coeff_modulus();
+    size_t coeff_count = parms.degree();
+    size_t coeff_modulus_size = coeff_modulus.size();
+
+    std::cout << "154" << std::endl;
+
+    if (!is_initialized)
+    {
+        // 初始化私钥.
+        secret_key_ = SecretKey();
+        sk_generated_ = false;
+        secret_key_.data().resize(context_, param_id, mul_safe(coeff_count, coeff_modulus_size));
+
+        if (context_.crt_context() == nullptr) {
+            std::cerr << "crt_context() is null!" << std::endl;
+        }
+
+        // 生成私钥
+        RNSIter secret_key(secret_key_.data().data(), coeff_count);
+        sample_poly_ternary_n_grouped(context_.random_generator()->create(), context_, param_id, secret_key);
+
+        // 转为NTT形式
+        auto ntt_tables = global_context_data->small_ntt_tables();
+        ntt_negacyclic_harvey(secret_key, coeff_modulus_size, ntt_tables);
+
+        secret_key_.parms_id() = param_id;
+    }
+
+    // 私钥的 1 次
     secret_key_array_ = allocate_poly(coeff_count, coeff_modulus_size, pool_);
     set_poly(secret_key_.data().data(), coeff_count, coeff_modulus_size, secret_key_array_.get());
     secret_key_array_size_ = 1;

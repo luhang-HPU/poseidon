@@ -288,6 +288,15 @@ void EvaluatorBfvBase::relinearize(const Ciphertext &ciph, Ciphertext &result,
     kswitch_->relinearize(ciph, result, relin_keys);
 }
 
+void EvaluatorBfvBase::switch_key(const Ciphertext &ciph, Ciphertext &result,
+                                  const KSwitchKeys &kswitch_keys) const
+{
+#ifdef DEBUG
+    poseidon::util::LocalTimer timer("SwitchKey");
+#endif
+    kswitch_->switch_key(ciph, kswitch_keys, result);
+}
+
 void EvaluatorBfvBase::multiply_relin(const Ciphertext &ciph1, const Ciphertext &ciph2,
                                       Ciphertext &result, const RelinKeys &relin_keys) const
 {

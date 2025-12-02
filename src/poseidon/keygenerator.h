@@ -55,6 +55,9 @@ public:
     */
     POSEIDON_NODISCARD const SecretKey &secret_key() const;
 
+    // Generates a secret_key, degree = n
+    KeyGenerator(const PoseidonContext &context, const int n);
+
     /**
     Generates a public key and stores the result in destination. Every time
     this function is called, a new public key will be generated.
@@ -333,6 +336,8 @@ private:
     */
     void generate_sk(bool is_initialized = false);
 
+    void generate_sk_n(bool is_initialized = false, int n = 1024);
+
     /**
     Generates new public key matching to existing secret key.
     */
@@ -349,6 +354,7 @@ private:
 
 
     std::shared_ptr<KSwitchGenBase> kswitch_gen_{nullptr};
+
     // We use a fresh memory pool with `clear_on_destruction' enabled.
     MemoryPoolHandle pool_ = MemoryManager::GetPool(mm_prof_opt::mm_force_new, true);
 

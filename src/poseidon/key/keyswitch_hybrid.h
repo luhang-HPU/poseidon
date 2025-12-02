@@ -40,7 +40,9 @@ public:
                               const GaloisKeys &galois_keys, MemoryPoolHandle pool) const override;
     void relinearize_internal(Ciphertext &encrypted, const RelinKeys &relin_keys,
                               size_t destination_size, MemoryPoolHandle pool) const override;
-
+    void switch_key_internal(Ciphertext &encrypted, const KSwitchKeys &switch_keys, 
+                              MemoryPoolHandle pool) const override;
+    
 private:
     void switch_key_inplace(Ciphertext &encrypted, RNSPoly &poly, const KSwitchKeys &kswitch_keys,
                             std::size_t key_index,

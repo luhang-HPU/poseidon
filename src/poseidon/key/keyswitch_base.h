@@ -77,6 +77,9 @@ protected:
                                       const GaloisKeys &galois_keys,
                                       MemoryPoolHandle pool) const = 0;
 
+    virtual void switch_key_internal(Ciphertext &encrypted, const KSwitchKeys &switch_keys, 
+                                    MemoryPoolHandle pool) const = 0;
+
     PoseidonContext context_;
     MemoryPoolHandle pool_;
 
@@ -85,6 +88,12 @@ private:
                                     MemoryPoolHandle pool = MemoryManager::GetPool()) const
     {
         relinearize_internal(encrypted, relin_keys, 2, std::move(pool));
+    }
+
+    inline void switch_key_inplace(Ciphertext &encrypted, const KSwitchKeys &switch_keys, 
+                                  MemoryPoolHandle pool) const
+    {
+        switch_key_internal(encrypted, switch_keys, std::move(pool));
     }
 };
 

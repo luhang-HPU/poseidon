@@ -23,6 +23,9 @@ void sample_poly_ternary(std::shared_ptr<UniformRandomGenerator> prng,
                          const PoseidonContext &context, parms_id_type id,
                          std::uint64_t *destination);
 
+void sample_poly_ternary_n_grouped(shared_ptr<UniformRandomGenerator> prng, const PoseidonContext &context,
+                         parms_id_type id, uint64_t *destination);
+
 void sample_poly_ternary_with_hamming(shared_ptr<UniformRandomGenerator> prng,
                                       const PoseidonContext &context, parms_id_type id,
                                       uint64_t *destination);
