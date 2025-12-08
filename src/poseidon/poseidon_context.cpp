@@ -24,13 +24,13 @@ PoseidonContext::PoseidonContext(const ParametersLiteral &param_literal, bool us
     {
         key_switch_variant_ = none;
     }
-    else if (base_p_size == base_q_size)
-    {
-        key_switch_variant_ = GHS;
-    }
     else if (base_p_size == 1)
     {
         key_switch_variant_ = BV;
+    }
+    else if (base_p_size == base_q_size)
+    {
+        key_switch_variant_ = GHS;
     }
     else
     {

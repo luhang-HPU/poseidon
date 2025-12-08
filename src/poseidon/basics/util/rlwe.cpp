@@ -47,53 +47,61 @@ void sample_poly_ternary_n_grouped(shared_ptr<UniformRandomGenerator> prng, cons
     auto coeff_modulus = context_data->coeff_modulus();
     size_t coeff_modulus_size = coeff_modulus.size();
     size_t coeff_count = parms.degree();
-    int n = 1024; // 组大小
 
-    // 检查：n 必须小于等于 coeff_count
-    if (static_cast<size_t>(n) > coeff_count) {
-        n = static_cast<int>(coeff_count);
-    }
+    int n = 1024; // 目标 LWE 维度/非零系数的组大小
 
+    // 确定需要随机采样的系数数量 (前 n 个)
+    size_t sample_count = std::min(static_cast<size_t>(n), coeff_count);
+
+    // --- 1. 初始化随机数生成器 ---
     RandomToStandardAdapter engine(prng);
-    uniform_int_distribution<uint64_t> dist(0, 2);
+    // 采样范围 [0, 2]，用于映射到 {-1, 0, 1}
+    uniform_int_distribution<uint64_t> dist(0, 2); 
 
-    // 1. 生成 n 个基本随机值
-    // 使用 std::vector 确保分配和初始化
+    // --- 2. 生成 n 个基本随机值 ---
+    // base_rands 只需要 n 个，因为分组只在前 n 个系数生效
     std::vector<uint64_t> base_rands(n);
     for (int i = 0; i < n; ++i) {
         base_rands[i] = dist(engine);
     }
 
-    // 2. 替换 POSEIDON_ITERATE 为标准的 for 循环以获取索引
-    for (size_t coeff_index = 0; coeff_index < coeff_count; ++coeff_index)
+    // --- 3. 采样前 n 个系数 (0 到 sample_count - 1) ---
+    for (size_t coeff_index = 0; coeff_index < sample_count; ++coeff_index)
     {
         // 确定当前系数对应的基础随机数索引
+        // 这里 coeff_index < n，所以 base_index = coeff_index
         int base_index = coeff_index % n;
-        uint64_t rand = base_rands[base_index];
+        uint64_t rand = base_rands[base_index]; // 随机值为 0, 1, 或 2
 
-        // 核心转换逻辑
+        // 核心转换逻辑：rand 映射到 {-1, 0, 1}
+        // rand = 0 => result = -1
+        // rand = 1 => result = 0
+        // rand = 2 => result = 1
         uint64_t flag = static_cast<uint64_t>(-static_cast<int64_t>(rand == 0));
 
-        // 3. 替换内部的 POSEIDON_ITERATE
-        // 假设 destination 是以 {c0[q0], c0[q1], ..., c1[q0], c1[q1], ...} 的形式存储 (连续存储)
-        // 实际上 FHE 库通常是以系数为外循环，模数为内循环，并使用 CRT 形式存储。
-        
-        // FHE 库通常是按 (coeff_modulus_size * coeff_count) 的内存布局，
-        // 且模数通常是连续存储的 (CT_q0, CT_q1, ...)
-        
-        // 假设您的库使用 BFV/CKKS 的 NTT 友好存储布局：
-        // destination[i + j * coeff_count] 是第 i 个系数在第 j 个模数上的值。
-        
+        // 遍历所有模数 q_j
         for (size_t mod_index = 0; mod_index < coeff_modulus_size; ++mod_index)
         {
-            // 获取当前模数 q_j 的值
             uint64_t q_i_value = coeff_modulus[mod_index].value(); 
             
-            // 计算结果: rand 映射到 {-1, 0, 1}
+            // 如果 rand=0，flag=q_i_value (或全 1)，结果为 q_i_value - 1 (即 -1 mod q_i)
+            // 如果 rand=1，flag=0，结果为 1 - 1 = 0
+            // 如果 rand=2，flag=0，结果为 2 - 1 = 1
             uint64_t result = rand + (flag & q_i_value) - 1;
 
             // 写入目标位置：第 coeff_index 个系数，在第 mod_index 个模数上
             destination[coeff_index + mod_index * coeff_count] = result;
+        }
+    }
+
+    // --- 4. 将剩余的系数全部设置为 0 ---
+    // 从 n 处开始到 coeff_count 结束
+    for (size_t coeff_index = sample_count; coeff_index < coeff_count; ++coeff_index)
+    {
+        // 遍历所有模数 q_j，将该系数的所有模数分量设置为 0
+        for (size_t mod_index = 0; mod_index < coeff_modulus_size; ++mod_index)
+        {
+            destination[coeff_index + mod_index * coeff_count] = 0;
         }
     }
 }

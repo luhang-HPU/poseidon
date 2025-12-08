@@ -184,13 +184,10 @@ void regevDec_Value(vector<int>& msg, const vector<regevCiphertext>& ct, const r
             mul_tmp = mul_tmp < 0 ? mul_tmp + q : mul_tmp;
             temp = (temp + (int) mul_tmp) % q;
         }
-        
-        int r = (int)ct[i].b - temp;
-        // 确保结果在 [0, q-1] 范围内
-        r = (r % q + q) % q; 
-        // 将大空间 q 映射到小空间 t，使用四舍五入偏移
-        r = (r + errorRange/2) % q; 
-        msg[i] = r / errorRange;
+        temp = (ct[i].b + temp) % q;
+
+        temp = (temp + errorRange/2) % q; // +-64 is error bound for 2^9
+        msg[i] = temp / errorRange;
     }
     cout << endl;
 }
