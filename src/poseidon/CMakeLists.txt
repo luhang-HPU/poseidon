@@ -15,5 +15,6 @@ add_subdirectory(key)
 add_subdirectory(basics)
 add_subdirectory(util)
 add_subdirectory(houmo)
+add_subdirectory(cambricon)
 
 set(POSEIDON_SOURCE_FILES ${POSEIDON_SOURCE_FILES} PARENT_SCOPE)

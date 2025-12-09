@@ -1,3 +1,6 @@
+#ifndef HOUMO_API_H
+#define HOUMO_API_H
+
 #include "/usr/local/houmo/include/tcim/tcim_runtime.h"
 // 文件在目录/usr/local/houmo/include/tcim下
 
@@ -135,3 +138,5 @@ private:
     tcim::Module module_sub_;
     tcim::Module module_mul_;
 };
+
+#endif
