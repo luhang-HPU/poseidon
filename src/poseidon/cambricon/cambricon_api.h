@@ -2,11 +2,15 @@
 #define POSEIDON_CAMBRICON_API_H
 
 #include <iostream>
-#include <torch/torch.h>
-#include <torch_mlu/torch_mlu.h>
 #include <cstring>
 #include <memory>
 #include <mutex>
+
+#include <torch/library.h>
+#include <torch/script.h>
+
+#include "framework/core/device.h"
+#include "framework/core/caching_allocator.h"
 
 using uint16_t = unsigned short;
 
@@ -15,7 +19,7 @@ class CAMBRICON_API
 public:
     CAMBRICON_API()
     {
-        torch::torch_mlu_init();
+        device = at::Device("mlu:0");
     }
 
     static std::shared_ptr<CAMBRICON_API> get_instance()
@@ -66,8 +70,8 @@ public:
         torch::Tensor tensor_op1 = torch::from_blob(arr_op1, {size}, torch::uint16).clone();
         torch::Tensor tensor_op2 = torch::from_blob(arr_op2, {size}, torch::uint16).clone();
 
-        auto op1_mlu = tensor_op1.to(at::kMLU);
-        auto op2_mlu = tensor_op2.to(at::kMLU);
+        auto op1_mlu = tensor_op1.to(device);
+        auto op2_mlu = tensor_op2.to(device);
 
         auto res_mlu = op1_mlu + op2_mlu;
         torch::Tensor tensor_res = res_mlu.cpu();
@@ -152,8 +156,8 @@ public:
         torch::Tensor tensor_op1 = torch::from_blob(arr_op1, {size}, torch::uint16).clone();
         torch::Tensor tensor_op2 = torch::from_blob(arr_op2, {size}, torch::uint16).clone();
 
-        auto op1_mlu = tensor_op1.to(at::kMLU);
-        auto op2_mlu = tensor_op2.to(at::kMLU);
+        auto op1_mlu = tensor_op1.to(device);
+        auto op2_mlu = tensor_op2.to(device);
 
         auto res_mlu = op1_mlu - op2_mlu;
         torch::Tensor tensor_res = res_mlu.cpu();
@@ -237,8 +241,8 @@ public:
         torch::Tensor tensor_op1 = torch::from_blob(arr_op1, {size}, torch::uint16).clone();
         torch::Tensor tensor_op2 = torch::from_blob(arr_op2, {size}, torch::uint16).clone();
 
-        auto op1_mlu = tensor_op1.to(at::kMLU);
-        auto op2_mlu = tensor_op2.to(at::kMLU);
+        auto op1_mlu = tensor_op1.to(device);
+        auto op2_mlu = tensor_op2.to(device);
 
         auto res_mlu = op1_mlu * op2_mlu;
         // dot product
@@ -291,6 +295,7 @@ public:
     }
 
 private:
+    static at::Device device_;
     static std::mutex mtx_;
     static std::shared_ptr<CAMBRICON_API> cambricon_api_;
 };
