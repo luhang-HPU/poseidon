@@ -222,9 +222,54 @@ if(POSEIDON_USE_ZSTD)
     target_link_libraries(poseidon_shared PRIVATE ${zstd_static})
 endif()
 
-set(TCIM_LITE_LIB_DIR /usr/local/lib/python3.9/dist-packages/tcim_lite/lib)
-target_link_directories(poseidon_shared PUBLIC ${TCIM_LITE_LIB_DIR})
-target_link_libraries(poseidon_shared PUBLIC tcim_runtime_lite)
+
+# set the real path
+if(DEFINED ENV{Torch_DIR})
+    set(torch_path "$ENV{Torch_DIR}")
+else()
+    set(torch_path "path/to/your/pytorch/torch")
+endif()
+if(NOT EXISTS ${torch_path})
+  message(FATAL_ERROR "please set correct torch_path")
+endif()
+include_directories(${torch_path}/include)
+link_directories(${torch_path}/lib)
+
+# set the real path
+if(DEFINED ENV{TORCH_MLU_HOME})
+    set(torch_mlu_path "$ENV{TORCH_MLU_HOME}")
+else()
+    set(torch_mlu_path "path/to/your/torch_mlu")
+endif()
+if(NOT EXISTS ${torch_mlu_path})
+  message(FATAL_ERROR "please set correct torch_mlu_path")
+endif()
+
+# set the real path
+if(DEFINED ENV{NEUWARE_HOME})
+    set(neuware_home "$ENV{NEUWARE_HOME}")
+else()
+    set(neuware_home "path/to/your/neuware_home")
+endif()
+if(NOT EXISTS ${neuware_home})
+  message(FATAL_ERROR "please set correct neuware_home")
+endif()
+
+include_directories(${torch_mlu_path}/csrc)
+include_directories(${neuware_home}/include)
+
+link_directories(${torch_mlu_path}/csrc/lib)
+link_directories(${neuware_home}/lib64)
+
+target_link_libraries(poseidon_shared PUBLIC "-Wl,--no-as-needed" torch_mlu "-Wl,--as-needed")
+target_link_libraries(poseidon_shared PUBLIC pthread)
+target_link_libraries(poseidon_shared PUBLIC cnrt)
+target_link_libraries(poseidon_shared PUBLIC torch torch_cpu c10 dl util)
+
+
+# set(TCIM_LITE_LIB_DIR /usr/local/lib/python3.9/dist-packages/tcim_lite/lib)
+# target_link_directories(poseidon_shared PUBLIC ${TCIM_LITE_LIB_DIR})
+# target_link_libraries(poseidon_shared PUBLIC tcim_runtime_lite)
 
 if(POSEIDON_BUILD_DEPS)
     # MSGSL

@@ -1,7 +1,7 @@
 #include "poseidon/basics/util/polyarithsmallmod.h"
 #include "poseidon/basics/util/uintarith.h"
 #include "poseidon/basics/util/uintcore.h"
-#include "poseidon/houmo/houmo_api.h"
+// #include "poseidon/houmo/houmo_api.h"
 #include "poseidon/cambricon/cambricon_api.h"
 
 #ifdef POSEIDON_USE_INTEL_HEXL

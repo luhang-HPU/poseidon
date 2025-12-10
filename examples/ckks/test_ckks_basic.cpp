@@ -40,15 +40,23 @@ int main()
     sample_random_complex_vector(msg1, slot_num);
     sample_random_complex_vector(msg2, slot_num);
 
+    Timestacs timestacs;
     Plaintext plt1, plt2, plt_res;
+
+    timestacs.start();
     encoder.encode(msg1, scale, plt1);
+    timestacs.end();
+    timestacs.print_time("encode TIME: ");
     encoder.encode(msg2, scale, plt2);
 
     Ciphertext ct1, ct2, ct_res;
+    timestacs.start();
     encryptor.encrypt(plt1, ct1);
+    timestacs.end();
+    timestacs.print_time("encrypt TIME: ");
     encryptor.encrypt(plt2, ct2);
 
-    Timestacs timestacs;
+    
 
     // DROP MODULUS
     print_example_banner("Example: Drop Modulus in CKKS");

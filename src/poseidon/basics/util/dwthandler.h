@@ -7,7 +7,7 @@
 #include "poseidon/basics/util/pointer.h"
 #include "poseidon/basics/util/uintarithsmallmod.h"
 #include "poseidon/basics/util/uintcore.h"
-#include "poseidon/houmo/houmo_api.h"
+// #include "poseidon/houmo/houmo_api.h"
 #include <stdexcept>
 
 // #define HOUMO1
