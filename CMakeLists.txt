@@ -23,9 +23,6 @@ endif ()
 
 project(Poseidon VERSION 1.0.0 LANGUAGES CXX C)
 
-find_package(Torch REQUIRED)
-find_package(TorchMLU REQUIRED)
-
 # 根据ASAN的值来设置编译器标志  
 option(ASAN "Enable AddressSanitizer" OFF)  
 if(ASAN)
