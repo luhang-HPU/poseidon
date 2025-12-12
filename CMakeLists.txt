@@ -23,10 +23,13 @@ endif ()
 
 project(Poseidon VERSION 1.0.0 LANGUAGES CXX C)
 
+find_package(Torch REQUIRED)
+find_package(TorchMLU REQUIRED)
+
 # 根据ASAN的值来设置编译器标志  
 option(ASAN "Enable AddressSanitizer" OFF)  
 if(ASAN)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fsanitize-recover=address -fno-stack-protector -fno-omit-frame-pointer")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fsanitize-recover=address -fno-stack-protector -fno-omit-frame-pointer ${TORCH_CXX_FLAGS}")
     message(STATUS "AddressSanitizer enabled.") 
 else()
     message(STATUS "AddressSanitizer disabled.")
@@ -265,11 +268,6 @@ target_link_libraries(poseidon_shared PUBLIC "-Wl,--no-as-needed" torch_mlu "-Wl
 target_link_libraries(poseidon_shared PUBLIC pthread)
 target_link_libraries(poseidon_shared PUBLIC cnrt)
 target_link_libraries(poseidon_shared PUBLIC torch torch_cpu c10 dl util)
-
-
-# set(TCIM_LITE_LIB_DIR /usr/local/lib/python3.9/dist-packages/tcim_lite/lib)
-# target_link_directories(poseidon_shared PUBLIC ${TCIM_LITE_LIB_DIR})
-# target_link_libraries(poseidon_shared PUBLIC tcim_runtime_lite)
 
 if(POSEIDON_BUILD_DEPS)
     # MSGSL
