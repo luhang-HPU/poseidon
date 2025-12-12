@@ -22,11 +22,12 @@ if(CROSS_COMPILE_ARRCH64)
 endif ()
 
 project(Poseidon VERSION 1.0.0 LANGUAGES CXX C)
+add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)
 
 # 根据ASAN的值来设置编译器标志  
 option(ASAN "Enable AddressSanitizer" OFF)  
 if(ASAN)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fsanitize-recover=address -fno-stack-protector -fno-omit-frame-pointer ${TORCH_CXX_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fsanitize-recover=address -fno-stack-protector -fno-omit-frame-pointer")
     message(STATUS "AddressSanitizer enabled.") 
 else()
     message(STATUS "AddressSanitizer disabled.")
@@ -185,8 +186,8 @@ option(POSEIDON_BUILD_EXAMPLES "Build examples for POSEIDON" ON)
 message(STATUS "POSEIDON_BUILD_EXAMPLES: ${POSEIDON_BUILD_EXAMPLES}")
 if(POSEIDON_BUILD_EXAMPLES)
     add_subdirectory(examples/bfv)
-    add_subdirectory(examples/bgv)
-    add_subdirectory(examples/ckks)
+    # add_subdirectory(examples/bgv)
+    # add_subdirectory(examples/ckks)
 endif()
 
 # Create the config file
@@ -261,10 +262,53 @@ include_directories(${neuware_home}/include)
 link_directories(${torch_mlu_path}/csrc/lib)
 link_directories(${neuware_home}/lib64)
 
-target_link_libraries(poseidon_shared PUBLIC "-Wl,--no-as-needed" torch_mlu "-Wl,--as-needed")
-target_link_libraries(poseidon_shared PUBLIC pthread)
-target_link_libraries(poseidon_shared PUBLIC cnrt)
-target_link_libraries(poseidon_shared PUBLIC torch torch_cpu c10 dl util)
+set(PYTORCH_LIB_PATH "/torch/venv3/pytorch/lib/python3.10/site-packages/torch/lib")
+set(PYTORCH_MLU_PATH "/torch/venv3/pytorch/lib/python3.10/site-packages/torch_mlu/csrc/lib")
+set(CNRT_LIB_PATH "/usr/local/neuware/lib64")
+set(CNRT_EDGE_LIB_DIR "/usr/local/neuware/edge/lib64")
+
+target_link_directories(poseidon_shared PUBLIC
+    ${PYTORCH_LIB_PATH}
+    ${PYTORCH_MLU_PATH}
+    ${CNRT_LIB_PATH}
+    ${CNRT_EDGE_LIB_DIR}
+)
+# 定义所有外部依赖（短名称列表）
+set(POSEIDON_EXTERNAL_DEPS
+    torch_mlu 
+    cnrt 
+    torch 
+    torch_cpu 
+    c10 
+    pthread 
+    dl 
+    util
+)
+
+target_link_directories(poseidon_shared PUBLIC
+    ${PYTORCH_LIB_PATH}
+    ${PYTORCH_MLU_PATH}
+    ${CNRT_LIB_PATH}
+    ${CNRT_EDGE_LIB_DIR}
+)
+
+target_link_libraries(poseidon_shared PRIVATE 
+    # 强制链接器解决循环依赖
+    "-Wl,--start-group" 
+    ${POSEIDON_EXTERNAL_DEPS}
+    "-Wl,--end-group" 
+)
+
+
+target_link_libraries(poseidon_shared INTERFACE 
+    ${POSEIDON_EXTERNAL_DEPS}
+)
+
+# target_link_libraries(poseidon_shared PUBLIC "-Wl,--no-as-needed" torch_mlu "-Wl,--as-needed")
+# target_link_libraries(poseidon_shared PUBLIC pthread)
+# target_link_libraries(poseidon_shared PUBLIC cnrt)
+# target_link_libraries(poseidon_shared PUBLIC torch torch_cpu c10 dl util)
+
 
 if(POSEIDON_BUILD_DEPS)
     # MSGSL
