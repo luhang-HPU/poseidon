@@ -68,8 +68,8 @@ public:
             }
         }
 
-        torch::Tensor tensor_op1 = torch::from_blob(arr_op1, {size}, torch::kUint16).clone();
-        torch::Tensor tensor_op2 = torch::from_blob(arr_op2, {size}, torch::kUint16).clone();
+        torch::Tensor tensor_op1 = torch::from_blob(arr_op1, {size}, torch::kUInt16).clone();
+        torch::Tensor tensor_op2 = torch::from_blob(arr_op2, {size}, torch::kUInt16).clone();
 
         auto op1_mlu = tensor_op1.to(device_);
         auto op2_mlu = tensor_op2.to(device_);
@@ -154,8 +154,8 @@ public:
             }
         }
 
-        torch::Tensor tensor_op1 = torch::from_blob(arr_op1, {size}, torch::kUint16).clone();
-        torch::Tensor tensor_op2 = torch::from_blob(arr_op2, {size}, torch::kUint16).clone();
+        torch::Tensor tensor_op1 = torch::from_blob(arr_op1, {size}, torch::kUInt16).clone();
+        torch::Tensor tensor_op2 = torch::from_blob(arr_op2, {size}, torch::kUInt16).clone();
 
         auto op1_mlu = tensor_op1.to(device_);
         auto op2_mlu = tensor_op2.to(device_);
@@ -239,8 +239,8 @@ public:
             }
         }
 
-        torch::Tensor tensor_op1 = torch::from_blob(arr_op1, {size}, torch::kUint16).clone();
-        torch::Tensor tensor_op2 = torch::from_blob(arr_op2, {size}, torch::kUint16).clone();
+        torch::Tensor tensor_op1 = torch::from_blob(arr_op1, {size}, torch::kUInt16).clone();
+        torch::Tensor tensor_op2 = torch::from_blob(arr_op2, {size}, torch::kUInt16).clone();
 
         auto op1_mlu = tensor_op1.to(device_);
         auto op2_mlu = tensor_op2.to(device_);
