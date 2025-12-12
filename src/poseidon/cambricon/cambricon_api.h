@@ -5,6 +5,7 @@
 #include <cstring>
 #include <memory>
 #include <mutex>
+#include <complex>
 
 #include <torch/library.h>
 #include <torch/script.h>
@@ -19,7 +20,7 @@ class CAMBRICON_API
 public:
     CAMBRICON_API()
     {
-        device = at::Device("mlu:0");
+        device_ = at::Device("mlu:0");
     }
 
     static std::shared_ptr<CAMBRICON_API> get_instance()
@@ -70,8 +71,8 @@ public:
         torch::Tensor tensor_op1 = torch::from_blob(arr_op1, {size}, torch::uint16).clone();
         torch::Tensor tensor_op2 = torch::from_blob(arr_op2, {size}, torch::uint16).clone();
 
-        auto op1_mlu = tensor_op1.to(device);
-        auto op2_mlu = tensor_op2.to(device);
+        auto op1_mlu = tensor_op1.to(device_);
+        auto op2_mlu = tensor_op2.to(device_);
 
         auto res_mlu = op1_mlu + op2_mlu;
         torch::Tensor tensor_res = res_mlu.cpu();
@@ -156,8 +157,8 @@ public:
         torch::Tensor tensor_op1 = torch::from_blob(arr_op1, {size}, torch::uint16).clone();
         torch::Tensor tensor_op2 = torch::from_blob(arr_op2, {size}, torch::uint16).clone();
 
-        auto op1_mlu = tensor_op1.to(device);
-        auto op2_mlu = tensor_op2.to(device);
+        auto op1_mlu = tensor_op1.to(device_);
+        auto op2_mlu = tensor_op2.to(device_);
 
         auto res_mlu = op1_mlu - op2_mlu;
         torch::Tensor tensor_res = res_mlu.cpu();
@@ -241,8 +242,8 @@ public:
         torch::Tensor tensor_op1 = torch::from_blob(arr_op1, {size}, torch::uint16).clone();
         torch::Tensor tensor_op2 = torch::from_blob(arr_op2, {size}, torch::uint16).clone();
 
-        auto op1_mlu = tensor_op1.to(device);
-        auto op2_mlu = tensor_op2.to(device);
+        auto op1_mlu = tensor_op1.to(device_);
+        auto op2_mlu = tensor_op2.to(device_);
 
         auto res_mlu = op1_mlu * op2_mlu;
         // dot product
