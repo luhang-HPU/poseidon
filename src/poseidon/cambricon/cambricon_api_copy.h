@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstring>
 #include <memory>
+#include <mutex>
 #include <complex>
 
 #include <torch/library.h>
@@ -26,7 +27,11 @@ public:
     {
         if (!cambricon_api_)
         {
-            cambricon_api_ = std::make_shared<CAMBRICON_API>();
+            std::lock_guard<std::mutex> lck(mtx_);
+            if (!cambricon_api_)
+            {
+                cambricon_api_ = std::make_shared<CAMBRICON_API>();
+            }
         }
         return cambricon_api_;
     }
@@ -292,6 +297,7 @@ public:
 
 private:
     static at::Device device_;
+    static std::mutex mtx_;
     static std::shared_ptr<CAMBRICON_API> cambricon_api_;
 };
 
