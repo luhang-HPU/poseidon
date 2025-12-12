@@ -5,6 +5,7 @@
 #include <cstring>
 #include <memory>
 #include <mutex>
+#include <complex>
 
 #include <torch/library.h>
 #include <torch/script.h>
@@ -19,7 +20,7 @@ class CAMBRICON_API
 public:
     CAMBRICON_API()
     {
-        device = at::Device("mlu:0");
+        device_ = at::Device("mlu:0");
     }
 
     static std::shared_ptr<CAMBRICON_API> get_instance()
@@ -42,7 +43,7 @@ public:
         uint16_t arr_op2[size];
         uint16_t arr_res[size];
 
-        if constexpr (std::is_same_v<T, std::complex<double>*>)
+        if constexpr (std::is_same_v<T, std::complex<double>>)
         {
             for (auto i = 0; i < size; ++i)
             {
@@ -67,16 +68,16 @@ public:
             }
         }
 
-        torch::Tensor tensor_op1 = torch::from_blob(arr_op1, {size}, torch::uint16).clone();
-        torch::Tensor tensor_op2 = torch::from_blob(arr_op2, {size}, torch::uint16).clone();
+        torch::Tensor tensor_op1 = torch::from_blob(arr_op1, {size}, torch::kUint16).clone();
+        torch::Tensor tensor_op2 = torch::from_blob(arr_op2, {size}, torch::kUint16).clone();
 
-        auto op1_mlu = tensor_op1.to(device);
-        auto op2_mlu = tensor_op2.to(device);
+        auto op1_mlu = tensor_op1.to(device_);
+        auto op2_mlu = tensor_op2.to(device_);
 
         auto res_mlu = op1_mlu + op2_mlu;
         torch::Tensor tensor_res = res_mlu.cpu();
 
-        std::memcpy(arr_res, tensor_res.data_ptr<uint16_t>(), tensor_res.numel * sizeof(uint16_t));
+        std::memcpy(arr_res, tensor_res.data_ptr<uint16_t>(), tensor_res.numel() * sizeof(uint16_t));
 
 
         if constexpr (std::is_same_v<T, std::complex<double>>)
@@ -153,16 +154,16 @@ public:
             }
         }
 
-        torch::Tensor tensor_op1 = torch::from_blob(arr_op1, {size}, torch::uint16).clone();
-        torch::Tensor tensor_op2 = torch::from_blob(arr_op2, {size}, torch::uint16).clone();
+        torch::Tensor tensor_op1 = torch::from_blob(arr_op1, {size}, torch::kUint16).clone();
+        torch::Tensor tensor_op2 = torch::from_blob(arr_op2, {size}, torch::kUint16).clone();
 
-        auto op1_mlu = tensor_op1.to(device);
-        auto op2_mlu = tensor_op2.to(device);
+        auto op1_mlu = tensor_op1.to(device_);
+        auto op2_mlu = tensor_op2.to(device_);
 
         auto res_mlu = op1_mlu - op2_mlu;
         torch::Tensor tensor_res = res_mlu.cpu();
 
-        std::memcpy(arr_res, tensor_res.data_ptr<uint16_t>(), tensor_res.numel * sizeof(uint16_t));
+        std::memcpy(arr_res, tensor_res.data_ptr<uint16_t>(), tensor_res.numel() * sizeof(uint16_t));
 
 
         if constexpr (std::is_same_v<T, std::complex<double>>)
@@ -238,18 +239,18 @@ public:
             }
         }
 
-        torch::Tensor tensor_op1 = torch::from_blob(arr_op1, {size}, torch::uint16).clone();
-        torch::Tensor tensor_op2 = torch::from_blob(arr_op2, {size}, torch::uint16).clone();
+        torch::Tensor tensor_op1 = torch::from_blob(arr_op1, {size}, torch::kUint16).clone();
+        torch::Tensor tensor_op2 = torch::from_blob(arr_op2, {size}, torch::kUint16).clone();
 
-        auto op1_mlu = tensor_op1.to(device);
-        auto op2_mlu = tensor_op2.to(device);
+        auto op1_mlu = tensor_op1.to(device_);
+        auto op2_mlu = tensor_op2.to(device_);
 
         auto res_mlu = op1_mlu * op2_mlu;
         // dot product
         // auto res_mlu = torch::matmul(op1_mlu, op2_mlu);
         torch::Tensor tensor_res = res_mlu.cpu();
 
-        std::memcpy(arr_res, tensor_res.data_ptr<uint16_t>(), tensor_res.numel * sizeof(uint16_t));
+        std::memcpy(arr_res, tensor_res.data_ptr<uint16_t>(), tensor_res.numel() * sizeof(uint16_t));
 
 
         if constexpr (std::is_same_v<T, std::complex<double>>)
