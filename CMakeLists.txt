@@ -185,9 +185,9 @@ endif()
 option(POSEIDON_BUILD_EXAMPLES "Build examples for POSEIDON" ON)
 message(STATUS "POSEIDON_BUILD_EXAMPLES: ${POSEIDON_BUILD_EXAMPLES}")
 if(POSEIDON_BUILD_EXAMPLES)
-    add_subdirectory(examples/bfv)
+    # add_subdirectory(examples/bfv)
     # add_subdirectory(examples/bgv)
-    # add_subdirectory(examples/ckks)
+    add_subdirectory(examples/ckks)
 endif()
 
 # Create the config file
@@ -226,10 +226,13 @@ endif()
 
 # set the real path
 if(DEFINED ENV{Torch_DIR})
-    set(torch_path "$ENV{Torch_DIR}")
+    message(STATUS "=========== env Torch_DIR defined ===========")
+    set(torch_path "/torch/venv3/pytorch/lib/python3.10/site-packages/torch/")
 else()
-    set(torch_path "path/to/your/pytorch/torch")
+    message(STATUS "========== env Torch_DIR undefined ===========")
+    set(torch_path "/torch/venv3/pytorch/lib/python3.10/site-packages/torch/")
 endif()
+message(STATUS "torch_path: ${torch_path}")
 if(NOT EXISTS ${torch_path})
   message(FATAL_ERROR "please set correct torch_path")
 endif()
@@ -238,22 +241,26 @@ link_directories(${torch_path}/lib)
 
 # set the real path
 if(DEFINED ENV{TORCH_MLU_HOME})
-    set(torch_mlu_path "$ENV{TORCH_MLU_HOME}")
+    message(STATUS "=========== env TORCH_MLU_HOME defined =======")
+    set(torch_mlu_path "/torch/venv3/pytorch/lib/python3.10/site-packages/torch_mlu/")
 else()
-    set(torch_mlu_path "path/to/your/torch_mlu")
+    message(STATUS "========= env TORCH_MLU_HOME undefined ========")
+    set(torch_mlu_path "/torch/venv3/pytorch/lib/python3.10/site-packages/torch_mlu/")
 endif()
+message(STATUS "torch_mlu_path: ${torch_mlu_path}")
 if(NOT EXISTS ${torch_mlu_path})
-  message(FATAL_ERROR "please set correct torch_mlu_path")
+    message(FATAL_ERROR "please set correct torch_mlu_path")
 endif()
 
 # set the real path
 if(DEFINED ENV{NEUWARE_HOME})
-    set(neuware_home "$ENV{NEUWARE_HOME}")
+    set(neuware_home "/usr/local/neuware/")
 else()
-    set(neuware_home "path/to/your/neuware_home")
+    set(neuware_home "/usr/local/neuware/")
 endif()
+message(STATUS "neuware_home: ${neuware_home}")
 if(NOT EXISTS ${neuware_home})
-  message(FATAL_ERROR "please set correct neuware_home")
+    message(FATAL_ERROR "please set correct neuware_home")
 endif()
 
 include_directories(${torch_mlu_path}/csrc)
@@ -268,46 +275,16 @@ set(CNRT_LIB_PATH "/usr/local/neuware/lib64")
 set(CNRT_EDGE_LIB_DIR "/usr/local/neuware/edge/lib64")
 
 target_link_directories(poseidon_shared PUBLIC
-    ${PYTORCH_LIB_PATH}
-    ${PYTORCH_MLU_PATH}
-    ${CNRT_LIB_PATH}
-    ${CNRT_EDGE_LIB_DIR}
-)
-# 定义所有外部依赖（短名称列表）
-set(POSEIDON_EXTERNAL_DEPS
-    torch_mlu 
-    cnrt 
-    torch 
-    torch_cpu 
-    c10 
-    pthread 
-    dl 
-    util
+        ${PYTORCH_LIB_PATH}
+        ${PYTORCH_MLU_PATH}
+        ${CNRT_LIB_PATH}
+        ${CNRT_EDGE_LIB_DIR}
 )
 
-target_link_directories(poseidon_shared PUBLIC
-    ${PYTORCH_LIB_PATH}
-    ${PYTORCH_MLU_PATH}
-    ${CNRT_LIB_PATH}
-    ${CNRT_EDGE_LIB_DIR}
-)
-
-target_link_libraries(poseidon_shared PRIVATE 
-    # 强制链接器解决循环依赖
-    "-Wl,--start-group" 
-    ${POSEIDON_EXTERNAL_DEPS}
-    "-Wl,--end-group" 
-)
-
-
-target_link_libraries(poseidon_shared INTERFACE 
-    ${POSEIDON_EXTERNAL_DEPS}
-)
-
-# target_link_libraries(poseidon_shared PUBLIC "-Wl,--no-as-needed" torch_mlu "-Wl,--as-needed")
-# target_link_libraries(poseidon_shared PUBLIC pthread)
-# target_link_libraries(poseidon_shared PUBLIC cnrt)
-# target_link_libraries(poseidon_shared PUBLIC torch torch_cpu c10 dl util)
+target_link_libraries(poseidon_shared PUBLIC "-Wl,--no-as-needed" torch_mlu "-Wl,--as-needed")
+target_link_libraries(poseidon_shared PUBLIC pthread)
+target_link_libraries(poseidon_shared PUBLIC cnrt)
+target_link_libraries(poseidon_shared PUBLIC torch torch_cpu c10 dl util)
 
 
 if(POSEIDON_BUILD_DEPS)
