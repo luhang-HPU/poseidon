@@ -19,7 +19,7 @@ class CAMBRICON_API
 public:
     CAMBRICON_API()
     {
-        device_ = at::Device("mlu:0");
+
     }
 
     static std::shared_ptr<CAMBRICON_API> get_instance()
