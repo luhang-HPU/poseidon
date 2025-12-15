@@ -14,7 +14,7 @@
 class CAMBRICON_API
 {
 public:
-    CAMBRICON_API() device_("mlu:0")
+    CAMBRICON_API() : device_("mlu:0")
     {
     }
 
@@ -94,23 +94,23 @@ public:
         }
 
 
-        {
-            // 验证数据
-            std::cout << "=================== add expected data ==================" << std::endl;
-            for (auto i = 0; i < size; ++i)
-            {
-                std::cout << op1[i] + op2[i] << " ";
-            }
-            std::cout << std::endl;
-            std::cout << "=================== add int[] data ==================" << std::endl;
-            for (auto i = 0; i < size; ++i)
-            {
-                std::cout << res[i] << " ";
-            }
-            std::cout << std::endl;
-            std::cout << "=================== add torch::Tensor data ==================" << std::endl;
-            std::cout << tensor_res << std::endl;
-        }
+//        {
+//            // 验证数据
+//            std::cout << "=================== add expected data ==================" << std::endl;
+//            for (auto i = 0; i < size; ++i)
+//            {
+//                std::cout << op1[i] + op2[i] << " ";
+//            }
+//            std::cout << std::endl;
+//            std::cout << "=================== add int[] data ==================" << std::endl;
+//            for (auto i = 0; i < size; ++i)
+//            {
+//                std::cout << res[i] << " ";
+//            }
+//            std::cout << std::endl;
+//            std::cout << "=================== add torch::Tensor data ==================" << std::endl;
+//            std::cout << tensor_res << std::endl;
+//        }
     }
 
     template <typename T>
@@ -179,23 +179,23 @@ public:
             }
         }
 
-        {
-            // 验证数据
-            std::cout << "=================== sub expected data ==================" << std::endl;
-            for (auto i = 0; i < size; ++i)
-            {
-                std::cout << op1[i] - op2[i] << " ";
-            }
-            std::cout << std::endl;
-            std::cout << "=================== sub int[] data ==================" << std::endl;
-            for (auto i = 0; i < size; ++i)
-            {
-                std::cout << res[i] << " ";
-            }
-            std::cout << std::endl;
-            std::cout << "=================== sub torch::Tensor data ==================" << std::endl;
-            std::cout << tensor_res << std::endl;
-        }
+//        {
+//            // 验证数据
+//            std::cout << "=================== sub expected data ==================" << std::endl;
+//            for (auto i = 0; i < size; ++i)
+//            {
+//                std::cout << op1[i] - op2[i] << " ";
+//            }
+//            std::cout << std::endl;
+//            std::cout << "=================== sub int[] data ==================" << std::endl;
+//            for (auto i = 0; i < size; ++i)
+//            {
+//                std::cout << res[i] << " ";
+//            }
+//            std::cout << std::endl;
+//            std::cout << "=================== sub torch::Tensor data ==================" << std::endl;
+//            std::cout << tensor_res << std::endl;
+//        }
     }
 
     template <typename T>
@@ -267,23 +267,23 @@ public:
         }
 
 
-        {
-            // 验证数据
-            std::cout << "=================== mul expected data ==================" << std::endl;
-            for (auto i = 0; i < size; ++i)
-            {
-                std::cout << op1[i] * op2[i] << " ";
-            }
-            std::cout << std::endl;
-            std::cout << "=================== mul int[] data ==================" << std::endl;
-            for (auto i = 0; i < size; ++i)
-            {
-                std::cout << res[i] << " ";
-            }
-            std::cout << std::endl;
-            std::cout << "=================== mul torch::Tensor data ==================" << std::endl;
-            std::cout << tensor_res << std::endl;
-        }
+//        {
+//            // 验证数据
+//            std::cout << "=================== mul expected data ==================" << std::endl;
+//            for (auto i = 0; i < size; ++i)
+//            {
+//                std::cout << op1[i] * op2[i] << " ";
+//            }
+//            std::cout << std::endl;
+//            std::cout << "=================== mul int[] data ==================" << std::endl;
+//            for (auto i = 0; i < size; ++i)
+//            {
+//                std::cout << res[i] << " ";
+//            }
+//            std::cout << std::endl;
+//            std::cout << "=================== mul torch::Tensor data ==================" << std::endl;
+//            std::cout << tensor_res << std::endl;
+//        }
     }
 
 private:
