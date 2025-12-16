@@ -1,3 +1,5 @@
+#pragma once
+
 #include "/usr/local/houmo/include/tcim/tcim_runtime.h"
 // 文件在目录/usr/local/houmo/include/tcim下
 
