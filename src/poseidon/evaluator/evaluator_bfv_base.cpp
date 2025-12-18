@@ -997,4 +997,16 @@ void EvaluatorBfvBase::multiply_by_diag_matrix_bsgs(const Ciphertext &ciph,
     }
 }
 
+void EvaluatorBfvBase::negate_inplace(Ciphertext &ciph) const
+{
+    // Extract encryption parameters.
+    auto &context_data = *context_.crt_context()->get_context_data(ciph.parms_id());
+    auto &parms = context_data.parms();
+    auto &coeff_modulus = parms.coeff_modulus();
+    size_t encrypted_size = ciph.size();
+
+    // Negate each poly in the array
+    negate_poly_coeffmod(ciph, encrypted_size, coeff_modulus, ciph);
+}
+
 }  // namespace poseidon

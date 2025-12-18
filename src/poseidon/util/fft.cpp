@@ -11,7 +11,7 @@ FFT::FFT(size_t coeff_count, MemoryPoolHandle pool)
     int logn = safe_cast<int>(log2(coeff_count));
     matrix_reps_index_map_ = allocate<size_t>(coeff_count, pool_);
 
-    uint64_t gen = 3;
+    uint64_t gen = 5;
     uint64_t pos = 1;
     for (size_t i = 0; i < slot; i++)
     {

@@ -253,6 +253,11 @@ void NTTTables::initialize(int coeff_count_power, const Modulus &modulus)
     {
         POSEIDON_THROW(invalid_argument_error, "invalid modulus");
     }
+    // std::cout << "root_: " << root_ << std::endl;
+    if (modulus.value() == 65537){
+        root_ = 5;
+        std::cout << "root_ 修改: " << root_ << std::endl;
+    }
     if (!try_invert_uint_mod(root_, modulus_, inv_root_))
     {
         POSEIDON_THROW(invalid_argument_error, "invalid modulus");

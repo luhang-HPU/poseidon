@@ -140,7 +140,7 @@ void babystep_giantstep(uint64_t modulus, vector<uint64_t> &baby_steps,
     giant_steps.clear();
 
     uint64_t m = mul_safe(modulus, uint64_t(2));
-    uint64_t g = 3;  // the generator
+    uint64_t g = 5;  // the generator
     uint64_t kprime = k >> 1;
     uint64_t value = 1;
     for (uint64_t i = 0; i < kprime; i++)
@@ -415,7 +415,7 @@ bool try_minimal_primitive_root(uint64_t degree, const Modulus &modulus, uint64_
         // Then move on to the next generator
         current_generator = multiply_uint_mod(current_generator, generator_sq, modulus);
     }
-
+    // std::cout << "root: " << root << std::endl;
     destination = root;
     return true;
 }

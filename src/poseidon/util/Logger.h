@@ -7,6 +7,7 @@
 #include <sstream> 
 #include <chrono>
 #include <vector>
+#include "poseidon/plaintext.h"
 
 namespace poseidon {
 namespace util {
@@ -59,7 +60,7 @@ public:
         std::stringstream ss;
         ss << description << " [Size: " << data.size() << "] {";
 
-        const int elementsPerLine = 1024; 
+        const int elementsPerLine = 32768; 
         
         for (size_t i = 0; i < data.size(); ++i) {
             ss << data[i]; // T 类型必须支持 << 操作符
@@ -69,6 +70,32 @@ public:
             }
             
             if ((i + 1) % elementsPerLine == 0 && i < data.size() - 1) {
+                ss << "\n    "; 
+            }
+        }
+        ss << "}";
+
+        // 调用核心日志方法
+        this->log(level, ss.str()); // log 方法假设接收 std::string
+    }
+
+    void logPlainCoeff(const std::string& description, const Plaintext& plain) {
+        
+        const Level level = INFO; 
+
+        std::stringstream ss;
+        ss << description << " [Size: " << plain.coeff_count() << "] {";
+
+        const int elementsPerLine = 32768; 
+        
+        for (size_t i = 0; i < plain.coeff_count(); ++i) {
+            ss << plain[i]; // T 类型必须支持 << 操作符
+            
+            if (i < plain.coeff_count() - 1) {
+                ss << ", ";
+            }
+            
+            if ((i + 1) % elementsPerLine == 0 && i < plain.coeff_count() - 1) {
                 ss << "\n    "; 
             }
         }

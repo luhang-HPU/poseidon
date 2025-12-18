@@ -66,7 +66,8 @@ public:
     void multiply_plain_ntt(Ciphertext &ciph_ntt, const Plaintext &plain_ntt) const;
     void multiply_plain_normal(Ciphertext &ciph, const Plaintext &plain,
                                MemoryPoolHandle pool = MemoryManager::GetPool()) const;
-
+    void negate_inplace(Ciphertext &ciph) const;
+    
 private:
     std::shared_ptr<KSwitchBase> kswitch_{nullptr};
 };
