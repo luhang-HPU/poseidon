@@ -1,4 +1,5 @@
 #!/bin/bash
+export LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
 set -e
 PACKAGE_NAME="torch"
 PACKAGE_PATH=$(pip show "$PACKAGE_NAME" 2>/dev/null | grep -i "^Location:" | awk '{print $2}')
