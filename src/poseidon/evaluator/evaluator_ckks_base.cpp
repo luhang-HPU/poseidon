@@ -1341,7 +1341,6 @@ void EvaluatorCkksBase::ckks_multiply(Ciphertext &ciph1, const Ciphertext &ciph2
     // Set up iterators for input ciphs
     PolyIter ciph1_iter = iter(ciph1);
     ConstPolyIter ciph2_iter = iter(ciph2);
-    auto start = chrono::high_resolution_clock::now();
 
     if (dest_size == 3)
     {
