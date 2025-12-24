@@ -185,16 +185,8 @@ endif()
 option(POSEIDON_BUILD_EXAMPLES "Build examples for POSEIDON" ON)
 message(STATUS "POSEIDON_BUILD_EXAMPLES: ${POSEIDON_BUILD_EXAMPLES}")
 if(POSEIDON_BUILD_EXAMPLES)
-<<<<<<< Updated upstream
     # add_subdirectory(examples/bfv)
     # add_subdirectory(examples/bgv)
-=======
-<<<<<<< Updated upstream
-    add_subdirectory(examples/bfv)
-    add_subdirectory(examples/bgv)
-=======
->>>>>>> Stashed changes
->>>>>>> Stashed changes
     add_subdirectory(examples/ckks)
 endif()
 
