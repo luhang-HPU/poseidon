@@ -1,6 +1,7 @@
 #include "evaluator_ckks_base.h"
 #include "poseidon/advance/homomorphic_dft.h"
 #include "poseidon/util/debug.h"
+#include "poseidon/encryptor.h"
 
 namespace poseidon
 {
@@ -1957,4 +1958,104 @@ void EvaluatorCkksBase::add_dynamic(const Ciphertext &ciph1, const Ciphertext &c
 
 void EvaluatorCkksBase::read(Ciphertext &ciph) const {}
 void EvaluatorCkksBase::read(Plaintext &plain) const {}
+
+void EvaluatorCkksBase::accumulate_top_n(const Ciphertext &ciph, Ciphertext &result, int n, const CKKSEncoder &encoder,
+                      const Encryptor &enc, const GaloisKeys &rot_keys) const
+{
+    if (n <= 0)
+    {
+        POSEIDON_THROW(invalid_argument_error, "n cannot be negative");
+    }
+
+    Ciphertext ciph_rotate_sum = ciph;
+
+    std::vector<std::complex<double>> zero = {{0.0, 0.0}};
+    Plaintext plain_zero;
+    Ciphertext ciph_sum;
+    encoder.encode(zero, ciph.parms_id(), ciph.scale(), plain_zero);
+    enc.encrypt(plain_zero, ciph_sum);
+
+    int cnt = 0;
+    int bottom_nth = 0;
+    const int const_n = n;
+    while (n)
+    {
+        Ciphertext ciph_tmp;
+        if (n & 1 && n != 1)
+        {
+            bottom_nth += 1 << cnt;
+            rotate(ciph_rotate_sum, ciph_tmp, const_n - bottom_nth, rot_keys);
+            add(ciph_sum, ciph_tmp, ciph_sum);
+        }
+        n = n >> 1;
+        if (n)
+        {
+            rotate(ciph_rotate_sum, ciph_tmp, 1 << cnt, rot_keys);
+            add(ciph_rotate_sum, ciph_tmp, ciph_rotate_sum);
+        }
+        ++cnt;
+    }
+    add(ciph_sum, ciph_rotate_sum, ciph_sum);
+    result = ciph_sum;
+}
+
+void EvaluatorCkksBase::sigmoid_approx(const Ciphertext &ciph, Ciphertext &result, const CKKSEncoder &encoder,
+                    const RelinKeys &relin_keys)
+{
+    vector<complex<double>> buffer(4, 0);
+    buffer[0] = 0.5;
+    buffer[1] = 0.197;
+    buffer[3] = -0.004;
+
+    Polynomial approxF(buffer, 0, 0, 4, Monomial);
+    approxF.lead() = true;
+    vector<Polynomial> poly_v{approxF};
+    vector<vector<int>> slots_index(1, vector<int>(context_.parameters_literal()->degree() >> 1, 0));
+    vector<int> idxF(context_.parameters_literal()->degree() >> 1);
+    for (int i = 0; i < context_.parameters_literal()->degree() >> 1; i++)
+    {
+        idxF[i] = i;  // Index with all even slots
+    }
+    slots_index[0] = idxF;  // Assigns index of all even slots to poly[0] = f(x)
+
+    PolynomialVector polys(poly_v, slots_index);
+    evaluate_poly_vector(ciph, result, polys, ciph.scale(), relin_keys, encoder);
+}
+
+void EvaluatorCkksBase::conv(const Ciphertext &ciph_f, const Ciphertext &ciph_g_rev, Ciphertext &result,
+          const uint size, const CKKSEncoder &encoder, const Encryptor &enc,
+          const GaloisKeys &galois_keys, const RelinKeys &relin_keys) const
+{
+    Ciphertext ciph_res;
+    Ciphertext ciph_f_rotate = ciph_f;
+    for (auto i = 0; i < size; ++i)
+    {
+        rotate(ciph_f_rotate, ciph_f_rotate, 1, galois_keys);
+        Ciphertext ciph_tmp;
+        multiply_relin(ciph_f_rotate, ciph_g_rev, ciph_tmp, relin_keys);
+        accumulate_top_n(ciph_tmp, ciph_tmp, size, encoder, enc, galois_keys);
+
+        rotate(ciph_tmp, ciph_tmp, i, galois_keys);
+
+        std::vector<std::complex<double>> zero = {{0.0, 0.0}};
+        zero[i] = {1.0, 0.0};
+        Plaintext plain_zero;
+        encoder.encode(zero, ciph_tmp.parms_id(), ciph_tmp.scale(), plain_zero);
+
+        multiply_plain(ciph_tmp, plain_zero, ciph_tmp);
+        relinearize(ciph_tmp, ciph_tmp, relin_keys);
+
+        if (!ciph_res.is_valid())
+        {
+            ciph_res = ciph_tmp;
+        }
+        else
+        {
+            add(ciph_res, ciph_tmp, ciph_res);
+        }
+    }
+
+    result = ciph_res;
+}
+
 }  // namespace poseidon
