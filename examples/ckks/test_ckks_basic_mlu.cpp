@@ -61,7 +61,6 @@ void matrix()
     Decryptor dec(context, kgen.secret_key());
 
     Plaintext plaintext, plaintext2;
-    double scale = std::pow(2.0, 40);
     ckks_encoder.encode(message1, scale, plaintext);
     vector<complex<double>> message2;
 
@@ -71,13 +70,12 @@ void matrix()
     timestacs.start();
     ckks_eva->multiply_by_diag_matrix_bsgs(ct, matrix_plain, cipher_res, rot_keys);
     timestacs.end();
-    std::cout << "Average Conv Time: " << timestacs.microseconds() / 1.0 << " us" << std::endl;
-    timestacs.print_time("matrix TIME : ");
+    std::cout << "Matrix Time: " << timestacs.microseconds() / 1.0 << " us" << std::endl;
 }
 
 void sigmoid()
 {
-    ParametersLiteralDefault ckks_param_literal(CKKS, 4096, poseidon::sec_level_type::tc128);
+    ParametersLiteralDefault ckks_param_literal(CKKS, 8192, poseidon::sec_level_type::tc128);
     PoseidonFactory::get_instance()->set_device_type(DEVICE_SOFTWARE);
     auto context = PoseidonFactory::get_instance()->create_poseidon_context(ckks_param_literal);
     auto ckks_eva = PoseidonFactory::get_instance()->create_ckks_evaluator(context);
@@ -117,8 +115,58 @@ void sigmoid()
     timestacs.start();
     ckks_eva->sigmoid_approx(ct1, ct_res, encoder, relin_keys);
     timestacs.end();
-    std::cout << "Average Encode Time: " << timestacs.microseconds() / 1.0 << " us" << std::endl;
+    std::cout << "Sigmoid Time: " << timestacs.microseconds() / 1.0 << " us" << std::endl;
 
+    decryptor.decrypt(ct_res, plt_res);
+    encoder.decode(plt_res, msg_res);
+}
+
+void conv()
+{
+    ParametersLiteralDefault ckks_param_literal(CKKS, 8192, poseidon::sec_level_type::tc128);
+    PoseidonFactory::get_instance()->set_device_type(DEVICE_SOFTWARE);
+    auto context = PoseidonFactory::get_instance()->create_poseidon_context(ckks_param_literal);
+    auto ckks_eva = PoseidonFactory::get_instance()->create_ckks_evaluator(context);
+
+    double scale = std::pow(2.0, 19);
+    double const_num = 5.0;
+
+    PublicKey public_key;
+    RelinKeys relin_keys;
+    GaloisKeys galois_keys;
+    KeyGenerator keygen(context);
+    keygen.create_public_key(public_key);
+    keygen.create_relin_keys(relin_keys);
+    keygen.create_galois_keys(galois_keys);
+
+    CKKSEncoder encoder(context);
+    Encryptor encryptor(context, public_key);
+    Decryptor decryptor(context, keygen.secret_key());
+
+    auto slot_num = ckks_param_literal.slot();
+    vector<complex<double>> msg1, msg2, msg_expect, msg_res;
+
+    sample_random_complex_vector(msg1, slot_num);
+    sample_random_complex_vector(msg2, slot_num);
+
+    Timestacs timestacs;
+    Plaintext plt1, plt2, plt_res;
+    Ciphertext ct1, ct2, ct_res;
+
+    // encode
+    encoder.encode(msg1, scale, plt1);
+    encoder.encode(msg2, scale, plt2);
+
+    // encrypt
+    encryptor.encrypt(plt1, ct1);
+    encryptor.encrypt(plt2, ct2);
+
+    // sigmoid_approx
+    timestacs.start();
+    ckks_eva->conv(ct1, ct2, ct_res, 1, encoder, encryptor, galois_keys, relin_keys);
+    timestacs.end();
+    std::cout << "Conv Time: " << timestacs.microseconds() / 1.0 << " us" << std::endl;
+    timestacs.end();
     decryptor.decrypt(ct_res, plt_res);
     encoder.decode(plt_res, msg_res);
 }
@@ -163,7 +211,7 @@ int main()
     uint64_t decrypt_time = 0;
     uint64_t multiply_time = 0;
     uint64_t rotate_time = 0;
-    uint64_t conv_time = 0;
+    uint64_t kswitch_time = 0;
 
     timestacs_total.start();
     for (auto i = 0; i < 100; i++)
@@ -198,11 +246,11 @@ int main()
         timestacs.end();
         rotate_time += timestacs.microseconds();
 
-        // conv
+        // kswitch
         timestacs.start();
-        ckks_eva->conv(ct1, ct2, ct_res, 1, encoder, encryptor, galois_keys, relin_keys);
+        ckks_eva->rotate(ct_res, ct_res, 1, galois_keys);
         timestacs.end();
-        conv_time += timestacs.microseconds();
+        kswitch_time += timestacs.microseconds();
 
         // decrypt
         timestacs.start();
@@ -216,19 +264,27 @@ int main()
         timestacs.end();
         decode_time += timestacs.microseconds();
     }
+    timestacs_total.end();
 
     matrix();
-    sigmoid();
-
-    timestacs_total.end();
     total_time = timestacs_total.microseconds();
-    std::cout << "Average Encode Time: " << encode_time / 100.0 << " us" << std::endl;
-    std::cout << "Average Encrypt Time: " << encrypt_time / 100.0 << " us" << std::endl;
-    std::cout << "Average Multiply Time: " << multiply_time / 100.0 << " us" << std::endl;
-    std::cout << "Average Rotate Time: " << rotate_time / 100.0 << " us" << std::endl;
-    std::cout << "Average Conv Time: " << conv_time / 100.0 << " us" << std::endl;
-    std::cout << "Average Decrypt Time: " << decrypt_time / 100.0 << " us" << std::endl;
-    std::cout << "Average Decode Time: " << decode_time / 100.0 << " us" << std::endl;
+    std::cout << "Multiply Time: " << multiply_time / 100.0 << " us" << std::endl;
+    std::cout << "Rotate Time: " << rotate_time / 100.0 << " us" << std::endl;
+    std::cout << "KSwitch Time: " << kswitch_time / 100.0 << " us" << std::endl;
+    std::cout << "degree: " << 4096 << std::endl;
+    std::cout << "depth: " << 3 << std::endl
+              << std::endl;
+
+    sigmoid();
+    conv();
+    std::cout << "degree: " << 8192 << std::endl;
+    std::cout << "depth: " << 5 << std::endl
+              << std::endl;
+
+    std::cout << "Encode Time: " << encode_time / 100.0 << " us" << std::endl;
+    std::cout << "Encrypt Time: " << encrypt_time / 100.0 << " us" << std::endl;    
+    std::cout << "Decrypt Time: " << decrypt_time / 100.0 << " us" << std::endl;
+    std::cout << "Decode Time: " << decode_time / 100.0 << " us" << std::endl;
     std::cout << "Total Average Time: " << total_time / 100.0 << " us" << std::endl;
     return 0;
 }
