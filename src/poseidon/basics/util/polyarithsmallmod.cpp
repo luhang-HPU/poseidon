@@ -178,15 +178,15 @@ void sub_poly_coeffmod(ConstCoeffIter operand1, ConstCoeffIter operand2, std::si
     }
 #endif
 
+    const uint64_t modulus_value = modulus.value();
 #if defined(POSEIDON_HOUMO2)
     HOUMO_API houmo_api;
     houmo_api.houmo_add(operand1, operand2, result, coeff_count);
-    // TODO mod
+    result = result % modulus_value;
 #elif defined(CAMBRICON)
     CAMBRICON_API::get_instance()->sub(operand1.ptr(), operand2.ptr(), result.ptr(), coeff_count);
-    // TODO mod
+    *result = *result % modulus_value;
 #else
-    const uint64_t modulus_value = modulus.value();
 #ifdef POSEIDON_USE_INTEL_HEXL
     intel::hexl::EltwiseSubMod(result, operand1, operand2, coeff_count, modulus_value);
 #else
@@ -241,7 +241,7 @@ void add_poly_scalar_coeffmod(ConstCoeffIter poly, size_t coeff_count, uint64_t 
 #elif defined(CAMBRICON)
     std::vector<uint64_t> temp2(coeff_count, scalar);
     CAMBRICON_API::get_instance()->add(poly.ptr(), temp2.data(), result.ptr(), coeff_count);
-    // TODO mod
+    *result = *result % modulus.value();
 #else
 #ifdef POSEIDON_USE_INTEL_HEXL
     intel::hexl::EltwiseAddMod(result, poly, scalar, coeff_count, modulus.value());
@@ -267,7 +267,7 @@ void sub_poly_scalar_coeffmod(ConstCoeffIter poly, size_t coeff_count, uint64_t 
 #elif defined(CAMBRICON)
     std::vector<uint64_t> temp2(coeff_count, scalar);
     CAMBRICON_API::get_instance()->sub(poly.ptr(), temp2.data(), result.ptr(), coeff_count);
-    // TODO mod
+    *result = *result % modulus.value();
 #else
 #ifdef POSEIDON_DEBUG
     if (!poly && coeff_count > 0)
@@ -328,7 +328,7 @@ void multiply_poly_scalar_coeffmod(ConstCoeffIter poly, size_t coeff_count,
 #elif defined(CAMBRICON)
     std::vector<uint64_t> temp2(coeff_count, scalar.quotient);
     CAMBRICON_API::get_instance()->mul(poly.ptr(), temp2.data(), result.ptr(), coeff_count);
-    // TODO mod
+    *result = *result % modulus.value();
 #else
 
 #ifdef POSEIDON_USE_INTEL_HEXL

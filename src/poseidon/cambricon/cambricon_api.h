@@ -237,8 +237,6 @@ public:
         auto op2_mlu = tensor_op2.to(device_);
 
         auto res_mlu = op1_mlu * op2_mlu;
-        // dot product
-        // auto res_mlu = torch::matmul(op1_mlu, op2_mlu);
         torch::Tensor tensor_res = res_mlu.cpu();
 
         std::memcpy(arr_res, tensor_res.data_ptr<int16_t>(), tensor_res.numel() * sizeof(int16_t));
