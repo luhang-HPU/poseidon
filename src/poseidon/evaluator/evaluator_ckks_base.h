@@ -4,6 +4,7 @@
 #include "poseidon/advance/homomorphic_mod.h"
 #include "poseidon/advance/polynomial_evaluation.h"
 #include "poseidon/key/keyswitch.h"
+#include "poseidon/encryptor.h"
 
 namespace poseidon
 {
