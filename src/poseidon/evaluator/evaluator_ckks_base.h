@@ -148,6 +148,10 @@ public:
     virtual void add_dynamic(const Ciphertext &ciph1, const Ciphertext &ciph2, Ciphertext &result,
                              const CKKSEncoder &encoder) const;
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
     void sigmoid_approx(const Ciphertext &ciph, Ciphertext &result, const CKKSEncoder &encoder,
                         const RelinKeys &relin_keys);
 
@@ -158,8 +162,11 @@ public:
     void conv(const Ciphertext &ciph_f, const Ciphertext &ciph_g_rev, Ciphertext &result,
               const uint size, const CKKSEncoder &encoder, const Encryptor &enc,
               const GaloisKeys &galois_keys, const RelinKeys &relin_keys) const;
+<<<<<<< Updated upstream
 
 
+=======
+>>>>>>> Stashed changes
 private:
     inline void set_min_scale(double scale) { min_scale_ = scale; }
 
