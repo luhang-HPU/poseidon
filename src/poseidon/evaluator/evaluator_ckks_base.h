@@ -4,6 +4,7 @@
 #include "poseidon/advance/homomorphic_mod.h"
 #include "poseidon/advance/polynomial_evaluation.h"
 #include "poseidon/key/keyswitch.h"
+#include "poseidon/encryptor.h"
 
 namespace poseidon
 {
@@ -147,6 +148,17 @@ public:
                              const CKKSEncoder &encoder) const;
     virtual void add_dynamic(const Ciphertext &ciph1, const Ciphertext &ciph2, Ciphertext &result,
                              const CKKSEncoder &encoder) const;
+
+    void sigmoid_approx(const Ciphertext &ciph, Ciphertext &result, const CKKSEncoder &encoder,
+                        const RelinKeys &relin_keys);
+
+    void accumulate_top_n(const Ciphertext &ciph, Ciphertext &result, int n, const CKKSEncoder &encoder,
+                          const Encryptor &enc, const GaloisKeys &rot_keys) const;
+
+    // result = conv(ciph_f, ciph_g_rev)
+    void conv(const Ciphertext &ciph_f, const Ciphertext &ciph_g_rev, Ciphertext &result,
+              const uint size, const CKKSEncoder &encoder, const Encryptor &enc,
+              const GaloisKeys &galois_keys, const RelinKeys &relin_keys) const;
 
 private:
     inline void set_min_scale(double scale) { min_scale_ = scale; }
