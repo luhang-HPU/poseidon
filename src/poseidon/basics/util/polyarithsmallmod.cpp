@@ -124,10 +124,10 @@ void add_poly_coeffmod(ConstCoeffIter operand1, ConstCoeffIter operand2, std::si
 #if defined(POSEIDON_HOUMO1)
     HOUMO_API houmo_api;
     houmo_api.houmo_add(operand1, operand2, result, coeff_count);
-    // TODO mod
+    *result = *result % modulus.value();
 #elif defined(CAMBRICON)
     CAMBRICON_API::get_instance()->add(operand1.ptr(), operand2.ptr(), result.ptr(), coeff_count);
-    // TODO mod
+    *result = *result % modulus.value();
 #else
 #ifdef POSEIDON_USE_INTEL_HEXL
     intel::hexl::EltwiseAddMod(&result[0], &operand1[0], &operand2[0], coeff_count, modulus_value);
