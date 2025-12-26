@@ -92,12 +92,12 @@ void compute_similarity(std::map<std::string, Plaintext> &database, std::shared_
 
 void face_id()
 {
-    ParametersLiteralDefault ckks_param_literal(CKKS, 4096, poseidon::sec_level_type::none);
+    ParametersLiteralDefault ckks_param_literal(CKKS, 4096, poseidon::sec_level_type::tc128);
     PoseidonFactory::get_instance()->set_device_type(DEVICE_SOFTWARE);
     auto context = PoseidonFactory::get_instance()->create_poseidon_context(ckks_param_literal);
     std::shared_ptr<EvaluatorCkksBase> ckks_eva = PoseidonFactory::get_instance()->create_ckks_evaluator(context);
 
-    double scale = std::pow(2.0, 32);
+    double scale = std::pow(2.0, 19);
 
     PublicKey public_key;
     RelinKeys relin_keys;
@@ -112,7 +112,7 @@ void face_id()
     Decryptor decryptor(context, keygen.secret_key());
 
     std::map<std::string, Plaintext> database;
-    test_read_database(encoder, database);
+    test_read_database(encoder, database, scale);
 
     Ciphertext ciph_face;
     encryptor.encrypt(database.begin()->second, ciph_face);
