@@ -11,7 +11,6 @@ using namespace poseidon::util;
 void matrix()
 {
     ParametersLiteralDefault ckks_param_literal(CKKS, 4096, poseidon::sec_level_type::tc128);
-    PoseidonFactory::get_instance()->set_device_type(DEVICE_SOFTWARE);
     auto context = PoseidonFactory::get_instance()->create_poseidon_context(ckks_param_literal);
     auto ckks_eva = PoseidonFactory::get_instance()->create_ckks_evaluator(context);
 
@@ -76,7 +75,6 @@ void matrix()
 void sigmoid()
 {
     ParametersLiteralDefault ckks_param_literal(CKKS, 8192, poseidon::sec_level_type::tc128);
-    PoseidonFactory::get_instance()->set_device_type(DEVICE_SOFTWARE);
     auto context = PoseidonFactory::get_instance()->create_poseidon_context(ckks_param_literal);
     auto ckks_eva = PoseidonFactory::get_instance()->create_ckks_evaluator(context);
 
@@ -124,7 +122,6 @@ void sigmoid()
 void conv()
 {
     ParametersLiteralDefault ckks_param_literal(CKKS, 8192, poseidon::sec_level_type::tc128);
-    PoseidonFactory::get_instance()->set_device_type(DEVICE_SOFTWARE);
     auto context = PoseidonFactory::get_instance()->create_poseidon_context(ckks_param_literal);
     auto ckks_eva = PoseidonFactory::get_instance()->create_ckks_evaluator(context);
 
@@ -174,8 +171,8 @@ void conv()
 int main()
 {
     std::cout << BANNER << std::endl;
-    std::cout << "POSEIDON SOFTWARE VERSION:" << POSEIDON_VERSION << std::endl;
-    std::cout << "" << std::endl;
+    std::cout << "software version" << std::endl;
+    std::cout << "exec on CPU" << std::endl;
 
     ParametersLiteralDefault ckks_param_literal(CKKS, 4096, poseidon::sec_level_type::tc128);
     PoseidonFactory::get_instance()->set_device_type(DEVICE_SOFTWARE);
