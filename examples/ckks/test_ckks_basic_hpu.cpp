@@ -107,7 +107,6 @@ int main()
         decode_time += timestacs.microseconds();
     }
 
-
     std::cout << "================================================" << std::endl;
     std::cout << "All tests is based on the following parameters" << std::endl;
     std::cout << "polynomial degree: " << ckks_param_literal.degree() << std::endl;
@@ -125,3 +124,4 @@ int main()
     std::cout << "Relinearize Time: " << relinearize_time / 100.0 << " us" << std::endl;
 
     return 0;
+}
