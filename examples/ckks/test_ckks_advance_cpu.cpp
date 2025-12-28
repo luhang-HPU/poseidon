@@ -15,6 +15,7 @@ int main()
     std::cout << BANNER << std::endl;
     std::cout << "CPU version" << std::endl;
 
+    PoseidonFactory::get_instance()->set_device_type(DEVICE_SOFTWARE);
     ParametersLiteralDefault ckks_param_literal(CKKS, 8192, poseidon::sec_level_type::tc128);
     auto context = PoseidonFactory::get_instance()->create_poseidon_context(ckks_param_literal);
     auto ckks_eva = PoseidonFactory::get_instance()->create_ckks_evaluator(context);
