@@ -14,7 +14,6 @@ int main()
 {
     std::cout << BANNER << std::endl;
     std::cout << "CPU version" << std::endl;
-    std::cout << std::endl;
 
     ParametersLiteralDefault ckks_param_literal(CKKS, 8192, poseidon::sec_level_type::tc128);
     auto context = PoseidonFactory::get_instance()->create_poseidon_context(ckks_param_literal);
@@ -57,6 +56,7 @@ int main()
     std::cout << "polynomial degree: " << ckks_param_literal.degree() << std::endl;
     std::cout << "multiplication depth: " << ckks_param_literal.q().size() + 1 << std::endl;
     std::cout << "================================================" << std::endl;
+    std::cout << std::endl;
 
     timestacs.start();
     for (auto i = 0; i < times; ++i)
