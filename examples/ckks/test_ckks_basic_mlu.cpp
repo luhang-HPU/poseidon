@@ -180,7 +180,6 @@ int main()
     auto ckks_eva = PoseidonFactory::get_instance()->create_ckks_evaluator(context);
 
     double scale = std::pow(2.0, 19);
-    double const_num = 5.0;
 
     PublicKey public_key;
     RelinKeys relin_keys;
@@ -268,8 +267,8 @@ int main()
     std::cout << "Multiply Time: " << multiply_time / 100.0 << " us" << std::endl;
     std::cout << "Rotate Time: " << rotate_time / 100.0 << " us" << std::endl;
     std::cout << "KSwitch Time: " << kswitch_time / 100.0 << " us" << std::endl;
-    std::cout << "degree: " << 4096 << std::endl;
-    std::cout << "depth: " << 3 << std::endl
+    std::cout << "degree: " << ckks_param_literal.degree() << std::endl;
+    std::cout << "depth: " << ckks_param_literal.q().size() + 1 << std::endl
               << std::endl;
 
     sigmoid();
