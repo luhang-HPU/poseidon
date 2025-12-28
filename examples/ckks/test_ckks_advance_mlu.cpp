@@ -13,7 +13,7 @@ const int times = 100;
 int main()
 {
     std::cout << BANNER << std::endl;
-    std::cout << " domestic AI chip version" << std::endl;
+    std::cout << "domestic AI chip version" << std::endl;
 
     PoseidonFactory::get_instance()->set_device_type(DEVICE_SOFTWARE);
     ParametersLiteralDefault ckks_param_literal(CKKS, 8192, poseidon::sec_level_type::tc128);
