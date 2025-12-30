@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.12)
 
+add_executable(test_ckks_basic test_ckks_basic.cpp)
+target_link_libraries(test_ckks_basic poseidon_shared)
+
 add_executable(test_ckks_basic_cpu test_ckks_basic_cpu.cpp)
 target_link_libraries(test_ckks_basic_cpu poseidon_shared)
 
