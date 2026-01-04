@@ -70,5 +70,7 @@ public:
     {
         return KSwitchKeys::data(get_index(galois_elt));
     }
+
+    std::streamoff load(const PoseidonContext &context, std::istream &stream) override;
 };
 }  // namespace poseidon
