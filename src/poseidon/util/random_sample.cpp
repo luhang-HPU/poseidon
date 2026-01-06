@@ -1,4 +1,6 @@
 #include "random_sample.h"
+#include <chrono>
+
 namespace poseidon
 {
 int sample_hamming_weight_vector(int *sample, int length, int hamming_weight)
@@ -63,7 +65,7 @@ int sample_triangle(int *uniform_res, int num_samples)
 
 void sample_random_complex_vector(vector<complex<double>> &vec, int length)
 {
-    srand(time(NULL));
+    srand(std::chrono::system_clock::now().time_since_epoch().count());
     vec.resize(length);
     for (int i = 0; i < length; i++)
     {

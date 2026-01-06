@@ -218,7 +218,7 @@ public:
     Poseidon, if the loaded data is invalid, or if decompression failed
     @throws std::runtime_error if I/O operations failed
     */
-    inline std::streamoff load(const PoseidonContext &context, std::istream &stream)
+    virtual std::streamoff load(const PoseidonContext &context, std::istream &stream)
     {
         KSwitchKeys new_keys;
         new_keys.pool_ = pool_;
@@ -287,7 +287,7 @@ public:
     Poseidon, if the loaded data is invalid, or if decompression failed
     @throws std::runtime_error if I/O operations failed
     */
-    inline std::streamoff load(const PoseidonContext &context, const poseidon_byte *in,
+    virtual std::streamoff load(const PoseidonContext &context, const poseidon_byte *in,
                                std::size_t size)
     {
         KSwitchKeys new_keys;
