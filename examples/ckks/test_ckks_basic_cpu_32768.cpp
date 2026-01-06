@@ -15,12 +15,16 @@ int main()
     std::cout << BANNER << std::endl;
     std::cout << "CPU version" << std::endl;
 
-    ParametersLiteralDefault ckks_param_literal(CKKS, 32768, poseidon::sec_level_type::tc128);
+    ParametersLiteral ckks_param_literal{CKKS, 15, 15 - 1, 55, 5, 0, 0, {}, {}};
+    vector<uint32_t> log_q_tmp{55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55};
+    vector<uint32_t> log_p_tmp{56};
+    ckks_param_literal.set_log_modulus(log_q_tmp, log_p_tmp);
+
     PoseidonFactory::get_instance()->set_device_type(DEVICE_SOFTWARE);
     auto context = PoseidonFactory::get_instance()->create_poseidon_context(ckks_param_literal);
     auto ckks_eva = PoseidonFactory::get_instance()->create_ckks_evaluator(context);
 
-    double scale = std::pow(2.0, 40);
+    double scale = std::pow(2.0, 55);
 
     PublicKey public_key;
     RelinKeys relin_keys;
@@ -45,10 +49,9 @@ int main()
     uint64_t decode_time = 0;
     uint64_t encrypt_time = 0;
     uint64_t decrypt_time = 0;
-    uint64_t multiply_time = 0;
+    uint64_t multiply_relin_time = 0;
     uint64_t rotate_time = 0;
     uint64_t kswitch_time = 0;
-    uint64_t relinearize_time = 0;
 
     for (auto i = 0; i < 100; i++)
     {
@@ -71,16 +74,9 @@ int main()
 
         // MULTIPLY
         timestacs.start();
-        ckks_eva->multiply(ct1, ct2, ct_res);
+        ckks_eva->multiply_relin(ct1, ct2, ct_res, relin_keys);
         timestacs.end();
-        multiply_time += timestacs.microseconds();
-
-        // relinearize
-        timestacs.start();
-        ckks_eva->relinearize(ct_res, ct_res, relin_keys);
-        timestacs.end();
-        relinearize_time += timestacs.microseconds();
-        ckks_eva->rescale(ct_res, ct_res);
+        multiply_relin_time += timestacs.microseconds();
 
         // rotate
         timestacs.start();
@@ -114,14 +110,14 @@ int main()
     std::cout << "================================================" << std::endl;
     std::cout << std::endl;
 
-    std::cout << "Encode Time: " << encode_time / 100.0 << " us" << std::endl;
-    std::cout << "Encrypt Time: " << encrypt_time / 100.0 << " us" << std::endl;
-    std::cout << "Decrypt Time: " << decrypt_time / 100.0 << " us" << std::endl;
-    std::cout << "Decode Time: " << decode_time / 100.0 << " us" << std::endl;
-    std::cout << "Multiply Time: " << multiply_time / 100.0 << " us" << std::endl;
-    std::cout << "Rotate Time: " << rotate_time / 100.0 << " us" << std::endl;
-    std::cout << "KSwitch Time: " << kswitch_time / 100.0 << " us" << std::endl;
-    std::cout << "Relinearize Time: " << relinearize_time / 100.0 << " us" << std::endl;
+    std::cout << "Encode Time: " << encode_time / times / 1.0 << " us" << std::endl;
+    std::cout << "Encrypt Time: " << encrypt_time / times / 1.0 << " us" << std::endl;
+    std::cout << "Decrypt Time: " << decrypt_time / times / 1.0 << " us" << std::endl;
+    std::cout << "Decode Time: " << decode_time / times / 1.0 << " us" << std::endl;
+    std::cout << "Multiply Relinearize Time: " << multiply_relin_time / times / 1.0 << " us"
+              << std::endl;
+    std::cout << "Rotate Time: " << rotate_time / times / 1.0 << " us" << std::endl;
+    std::cout << "KSwitch Time: " << kswitch_time / times / 1.0 << " us" << std::endl;
 
     return 0;
 }
