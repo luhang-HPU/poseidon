@@ -2022,7 +2022,7 @@ void EvaluatorCkksBase::sigmoid_approx(const Ciphertext &ciph, Ciphertext &resul
     evaluate_poly_vector(ciph, result, polys, ciph.scale(), relin_keys, encoder);
 }
 
-void EvaluatorCkksBase::conv(const Ciphertext &ciph_f, const Ciphertext &ciph_g_rev, Ciphertext &result,
+void EvaluatorCkksBase::conv(const Ciphertext &ciph_f, const Ciphertext &ciph_g, Ciphertext &result,
           const uint size, const CKKSEncoder &encoder, const Encryptor &enc,
           const GaloisKeys &galois_keys, const RelinKeys &relin_keys) const
 {
@@ -2032,7 +2032,7 @@ void EvaluatorCkksBase::conv(const Ciphertext &ciph_f, const Ciphertext &ciph_g_
     {
         rotate(ciph_f_rotate, ciph_f_rotate, 1, galois_keys);
         Ciphertext ciph_tmp;
-        multiply_relin(ciph_f_rotate, ciph_g_rev, ciph_tmp, relin_keys);
+        multiply_relin(ciph_f_rotate, ciph_g, ciph_tmp, relin_keys);
         accumulate_top_n(ciph_tmp, ciph_tmp, size, encoder, enc, galois_keys);
 
         rotate(ciph_tmp, ciph_tmp, i, galois_keys);

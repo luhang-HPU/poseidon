@@ -24,7 +24,7 @@ std::vector<double> conv(std::vector<std::complex<double>> input, std::vector<st
     for (int i = 0; i < output_size; ++i) {
         double sum = 0.0;
         for (int j = 0; j < kernel.size(); ++j) {
-            sum += input[i + j].real() * kernel[j].real();
+            sum += input[(i + j) % input.size()].real() * kernel[j].real();
         }
         output[i] = sum;
     }
@@ -118,7 +118,7 @@ int main()
         encryptor.encrypt(plt2, ct2);
 
         timestacs.start();
-        ckks_eva->conv(ct1, ct2, ct_res, 1, encoder, encryptor, galois_keys, relin_keys);
+        ckks_eva->conv(ct1, ct2, ct_res, slot_num, encoder, encryptor, galois_keys, relin_keys);
         timestacs.end();
         conv_time += timestacs.microseconds();
 
@@ -129,7 +129,7 @@ int main()
         printf("expected value: %8.2lf, answer value: %8.2lf\n", conv(msg1, msg2)[0], msg_res[0].real());
     }
 
-
+    std::cout << std::endl;
     std::cout << "Sigmoid Average Time: " << (double)sigmoid_time / times << " us" << std::endl;
     std::cout << "Conv Average Time: " << (double)conv_time / times << " us" << std::endl;
 
