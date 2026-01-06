@@ -20,6 +20,13 @@ int main()
     vector<uint32_t> log_p_tmp{56};
     ckks_param_literal.set_log_modulus(log_q_tmp, log_p_tmp);
 
+    std::cout << "================================================" << std::endl;
+    std::cout << "All tests is based on the following parameters" << std::endl;
+    std::cout << "polynomial degree: " << ckks_param_literal.degree() << std::endl;
+    std::cout << "multiplication depth: " << ckks_param_literal.q().size() + 1 << std::endl;
+    std::cout << "================================================" << std::endl;
+    std::cout << std::endl;
+
     PoseidonFactory::get_instance()->set_device_type(DEVICE_SOFTWARE);
     auto context = PoseidonFactory::get_instance()->create_poseidon_context(ckks_param_literal);
     auto ckks_eva = PoseidonFactory::get_instance()->create_ckks_evaluator(context);
@@ -41,35 +48,25 @@ int main()
     auto slot_num = ckks_param_literal.slot();
     vector<complex<double>> msg1, msg2, msg_expect, msg_res;
 
-    sample_random_complex_vector(msg1, slot_num);
-    sample_random_complex_vector(msg2, slot_num);
-
     Timestacs timestacs;
-    uint64_t encode_time = 0;
-    uint64_t decode_time = 0;
-    uint64_t encrypt_time = 0;
-    uint64_t decrypt_time = 0;
     uint64_t multiply_relin_time = 0;
     uint64_t rotate_time = 0;
     uint64_t kswitch_time = 0;
 
     for (auto i = 0; i < 100; i++)
     {
+        sample_random_complex_vector(msg1, slot_num);
+        sample_random_complex_vector(msg2, slot_num);
+
         Plaintext plt1, plt2, plt_res;
         Ciphertext ct1, ct2, ct_res;
 
         // encode
-        timestacs.start();
         encoder.encode(msg1, scale, plt1);
-        timestacs.end();
-        encode_time += timestacs.microseconds();
         encoder.encode(msg2, scale, plt2);
 
         // encrypt
-        timestacs.start();
         encryptor.encrypt(plt1, ct1);
-        timestacs.end();
-        encrypt_time += timestacs.microseconds();
         encryptor.encrypt(plt2, ct2);
 
         // MULTIPLY
@@ -78,42 +75,36 @@ int main()
         timestacs.end();
         multiply_relin_time += timestacs.microseconds();
 
+        decryptor.decrypt(ct_res, plt_res);
+        encoder.decode(plt_res, msg_res);
+
+        for (auto j = 0; j < msg_expect.size(); ++j)
+        {
+            msg_expect[j] = msg1[j] * msg2[j];
+        }
+        std::cout << "==== MUL and RELIN ====" << std::endl;
+        printf("expected value: %8.2lf, answer value: %8.2lf\n", msg_expect[0].real(), msg_res[0].real());
+
         // rotate
         timestacs.start();
         ckks_eva->rotate(ct_res, ct_res, 1, galois_keys);
         timestacs.end();
         rotate_time += timestacs.microseconds();
 
+        decryptor.decrypt(ct_res, plt_res);
+        encoder.decode(plt_res, msg_res);
+
+        std::rotate(msg_expect.begin(), msg_expect.begin() + 1, msg_expect.end());
+        std::cout << "==== ROTATE ====" << std::endl;
+        printf("expected value: %8.2lf, answer value: %8.2lf\n", msg_expect[0].real(), msg_res[0].real());
+
         // kswitch
         timestacs.start();
         ckks_eva->rotate(ct_res, ct_res, 1, galois_keys);
         timestacs.end();
         kswitch_time += timestacs.microseconds();
-
-        // decrypt
-        timestacs.start();
-        decryptor.decrypt(ct_res, plt_res);
-        timestacs.end();
-        decrypt_time += timestacs.microseconds();
-
-        // decod
-        timestacs.start();
-        encoder.decode(plt_res, msg_res);
-        timestacs.end();
-        decode_time += timestacs.microseconds();
     }
 
-    std::cout << "================================================" << std::endl;
-    std::cout << "All tests is based on the following parameters" << std::endl;
-    std::cout << "polynomial degree: " << ckks_param_literal.degree() << std::endl;
-    std::cout << "multiplication depth: " << ckks_param_literal.q().size() + 1 << std::endl;
-    std::cout << "================================================" << std::endl;
-    std::cout << std::endl;
-
-    std::cout << "Encode Time: " << encode_time / times / 1.0 << " us" << std::endl;
-    std::cout << "Encrypt Time: " << encrypt_time / times / 1.0 << " us" << std::endl;
-    std::cout << "Decrypt Time: " << decrypt_time / times / 1.0 << " us" << std::endl;
-    std::cout << "Decode Time: " << decode_time / times / 1.0 << " us" << std::endl;
     std::cout << "Multiply Relinearize Time: " << multiply_relin_time / times / 1.0 << " us"
               << std::endl;
     std::cout << "Rotate Time: " << rotate_time / times / 1.0 << " us" << std::endl;
