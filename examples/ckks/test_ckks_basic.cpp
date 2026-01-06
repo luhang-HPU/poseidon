@@ -15,7 +15,7 @@ int main()
     std::cout << "" << std::endl;
 
     ParametersLiteralDefault ckks_param_literal(CKKS, 16384, poseidon::sec_level_type::tc128);
-    PoseidonFactory::get_instance()->set_device_type(DEVICE_HARDWARE);
+    PoseidonFactory::get_instance()->set_device_type(DEVICE_SOFTWARE);
     auto context = PoseidonFactory::get_instance()->create_poseidon_context(ckks_param_literal);
     auto ckks_eva = PoseidonFactory::get_instance()->create_ckks_evaluator(context);
 

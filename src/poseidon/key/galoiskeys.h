@@ -72,5 +72,7 @@ public:
     }
 
     std::streamoff load(const PoseidonContext &context, std::istream &stream) override;
+    std::streamoff load(const PoseidonContext &context, const poseidon_byte *in,
+                        std::size_t size) override;
 };
 }  // namespace poseidon
