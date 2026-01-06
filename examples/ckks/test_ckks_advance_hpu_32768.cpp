@@ -21,7 +21,6 @@ int main()
     vector<uint32_t> log_q_tmp{55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55};
     vector<uint32_t> log_p_tmp{56};
     ckks_param_literal.set_log_modulus(log_q_tmp, log_p_tmp);
-    // ParametersLiteralDefault ckks_param_literal(CKKS, 32768, poseidon::sec_level_type::tc128);
 
     auto context = PoseidonFactory::get_instance()->create_poseidon_context(ckks_param_literal);
     auto ckks_eva = PoseidonFactory::get_instance()->create_ckks_evaluator(context);

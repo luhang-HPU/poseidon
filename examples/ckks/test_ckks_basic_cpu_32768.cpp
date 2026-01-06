@@ -46,7 +46,7 @@ int main()
     Decryptor decryptor(context, keygen.secret_key());
 
     auto slot_num = ckks_param_literal.slot();
-    vector<complex<double>> msg1, msg2, msg_expect, msg_res;
+    vector<complex<double>> msg1, msg2, msg_res;
 
     Timestacs timestacs;
     uint64_t multiply_relin_time = 0;
@@ -57,6 +57,8 @@ int main()
     {
         sample_random_complex_vector(msg1, slot_num);
         sample_random_complex_vector(msg2, slot_num);
+
+        auto msg_expect = msg1;
 
         Plaintext plt1, plt2, plt_res;
         Ciphertext ct1, ct2, ct_res;
@@ -103,9 +105,17 @@ int main()
         ckks_eva->rotate(ct_res, ct_res, 1, galois_keys);
         timestacs.end();
         kswitch_time += timestacs.microseconds();
+
+        decryptor.decrypt(ct_res, plt_res);
+        encoder.decode(plt_res, msg_res);
+
+        std::rotate(msg_expect.begin(), msg_expect.begin() + 1, msg_expect.end());
+        std::cout << "==== KEYSWITCH ====" << std::endl;
+        printf("expected value: %8.2lf, answer value: %8.2lf\n", msg_expect[0].real(), msg_res[0].real());
     }
 
-    std::cout << "Multiply Relinearize Time: " << multiply_relin_time / times / 1.0 << " us"
+    std::cout << std::endl;
+    std::cout << "Multiply and Relinearize Time: " << multiply_relin_time / times / 1.0 << " us"
               << std::endl;
     std::cout << "Rotate Time: " << rotate_time / times / 1.0 << " us" << std::endl;
     std::cout << "KSwitch Time: " << kswitch_time / times / 1.0 << " us" << std::endl;
