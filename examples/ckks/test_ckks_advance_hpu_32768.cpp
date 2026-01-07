@@ -109,7 +109,7 @@ int main()
 
     std::cout << "================= SIGMOID end ==================" << std::endl;
     std::cout << std::endl;
-    std::cout << "Sigmoid Average Time on HPU: " << (double)sigmoid_time / times << " us" << std::endl;
+    std::cout << std::fixed << setprecision(2) << "Sigmoid Average Time on HPU: " << (double)sigmoid_time / times << " us" << std::endl;
     std::cout << std::endl;
     std::cout << "============== CONVOLUTION start ===============" << std::endl;
 
@@ -141,7 +141,7 @@ int main()
 
     std::cout << "=============== CONVOLUTION end ================" << std::endl;
     std::cout << std::endl;
-    std::cout << std::fixed << "Conv Average Time on HPU: " << (double)conv_time / times << " us" << std::endl;
+    std::cout << std::fixed << setprecision(2) << "Conv Average Time on HPU: " << (double)conv_time / times << " us" << std::endl;
     std::cout << std::endl;
 
     return 0;
