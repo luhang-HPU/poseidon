@@ -158,7 +158,7 @@ public:
 
     // result = conv(ciph_f, ciph_g_rev)
     void conv(const Ciphertext &ciph_f, const Ciphertext &ciph_g, Ciphertext &result,
-              const uint size, const CKKSEncoder &encoder, const Encryptor &enc, Decryptor& dec,
+              const uint size, const CKKSEncoder &encoder, const Encryptor &enc,
               const GaloisKeys &galois_keys, const RelinKeys &relin_keys) const;
 
 private:

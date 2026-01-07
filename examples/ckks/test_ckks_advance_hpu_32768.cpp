@@ -129,7 +129,7 @@ int main()
         encryptor.encrypt(plt2, ct2);
 
         timestacs.start();
-        ckks_eva->conv(ct1, ct2, ct_res, kernal_size, encoder, encryptor, decryptor, galois_keys, relin_keys);
+        ckks_eva->conv(ct1, ct2, ct_res, kernal_size, encoder, encryptor, galois_keys, relin_keys);
         timestacs.end();
         conv_time += timestacs.microseconds();
 
