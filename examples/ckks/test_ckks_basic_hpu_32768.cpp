@@ -8,7 +8,7 @@
 using namespace poseidon;
 using namespace poseidon::util;
 
-const int times = 100;
+const int times = 10;
 
 int main()
 {
@@ -53,7 +53,8 @@ int main()
     uint64_t rotate_time = 0;
     uint64_t kswitch_time = 0;
 
-    for (auto i = 0; i < 100; i++)
+    std::cout << "============= MUL and RELIN start ==============" << std::endl;
+    for (auto i = 0; i < times; i++)
     {
         sample_random_complex_vector(msg1, slot_num);
         sample_random_complex_vector(msg2, slot_num);
@@ -84,12 +85,34 @@ int main()
         {
             msg_expect[j] = msg1[j] * msg2[j];
         }
-        std::cout << "==== MUL and RELIN ====" << std::endl;
         printf("expected value: %8.2lf, answer value: %8.2lf\n", msg_expect[0].real(), msg_res[0].real());
+    }
+    std::cout << "============== MUL and RELIN end ===============" << std::endl;
+
+    std::cout << std::endl;
+    std::cout << "Multiply and Relinearize Average Time on HPU: " << multiply_relin_time / times / 1.0 << " us"
+              << std::endl;
+    std::cout << std::endl;
+
+    std::cout << "================= ROTATE start =================" << std::endl;
+    for (auto i = 0; i < times; ++i)
+    {
+        sample_random_complex_vector(msg1, slot_num);
+
+        auto msg_expect = msg1;
+
+        Plaintext plt1, plt2, plt_res;
+        Ciphertext ct1, ct2, ct_res;
+
+        // encode
+        encoder.encode(msg1, scale, plt1);
+
+        // encrypt
+        encryptor.encrypt(plt1, ct1);
 
         // rotate
         timestacs.start();
-        ckks_eva->rotate(ct_res, ct_res, 1, galois_keys);
+        ckks_eva->rotate(ct1, ct_res, 1, galois_keys);
         timestacs.end();
         rotate_time += timestacs.microseconds();
 
@@ -97,12 +120,32 @@ int main()
         encoder.decode(plt_res, msg_res);
 
         std::rotate(msg_expect.begin(), msg_expect.begin() + 1, msg_expect.end());
-        std::cout << "==== ROTATE ====" << std::endl;
         printf("expected value: %8.2lf, answer value: %8.2lf\n", msg_expect[0].real(), msg_res[0].real());
+    }
+    std::cout << "================== ROTATE end ==================" << std::endl;
+
+    std::cout << std::endl;
+    std::cout << "Rotate Average Time on HPU: " << rotate_time / times / 1.0 << " us" << std::endl;
+    std::cout << std::endl;
+
+    std::cout << "=============== KEYSWITCH start ================" << std::endl;
+    for (auto i = 0; i < times; ++i)
+    {
+        sample_random_complex_vector(msg1, slot_num);
+
+        auto msg_expect = msg1;
+
+        Plaintext plt1, plt2, plt_res;
+        Ciphertext ct1, ct2, ct_res;
+
+        // encode
+        encoder.encode(msg1, scale, plt1);
+        // encrypt
+        encryptor.encrypt(plt1, ct1);
 
         // kswitch
         timestacs.start();
-        ckks_eva->rotate(ct_res, ct_res, 1, galois_keys);
+        ckks_eva->rotate(ct1, ct_res, 1, galois_keys);
         timestacs.end();
         kswitch_time += timestacs.microseconds();
 
@@ -110,15 +153,13 @@ int main()
         encoder.decode(plt_res, msg_res);
 
         std::rotate(msg_expect.begin(), msg_expect.begin() + 1, msg_expect.end());
-        std::cout << "==== KEYSWITCH ====" << std::endl;
         printf("expected value: %8.2lf, answer value: %8.2lf\n", msg_expect[0].real(), msg_res[0].real());
     }
+    std::cout << "================ KEYSWITCH end =================" << std::endl;
 
     std::cout << std::endl;
-    std::cout << "Multiply and Relinearize Time: " << multiply_relin_time / times / 1.0 << " us"
-              << std::endl;
-    std::cout << "Rotate Time: " << rotate_time / times / 1.0 << " us" << std::endl;
-    std::cout << "KSwitch Time: " << kswitch_time / times / 1.0 << " us" << std::endl;
+    std::cout << "KSwitch Average Time on HPU: " << kswitch_time / times / 1.0 << " us" << std::endl;
+    std::cout << std::endl;
 
     return 0;
 }

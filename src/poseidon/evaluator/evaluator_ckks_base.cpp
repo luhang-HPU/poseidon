@@ -1,7 +1,6 @@
 #include "evaluator_ckks_base.h"
 #include "poseidon/advance/homomorphic_dft.h"
 #include "poseidon/util/debug.h"
-#include "poseidon/encryptor.h"
 
 namespace poseidon
 {
@@ -2023,21 +2022,22 @@ void EvaluatorCkksBase::sigmoid_approx(const Ciphertext &ciph, Ciphertext &resul
 }
 
 void EvaluatorCkksBase::conv(const Ciphertext &ciph_f, const Ciphertext &ciph_g, Ciphertext &result,
-          const uint size, const CKKSEncoder &encoder, const Encryptor &enc,
+          const uint size, const CKKSEncoder &encoder, const Encryptor &enc, Decryptor &dec,
           const GaloisKeys &galois_keys, const RelinKeys &relin_keys) const
 {
     Ciphertext ciph_res;
     Ciphertext ciph_f_rotate = ciph_f;
     for (auto i = 0; i < size; ++i)
     {
-        rotate(ciph_f_rotate, ciph_f_rotate, 1, galois_keys);
+        rotate(ciph_f_rotate, ciph_f_rotate, -1, galois_keys);
         Ciphertext ciph_tmp;
         multiply_relin(ciph_f_rotate, ciph_g, ciph_tmp, relin_keys);
+
         accumulate_top_n(ciph_tmp, ciph_tmp, size, encoder, enc, galois_keys);
 
-        rotate(ciph_tmp, ciph_tmp, i, galois_keys);
+        rotate(ciph_tmp, ciph_tmp, -i, galois_keys);
 
-        std::vector<std::complex<double>> zero = {{0.0, 0.0}};
+        std::vector<std::complex<double>> zero(size, {0.0, 0.0});
         zero[i] = {1.0, 0.0};
         Plaintext plain_zero;
         encoder.encode(zero, ciph_tmp.parms_id(), ciph_tmp.scale(), plain_zero);

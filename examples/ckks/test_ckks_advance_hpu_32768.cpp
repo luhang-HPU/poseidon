@@ -5,10 +5,36 @@
 #include "poseidon/util/debug.h"
 #include "poseidon/util/random_sample.h"
 
+#include <iomanip>
+
 using namespace poseidon;
 using namespace poseidon::util;
 
-const int times = 100;
+const int times = 10;
+const int kernal_size = 10;
+
+// approximate sigmoid
+double sigmoid(double x)
+{
+    return (0.5 + 0.197 * x - 0.004 * x * x * x);
+}
+
+std::vector<std::complex<double>> conv(std::vector<std::complex<double>> input, std::vector<std::complex<double>> kernel, int size = kernal_size)
+{
+    int output_size = input.size();
+    std::vector<std::complex<double>> output(output_size, 0.0);
+
+    // 滑动卷积核，逐位置计算乘积和
+    for (int i = 0; i < output_size; ++i) {
+        std::complex<double> sum(0.0, 0.0);
+        for (int j = 0; j < size; ++j) {
+            sum += input[(i - j + input.size()) % input.size()] * kernel[j];
+        }
+        output[i] = sum;
+    }
+
+    return output;
+}
 
 int main()
 {
@@ -49,13 +75,8 @@ int main()
     Plaintext plt1, plt2, plt_res;
     Ciphertext ct1, ct2, ct_res;
 
-    // encode
-    encoder.encode(msg1, scale, plt1);
-    encoder.encode(msg2, scale, plt2);
-
-    // encrypt
-    encryptor.encrypt(plt1, ct1);
-    encryptor.encrypt(plt2, ct2);
+    uint64_t sigmoid_time;
+    uint64_t conv_time;
 
     std::cout << "================================================" << std::endl;
     std::cout << "All tests is based on the following parameters" << std::endl;
@@ -64,21 +85,64 @@ int main()
     std::cout << "================================================" << std::endl;
     std::cout << std::endl;
 
-    timestacs.start();
+    std::cout << "================ SIGMOID start =================" << std::endl;
     for (auto i = 0; i < times; ++i)
     {
-        ckks_eva->sigmoid_approx(ct1, ct_res, encoder, relin_keys);
-    }
-    timestacs.end();
-    std::cout << "Sigmoid Average Time: " << (double)timestacs.microseconds() / times << " us" << std::endl;
+        sample_random_complex_vector(msg1, slot_num);
 
-    timestacs.start();
+        // encode
+        encoder.encode(msg1, scale, plt1);
+
+        // encrypt
+        encryptor.encrypt(plt1, ct1);
+
+        timestacs.start();
+        ckks_eva->sigmoid_approx(ct1, ct_res, encoder, relin_keys);
+        timestacs.end();
+        sigmoid_time += timestacs.microseconds();
+
+        decryptor.decrypt(ct_res, plt_res);
+        encoder.decode(plt_res, msg_res);
+
+        printf("expected value: %8.2lf, answer value: %8.2lf\n", sigmoid(msg1[0].real()), msg_res[0].real());
+    }
+
+    std::cout << "================= SIGMOID end ==================" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Sigmoid Average Time on HPU: " << (double)sigmoid_time / times << " us" << std::endl;
+    std::cout << std::endl;
+    std::cout << "============== CONVOLUTION start ===============" << std::endl;
+
     for (auto i = 0; i < times; ++i)
     {
-        ckks_eva->conv(ct1, ct2, ct_res, 1, encoder, encryptor, galois_keys, relin_keys);
+        sample_random_complex_vector(msg1, slot_num);
+        sample_random_complex_vector(msg2, slot_num);
+        std::reverse(msg1.begin(), msg1.end());
+
+        // encode
+        encoder.encode(msg1, scale, plt1);
+        encoder.encode(msg2, scale, plt2);
+        std::reverse(msg1.begin(), msg1.end());
+
+        // encrypt
+        encryptor.encrypt(plt1, ct1);
+        encryptor.encrypt(plt2, ct2);
+
+        timestacs.start();
+        ckks_eva->conv(ct1, ct2, ct_res, kernal_size, encoder, encryptor, decryptor, galois_keys, relin_keys);
+        timestacs.end();
+        conv_time += timestacs.microseconds();
+
+        decryptor.decrypt(ct_res, plt_res);
+        encoder.decode(plt_res, msg_res);
+
+        printf("expected value: %8.2lf, answer value: %8.2lf\n", conv(msg1, msg2, kernal_size)[0].real(), msg_res[0].real());
     }
-    timestacs.end();
-    std::cout << "Conv Average Time: " << (double)timestacs.microseconds() / times << " us" << std::endl;
+
+    std::cout << "=============== CONVOLUTION end ================" << std::endl;
+    std::cout << std::endl;
+    std::cout << std::fixed << "Conv Average Time on HPU: " << (double)conv_time / times << " us" << std::endl;
+    std::cout << std::endl;
 
     return 0;
 }
