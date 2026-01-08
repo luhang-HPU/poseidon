@@ -2032,6 +2032,7 @@ void EvaluatorCkksBase::conv(const Ciphertext &ciph_f, const Ciphertext &ciph_g,
         rotate(ciph_f_rotate, ciph_f_rotate, -1, galois_keys);
         Ciphertext ciph_tmp;
         multiply_relin(ciph_f_rotate, ciph_g, ciph_tmp, relin_keys);
+        rescale(ciph_tmp, ciph_tmp);
 
         accumulate_top_n(ciph_tmp, ciph_tmp, size, encoder, enc, galois_keys);
 
@@ -2044,6 +2045,7 @@ void EvaluatorCkksBase::conv(const Ciphertext &ciph_f, const Ciphertext &ciph_g,
 
         multiply_plain(ciph_tmp, plain_zero, ciph_tmp);
         relinearize(ciph_tmp, ciph_tmp, relin_keys);
+        rescale(ciph_tmp, ciph_tmp);
 
         if (!ciph_res.is_valid())
         {

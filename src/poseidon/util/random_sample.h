@@ -11,8 +11,11 @@ namespace poseidon
 {
 
 int sample_hamming_weight_vector(int *sample, int length, int hamming_weight);
+
 int sample_triangle(int *uniform_res, int num_samples);
-void sample_random_complex_vector(vector<complex<double>> &vec, int length);
+
+void sample_random_complex_vector(vector<complex<double>> &vec, int length, double min = 0.0, double max = 10.0);
+
 template <typename T> void sample_random_vector(vector<T> &vec, int length, int max)
 {
     vec.resize(length);
@@ -24,6 +27,6 @@ template <typename T> void sample_random_vector(vector<T> &vec, int length, int 
         vec[i] = u(e);
     }
 }
-void sample_random_complex_vector2(std::vector<complex<double>> &vec, int length);
+
 
 }  // namespace poseidon

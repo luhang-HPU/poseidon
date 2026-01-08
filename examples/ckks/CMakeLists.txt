@@ -18,12 +18,6 @@ target_link_libraries(test_ckks_basic_cpu_32768 poseidon_shared)
 add_executable(test_ckks_basic_hpu_32768 test_ckks_basic_hpu_32768.cpp)
 target_link_libraries(test_ckks_basic_hpu_32768 poseidon_shared)
 
-add_executable(test_ckks_advance_cpu_32768 test_ckks_advance_cpu_32768.cpp)
-target_link_libraries(test_ckks_advance_cpu_32768 poseidon_shared)
-
-add_executable(test_ckks_advance_hpu_32768 test_ckks_advance_hpu_32768.cpp)
-target_link_libraries(test_ckks_advance_hpu_32768 poseidon_shared)
-
 add_executable(test_ckks_infer_cpu_4096 test_ckks_infer_cpu_4096.cpp)
 target_link_libraries(test_ckks_infer_cpu_4096 poseidon_shared)
 

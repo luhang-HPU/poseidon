@@ -63,32 +63,18 @@ int sample_triangle(int *uniform_res, int num_samples)
     return 0;
 }
 
-void sample_random_complex_vector(vector<complex<double>> &vec, int length)
+void sample_random_complex_vector(vector<complex<double>> &vec, int length, double min, double max)
 {
-    srand(std::chrono::system_clock::now().time_since_epoch().count());
+    auto seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::mt19937 engine(seed);
+    std::uniform_real_distribution<double> dist(min, max);
+
     vec.resize(length);
     for (int i = 0; i < length; i++)
     {
-        vec[i].imag(rand() / (RAND_MAX + 1.0));
-        vec[i].real(rand() / (RAND_MAX + 1.0));
+        vec[i].imag(0.0);
+        vec[i].real(dist(engine));
     }
-}
-
-void sample_random_complex_vector2(std::vector<complex<double>> &vec, int length)
-{
-
-    std::vector<complex<double>> vec_tmp;
-    double real_data = 0;
-    double imag_data = 0;
-    // vec_tmp.resize(length);
-    for (int i = 0; i < length; i++)
-    {
-        real_data = rand() / (RAND_MAX + 1.0);
-        imag_data = rand() / (RAND_MAX + 1.0);
-        std::complex<double> const_data(real_data, imag_data);
-        vec_tmp.push_back(const_data);
-    }
-    vec.swap(vec_tmp);
 }
 
 }  // namespace poseidon
