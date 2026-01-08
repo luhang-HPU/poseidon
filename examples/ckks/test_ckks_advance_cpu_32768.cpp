@@ -72,8 +72,8 @@ int main()
     Plaintext plt1, plt2, plt_res;
     Ciphertext ct1, ct2, ct_res;
 
-    uint64_t sigmoid_time;
-    uint64_t conv_time;
+    uint64_t sigmoid_time = 0;
+    uint64_t conv_time = 0;
 
     std::cout << "================================================" << std::endl;
     std::cout << "All tests is based on the following parameters" << std::endl;
