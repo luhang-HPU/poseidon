@@ -172,8 +172,10 @@ int main()
     std::cout << "INFER end" << std::endl;
 
     std::cout << std::endl;
-    std::cout << std::fixed << setprecision(0) << "INFER Time on MLU: " << infer_time / times / 1.0 << " us"
+    std::cout << std::fixed << setprecision(0) << "INFER Time on MLU: " << infer_time / times / 1.0 << " us "
               << std::endl;
+    std::cout << "data type cast: " << std::endl;
+    std::cout << "cpu data type: uint64_t (64-bit) >>>>" << " mlu data type: int16_t (16-bit)" << std::endl;
 
     return 0;
 }
