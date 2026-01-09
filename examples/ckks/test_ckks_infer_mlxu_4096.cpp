@@ -100,25 +100,23 @@ int main()
         std::cout << "================== INPUT LEVEL ==================" << std::endl;
         std::cout << "Input Vector Size: " << msg1.size() << std::endl;
         std::cout << "Input Value: ";
-        for (auto j = 0; j < msg1.size(); ++j)
+        for (auto j = 0; j < 10; ++j)
         {
             std::cout << msg1[j] << " ";
         }
-        std::cout << std::endl;
+        std::cout << "..." << std::endl;
         std::cout << std::endl;
 
         // Weight
         std::cout << "================= WEIGHT LEVEL ==================" << std::endl;
         std::cout << "Weight Vector Size: " << vec_msg.size() * vec_msg[0].size() << std::endl;
         std::cout << "Weight Value: ";
-        for (auto msg : vec_msg)
+
+        for (auto j = 0; j < 20; ++j)
         {
-            for (auto j = 0; j < msg.size(); ++j)
-            {
-                std::cout << msg[j] << " ";
-            }
+            std::cout << vec_msg[0][j] << " ";
         }
-        std::cout << std::endl;
+        std::cout << "..." <<  std::endl;
         std::cout << std::endl;
 
         Plaintext plt1, plt_res;
