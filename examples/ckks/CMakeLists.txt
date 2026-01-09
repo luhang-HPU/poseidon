@@ -11,3 +11,6 @@ target_link_libraries(test_ckks_infer_mlxu_4096 poseidon_shared)
 
 add_executable(test_ckks_infer_mlxu_32768 test_ckks_infer_mlxu_32768.cpp)
 target_link_libraries(test_ckks_infer_mlxu_32768 poseidon_shared)
+
+add_executable(test test.cpp)
+target_link_libraries(test poseidon_shared)

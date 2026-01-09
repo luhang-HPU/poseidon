@@ -27,6 +27,28 @@ public:
         return cambricon_api_;
     }
 
+    void test()
+    {
+        int size = 10;
+        int16_t arr_op1[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        int16_t arr_op2[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        torch::Tensor tensor_op1 = torch::from_blob(arr_op1, {size}, torch::kInt16).clone();
+        torch::Tensor tensor_op2 = torch::from_blob(arr_op2, {size}, torch::kInt16).clone();
+
+        auto op1_mlu = tensor_op1.to(device_);
+        auto op2_mlu = tensor_op2.to(device_);
+
+        auto res_mlu = op1_mlu + op2_mlu;
+        torch::Tensor tensor_res = res_mlu.cpu();
+
+        int16_t arr_res[10];
+        std::memcpy(arr_res, tensor_res.data_ptr<int16_t>(), tensor_res.numel() * sizeof(int16_t));
+        for (auto i = 0; i < 10; ++i)
+        {
+            std::cout << arr_res[i] << std::endl;
+        }
+    }
+
     template <typename T>
     void add(const T* op1, const T* op2, T* res, int size)
     {
