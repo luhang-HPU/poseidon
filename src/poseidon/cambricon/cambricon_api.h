@@ -245,28 +245,28 @@ public:
         {
             for (auto i = 0; i < size; ++i)
             {
-                arr_op1[4*i] = static_cast<int16_t>(op1[i].real());
-                arr_op2[4*i] = static_cast<int16_t>(op2[i].real());
-                arr_op1[4*i+1] = static_cast<int16_t>(op1[i].real());
-                arr_op2[4*i+1] = static_cast<int16_t>(op2[i].real());
-                arr_op1[4*i+2] = static_cast<int16_t>(op1[i].real());
-                arr_op2[4*i+2] = static_cast<int16_t>(op2[i].real());
-                arr_op1[4*i+3] = static_cast<int16_t>(op1[i].real());
-                arr_op2[4*i+3] = static_cast<int16_t>(op2[i].real());
+                arr_op1[4*i] = static_cast<int16_t>(op1[i]);
+                arr_op2[4*i] = static_cast<int16_t>(op2[i]);
+                arr_op1[4*i+1] = static_cast<int16_t>(op1[i]);
+                arr_op2[4*i+1] = static_cast<int16_t>(op2[i]);
+                arr_op1[4*i+2] = static_cast<int16_t>(op1[i]);
+                arr_op2[4*i+2] = static_cast<int16_t>(op2[i]);
+                arr_op1[4*i+3] = static_cast<int16_t>(op1[i]);
+                arr_op2[4*i+3] = static_cast<int16_t>(op2[i]);
             }
         }
         else if constexpr (std::is_same_v<T, double>)
         {
             for (auto i = 0; i < size; ++i)
             {
-                arr_op1[4*i] = static_cast<int16_t>(op1[i].real());
-                arr_op2[4*i] = static_cast<int16_t>(op2[i].real());
-                arr_op1[4*i+1] = static_cast<int16_t>(op1[i].real());
-                arr_op2[4*i+1] = static_cast<int16_t>(op2[i].real());
-                arr_op1[4*i+2] = static_cast<int16_t>(op1[i].real());
-                arr_op2[4*i+2] = static_cast<int16_t>(op2[i].real());
-                arr_op1[4*i+3] = static_cast<int16_t>(op1[i].real());
-                arr_op2[4*i+3] = static_cast<int16_t>(op2[i].real());
+                arr_op1[4*i] = static_cast<int16_t>(op1[i]);
+                arr_op2[4*i] = static_cast<int16_t>(op2[i]);
+                arr_op1[4*i+1] = static_cast<int16_t>(op1[i]);
+                arr_op2[4*i+1] = static_cast<int16_t>(op2[i]);
+                arr_op1[4*i+2] = static_cast<int16_t>(op1[i]);
+                arr_op2[4*i+2] = static_cast<int16_t>(op2[i]);
+                arr_op1[4*i+3] = static_cast<int16_t>(op1[i]);
+                arr_op2[4*i+3] = static_cast<int16_t>(op2[i]);
             }
         }
         
