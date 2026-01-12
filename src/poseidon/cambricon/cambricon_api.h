@@ -52,32 +52,50 @@ public:
     template <typename T>
     void add(const T* op1, const T* op2, T* res, int size)
     {
-        int16_t arr_op1[size];
-        int16_t arr_op2[size];
-        int16_t arr_res[size];
+        int16_t arr_op1[size * 4];
+        int16_t arr_op2[size * 4];
+        int16_t arr_res[size * 4];
 
         if constexpr (std::is_same_v<T, std::complex<double>>)
         {
             for (auto i = 0; i < size; ++i)
             {
-                arr_op1[i] = static_cast<int16_t>(op1[i].real());
-                arr_op2[i] = static_cast<int16_t>(op2[i].real());
+                arr_op1[4*i] = static_cast<int16_t>(op1[i].real());
+                arr_op2[4*i] = static_cast<int16_t>(op2[i].real());
+                arr_op1[4*i+1] = static_cast<int16_t>(op1[i].real());
+                arr_op2[4*i+1] = static_cast<int16_t>(op2[i].real());
+                arr_op1[4*i+2] = static_cast<int16_t>(op1[i].real());
+                arr_op2[4*i+2] = static_cast<int16_t>(op2[i].real());
+                arr_op1[4*i+3] = static_cast<int16_t>(op1[i].real());
+                arr_op2[4*i+3] = static_cast<int16_t>(op2[i].real());
             }
         }
-        else if constexpr (std::is_same_v<T, unsigned long int*>)
+        else if constexpr (std::is_same_v<T, unsigned long int>)
         {
             for (auto i = 0; i < size; ++i)
             {
-                arr_op1[i] = static_cast<int16_t>(op1[i]);
-                arr_op2[i] = static_cast<int16_t>(op2[i]);
+                arr_op1[4*i] = static_cast<int16_t>(op1[i]);
+                arr_op2[4*i] = static_cast<int16_t>(op2[i]);
+                arr_op1[4*i+1] = static_cast<int16_t>(op1[i]);
+                arr_op2[4*i+1] = static_cast<int16_t>(op2[i]);
+                arr_op1[4*i+2] = static_cast<int16_t>(op1[i]);
+                arr_op2[4*i+2] = static_cast<int16_t>(op2[i]);
+                arr_op1[4*i+3] = static_cast<int16_t>(op1[i]);
+                arr_op2[4*i+3] = static_cast<int16_t>(op2[i]);
             }
         }
-        else if constexpr (std::is_same_v<T, double*>)
+        else if constexpr (std::is_same_v<T, double>)
         {
             for (auto i = 0; i < size; ++i)
             {
-                arr_op1[i] = static_cast<int16_t>(op1[i]);
-                arr_op2[i] = static_cast<int16_t>(op2[i]);
+                arr_op1[4*i] = static_cast<int16_t>(op1[i]);
+                arr_op2[4*i] = static_cast<int16_t>(op2[i]);
+                arr_op1[4*i+1] = static_cast<int16_t>(op1[i]);
+                arr_op2[4*i+1] = static_cast<int16_t>(op2[i]);
+                arr_op1[4*i+2] = static_cast<int16_t>(op1[i]);
+                arr_op2[4*i+2] = static_cast<int16_t>(op2[i]);
+                arr_op1[4*i+3] = static_cast<int16_t>(op1[i]);
+                arr_op2[4*i+3] = static_cast<int16_t>(op2[i]);
             }
         }
         
@@ -90,6 +108,7 @@ public:
         auto res_mlu = op1_mlu + op2_mlu;
         torch::Tensor tensor_res = res_mlu.cpu();
 
+        std::cout << "MUL: tensor_res.numel() = " << tensor_res.numel() << std::endl;
         std::memcpy(arr_res, tensor_res.data_ptr<int16_t>(), tensor_res.numel() * sizeof(int16_t));
 
 
