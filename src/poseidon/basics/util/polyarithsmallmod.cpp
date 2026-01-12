@@ -129,7 +129,6 @@ void add_poly_coeffmod(ConstCoeffIter operand1, ConstCoeffIter operand2, std::si
     CAMBRICON_API::get_instance()->add(operand1.ptr(), operand2.ptr(), result.ptr(), coeff_count);
     *result = *result % modulus.value();
 #else
-    std::cout << "add NO CAMBRICON" << std::endl;
 #ifdef POSEIDON_USE_INTEL_HEXL
     intel::hexl::EltwiseAddMod(&result[0], &operand1[0], &operand2[0], coeff_count, modulus_value);
 #else
