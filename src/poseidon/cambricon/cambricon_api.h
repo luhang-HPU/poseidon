@@ -108,7 +108,7 @@ public:
         auto res_mlu = op1_mlu + op2_mlu;
         torch::Tensor tensor_res = res_mlu.cpu();
 
-        std::cout << "MUL: tensor_res.numel() = " << tensor_res.numel() << std::endl;
+        std::cout << "ADD: tensor_res.numel() = " << tensor_res.numel() << std::endl;
         std::memcpy(arr_res, tensor_res.data_ptr<int16_t>(), tensor_res.numel() * sizeof(int16_t));
 
 
