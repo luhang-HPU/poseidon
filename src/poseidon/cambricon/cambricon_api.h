@@ -223,37 +223,55 @@ public:
     template <typename T>
     void mul(const T* op1, const T* op2, T* res, int size)
     {
-        int16_t arr_op1[size];
-        int16_t arr_op2[size];
-        int16_t arr_res[size];
+        int16_t arr_op1[size * 4];
+        int16_t arr_op2[size * 4];
+        int16_t arr_res[size * 4];
 
         if constexpr (std::is_same_v<T, std::complex<double>>)
         {
             for (auto i = 0; i < size; ++i)
             {
-                arr_op1[i] = static_cast<int16_t>(op1[i].real());
-                arr_op2[i] = static_cast<int16_t>(op2[i].real());
+                arr_op1[4*i] = static_cast<int16_t>(op1[i].real());
+                arr_op2[4*i] = static_cast<int16_t>(op2[i].real());
+                arr_op1[4*i+1] = static_cast<int16_t>(op1[i].real());
+                arr_op2[4*i+1] = static_cast<int16_t>(op2[i].real());
+                arr_op1[4*i+2] = static_cast<int16_t>(op1[i].real());
+                arr_op2[4*i+2] = static_cast<int16_t>(op2[i].real());
+                arr_op1[4*i+3] = static_cast<int16_t>(op1[i].real());
+                arr_op2[4*i+3] = static_cast<int16_t>(op2[i].real());
             }
         }
         else if constexpr (std::is_same_v<T, unsigned long int>)
         {
             for (auto i = 0; i < size; ++i)
             {
-                arr_op1[i] = static_cast<int16_t>(op1[i]);
-                arr_op2[i] = static_cast<int16_t>(op2[i]);
+                arr_op1[4*i] = static_cast<int16_t>(op1[i].real());
+                arr_op2[4*i] = static_cast<int16_t>(op2[i].real());
+                arr_op1[4*i+1] = static_cast<int16_t>(op1[i].real());
+                arr_op2[4*i+1] = static_cast<int16_t>(op2[i].real());
+                arr_op1[4*i+2] = static_cast<int16_t>(op1[i].real());
+                arr_op2[4*i+2] = static_cast<int16_t>(op2[i].real());
+                arr_op1[4*i+3] = static_cast<int16_t>(op1[i].real());
+                arr_op2[4*i+3] = static_cast<int16_t>(op2[i].real());
             }
         }
         else if constexpr (std::is_same_v<T, double>)
         {
             for (auto i = 0; i < size; ++i)
             {
-                arr_op1[i] = static_cast<int16_t>(op1[i]);
-                arr_op2[i] = static_cast<int16_t>(op2[i]);
+                arr_op1[4*i] = static_cast<int16_t>(op1[i].real());
+                arr_op2[4*i] = static_cast<int16_t>(op2[i].real());
+                arr_op1[4*i+1] = static_cast<int16_t>(op1[i].real());
+                arr_op2[4*i+1] = static_cast<int16_t>(op2[i].real());
+                arr_op1[4*i+2] = static_cast<int16_t>(op1[i].real());
+                arr_op2[4*i+2] = static_cast<int16_t>(op2[i].real());
+                arr_op1[4*i+3] = static_cast<int16_t>(op1[i].real());
+                arr_op2[4*i+3] = static_cast<int16_t>(op2[i].real());
             }
         }
         
-        torch::Tensor tensor_op1 = torch::from_blob(arr_op1, {size}, torch::kInt16).clone();
-        torch::Tensor tensor_op2 = torch::from_blob(arr_op2, {size}, torch::kInt16).clone();
+        torch::Tensor tensor_op1 = torch::from_blob(arr_op1, {size * 4}, torch::kInt16).clone();
+        torch::Tensor tensor_op2 = torch::from_blob(arr_op2, {size * 4}, torch::kInt16).clone();
 
         auto op1_mlu = tensor_op1.to(device_);
         auto op2_mlu = tensor_op2.to(device_);
