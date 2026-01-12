@@ -126,7 +126,6 @@ void add_poly_coeffmod(ConstCoeffIter operand1, ConstCoeffIter operand2, std::si
     houmo_api.houmo_add(operand1, operand2, result, coeff_count);
     *result = *result % modulus.value();
 #elif defined(CAMBRICON)
-    std::cout << "add CAMBRICON" << std::endl;
     CAMBRICON_API::get_instance()->add(operand1.ptr(), operand2.ptr(), result.ptr(), coeff_count);
     *result = *result % modulus.value();
 #else
