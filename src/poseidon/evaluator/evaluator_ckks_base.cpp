@@ -2004,8 +2004,8 @@ void EvaluatorCkksBase::sigmoid_approx(const Ciphertext &ciph, Ciphertext &resul
 {
     vector<complex<double>> buffer(4, 0);
     buffer[0] = 0.5;
-    buffer[1] = 0.197;
-    buffer[3] = -0.004;
+    buffer[1] = 0.25;
+    buffer[3] = -0.021;
 
     Polynomial approxF(buffer, 0, 0, 4, Monomial);
     approxF.lead() = true;
