@@ -20,10 +20,10 @@ namespace hexl
 {
 // Single threaded POSEIDON allocator adapter
 template <>
-struct NTT::AllocatorAdapter<seal::MemoryPoolHandle>
-    : public AllocatorInterface<NTT::AllocatorAdapter<seal::MemoryPoolHandle>>
+struct NTT::AllocatorAdapter<poseidon::MemoryPoolHandle>
+    : public AllocatorInterface<NTT::AllocatorAdapter<poseidon::MemoryPoolHandle>>
 {
-    AllocatorAdapter(seal::MemoryPoolHandle handle) : handle_(std::move(handle)) {}
+    AllocatorAdapter(poseidon::MemoryPoolHandle handle) : handle_(std::move(handle)) {}
 
     ~AllocatorAdapter() {}
 
@@ -39,7 +39,7 @@ struct NTT::AllocatorAdapter<seal::MemoryPoolHandle>
     {
         auto it =
             std::remove_if(cache_.begin(), cache_.end(),
-                           [p](const poseidon::util::Pointer<seal::poseidon_byte> &seal_pointer)
+                           [p](const poseidon::util::Pointer<poseidon::poseidon_byte> &seal_pointer)
                            { return p == seal_pointer.get(); });
 
 #ifdef POSEIDON_DEBUG
@@ -52,8 +52,8 @@ struct NTT::AllocatorAdapter<seal::MemoryPoolHandle>
     }
 
 private:
-    seal::MemoryPoolHandle handle_;
-    std::vector<poseidon::util::Pointer<seal::poseidon_byte>> cache_;
+    poseidon::MemoryPoolHandle handle_;
+    std::vector<poseidon::util::Pointer<poseidon::poseidon_byte>> cache_;
 };
 
 // Thread safe policy
@@ -76,11 +76,11 @@ private:
 
 // Multithreaded POSEIDON allocator adapter
 template <>
-struct NTT::AllocatorAdapter<seal::MemoryPoolHandle, SimpleThreadSafePolicy>
+struct NTT::AllocatorAdapter<poseidon::MemoryPoolHandle, SimpleThreadSafePolicy>
     : public AllocatorInterface<
-          NTT::AllocatorAdapter<seal::MemoryPoolHandle, SimpleThreadSafePolicy>>
+          NTT::AllocatorAdapter<poseidon::MemoryPoolHandle, SimpleThreadSafePolicy>>
 {
-    AllocatorAdapter(seal::MemoryPoolHandle handle, SimpleThreadSafePolicy &&policy)
+    AllocatorAdapter(poseidon::MemoryPoolHandle handle, SimpleThreadSafePolicy &&policy)
         : handle_(std::move(handle)), policy_(std::move(policy))
     {
     }
@@ -105,7 +105,7 @@ struct NTT::AllocatorAdapter<seal::MemoryPoolHandle, SimpleThreadSafePolicy>
             auto accessor = policy_.locker();
             auto it =
                 std::remove_if(cache_.begin(), cache_.end(),
-                               [p](const poseidon::util::Pointer<seal::poseidon_byte> &seal_pointer)
+                               [p](const poseidon::util::Pointer<poseidon::poseidon_byte> &seal_pointer)
                                { return p == seal_pointer.get(); });
 
 #ifdef POSEIDON_DEBUG
@@ -119,9 +119,9 @@ struct NTT::AllocatorAdapter<seal::MemoryPoolHandle, SimpleThreadSafePolicy>
     }
 
 private:
-    seal::MemoryPoolHandle handle_;
+    poseidon::MemoryPoolHandle handle_;
     SimpleThreadSafePolicy policy_;
-    std::vector<poseidon::util::Pointer<seal::poseidon_byte>> cache_;
+    std::vector<poseidon::util::Pointer<poseidon::poseidon_byte>> cache_;
 };
 }  // namespace hexl
 
@@ -175,7 +175,7 @@ static intel::hexl::NTT &get_ntt(size_t N, uint64_t modulus, uint64_t root)
     auto ntt_it = ntt_cache_.find(key);
     if (ntt_it == ntt_cache_.end())
     {
-        hexl::NTT ntt(N, modulus, root, seal::MemoryManager::GetPool(),
+        hexl::NTT ntt(N, modulus, root, poseidon::MemoryManager::GetPool(),
                       hexl::SimpleThreadSafePolicy{});
         ntt_it = ntt_cache_.emplace(move(key), move(ntt)).first;
     }
@@ -260,7 +260,7 @@ void NTTTables::initialize(int coeff_count_power, const Modulus &modulus)
 
 #ifdef POSEIDON_USE_INTEL_HEXL
     // Pre-compute HEXL NTT object
-    intel::seal_ext::get_ntt(coeff_count_, modulus.value(), root_);
+    intel::poseidon_ext::get_ntt(coeff_count_, modulus.value(), root_);
 #endif
 
     // Populate tables with powers of root in specific orders.
@@ -390,7 +390,7 @@ void ntt_negacyclic_harvey_lazy(CoeffIter operand, const NTTTables &tables)
     uint64_t p = tables.modulus().value();
     uint64_t root = tables.get_root();
 
-    intel::seal_ext::compute_forward_ntt(operand, N, p, root, 4, 4);
+    intel::poseidon_ext::compute_forward_ntt(operand, N, p, root, 4, 4);
 #else
     tables.ntt_handler().transform_to_rev(operand.ptr(), tables.coeff_count_power(),
                                           tables.get_from_root_powers());
@@ -404,7 +404,7 @@ void ntt_negacyclic_harvey(CoeffIter operand, const NTTTables &tables)
     uint64_t p = tables.modulus().value();
     uint64_t root = tables.get_root();
 
-    intel::seal_ext::compute_forward_ntt(operand, N, p, root, 4, 1);
+    intel::poseidon_ext::compute_forward_ntt(operand, N, p, root, 4, 1);
 #else
     ntt_negacyclic_harvey_lazy(operand, tables);
     // Finally maybe we need to reduce every coefficient modulo q, but we
@@ -436,7 +436,7 @@ void inverse_ntt_negacyclic_harvey_lazy(CoeffIter operand, const NTTTables &tabl
     size_t N = size_t(1) << tables.coeff_count_power();
     uint64_t p = tables.modulus().value();
     uint64_t root = tables.get_root();
-    intel::seal_ext::compute_inverse_ntt(operand, N, p, root, 2, 2);
+    intel::poseidon_ext::compute_inverse_ntt(operand, N, p, root, 2, 2);
 #else
     MultiplyUIntModOperand inv_degree_modulo = tables.inv_degree_modulo();
     tables.ntt_handler().transform_from_rev(operand.ptr(), tables.coeff_count_power(),
@@ -450,7 +450,7 @@ void inverse_ntt_negacyclic_harvey(CoeffIter operand, const NTTTables &tables)
     size_t N = size_t(1) << tables.coeff_count_power();
     uint64_t p = tables.modulus().value();
     uint64_t root = tables.get_root();
-    intel::seal_ext::compute_inverse_ntt(operand, N, p, root, 2, 1);
+    intel::poseidon_ext::compute_inverse_ntt(operand, N, p, root, 2, 1);
 #else
     inverse_ntt_negacyclic_harvey_lazy(operand, tables);
     std::uint64_t modulus = tables.modulus().value();

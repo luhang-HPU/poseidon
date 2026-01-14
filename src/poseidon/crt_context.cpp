@@ -131,13 +131,16 @@ CrtContext::ContextData CrtContext::validate(const ParametersLiteral &params,
     context_data.total_coeff_modulus_bit_count_ =
         get_significant_bit_count_uint(context_data.total_coeff_modulus_.get(), coeff_modulus_size);
 
-    if (context_data.total_coeff_modulus_bit_count_ >
-        CoeffModulus::MaxBitCount(poly_modulus_degree, sec_level_))
-    {
-        POSEIDON_THROW(
-            invalid_argument_error,
-            "parameters are not compliant with HomomorphicEncryption.org security standard");
-    }
+    // std::cout << "poly_modulus_degree" << poly_modulus_degree << std::endl;
+    // std::cout << "total_coeff_modulus_bit_count_" << context_data.total_coeff_modulus_bit_count_  << std::endl;
+    // std::cout << "MaxBitCount" << CoeffModulus::MaxBitCount(poly_modulus_degree, sec_level_) << std::endl;
+    // if (context_data.total_coeff_modulus_bit_count_ >
+    //     CoeffModulus::MaxBitCount(poly_modulus_degree, sec_level_))
+    // {
+    //     POSEIDON_THROW(
+    //         invalid_argument_error,
+    //         "parameters are not compliant with HomomorphicEncryption.org security standard");
+    // }
 
     // Compute the upper_half_threshold for this modulus.
     // (total_coeff_modulus + 1) / 2

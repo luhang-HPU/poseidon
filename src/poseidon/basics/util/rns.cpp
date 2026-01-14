@@ -936,51 +936,63 @@ void RNSTool::divide_and_round_q_last_ntt_inplace(RNSIter input, ConstNTTTablesI
     add_poly_scalar_coeffmod(last_input, coeff_count_, half, last_modulus, last_input);
 
     POSEIDON_ALLOCATE_GET_COEFF_ITER(temp, coeff_count_, pool);
-    POSEIDON_ITERATE(
-        iter(input, inv_q_last_mod_q_, base_q_->base(), rns_ntt_tables), base_q_size - 1,
-        [&](auto I)
+    size_t base_q_size_minus_1 = base_q_size - 1;
+
+    // 开启并行区域
+    #pragma omp parallel
+    {
+        // 每个线程分配自己的临时缓冲区，coeff_count_ 是多项式的度
+        POSEIDON_ALLOCATE_GET_COEFF_ITER(thread_temp, coeff_count_, pool);
+
+        #pragma omp for
+        for (size_t i = 0; i < base_q_size_minus_1; i++)
         {
-            // (ct mod qk) mod qi
-            if (get<2>(I).value() < last_modulus.value())
+            auto current_input_poly = input[i];                  // get<0>(I)
+            uint64_t inv_q_last_val = inv_q_last_mod_q_[i].operand;  // get<1>(I)
+            Modulus qi = (*base_q_)[i];                          // get<2>(I)        
+            const auto &current_ntt_table = rns_ntt_tables[i];   // get<3>(I)
+
+            // 1. (ct mod qk) mod qi
+            if (qi.value() < last_modulus.value())
             {
-                modulo_poly_coeffs(last_input, coeff_count_, get<2>(I), temp);
+                modulo_poly_coeffs(last_input, coeff_count_, qi, thread_temp);
             }
             else
             {
-                set_uint(last_input, coeff_count_, temp);
+                set_uint(last_input, coeff_count_, thread_temp);
             }
 
-            // Lazy subtraction here. ntt_negacyclic_harvey_lazy can take 0 < x < 4*qi input.
-            uint64_t neg_half_mod = get<2>(I).value() - barrett_reduce_64(half, get<2>(I));
+            // 准备修正项
+            uint64_t neg_half_mod = qi.value() - barrett_reduce_64(half, qi);
 
-            // Note: lambda function parameter must be passed by reference here
-            POSEIDON_ITERATE(temp, coeff_count_, [&](auto &J) { J += neg_half_mod; });
-#if POSEIDON_USER_MOD_BIT_COUNT_MAX <= 60
-            // Since POSEIDON uses at most 60-bit moduli, 8*qi < 2^63.
-            // This ntt_negacyclic_harvey_lazy results in [0, 4*qi).
-            uint64_t qi_lazy = get<2>(I).value() << 2;
-            ntt_negacyclic_harvey_lazy(temp, get<3>(I));
-#else
-            // 2^60 < pi < 2^62, then 4*pi < 2^64, we perfrom one reduction from [0, 4*qi) to [0,
-            // 2*qi) after ntt.
-            uint64_t qi_lazy = get<2>(I).value() << 1;
-            ntt_negacyclic_harvey_lazy(temp, get<3>(I));
+            // 处理 thread_temp 上的每一个系数
+            for (size_t j = 0; j < coeff_count_; j++)
+            {
+                thread_temp[j] += neg_half_mod;
+            }
 
-            // Note: lambda function parameter must be passed by reference here
-            POSEIDON_ITERATE(
-                temp, coeff_count_,
-                [&](auto &J)
-                { J -= (qi_lazy & static_cast<uint64_t>(-static_cast<int64_t>(J >= qi_lazy))); });
-#endif
-            // Lazy subtraction again, results in [0, 2*qi_lazy),
-            // The reduction [0, 2*qi_lazy) -> [0, qi) is done implicitly in
-            // multiply_poly_scalar_coeffmod.
-            POSEIDON_ITERATE(iter(get<0>(I), temp), coeff_count_,
-                             [&](auto J) { get<0>(J) += qi_lazy - get<1>(J); });
+    #if POSEIDON_USER_MOD_BIT_COUNT_MAX <= 60
+            uint64_t qi_lazy = qi.value() << 2;
+            ntt_negacyclic_harvey_lazy(thread_temp, current_ntt_table);
+    #else
+            uint64_t qi_lazy = qi.value() << 1;
+            ntt_negacyclic_harvey_lazy(thread_temp, current_ntt_table);
 
-            // qk^(-1) * ((ct mod qi) - (ct mod qk)) mod qi
-            multiply_poly_scalar_coeffmod(get<0>(I), coeff_count_, get<1>(I), get<2>(I), get<0>(I));
-        });
+            for (size_t j = 0; j < coeff_count_; j++)
+            {
+                thread_temp[j] -= (qi_lazy & static_cast<uint64_t>(-static_cast<int64_t>(thread_temp[j] >= qi_lazy)));
+            }
+    #endif
+            // 执行减法：(ct mod qi) - (ct mod qk)
+            for (size_t j = 0; j < coeff_count_; j++)
+            {
+                current_input_poly[j] += qi_lazy - thread_temp[j];
+            }
+            // 乘上 qk^(-1) mod qi
+            multiply_poly_scalar_coeffmod(current_input_poly, coeff_count_, inv_q_last_val, qi, current_input_poly);
+        }
+    }
+
 }
 
 void RNSTool::fastbconv_sk(ConstRNSIter input, RNSIter destination, MemoryPoolHandle pool) const

@@ -203,8 +203,10 @@ GaloisKeys KSwitchGenBase::create_galois_keys(const std::vector<uint32_t> &galoi
     // The max number of keys is equal to number of coefficients
     galois_keys.data().resize(coeff_count);
 
-    for (auto galois_elt : galois_elts)
+    #pragma omp parallel for
+    for (size_t i = 0; i < galois_elts.size(); i++)
     {
+        uint32_t galois_elt = galois_elts[i];
         // Verify coprime conditions.
         if (!(galois_elt & 1) || (galois_elt >= coeff_count << 1))
         {

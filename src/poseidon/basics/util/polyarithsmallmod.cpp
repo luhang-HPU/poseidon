@@ -2,6 +2,7 @@
 #include "poseidon/basics/util/uintarith.h"
 #include "poseidon/basics/util/uintcore.h"
 
+
 #ifdef POSEIDON_USE_INTEL_HEXL
 #include "hexl/hexl.hpp"
 #endif
@@ -65,25 +66,20 @@ void add_poly_coeffmod(ConstCoeffIter operand1, ConstCoeffIter operand2, std::si
     intel::hexl::EltwiseAddMod(&result[0], &operand1[0], &operand2[0], coeff_count, modulus_value);
 #else
 
-    POSEIDON_ITERATE(iter(operand1, operand2, result), coeff_count,
-                     [&](auto I)
-                     {
-#ifdef POSEIDON_DEBUG
-                         if (get<0>(I) >= modulus_value)
-                         {
-                             throw std::invalid_argument("operand1");
-                         }
-                         if (get<1>(I) >= modulus_value)
-                         {
-                             throw std::invalid_argument("operand2");
-                         }
-#endif
-                         auto aa = get<0>(I);
-                         auto bb = get<1>(I);
-                         std::uint64_t sum = get<0>(I) + get<1>(I);
-                         get<2>(I) =
-                             POSEIDON_COND_SELECT(sum >= modulus_value, sum - modulus_value, sum);
-                     });
+    __m256i mod = _mm256_set1_epi64x(modulus_value);
+    for (size_t i = 0; i < coeff_count; i += 4) {
+        __m256i x = _mm256_loadu_si256((__m256i*)&operand1[i]);
+        __m256i y = _mm256_loadu_si256((__m256i*)&operand2[i]);
+        // sum = x + y
+        __m256i sum = _mm256_add_epi64(x, y);
+        // AVX2 没有直接的无符号 64 位比较，这里使用减法溢出技巧或补码转换
+        __m256i sub = _mm256_sub_epi64(sum, mod);
+        // 如果 sum >= modulus，选 sub，否则选 sum
+        __m256i mask = _mm256_cmpgt_epi64(sum, _mm256_sub_epi64(mod, _mm256_set1_epi64x(1)));
+        __m256i res = _mm256_blendv_epi8(sum, sub, mask);
+
+        _mm256_storeu_si256((__m256i*)&result[i], res);
+    }
 #endif
 }
 
