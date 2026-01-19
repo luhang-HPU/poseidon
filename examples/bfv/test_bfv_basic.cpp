@@ -34,7 +34,7 @@ int main()
     Decryptor dec(context, keygen.secret_key());
 
     Plaintext plt1, plt2, plt_res;
-    Ciphertext ct1, ct2;
+    Ciphertext ct1, ct2, ct3, ct4;
     vector<uint64_t> msg1 = {77, 2, 3};
     vector<uint64_t> msg2 = {11, 33, 22};
     vector<uint64_t> msg_res, msg_expect;
@@ -43,6 +43,8 @@ int main()
     encoder.encode(msg2, plt2);
     enc.encrypt(plt1, ct1);
     enc.encrypt(plt2, ct2);
+    enc.encrypt(plt1, ct3);
+    enc.encrypt(plt2, ct4);
 
     Timestacs timestacs;
 
@@ -216,21 +218,22 @@ int main()
     {
         print_example_banner("Example: MULTIPLY / MULTIPLY in bfv");
         timestacs.start();
-        bfv_eva->multiply_relin(ct1, ct1, ct1, relin_keys);
+        bfv_eva->multiply_relin(ct3, ct4, ct3, relin_keys);
         timestacs.end();
-        bfv_eva->read(ct1);
+        bfv_eva->read(ct3);
         timestacs.print_time("TIME : ");
-        dec.decrypt(ct1, plt_res);
+        dec.decrypt(ct3, plt_res);
         encoder.decode(plt_res, msg_res);
 
+        auto msg_expect_multiply = msg1;
         for (auto i = 0; i < msg_expect.size(); i++)
         {
-            msg_expect[i] *= msg_expect[i];
-            msg_expect[i] %= 65537;
+            msg_expect_multiply[i] = msg1[i] * msg2[i];
+            msg_expect_multiply[i] %= 65537;
         }
         for (auto i = 0; i < msg_expect.size(); i++)
         {
-            printf("source_data[%d] : %ld\n", i, msg_expect[i]);
+            printf("source_data[%d] : %ld\n", i, msg_expect_multiply[i]);
             printf("result_data[%d] : %ld\n", i, msg_res[i]);
         }
     }

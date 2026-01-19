@@ -345,6 +345,7 @@ void RNSPoly::add(const RNSPoly &operand, RNSPoly &result) const
             auto &modulus_q = context_data->parms().q();
             auto &modulus_p = key_context_data->parms().p();
 
+            #pragma omp parallel for
             for (int i = 0; i < rns_num_q_; ++i)
             {
                 add_poly_coeffmod(data_ + i * poly_degree_, operand.data_ + i * poly_degree_,
@@ -458,6 +459,7 @@ void RNSPoly::multiply(const RNSPoly &operand, RNSPoly &result) const
             auto &modulus_q = context_data->parms().q();
             auto &modulus_p = key_context_data->parms().p();
 
+            #pragma omp parallel for
             for (int i = 0; i < rns_num_q_; ++i)
             {
                 dyadic_product_coeffmod(data_ + i * poly_degree_, operand.data_ + i * poly_degree_,

@@ -264,127 +264,126 @@ void KSwitchBV::switch_key_inplace(Ciphertext &encrypted, ConstRNSIter target_it
     }
 
     // Temporary result
-    auto t_poly_prod(
-        allocate_zero_poly_array(key_component_count, coeff_count, rns_modulus_size, pool));
+    auto t_poly_prod(allocate_zero_poly_array(key_component_count, coeff_count, rns_modulus_size, pool));
 
-        #pragma omp parallel for schedule(static)
-        for (size_t I = 0; I < rns_modulus_size; ++I)
-        {
-            size_t key_index = (I == decomp_modulus_size ? key_modulus_size - 1 : I);
+    #pragma omp parallel for schedule(static)
+    for (size_t I = 0; I < rns_modulus_size; ++I)
+    {
+        size_t key_index = (I == decomp_modulus_size ? key_modulus_size - 1 : I);
 
-            // Product of two numbers is up to 60 + 60 = 120 bits, so we can sum up to 256 of them
-            // without reduction.
-            size_t lazy_reduction_summand_bound = size_t(POSEIDON_MULTIPLY_ACCUMULATE_USER_MOD_MAX);
-            size_t lazy_reduction_counter = lazy_reduction_summand_bound;
+        // Product of two numbers is up to 60 + 60 = 120 bits, so we can sum up to 256 of them
+        // without reduction.
+        size_t lazy_reduction_summand_bound = size_t(POSEIDON_MULTIPLY_ACCUMULATE_USER_MOD_MAX);
+        size_t lazy_reduction_counter = lazy_reduction_summand_bound;
 
-            // Allocate memory for a lazy accumulator (128-bit coefficients)
-            auto t_poly_lazy(allocate_zero_poly_array(key_component_count, coeff_count, 2, pool));
+        // Allocate memory for a lazy accumulator (128-bit coefficients)
+        auto t_poly_lazy(allocate_zero_poly_array(key_component_count, coeff_count, 2, pool));
 
-            // Semantic misuse of PolyIter; this is really pointing to the data for a single RNS
-            // factor
-            PolyIter accumulator_iter(t_poly_lazy.get(), 2, coeff_count);
+        // Semantic misuse of PolyIter; this is really pointing to the data for a single RNS
+        // factor
+        PolyIter accumulator_iter(t_poly_lazy.get(), 2, coeff_count);
 
-            // Multiply with keys and perform lazy reduction on product's coefficients
-            POSEIDON_ITERATE(
-                iter(size_t(0)), decomp_modulus_size,
-                [&](auto J)
+        // Multiply with keys and perform lazy reduction on product's coefficients
+        POSEIDON_ITERATE(
+            iter(size_t(0)), decomp_modulus_size,
+            [&](auto J)
+            {
+                POSEIDON_ALLOCATE_GET_COEFF_ITER(t_ntt, coeff_count, pool);
+                ConstCoeffIter t_operand;
+
+                // RNS-NTT form exists in input
+                if ((scheme == CKKS || scheme == BGV) && (I == J))
                 {
-                    POSEIDON_ALLOCATE_GET_COEFF_ITER(t_ntt, coeff_count, pool);
-                    ConstCoeffIter t_operand;
-
-                    // RNS-NTT form exists in input
-                    if ((scheme == CKKS || scheme == BGV) && (I == J))
+                    t_operand = target_iter[J];
+                }
+                // Perform RNS-NTT conversion
+                else
+                {
+                    // No need to perform RNS conversion (modular reduction)
+                    if (key_modulus[J] <= key_modulus[key_index])
                     {
-                        t_operand = target_iter[J];
+                        set_uint(t_target[J], coeff_count, t_ntt);
                     }
-                    // Perform RNS-NTT conversion
+                    // Perform RNS conversion (modular reduction)
                     else
                     {
-                        // No need to perform RNS conversion (modular reduction)
-                        if (key_modulus[J] <= key_modulus[key_index])
+                        modulo_poly_coeffs(t_target[J], coeff_count, key_modulus[key_index],
+                                            t_ntt);
+                    }
+                    // NTT conversion lazy outputs in [0, 4q)
+                    ntt_negacyclic_harvey_lazy(t_ntt, key_ntt_tables[key_index]);
+                    t_operand = t_ntt;
+                }
+
+                // Multiply with keys and modular accumulate products in a lazy fashion
+                POSEIDON_ITERATE(
+                    iter(key_vector[J].data(), accumulator_iter), key_component_count,
+                    [&](auto K)
+                    {
+                        if (!lazy_reduction_counter)
                         {
-                            set_uint(t_target[J], coeff_count, t_ntt);
+                            POSEIDON_ITERATE(
+                                iter(t_operand, get<0>(K)[key_index], get<1>(K)), coeff_count,
+                                [&](auto L)
+                                {
+                                    unsigned long long qword[2]{0, 0};
+                                    multiply_uint64(get<0>(L), get<1>(L), qword);
+
+                                    // Accumulate product of t_operand and t_key_acc to
+                                    // t_poly_lazy and reduce
+                                    add_uint128(qword, get<2>(L).ptr(), qword);
+                                    get<2>(L)[0] =
+                                        barrett_reduce_128(qword, key_modulus[key_index]);
+                                    get<2>(L)[1] = 0;
+                                });
                         }
-                        // Perform RNS conversion (modular reduction)
                         else
                         {
-                            modulo_poly_coeffs(t_target[J], coeff_count, key_modulus[key_index],
-                                               t_ntt);
+                            // Same as above but no reduction
+                            POSEIDON_ITERATE(iter(t_operand, get<0>(K)[key_index], get<1>(K)),
+                                                coeff_count,
+                                                [&](auto L)
+                                                {
+                                                    unsigned long long qword[2]{0, 0};
+                                                    multiply_uint64(get<0>(L), get<1>(L), qword);
+                                                    add_uint128(qword, get<2>(L).ptr(), qword);
+                                                    get<2>(L)[0] = qword[0];
+                                                    get<2>(L)[1] = qword[1];
+                                                });
                         }
-                        // NTT conversion lazy outputs in [0, 4q)
-                        ntt_negacyclic_harvey_lazy(t_ntt, key_ntt_tables[key_index]);
-                        t_operand = t_ntt;
-                    }
+                    });
 
-                    // Multiply with keys and modular accumulate products in a lazy fashion
-                    POSEIDON_ITERATE(
-                        iter(key_vector[J].data(), accumulator_iter), key_component_count,
-                        [&](auto K)
-                        {
-                            if (!lazy_reduction_counter)
-                            {
-                                POSEIDON_ITERATE(
-                                    iter(t_operand, get<0>(K)[key_index], get<1>(K)), coeff_count,
-                                    [&](auto L)
-                                    {
-                                        unsigned long long qword[2]{0, 0};
-                                        multiply_uint64(get<0>(L), get<1>(L), qword);
-
-                                        // Accumulate product of t_operand and t_key_acc to
-                                        // t_poly_lazy and reduce
-                                        add_uint128(qword, get<2>(L).ptr(), qword);
-                                        get<2>(L)[0] =
-                                            barrett_reduce_128(qword, key_modulus[key_index]);
-                                        get<2>(L)[1] = 0;
-                                    });
-                            }
-                            else
-                            {
-                                // Same as above but no reduction
-                                POSEIDON_ITERATE(iter(t_operand, get<0>(K)[key_index], get<1>(K)),
-                                                 coeff_count,
-                                                 [&](auto L)
-                                                 {
-                                                     unsigned long long qword[2]{0, 0};
-                                                     multiply_uint64(get<0>(L), get<1>(L), qword);
-                                                     add_uint128(qword, get<2>(L).ptr(), qword);
-                                                     get<2>(L)[0] = qword[0];
-                                                     get<2>(L)[1] = qword[1];
-                                                 });
-                            }
-                        });
-
-                    if (!--lazy_reduction_counter)
-                    {
-                        lazy_reduction_counter = lazy_reduction_summand_bound;
-                    }
-                });
-
-            // PolyIter pointing to the destination t_poly_prod, shifted to the appropriate modulus
-            PolyIter t_poly_prod_iter(t_poly_prod.get() + (I * coeff_count), coeff_count,
-                                      rns_modulus_size);
-
-            // Final modular reduction
-            POSEIDON_ITERATE(
-                iter(accumulator_iter, t_poly_prod_iter), key_component_count,
-                [&](auto K)
+                if (!--lazy_reduction_counter)
                 {
-                    if (lazy_reduction_counter == lazy_reduction_summand_bound)
-                    {
-                        POSEIDON_ITERATE(iter(get<0>(K), *get<1>(K)), coeff_count,
-                                         [&](auto L)
-                                         { get<1>(L) = static_cast<uint64_t>(*get<0>(L)); });
-                    }
-                    else
-                    {
-                        // Same as above except need to still do reduction
-                        POSEIDON_ITERATE(iter(get<0>(K), *get<1>(K)), coeff_count,
-                                         [&](auto L) {
-                                             get<1>(L) = barrett_reduce_128(get<0>(L).ptr(),
-                                                                            key_modulus[key_index]);
-                                         });
-                    }
-                });
+                    lazy_reduction_counter = lazy_reduction_summand_bound;
+                }
+            });
+
+        // PolyIter pointing to the destination t_poly_prod, shifted to the appropriate modulus
+        PolyIter t_poly_prod_iter(t_poly_prod.get() + (I * coeff_count), coeff_count,
+                                    rns_modulus_size);
+
+        // Final modular reduction
+        POSEIDON_ITERATE(
+            iter(accumulator_iter, t_poly_prod_iter), key_component_count,
+            [&](auto K)
+            {
+                if (lazy_reduction_counter == lazy_reduction_summand_bound)
+                {
+                    POSEIDON_ITERATE(iter(get<0>(K), *get<1>(K)), coeff_count,
+                                        [&](auto L)
+                                        { get<1>(L) = static_cast<uint64_t>(*get<0>(L)); });
+                }
+                else
+                {
+                    // Same as above except need to still do reduction
+                    POSEIDON_ITERATE(iter(get<0>(K), *get<1>(K)), coeff_count,
+                                        [&](auto L) {
+                                            get<1>(L) = barrett_reduce_128(get<0>(L).ptr(),
+                                                                        key_modulus[key_index]);
+                                        });
+                }
+            });
     }
     // Accumulated products are now stored in t_poly_prod
     // Perform modulus switching with scaling

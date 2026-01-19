@@ -248,6 +248,18 @@ void NTTTables::initialize(int coeff_count_power, const Modulus &modulus)
     coeff_count_power_ = coeff_count_power;
     coeff_count_ = size_t(1) << coeff_count_power_;
     modulus_ = modulus;
+
+    // std::cout << "Debug Info:" << std::endl;
+    // std::cout << "coeff_count_power_: " << coeff_count_power_ << std::endl;
+    // std::cout << "coeff_count_: " << coeff_count_ << std::endl;
+    // std::cout << "modulus_: " << modulus_.value() << std::endl;
+
+    // // 验证整除性
+    // uint64_t degree = 2 * coeff_count_;
+    // uint64_t m_minus_1 = modulus_.value() - 1;
+    // std::cout << "Check (m-1) % (2*n): " << m_minus_1 << " % " << degree 
+    //         << " = " << (m_minus_1 % degree) << std::endl;
+
     // We defer parameter checking to try_minimal_primitive_root(...)
     if (!try_minimal_primitive_root(2 * coeff_count_, modulus_, root_))
     {
