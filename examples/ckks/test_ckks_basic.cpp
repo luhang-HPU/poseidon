@@ -70,7 +70,7 @@ int main()
     util::GetPrecisionStats(msg_expect, msg_res);
 
     // ADD
-    print_example_banner("Example: ADD / ADD in CKKS");
+    print_example_banner("Example: ADD in CKKS");
     timestacs.start();
     ckks_eva->add(ct1, ct2, ct1);
     timestacs.end();
@@ -94,14 +94,14 @@ int main()
     msg1 = msg_res;
 
     // NTT
-    print_example_banner("Example: NTT / NTT in CKKS");
+    print_example_banner("Example: NTT / INTT in CKKS");
     timestacs.start();
     Ciphertext ct_tmp;
     ckks_eva->ntt_inv(ct1, ct_tmp);
     ckks_eva->ntt_fwd(ct_tmp, ct_res);
     timestacs.end();
     ckks_eva->read(ct_res);
-    timestacs.print_time("ADD TIME: ");
+    timestacs.print_time("NTT / INTT TIME: ");
     decryptor.decrypt(ct_res, plt_res);
     encoder.decode(plt_res, msg_res);
 
@@ -114,7 +114,7 @@ int main()
     util::GetPrecisionStats(msg_expect, msg_res);
 
     // SUB
-    print_example_banner("Example: SUB / SUB in CKKS");
+    print_example_banner("Example: SUB in CKKS");
     timestacs.start();
     ckks_eva->sub(ct1, ct2, ct_res);
     timestacs.end();
@@ -137,7 +137,7 @@ int main()
     util::GetPrecisionStats(msg_expect, msg_res);
 
     // ROTATE
-    print_example_banner("Example: ROTATE / ROTATE in CKKS");
+    print_example_banner("Example: ROTATE in CKKS");
     timestacs.start();
     ckks_eva->rotate(ct1, ct_res, 1, galois_keys);
     timestacs.end();
@@ -161,7 +161,7 @@ int main()
     util::GetPrecisionStats(msg_expect, msg_res);
 
     // CONJUGATE
-    print_example_banner("Example: CONJUGATE / CONJUGATE in CKKS");
+    print_example_banner("Example: CONJUGATE in CKKS");
     timestacs.start();
     ckks_eva->conjugate(ct1, galois_keys, ct_res);
     timestacs.end();
@@ -183,7 +183,7 @@ int main()
     util::GetPrecisionStats(msg_expect, msg_res);
 
     // ADD
-    print_example_banner("Example: ADD_PLAIN / ADD_PLAIN in CKKS");
+    print_example_banner("Example: ADD_PLAIN in CKKS");
     timestacs.start();
     ckks_eva->add_plain(ct1, plt_res, ct_res);
     timestacs.end();
@@ -205,7 +205,7 @@ int main()
     util::GetPrecisionStats(msg_expect, msg_res);
 
     // MULT_PLAIN
-    print_example_banner("Example: MULT_PLAIN / MULT_PLAIN in CKKS");
+    print_example_banner("Example: MULT_PLAIN in CKKS");
     timestacs.start();
     ckks_eva->multiply_plain(ct1, plt_res, ct_res);
     timestacs.end();
@@ -227,7 +227,7 @@ int main()
     util::GetPrecisionStats(msg_expect, msg_res);
 
     // RESCALE
-    print_example_banner("Example: RESCALE / RESCALE in CKKS");
+    print_example_banner("Example: RESCALE in CKKS");
     timestacs.start();
     ckks_eva->rescale(ct_res, ct_res);
     timestacs.end();
@@ -245,7 +245,7 @@ int main()
     util::GetPrecisionStats(msg_expect, msg_res);
 
     // MULTIPLY_RELIN_DYNAMIC
-    print_example_banner("Example: MULTIPLY_RELIN_DYNAMIC / MULTIPLY_RELIN_DYNAMIC in CKKS");
+    print_example_banner("Example: MULTIPLY_RELIN_DYNAMIC in CKKS");
     timestacs.start();
     ckks_eva->multiply_relin_dynamic(ct_res, ct2, ct_res, relin_keys);
     timestacs.end();
@@ -268,7 +268,7 @@ int main()
     util::GetPrecisionStats(msg_expect, msg_res);
 
     // MULT_CONST
-    print_example_banner("Example: MULT_CONST_DIRECT/ MULT_CONST_DIRECT in CKKS");
+    print_example_banner("Example: MULT_CONST_DIRECT in CKKS");
     timestacs.start();
     ckks_eva->multiply_const_direct(ct_res, 2, ct_res, encoder);
     ckks_eva->read(ct_res);
@@ -290,7 +290,7 @@ int main()
     util::GetPrecisionStats(msg_expect, msg_res);
 
     // MULT_CONST
-    print_example_banner("Example: MULT_CONST / MULT_CONST in CKKS");
+    print_example_banner("Example: MULT_CONST in CKKS");
     timestacs.start();
     ckks_eva->multiply_const(ct_res, const_num, 1.0, ct_res, encoder);
     ckks_eva->read(ct_res);
