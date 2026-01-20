@@ -20,6 +20,3 @@ target_link_libraries(test_ckks_multiply_matrix_bsgs_multi_thread poseidon_share
 
 add_executable(test_ckks_slot_to_coeff test_ckks_slot_to_coeff.cpp)
 target_link_libraries(test_ckks_slot_to_coeff poseidon_shared)
-
-add_executable(test_ckks_basic_mlu test_ckks_basic_mlu.cpp)
-target_link_libraries(test_ckks_basic_mlu poseidon_shared)
