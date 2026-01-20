@@ -152,15 +152,6 @@ if(POSEIDON_USE_ZSTD)
     endif()
 endif()
 
-# [option] POSEIDON_USE_HARDWARE (default: OFF)
-# If you turn on POSEIDON_USE_HARDWARE, you need to install poseidon_hardware first.
-option(POSEIDON_USE_HARDWARE OFF)
-message(STATUS "POSEIDON_USE_HARDWARE: ${POSEIDON_USE_HARDWARE}")
-if(POSEIDON_USE_HARDWARE)
-    set(USING_HARDWARE ON)
-endif()
-add_subdirectory(src/poseidon)
-
 # [option] POSEIDON_USE_MSGSL (default: ON)
 set(POSEIDON_USE_MSGSL_OPTION_STR "Use Microsoft GSL")
 option(POSEIDON_USE_MSGSL ${POSEIDON_USE_MSGSL_OPTION_STR} ON)
@@ -180,6 +171,39 @@ if(POSEIDON_USE_MSGSL)
     endif()
 endif()
 
+# [option] POSEIDON_USE_INTEL_HEXL (default: OFF)
+set(POSEIDON_USE_INTEL_HEXL_OPTION_STR "Use Intel HEXL library")
+unset(POSEIDON_USE_INTEL_HEXL CACHE)
+option(POSEIDON_USE_INTEL_HEXL ${POSEIDON_USE_INTEL_HEXL_OPTION_STR} OFF)
+message(STATUS "POSEIDON_USE_INTEL_HEXL: ${POSEIDON_USE_INTEL_HEXL}")
+
+if(POSEIDON_USE_INTEL_HEXL)
+    if(POSEIDON_BUILD_DEPS)
+        message(STATUS "Intel HEXL: download ...")
+        poseidon_fetch_thirdparty_content(ExternalIntelHEXL)
+    else()
+        find_package(HEXL 1.2.6)
+        if (NOT TARGET HEXL::hexl)
+            message(FATAL_ERROR "Intel HEXL: not found")
+        endif()
+    endif()
+endif()
+
+# Create the config file
+configure_file(${POSEIDON_CONFIG_H_IN_FILENAME} ${POSEIDON_CONFIG_H_FILENAME})
+install(
+        FILES ${POSEIDON_CONFIG_H_FILENAME}
+        DESTINATION ${POSEIDON_INCLUDES_INSTALL_DIR}/poseidon/util)
+
+# [option] POSEIDON_USE_HARDWARE (default: OFF)
+# If you turn on POSEIDON_USE_HARDWARE, you need to install poseidon_hardware first.
+option(POSEIDON_USE_HARDWARE OFF)
+message(STATUS "POSEIDON_USE_HARDWARE: ${POSEIDON_USE_HARDWARE}")
+if(POSEIDON_USE_HARDWARE)
+    set(USING_HARDWARE ON)
+endif()
+add_subdirectory(src/poseidon)
+
 # [option] POSEIDON_BUILD_EXAMPLES (default: ON)
 option(POSEIDON_BUILD_EXAMPLES "Build examples for POSEIDON" ON)
 message(STATUS "POSEIDON_BUILD_EXAMPLES: ${POSEIDON_BUILD_EXAMPLES}")
@@ -188,12 +212,6 @@ if(POSEIDON_BUILD_EXAMPLES)
     add_subdirectory(examples/bgv)
     add_subdirectory(examples/ckks)
 endif()
-
-# Create the config file
-configure_file(${POSEIDON_CONFIG_H_IN_FILENAME} ${POSEIDON_CONFIG_H_FILENAME})
-install(
-    FILES ${POSEIDON_CONFIG_H_FILENAME}
-    DESTINATION ${POSEIDON_INCLUDES_INSTALL_DIR}/poseidon/util)
 
 add_library(poseidon_shared SHARED ${POSEIDON_SOURCE_FILES})    
 target_include_directories(poseidon_shared PUBLIC ${POSEIDON_INCLUDES_DIR}/src)
@@ -229,6 +247,21 @@ if(POSEIDON_BUILD_DEPS)
             DIRECTORY ${msgsl_SOURCE_DIR}/include/gsl
             DESTINATION ${POSEIDON_INCLUDES_INSTALL_DIR})
     endif()
+endif()
+
+if(POSEIDON_USE_INTEL_HEXL)
+    target_link_libraries(poseidon_shared PRIVATE HEXL::hexl)
+    target_compile_options(poseidon_shared PRIVATE $<TARGET_PROPERTY:HEXL::hexl,INTERFACE_COMPILE_OPTIONS>)
+    get_target_property(HEXL_INTERFACE_LINK_OPTIONS HEXL::hexl INTERFACE_LINK_OPTIONS)
+    if (NOT "${HEXL_INTERFACE_LINK_OPTIONS}" STREQUAL "HEXL_INTERFACE_LINK_OPTIONS-NOTFOUND")
+        target_link_libraries(poseidon_shared INTERFACE ${HEXL_INTERFACE_LINK_OPTIONS})
+    endif()
+
+    # Install shared HEXL library to installation directory
+    install(DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/${CMAKE_LIBRARY_PREFIX}
+            FILES_MATCHING PATTERN "*hexl*"
+    )
 endif()
 
 install(
