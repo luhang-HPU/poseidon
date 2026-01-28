@@ -71,10 +71,10 @@ void Modulus::set_value(uint64_t value)
         const_ratio_ = {{0, 0, 0}};
         is_prime_ = false;
     }
-    else if ((value >> POSEIDON_MOD_BIT_COUNT_MAX != 0) || (value == 1))
-    {
-        POSEIDON_THROW(invalid_argument_error, "value can be at most 61-bit and cannot be 1");
-    }
+    // else if ((value >> POSEIDON_MOD_BIT_COUNT_MAX != 0) || (value == 1))
+    // {
+    //     POSEIDON_THROW(invalid_argument_error, "value can be at most 61-bit and cannot be 1");
+    // }
     else
     {
         // All normal, compute const_ratio and set everything

@@ -13,7 +13,7 @@ int main()
     cout << BANNER << std::endl;
     cout << "POSEIDON SOFTWARE VERSION:" << POSEIDON_VERSION << std::endl;
     cout << "" << std::endl;
-    size_t poly_modulus_degree = 4096;
+    size_t poly_modulus_degree = 32768;
     PoseidonFactory::get_instance()->set_device_type(DEVICE_HARDWARE);
     ParametersLiteralDefault bfv_param_literal(BFV, poly_modulus_degree, poseidon::sec_level_type::tc128);
     PoseidonContext context =
@@ -137,9 +137,9 @@ int main()
     {
         print_example_banner("Example: ROTATE_ROW / ROTATE_ROW in bfv");
         timestacs.start();
-        bfv_eva->rotate_row(ct1, ct1, 1, galois_keys);
+        bfv_eva->rotate_row(ct1, ct1, 111, galois_keys);
         timestacs.end();
-        bfv_eva->rotate_row(ct1, ct1, -1, galois_keys);
+        bfv_eva->rotate_row(ct1, ct1, -111, galois_keys);
         timestacs.print_time("TIME : ");
         dec.decrypt(ct1, plt_res);
         encoder.decode(plt_res, msg_res);

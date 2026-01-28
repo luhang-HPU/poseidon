@@ -663,12 +663,14 @@ void RNSTool::initialize(size_t poly_modulus_degree, const RNSBase &q, const Mod
     int total_coeff_bit_count = get_significant_bit_count_uint(q.base_prod(), q.size());
 
     size_t base_b_size = base_q_size;
-    if (32 + t_.bit_count() + total_coeff_bit_count >=
-        POSEIDON_INTERNAL_MOD_BIT_COUNT * safe_cast<int>(base_q_size) +
-            POSEIDON_INTERNAL_MOD_BIT_COUNT)
-    {
-        base_b_size++;
-    }
+    // if (32 + t_.bit_count() + total_coeff_bit_count >=
+    //     POSEIDON_INTERNAL_MOD_BIT_COUNT * safe_cast<int>(base_q_size) +
+    //         POSEIDON_INTERNAL_MOD_BIT_COUNT)
+    // {
+    //     base_b_size++;
+    //     printf("RNSTool: increasing base B size to %zu\r\n", base_b_size);  
+    // }
+    base_b_size++;
 
     size_t base_bsk_size = add_safe(base_b_size, size_t(1));
     size_t base_bsk_m_tilde_size = add_safe(base_bsk_size, size_t(1));

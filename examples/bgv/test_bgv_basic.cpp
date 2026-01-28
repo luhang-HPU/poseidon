@@ -13,7 +13,7 @@ int main()
     std::cout << "POSEIDON SOFTWARE VERSION:" << POSEIDON_VERSION << std::endl;
     std::cout << "" << std::endl;
 
-    ParametersLiteralDefault bgv_param_literal(BGV, 65536, poseidon::sec_level_type::tc128);
+    ParametersLiteralDefault bgv_param_literal(BGV, 32768, poseidon::sec_level_type::tc128);
     PoseidonFactory::get_instance()->set_device_type(DEVICE_HARDWARE);
     auto context =
         PoseidonFactory::get_instance()->create_poseidon_context(bgv_param_literal);

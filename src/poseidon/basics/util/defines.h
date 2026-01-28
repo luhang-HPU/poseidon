@@ -32,10 +32,10 @@ static_assert(sizeof(unsigned long long) == 8, "Require sizeof(unsigned long lon
 #define POSEIDON_MOD_BIT_COUNT_MIN 2
 
 // Bit-length of internally used coefficient moduli, e.g., auxiliary base in BFV
-#define POSEIDON_INTERNAL_MOD_BIT_COUNT 60
+#define POSEIDON_INTERNAL_MOD_BIT_COUNT 44
 
 // Bounds for bit-length of user-defined coefficient moduli
-#define POSEIDON_USER_MOD_BIT_COUNT_MAX 59
+#define POSEIDON_USER_MOD_BIT_COUNT_MAX 44
 #define POSEIDON_USER_MOD_BIT_COUNT_MIN 2
 
 // Bounds for bit-length of the plaintext modulus

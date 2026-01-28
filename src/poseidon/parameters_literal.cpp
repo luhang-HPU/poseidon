@@ -420,31 +420,31 @@ GetDefaultLogCoeffModulus128()
             /*
             Polynomial modulus: 1x^8192 + 1
             Modulus count: 5
-            Total bit count: 218 = 2 * 43 + 3 * 44
+            Total bit count: 211 = 4 * 42 + 1 * 43
             */
-            {8192, {{43, 43, 43, 43}, {44}, 32}},
+            {8192, {{42, 42, 42, 42}, {43}, 32}},
 
             /*
             Polynomial modulus: 1x^16384 + 1
-            Modulus count: 9
-            Total bit count: 438 = 3 * 48 + 6 * 49
+            Modulus count: 10
+            Total bit count: 431 = 9 * 43 + 1 * 44
             */
-            {16384, {{48, 48, 48, 48, 48, 48, 48, 48}, {50}, 40}},
+            {16384, {{43, 43, 43, 43, 43, 43, 43, 43, 43}, {44}, 40}},
 
             /*
             Polynomial modulus: 1x^32768 + 1
-            Modulus count: 16
-            Total bit count: 881 = 15 * 55 + 56
+            Modulus count: 20
+            Total bit count: 861 = 19 * 43 + 44
             */
-            {32768, {{55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55}, {56}, 40}},
+            {32768, {{43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43}, {44}, 40}},
 
             /*
             Polynomial modulus: 1x^65536 + 1
-            Modulus count: 32
-            Total bit count: 1857 = 31 * 58 + 59
+            Modulus count: 31
+            Total bit count: 1334 = 43 * 30 + 44
             */
-            {65536, {{58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58,
-                  58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58}, {59}, 40}}};
+            {65536, {{43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43,
+                  43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43}, {44}, 40}}};
 
     return default_log_coeff_modulus_128;
 }
@@ -611,29 +611,29 @@ void ParametersLiteralDefault::init(SchemeType scheme_type, uint32_t degree,
         switch (sec_level_)
         {
         case sec_level_type::none:
-            log_scale_ = std::get<2>(GetDefaultCoeffModulus128().at(degree));
-            set_modulus(std::get<0>(GetDefaultCoeffModulus128().at(degree)),
-                        std::get<1>(GetDefaultCoeffModulus128().at(degree)));
+            log_scale_ = std::get<2>(GetDefaultLogCoeffModulus128().at(degree));
+            set_log_modulus(std::get<0>(GetDefaultLogCoeffModulus128().at(degree)),
+                            std::get<1>(GetDefaultLogCoeffModulus128().at(degree)));
             break;
         case sec_level_type::tc128:
-            log_scale_ = std::get<2>(GetDefaultCoeffModulus128().at(degree));
-            set_modulus(std::get<0>(GetDefaultCoeffModulus128().at(degree)),
-                        std::get<1>(GetDefaultCoeffModulus128().at(degree)));
+            log_scale_ = std::get<2>(GetDefaultLogCoeffModulus128().at(degree));
+            set_log_modulus(std::get<0>(GetDefaultLogCoeffModulus128().at(degree)),
+                            std::get<1>(GetDefaultLogCoeffModulus128().at(degree)));
             break;
         case sec_level_type::tc192:
-            log_scale_ = std::get<2>(GetDefaultCoeffModulus192().at(degree));
-            set_modulus(std::get<0>(GetDefaultCoeffModulus192().at(degree)),
-                        std::get<1>(GetDefaultCoeffModulus192().at(degree)));
+            log_scale_ = std::get<2>(GetDefaultLogCoeffModulus192().at(degree));
+            set_log_modulus(std::get<0>(GetDefaultLogCoeffModulus192().at(degree)),
+                            std::get<1>(GetDefaultLogCoeffModulus192().at(degree)));
             break;
         case sec_level_type::tc256:
-            log_scale_ = std::get<2>(GetDefaultCoeffModulus256().at(degree));
-            set_modulus(std::get<0>(GetDefaultCoeffModulus256().at(degree)),
-                        std::get<1>(GetDefaultCoeffModulus256().at(degree)));
+            log_scale_ = std::get<2>(GetDefaultLogCoeffModulus256().at(degree));
+            set_log_modulus(std::get<0>(GetDefaultLogCoeffModulus256().at(degree)),
+                            std::get<1>(GetDefaultLogCoeffModulus256().at(degree)));
             break;
         default:
-            log_scale_ = std::get<2>(GetDefaultCoeffModulus128().at(degree));
-            set_modulus(std::get<0>(GetDefaultCoeffModulus128().at(degree)),
-                        std::get<1>(GetDefaultCoeffModulus128().at(degree)));
+            log_scale_ = std::get<2>(GetDefaultLogCoeffModulus128().at(degree));
+            set_log_modulus(std::get<0>(GetDefaultLogCoeffModulus128().at(degree)),
+                            std::get<1>(GetDefaultLogCoeffModulus128().at(degree)));
         }
     }
     else if (scheme_type == BGV)
@@ -652,29 +652,29 @@ void ParametersLiteralDefault::init(SchemeType scheme_type, uint32_t degree,
         switch (sec_level_)
         {
         case sec_level_type::none:
-            log_scale_ = std::get<2>(GetDefaultCoeffModulus128().at(degree));
-            set_modulus(std::get<0>(GetDefaultCoeffModulus128().at(degree)),
-                        std::get<1>(GetDefaultCoeffModulus128().at(degree)));
+            log_scale_ = std::get<2>(GetDefaultLogCoeffModulus128().at(degree));
+            set_log_modulus(std::get<0>(GetDefaultLogCoeffModulus128().at(degree)),
+                            std::get<1>(GetDefaultLogCoeffModulus128().at(degree)));
             break;
         case sec_level_type::tc128:
-            log_scale_ = std::get<2>(GetDefaultCoeffModulus128().at(degree));
-            set_modulus(std::get<0>(GetDefaultCoeffModulus128().at(degree)),
-                        std::get<1>(GetDefaultCoeffModulus128().at(degree)));
+            log_scale_ = std::get<2>(GetDefaultLogCoeffModulus128().at(degree));
+            set_log_modulus(std::get<0>(GetDefaultLogCoeffModulus128().at(degree)),
+                            std::get<1>(GetDefaultLogCoeffModulus128().at(degree)));
             break;
         case sec_level_type::tc192:
-            log_scale_ = std::get<2>(GetDefaultCoeffModulus192().at(degree));
-            set_modulus(std::get<0>(GetDefaultCoeffModulus192().at(degree)),
-                        std::get<1>(GetDefaultCoeffModulus192().at(degree)));
+            log_scale_ = std::get<2>(GetDefaultLogCoeffModulus192().at(degree));
+            set_log_modulus(std::get<0>(GetDefaultLogCoeffModulus192().at(degree)),
+                            std::get<1>(GetDefaultLogCoeffModulus192().at(degree)));
             break;
         case sec_level_type::tc256:
-            log_scale_ = std::get<2>(GetDefaultCoeffModulus256().at(degree));
-            set_modulus(std::get<0>(GetDefaultCoeffModulus256().at(degree)),
-                        std::get<1>(GetDefaultCoeffModulus256().at(degree)));
+            log_scale_ = std::get<2>(GetDefaultLogCoeffModulus256().at(degree));
+            set_log_modulus(std::get<0>(GetDefaultLogCoeffModulus256().at(degree)),
+                            std::get<1>(GetDefaultLogCoeffModulus256().at(degree)));
             break;
         default:
-            log_scale_ = std::get<2>(GetDefaultCoeffModulus128().at(degree));
-            set_modulus(std::get<0>(GetDefaultCoeffModulus128().at(degree)),
-                        std::get<1>(GetDefaultCoeffModulus128().at(degree)));
+            log_scale_ = std::get<2>(GetDefaultLogCoeffModulus128().at(degree));
+            set_log_modulus(std::get<0>(GetDefaultLogCoeffModulus128().at(degree)),
+                            std::get<1>(GetDefaultLogCoeffModulus128().at(degree)));
         }
     }
 }
