@@ -268,7 +268,7 @@
 //         }
 //     }
 
-//     void bm_bgv_relin_inplace(State &state, shared_ptr<BMEnv> bm_env)
+//     void bm_bgv_relinearize(State &state, shared_ptr<BMEnv> bm_env)
 //     {
 //         Ciphertext ct;
 //         for (auto _ : state)

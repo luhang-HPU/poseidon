@@ -67,31 +67,22 @@ void register_bm_family(
     //     POSEIDON_BENCHMARK_REGISTER(KeyGen, n, log_q, Galois, bm_keygen_galois, bm_env_bfv);
     // }
 
-    // POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EncryptSecret, bm_bfv_encrypt_secret, bm_env_bfv);
-    // POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EncryptPublic, bm_bfv_encrypt_public, bm_env_bfv);
-    // POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, Decrypt, bm_bfv_decrypt, bm_env_bfv);
-    // POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EncodeBatch, bm_bfv_encode_batch, bm_env_bfv);
-    // POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, DecodeBatch, bm_bfv_decode_batch, bm_env_bfv);
-    // POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateAddCt, bm_bfv_add_ct, bm_env_bfv);
-    // POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateAddPt, bm_bfv_add_pt, bm_env_bfv);
-    // POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateNegate, bm_bfv_negate, bm_env_bfv);
-    // POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateSubCt, bm_bfv_sub_ct, bm_env_bfv);
-    // POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateSubPt, bm_bfv_sub_pt, bm_env_bfv);
-    // POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateMulCt, bm_bfv_mul_ct, bm_env_bfv);
-    // POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateMulPt, bm_bfv_mul_pt, bm_env_bfv);
-    // POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateSquare, bm_bfv_square, bm_env_bfv);
-    // if (bm_env_bfv->context().first_context_data()->parms().coeff_modulus().size() > 1)
-    // {
-    //     POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateModSwitchInplace,
-    //     bm_bfv_modswitch_inplace, bm_env_bfv);
-    // }
-    // if (bm_env_bfv->context().using_keyswitching())
-    // {
-    //     POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateRelinearize, bm_bfv_relin_inplace,
-    //     bm_env_bfv); POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateRotateRows,
-    //     bm_bfv_rotate_rows, bm_env_bfv); POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q,
-    //     EvaluateRotateCols, bm_bfv_rotate_cols, bm_env_bfv);
-    // }
+    POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EncryptSecret, bm_bfv_encrypt_secret, bm_env_bfv);
+    POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EncryptPublic, bm_bfv_encrypt_public, bm_env_bfv);
+    POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, Decrypt, bm_bfv_decrypt, bm_env_bfv);
+    POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EncodeBatch, bm_bfv_encode_batch, bm_env_bfv);
+    POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, DecodeBatch, bm_bfv_decode_batch, bm_env_bfv);
+    POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateAddCt, bm_bfv_add_ct, bm_env_bfv);
+    POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateAddPt, bm_bfv_add_pt, bm_env_bfv);
+    POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateSubCt, bm_bfv_sub_ct, bm_env_bfv);
+    POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateSubPt, bm_bfv_sub_pt, bm_env_bfv);
+    POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateMulCt, bm_bfv_mul_ct, bm_env_bfv);
+    POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateMulPt, bm_bfv_mul_pt, bm_env_bfv);
+    POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateSquare, bm_bfv_square, bm_env_bfv);
+    POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateModSwitch, bm_bfv_modswitch, bm_env_bfv);
+    POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateRelinearize, bm_bfv_relinearize, bm_env_bfv);
+    POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateRotateRows, bm_bfv_rotate_rows, bm_env_bfv);
+    POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateRotateCols, bm_bfv_rotate_cols, bm_env_bfv);
 
     // POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EncryptSecret, bm_bgv_encrypt_secret, bm_env_bgv);
     // POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EncryptPublic, bm_bgv_encrypt_public, bm_env_bgv);
@@ -108,9 +99,9 @@ void register_bm_family(
     // bm_bgv_mul_ct, bm_env_bgv); POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateMulCtInplace,
     // bm_bgv_mul_ct_inplace, bm_env_bgv); POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateMulPt,
     // bm_bgv_mul_pt, bm_env_bgv); POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateMulPtInplace,
-    // bm_bgv_mul_pt_inplace, bm_env_bgv); POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateSquare,
-    // bm_bgv_square, bm_env_bgv); POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateSquareInplace,
-    // bm_bgv_square_inplace, bm_env_bgv); if
+    // bm_bgv_mul_pt_inplace, bm_env_bgv); POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q,
+    // EvaluateSquare, bm_bgv_square, bm_env_bgv); POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q,
+    // EvaluateSquareInplace, bm_bgv_square_inplace, bm_env_bgv); if
     // (bm_env_bgv->context().first_context_data()->parms().coeff_modulus().size() > 1)
     // {
     //     POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateModSwitchInplace,
@@ -118,7 +109,7 @@ void register_bm_family(
     // }
     // if (bm_env_bgv->context().using_keyswitching())
     // {
-    //     POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateRelinearize, bm_bgv_relin_inplace,
+    //     POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateRelinearize, bm_bgv_relinearize,
     //     bm_env_bgv); POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateRotateRows,
     //     bm_bgv_rotate_rows, bm_env_bgv); POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q,
     //     EvaluateRotateRowsInplace, bm_bgv_rotate_rows_inplace, bm_env_bgv);
@@ -137,9 +128,7 @@ void register_bm_family(
     POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, DecodeDouble, bm_ckks_decode_double, bm_env_ckks);
     POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateAddCt, bm_ckks_add_ct, bm_env_ckks);
     POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateAddPt, bm_ckks_add_pt, bm_env_ckks);
-    // POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateNegate, bm_ckks_negate, bm_env_ckks); // don't support negate
     POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateSubCt, bm_ckks_sub_ct, bm_env_ckks);
-    // POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateSubPt, bm_ckks_sub_pt, bm_env_ckks); // don't support sub_pt
     POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateMulCt, bm_ckks_mul_ct, bm_env_ckks);
     POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateMulPt, bm_ckks_mul_pt, bm_env_ckks);
     POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateSquare, bm_ckks_square, bm_env_ckks);

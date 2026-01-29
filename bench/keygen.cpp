@@ -1,17 +1,16 @@
-// #include "seal/seal.h"
-// #include "seal/util/rlwe.h"
-// #include "bench.h"
+#include "poseidon/basics/util/rlwe.h"
+#include "bench.h"
 
-// using namespace benchmark;
-// using namespace sealbench;
-// using namespace seal;
-// using namespace std;
+using namespace benchmark;
+using namespace poseidonbench;
+using namespace poseidon;
+using namespace std;
 
-// /**
-// This file defines benchmarks for KeyGen-related HE primitives.
-// */
+/**
+This file defines benchmarks for KeyGen-related HE primitives.
+*/
 
-// namespace seal
+// namespace poseidon
 // {
 //     struct KeyGenerator::KeyGeneratorPrivateHelper
 //     {
@@ -20,10 +19,10 @@
 //             return keygen->generate_sk();
 //         }
 //     };
-// } // namespace seal
+// } // namespace poseidon
 
-// namespace sealbench
-// {
+namespace poseidonbench
+{
 //     void bm_keygen_secret(State &state, shared_ptr<BMEnv> bm_env)
 //     {
 //         KeyGenerator keygen(bm_env->context());
@@ -70,4 +69,4 @@
 //             keygen->create_galois_keys({ random_one_step() }, glk);
 //         }
 //     }
-// } // namespace sealbench
+} // namespace poseidonbench
