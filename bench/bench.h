@@ -9,6 +9,9 @@
 #include "poseidon/util/debug.h"
 #include "poseidon/util/random_sample.h"
 
+using namespace poseidon;
+using namespace poseidon::util;
+
 namespace poseidonbench
 {
 /**
@@ -142,10 +145,6 @@ public:
     void randomize_array_mod(std::uint64_t *data, std::size_t count,
                              const poseidon::Modulus &modulus)
     {
-        // For the purpose of benchmark, avoid using poseidon::UniformRandomGenerator, as it
-        // degrades performance with HEXL on some systems, due to AVX512 transitions. See
-        // https://travisdowns.github.io/blog/2020/01/17/avxfreq1.html#voltage-only-transitions.
-        // This method is not used for random number generation in Microsoft SEAL.
         std::random_device rd;
         std::mt19937_64 generator(rd());
         std::uniform_int_distribution<std::uint64_t> dist(0, modulus.value() - 1);
@@ -203,18 +202,16 @@ public:
     /**
     Create a uniform random ciphertext in CKKS using the highest-level parameters.
     */
-    void randomize_ct_ckks(poseidon::Ciphertext &ct)
+    void randomize_ct_ckks(poseidon::Ciphertext &ct, double scale)
     {
-        if (ct.parms_id() != context_.crt_context()->first_parms_id())
-        {
-            ct.resize(context_, std::size_t(2));
-        }
+        Plaintext pt;
         auto &parms = context_.crt_context()->first_context_data()->parms();
-        for (std::size_t i = 0; i < ct.size(); i++)
-        {
-            randomize_poly_rns(ct.data(i), parms);
-        }
-        ct.is_ntt_form() = true;
+        auto slot_num = parms.slot();
+        vector<complex<double>> msg;
+        sample_random_complex_vector(msg, slot_num);
+        ckks_encoder_->encode(msg, scale, pt);
+        encryptor_->encrypt(pt, ct);
+        // ct.is_ntt_form() = true;
     }
 
     /**
@@ -235,19 +232,13 @@ public:
     /**
     Create a uniform random plaintext (RNS poly) in CKKS.
     */
-    void randomize_pt_ckks(poseidon::Plaintext &pt)
+    void randomize_pt_ckks(poseidon::Plaintext &pt, double scale)
     {
         auto &parms = context_.crt_context()->first_context_data()->parms();
-        if (pt.coeff_count() != parms.degree() * parms.coeff_modulus().size())
-        {
-            pt.parms_id() = poseidon::parms_id_zero;
-            pt.resize(parms.degree() * parms.coeff_modulus().size());
-        }
-        if (pt.parms_id() != context_.crt_context()->first_parms_id())
-        {
-            pt.parms_id() = context_.crt_context()->first_parms_id();
-        }
-        randomize_poly_rns(pt.data(), parms);
+        auto slot_num = parms.slot();
+        vector<complex<double>> msg;
+        sample_random_complex_vector(msg, slot_num);
+        ckks_encoder_->encode(msg, scale, pt);
     }
 
     /**
@@ -355,20 +346,20 @@ private:
     // void bm_bgv_from_ntt_inplace(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
 
     // // CKKS-specific benchmark cases
-    // void bm_ckks_encrypt_secret(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_ckks_encrypt_public(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_ckks_decrypt(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_ckks_encode_double(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_ckks_decode_double(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_ckks_add_ct(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_ckks_add_pt(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_ckks_encrypt_secret(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_ckks_encrypt_public(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_ckks_decrypt(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_ckks_encode_double(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_ckks_decode_double(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_ckks_add_ct(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_ckks_add_pt(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
     // void bm_ckks_negate(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
     void bm_ckks_sub_ct(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
     // void bm_ckks_sub_pt(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_ckks_mul_ct(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_ckks_mul_pt(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_ckks_square(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_ckks_rescale_inplace(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_ckks_relin_inplace(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_ckks_rotate(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_ckks_mul_ct(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_ckks_mul_pt(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_ckks_square(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_ckks_rescale(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_ckks_relinearize(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_ckks_rotate(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
 } // namespace poseidonbench

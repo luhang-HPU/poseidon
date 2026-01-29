@@ -87,7 +87,7 @@ void register_bm_family(
     // }
     // if (bm_env_bfv->context().using_keyswitching())
     // {
-    //     POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateRelinInplace, bm_bfv_relin_inplace,
+    //     POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateRelinearize, bm_bfv_relin_inplace,
     //     bm_env_bfv); POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateRotateRows,
     //     bm_bfv_rotate_rows, bm_env_bfv); POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q,
     //     EvaluateRotateCols, bm_bfv_rotate_cols, bm_env_bfv);
@@ -118,7 +118,7 @@ void register_bm_family(
     // }
     // if (bm_env_bgv->context().using_keyswitching())
     // {
-    //     POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateRelinInplace, bm_bgv_relin_inplace,
+    //     POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateRelinearize, bm_bgv_relin_inplace,
     //     bm_env_bgv); POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateRotateRows,
     //     bm_bgv_rotate_rows, bm_env_bgv); POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q,
     //     EvaluateRotateRowsInplace, bm_bgv_rotate_rows_inplace, bm_env_bgv);
@@ -130,30 +130,23 @@ void register_bm_family(
     // bm_env_bgv); POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateFromNTTInplace,
     // bm_bgv_from_ntt_inplace, bm_env_bgv);
 
-    // POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EncryptSecret, bm_ckks_encrypt_secret, bm_env_ckks);
-    // POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EncryptPublic, bm_ckks_encrypt_public, bm_env_ckks);
-    // POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, Decrypt, bm_ckks_decrypt, bm_env_ckks);
-    // POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EncodeDouble, bm_ckks_encode_double, bm_env_ckks);
-    // POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, DecodeDouble, bm_ckks_decode_double, bm_env_ckks);
-    // POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateAddCt, bm_ckks_add_ct, bm_env_ckks);
-    // POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateAddPt, bm_ckks_add_pt, bm_env_ckks);
-    // POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateNegate, bm_ckks_negate, bm_env_ckks);
+    POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EncryptSecret, bm_ckks_encrypt_secret, bm_env_ckks);
+    POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EncryptPublic, bm_ckks_encrypt_public, bm_env_ckks);
+    POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, Decrypt, bm_ckks_decrypt, bm_env_ckks);
+    POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EncodeDouble, bm_ckks_encode_double, bm_env_ckks);
+    POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, DecodeDouble, bm_ckks_decode_double, bm_env_ckks);
+    POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateAddCt, bm_ckks_add_ct, bm_env_ckks);
+    POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateAddPt, bm_ckks_add_pt, bm_env_ckks);
+    // POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateNegate, bm_ckks_negate, bm_env_ckks); // don't support negate
     POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateSubCt, bm_ckks_sub_ct, bm_env_ckks);
-    // POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateSubPt, bm_ckks_sub_pt, bm_env_ckks);
-    // POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateMulCt, bm_ckks_mul_ct, bm_env_ckks);
-    // POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateMulPt, bm_ckks_mul_pt, bm_env_ckks);
-    // POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateSquare, bm_ckks_square, bm_env_ckks);
-    // if (bm_env_ckks->context().first_context_data()->parms().coeff_modulus().size() > 1)
-    // {
-    //     POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateRescaleInplace, bm_ckks_rescale_inplace,
-    //     bm_env_ckks);
-    // }
-    // if (bm_env_ckks->context().using_keyswitching())
-    // {
-    //     POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateRelinInplace, bm_ckks_relin_inplace,
-    //     bm_env_ckks); POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateRotate, bm_ckks_rotate,
-    //     bm_env_ckks);
-    // }
+    // POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateSubPt, bm_ckks_sub_pt, bm_env_ckks); // don't support sub_pt
+    POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateMulCt, bm_ckks_mul_ct, bm_env_ckks);
+    POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateMulPt, bm_ckks_mul_pt, bm_env_ckks);
+    POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateSquare, bm_ckks_square, bm_env_ckks);
+    POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateRescale, bm_ckks_rescale, bm_env_ckks);
+    POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateRelinearize, bm_ckks_relinearize, bm_env_ckks);
+    POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateRotate, bm_ckks_rotate, bm_env_ckks);
+
     // POSEIDON_BENCHMARK_REGISTER(UTIL, n, log_q, NTTForward, bm_util_ntt_forward, bm_env_bfv);
     // POSEIDON_BENCHMARK_REGISTER(UTIL, n, log_q, NTTInverse, bm_util_ntt_inverse, bm_env_bfv);
     // POSEIDON_BENCHMARK_REGISTER(UTIL, n, 0, NTTForwardLowLevel, bm_util_ntt_forward_low_level,
@@ -216,7 +209,7 @@ int main(int argc, char **argv)
 
     RunSpecifiedBenchmarks();
 
-    // After running all benchmark cases, we print again the total memory consumption by SEAL memory pool.
+    // After running all benchmark cases, we print again the total memory consumption by poseidon memory pool.
     // This value should be larger than the previous amount but not by much.
     cout << "[" << setw(7) << right << (poseidon::MemoryManager::GetPool().alloc_byte_count() >> 20) << " MB] "
          << "Total allocation from the memory pool" << endl;
