@@ -1,4 +1,3 @@
-#include "poseidon/basics/util/rlwe.h"
 #include "bench.h"
 
 using namespace benchmark;

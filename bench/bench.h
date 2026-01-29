@@ -2,6 +2,7 @@
 #pragma GCC diagnostic ignored "-Wconversion"
 #include "benchmark/benchmark.h"
 #pragma GCC diagnostic pop
+#include "poseidon/basics/util/rlwe.h"
 #include "poseidon/decryptor.h"
 #include "poseidon/encryptor.h"
 #include "poseidon/factory/poseidon_factory.h"
@@ -33,14 +34,11 @@ public:
         keygen_ = std::make_shared<poseidon::KeyGenerator>(context_);
         sk_ = keygen_->secret_key();
         keygen_->create_public_key(pk_);
-        // if (context_.using_keyswitching())
-        // {
         keygen_->create_relin_keys(rlk_);
         galois_elts_all_ = context_.crt_context()->galois_tool()->get_elts_from_steps({1});
         galois_elts_all_.emplace_back(2 * static_cast<uint32_t>(parms_.degree()) -
                                         1);
         keygen_->create_galois_keys(galois_elts_all_, glk_);
-        // }
 
         encryptor_ = std::make_shared<poseidon::Encryptor>(context_, pk_, sk_);
         decryptor_ = std::make_shared<poseidon::Decryptor>(context_, sk_);
@@ -59,7 +57,6 @@ public:
             ckks_encoder_ = std::make_shared<poseidon::CKKSEncoder>(context_);
             evaluator_ = poseidon::PoseidonFactory::get_instance()->create_ckks_evaluator(context_);
         }
-        // evaluator_ = std::make_shared<poseidon::EvaluatorBase>(context_);
 
         pt_.resize(std::size_t(2));
         for (std::size_t i = 0; i < 2; i++)
@@ -299,7 +296,7 @@ private:
     // void bm_keygen_relin(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
     // void bm_keygen_galois(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
 
-    // // BFV-specific benchmark cases
+    // BFV-specific benchmark cases
     void bm_bfv_encrypt_secret(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
     void bm_bfv_encrypt_public(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
     void bm_bfv_decrypt(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
@@ -317,34 +314,27 @@ private:
     void bm_bfv_rotate_rows(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
     void bm_bfv_rotate_cols(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
 
-    // // BGV-specific benchmark cases
-    // void bm_bgv_encrypt_secret(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_bgv_encrypt_public(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_bgv_decrypt(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_bgv_encode_batch(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_bgv_decode_batch(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_bgv_negate(benchmark::State &state, std::shared_ptr<BMEnv>);
-    // void bm_bgv_negate_inplace(benchmark::State &state, std::shared_ptr<BMEnv>);
-    // void bm_bgv_add_ct(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_bgv_add_ct_inplace(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_bgv_add_pt(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_bgv_add_pt_inplace(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_bgv_mul_ct(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_bgv_mul_ct_inplace(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_bgv_mul_pt(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_bgv_mul_pt_inplace(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_bgv_square(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_bgv_square_inplace(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_bgv_modswitch_inplace(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_bgv_relinearize(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_bgv_rotate_rows(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_bgv_rotate_rows_inplace(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_bgv_rotate_cols(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_bgv_rotate_cols_inplace(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_bgv_to_ntt_inplace(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
-    // void bm_bgv_from_ntt_inplace(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    // BGV-specific benchmark cases
+    void bm_bgv_encrypt_secret(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_bgv_encrypt_public(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_bgv_decrypt(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_bgv_encode_batch(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_bgv_decode_batch(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_bgv_add_ct(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_bgv_add_pt(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_bgv_mul_ct(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_bgv_mul_pt(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_bgv_mul_pt_inplace(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_bgv_square(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_bgv_square_inplace(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_bgv_modswitch(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_bgv_relinearize(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_bgv_rotate_rows(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_bgv_rotate_cols(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_bgv_to_ntt_inplace(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_bgv_from_ntt_inplace(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
 
-    // // CKKS-specific benchmark cases
+    // CKKS-specific benchmark cases
     void bm_ckks_encrypt_secret(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
     void bm_ckks_encrypt_public(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
     void bm_ckks_decrypt(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);

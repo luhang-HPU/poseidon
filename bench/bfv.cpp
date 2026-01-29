@@ -1,6 +1,5 @@
 
 #include "bench.h"
-#include "poseidon/basics/util/rlwe.h"
 
 using namespace benchmark;
 using namespace poseidonbench;

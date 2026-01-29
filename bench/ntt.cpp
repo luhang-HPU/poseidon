@@ -1,21 +1,16 @@
-// // Copyright (c) Microsoft Corporation. All rights reserved.
-// // Licensed under the MIT license.
+#include "bench.h"
 
-// #include "seal/seal.h"
-// #include "seal/util/rlwe.h"
-// #include "bench.h"
+using namespace benchmark;
+using namespace poseidonbench;
+using namespace poseidon;
+using namespace std;
 
-// using namespace benchmark;
-// using namespace sealbench;
-// using namespace seal;
-// using namespace std;
+/**
+This file defines benchmarks for NTT-related HE primitives.
+*/
 
-// /**
-// This file defines benchmarks for NTT-related HE primitives.
-// */
-
-// namespace sealbench
-// {
+namespace poseidonbench
+{
 //     void bm_util_ntt_forward(State &state, shared_ptr<BMEnv> bm_env)
 //     {
 //         vector<Ciphertext> &ct = bm_env->ct();
@@ -106,4 +101,4 @@
 //             inverse_ntt_negacyclic_harvey_lazy(ct[0].data(), small_ntt_tables[0]);
 //         }
 //     }
-// } // namespace sealbench
+} // namespace poseidonbench
