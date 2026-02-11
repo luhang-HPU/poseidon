@@ -202,6 +202,7 @@ void bm_ckks_relinearize(State &state, shared_ptr<BMEnv> bm_env)
         state.PauseTiming();
         ct.resize(bm_env->context(), size_t(3));
         bm_env->randomize_ct_ckks(ct, scale);
+        bm_env->evaluator()->multiply(ct, ct, ct);
 
         state.ResumeTiming();
         bm_env->evaluator()->relinearize(ct, ct, bm_env->rlk());
