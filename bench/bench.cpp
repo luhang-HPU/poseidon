@@ -144,17 +144,6 @@ int main(int argc, char **argv)
         ParametersLiteralDefault parms_bfv(BFV, i);
         ParametersLiteralDefault parms_bgv(BGV, i);
         ParametersLiteralDefault parms_ckks(CKKS, i);
-        // EncryptionParameters parms_bfv(scheme_type::bfv);
-        // parms_bfv.set_poly_modulus_degree(i.first);
-        // parms_bfv.set_coeff_modulus(i.second);
-        // parms_bfv.set_plain_modulus(PlainModulus::Batching(i.first, 20));
-        // EncryptionParameters parms_bgv(scheme_type::bgv);
-        // parms_bgv.set_poly_modulus_degree(i.first);
-        // parms_bgv.set_coeff_modulus(i.second);
-        // parms_bgv.set_plain_modulus(PlainModulus::Batching(i.first, 20));
-        // EncryptionParameters parms_ckks(scheme_type::ckks);
-        // parms_ckks.set_poly_modulus_degree(i.first);
-        // parms_ckks.set_coeff_modulus(i.second);
 
         if (bm_env_map.emplace(make_pair(parms_bfv, make_shared<BMEnv>(parms_bfv))).second == false)
         {
