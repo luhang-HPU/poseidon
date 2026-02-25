@@ -616,16 +616,32 @@ void EvaluatorBfvBase::multiply_inplace(Ciphertext &ciph1, const Ciphertext &cip
                         iter(shifted_in1_iter, shifted_reversed_in2_iter), steps,
                         [&](auto J)
                         {
-                            POSEIDON_ITERATE(
-                                iter(J, base_iter, shifted_out_iter), base_size,
-                                [&](auto K)
-                                {
-                                    POSEIDON_ALLOCATE_GET_COEFF_ITER(temp, coeff_count, pool);
-                                    dyadic_product_coeffmod(get<0, 0>(K), get<0, 1>(K), coeff_count,
-                                                            get<1>(K), temp);
-                                    add_poly_coeffmod(temp, get<2>(K), coeff_count, get<1>(K),
-                                                      get<2>(K));
-                                });
+                            // POSEIDON_ITERATE(
+                            //     iter(J, base_iter, shifted_out_iter), base_size,
+                            //     [&](auto K)
+                            //     {
+                            //         POSEIDON_ALLOCATE_GET_COEFF_ITER(temp, coeff_count, pool);
+                            //         dyadic_product_coeffmod(get<0, 0>(K), get<0, 1>(K), coeff_count,
+                            //                                 get<1>(K), temp);
+                            //         add_poly_coeffmod(temp, get<2>(K), coeff_count, get<1>(K),
+                            //                           get<2>(K));
+                            //     });
+                            #pragma omp parallel for
+                            for (size_t k = 0; k < base_size; k++)
+                            {
+                                // 1. 获取当前 RNS 分量的数据
+                                auto poly1_at_k = get<0>(J)[k]; // 第一个输入密文在第k个模数下的多项式
+                                auto poly2_at_k = get<1>(J)[k]; // 第二个输入密文在第k个模数下的多项式
+                                auto mod_k = base_iter[k];      // 当前模数分量
+                                auto out_poly_k = shifted_out_iter[k]; // 输出密文在第k个模数下的多项式
+
+                                // 2. 这里的 temp 需要注意线程安全，每个线程必须有自己的临时空间
+                                POSEIDON_ALLOCATE_GET_COEFF_ITER(temp, coeff_count, pool);
+
+                                // 3. 执行点乘与累加
+                                dyadic_product_coeffmod(poly1_at_k, poly2_at_k, coeff_count, mod_k, temp);
+                                add_poly_coeffmod(temp, out_poly_k, coeff_count, mod_k, out_poly_k);
+                            }
                         });
                 };
 
