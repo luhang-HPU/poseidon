@@ -10,13 +10,6 @@ PoseidonContext::PoseidonContext(const ParametersLiteral &param_literal, bool us
     : parameters_literal_(make_shared<const poseidon::ParametersLiteral>(param_literal)),
       sec_level_(param_literal.sec_level()), using_hardware_(using_hardware)
 {
-#ifdef USING_HARDWARE
-    if (using_hardware_)
-    {
-        HardwareApi::check_hardware();
-    }
-#endif
-
     auto base_p_size = param_literal.p().size();
     auto base_q_size = param_literal.q().size();
     auto scheme_type = param_literal.scheme();

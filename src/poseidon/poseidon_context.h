@@ -16,7 +16,7 @@ namespace poseidon
 class PoseidonContext
 {
 public:
-    explicit PoseidonContext(const ParametersLiteral &param_literal, bool using_hardware = true);
+    explicit PoseidonContext(const ParametersLiteral &param_literal, bool using_hardware = false);
     PoseidonContext(const PoseidonContext &context) = default;
     ~PoseidonContext() = default;
 

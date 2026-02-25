@@ -167,7 +167,6 @@ public:
         destination = create_galois_keys(steps, false);
     }
 
-private:
     /**
     Generates Galois keys and stores the result in destination. Every time
     this function is called, new Galois keys will be generated.
@@ -199,6 +198,7 @@ private:
         destination = create_galois_keys(galois_elts, false);
     }
 
+private:
     /**
     Generates and returns Galois keys as a serializable object. Every time
     this function is called, new Galois keys will be generated.
