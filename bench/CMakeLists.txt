@@ -4,14 +4,11 @@ project(POSEIDONBench VERSION 4.1.1 LANGUAGES CXX)
 # Must define these variables and include macros
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${OUTLIB_PATH})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
-set(POSEIDON_THIRDPARTY_DIR ${CMAKE_CURRENT_BINARY_DIR}/../../thirdparty)
+set(POSEIDON_THIRDPARTY_DIR ${CMAKE_CURRENT_BINARY_DIR}/../thirdparty)
 set(THIRDPARTY_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/thirdparty")
 
-message(STATUS "Thirdparty Source Dir: ${POSEIDON_THIRDPARTY_DIR}")
-message(STATUS "Thirdparty Binary Dir: ${THIRDPARTY_BINARY_DIR}")
-
 # Extra modules
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/../../cmake)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 include(PoseidonMacros)
 include(FetchContent)
 mark_as_advanced(FETCHCONTENT_BASE_DIR)

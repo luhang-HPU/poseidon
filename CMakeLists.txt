@@ -213,6 +213,13 @@ if(POSEIDON_BUILD_EXAMPLES)
     add_subdirectory(examples/ckks)
 endif()
 
+# [option] POSEIDON_BUILD_BENCH (default: OFF)
+option(POSEIDON_BUILD_BENCH "Build examples for POSEIDON" OFF)
+message(STATUS "POSEIDON_BUILD_BENCH: ${POSEIDON_BUILD_BENCH}")
+if(POSEIDON_BUILD_BENCH)
+    add_subdirectory(bench)
+endif()
+
 add_library(poseidon_shared SHARED ${POSEIDON_SOURCE_FILES})    
 target_include_directories(poseidon_shared PUBLIC ${POSEIDON_INCLUDES_DIR}/src)
 target_link_libraries(poseidon_shared PRIVATE gmp)
