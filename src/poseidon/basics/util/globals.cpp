@@ -18,19 +18,6 @@ thread_local shared_ptr<MemoryPool> const tls_memory_pool{make_shared<MemoryPool
 const map<size_t, vector<Modulus>> &GetDefaultCoeffModulus128()
 {
     static const map<size_t, vector<Modulus>> default_coeff_modulus_128{
-        /*
-        Polynomial modulus: 1x^1024 + 1
-        Modulus count: 1
-        Total bit count: 27
-        */
-        {1024, {0x7e00001}},
-
-        /*
-        Polynomial modulus: 1x^2048 + 1
-        Modulus count: 1
-        Total bit count: 54
-        */
-        {2048, {0x3fffffff000001}},
 
         /*
         Polynomial modulus: 1x^4096 + 1
