@@ -2,7 +2,6 @@
 #include "poseidon/basics/util/uintarith.h"
 #include "poseidon/basics/util/uintcore.h"
 
-
 #ifdef POSEIDON_USE_INTEL_HEXL
 #include "hexl/hexl.hpp"
 #endif
