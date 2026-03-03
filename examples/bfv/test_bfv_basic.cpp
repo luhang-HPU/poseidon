@@ -13,7 +13,7 @@ int main()
     cout << BANNER << std::endl;
     cout << "POSEIDON SOFTWARE VERSION:" << POSEIDON_VERSION << std::endl;
     cout << "" << std::endl;
-    size_t poly_modulus_degree = 32768;
+    size_t poly_modulus_degree = 65536;
     PoseidonFactory::get_instance()->set_device_type(DEVICE_HARDWARE);
     ParametersLiteralDefault bfv_param_literal(BFV, poly_modulus_degree, poseidon::sec_level_type::tc128);
     PoseidonContext context =

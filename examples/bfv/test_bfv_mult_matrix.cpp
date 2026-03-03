@@ -14,7 +14,7 @@ int main()
     cout << "" << std::endl;
 
     ParametersLiteralDefault bfv_param_literal(BFV, 8192, poseidon::sec_level_type::tc128);
-    PoseidonFactory::get_instance()->set_device_type(DEVICE_SOFTWARE);
+    PoseidonFactory::get_instance()->set_device_type(DEVICE_HARDWARE);
     PoseidonContext context =
         PoseidonFactory::get_instance()->create_poseidon_context(bfv_param_literal);
     auto bfv_eva = PoseidonFactory::get_instance()->create_bfv_evaluator(context);
