@@ -59,7 +59,6 @@ int main()
 
     // evaluate
     auto start = chrono::high_resolution_clock::now();
-    std::cout << "bootstraping start..." << std::endl;
     ckks_eva->multiply_relin(cipher, cipher, cipher, relin_keys);
     ckks_eva->rescale_dynamic(cipher, cipher, (int64_t)1 << 45);
 
@@ -68,7 +67,7 @@ int main()
     ckks_eva->bootstrap(cipher, cipher, relin_keys,rot_keys, ckks_encoder, eval_mod_poly);
     auto stop = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
-    std::cout << "EXP TIME: " << duration.count() << " microseconds" << std::endl;
+    std::cout << "Bootstrap TIME: " << duration.count() << " microseconds" << std::endl;
 
     // decode && decrypt
     dec.decrypt(cipher, plain_res);
