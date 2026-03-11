@@ -209,6 +209,23 @@ void bm_ckks_relinearize(State &state, shared_ptr<BMEnv> bm_env)
     }
 }
 
+void bm_ckks_mul_relinearize(State &state, shared_ptr<BMEnv> bm_env)
+{
+    vector<Ciphertext> &ct = bm_env->ct();
+    double scale = bm_env->safe_scale();
+    for (auto _ : state)
+    {
+        state.PauseTiming();
+        bm_env->randomize_ct_ckks(ct[0], scale);
+        bm_env->randomize_ct_ckks(ct[1], scale);
+
+        state.ResumeTiming();
+        Ciphertext temp;
+        bm_env->evaluator()->multiply(ct[0], ct[1], temp);
+        bm_env->evaluator()->relinearize(temp, ct[0], bm_env->rlk());
+    }
+}
+
 void bm_ckks_rotate(State &state, shared_ptr<BMEnv> bm_env)
 {
     vector<Ciphertext> &ct = bm_env->ct();

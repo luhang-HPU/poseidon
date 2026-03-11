@@ -476,42 +476,46 @@ void EvaluatorBgvBase::bgv_multiply(Ciphertext &ciph1, const Ciphertext &ciph2,
         // Given input tuples of polynomials x = (x[0], x[1], x[2]), y = (y[0], y[1]), computes
         // x = (x[0] * y[0], x[0] * y[1] + x[1] * y[0], x[1] * y[1])
         // with appropriate modular reduction
-        POSEIDON_ITERATE(coeff_modulus, coeff_modulus_size,
-                         [&](auto I)
-                         {
-                             POSEIDON_ITERATE(
-                                 iter(size_t(0)), num_tiles,
-                                 [&](POSEIDON_MAYBE_UNUSED auto J)
-                                 {
-                                     // Compute third output polynomial, overwriting input
-                                     // x[2] = x[1] * y[1]
-                                     dyadic_product_coeffmod(ciph1_1_iter[0], ciph2_1_iter[0],
-                                                             tile_size, I, ciph1_2_iter[0]);
+        // 外层循环：并行遍历 RNS 模数分量
+        #pragma omp parallel for
+        for (size_t i = 0; i < coeff_modulus_size; i++)
+        {
+            // 获取当前模数对象
+            auto &I = coeff_modulus[i];
+            // 每一层模数需要独立的临时空间，防止多线程冲突
+            std::vector<uint64_t> temp_tile(tile_size); 
+            uint64_t* temp = temp_tile.data();
 
-                                     // Compute second output polynomial, overwriting input
-                                     // temp = x[1] * y[0]
-                                     dyadic_product_coeffmod(ciph1_1_iter[0], ciph2_0_iter[0],
-                                                             tile_size, I, temp);
-                                     // x[1] = x[0] * y[1]
-                                     dyadic_product_coeffmod(ciph1_0_iter[0], ciph2_1_iter[0],
-                                                             tile_size, I, ciph1_1_iter[0]);
-                                     // x[1] += temp
-                                     add_poly_coeffmod(ciph1_1_iter[0], temp, tile_size, I,
-                                                       ciph1_1_iter[0]);
+            // 初始化指向当前模数 i 的起始位置迭代器，确保 ciph1_iter[poly_index][i] 返回的是指向第 i 个模数分量数据的指针
+            RNSIter ciph1_0_tile_iter(ciph1_iter[0][i], tile_size);
+            RNSIter ciph1_1_tile_iter(ciph1_iter[1][i], tile_size);
+            RNSIter ciph1_2_tile_iter(ciph1_iter[2][i], tile_size);
+            ConstRNSIter ciph2_0_tile_iter(ciph2_iter[0][i], tile_size);
+            ConstRNSIter ciph2_1_tile_iter(ciph2_iter[1][i], tile_size);
 
-                                     // Compute first output polynomial, overwriting input
-                                     // x[0] = x[0] * y[0]
-                                     dyadic_product_coeffmod(ciph1_0_iter[0], ciph2_0_iter[0],
-                                                             tile_size, I, ciph1_0_iter[0]);
+            // 内层循环：遍历当前模数分量下的每一个 Tile
+            for (size_t j = 0; j < num_tiles; j++)
+            {
+                // 1. x[2] = x[1] * y[1]
+                dyadic_product_coeffmod(ciph1_1_tile_iter[0], ciph2_1_tile_iter[0], tile_size, I, ciph1_2_tile_iter[0]);
+                // 2. temp = x[1] * y[0]
+                dyadic_product_coeffmod(ciph1_1_tile_iter[0], ciph2_0_tile_iter[0], tile_size, I, temp);
 
-                                     // Manually increment iterators
-                                     ciph1_0_iter++;
-                                     ciph1_1_iter++;
-                                     ciph1_2_iter++;
-                                     ciph2_0_iter++;
-                                     ciph2_1_iter++;
-                                 });
-                         });
+                // 3. x[1] = x[0] * y[1]
+                dyadic_product_coeffmod(ciph1_0_tile_iter[0], ciph2_1_tile_iter[0], tile_size, I, ciph1_1_tile_iter[0]);
+
+                // 4. x[1] = x[1] + temp
+                add_poly_coeffmod(ciph1_1_tile_iter[0], temp, tile_size, I, ciph1_1_tile_iter[0]);
+                // 5. x[0] = x[0] * y[0]
+                dyadic_product_coeffmod(ciph1_0_tile_iter[0], ciph2_0_tile_iter[0], tile_size, I, ciph1_0_tile_iter[0]);
+                // 迭代器移动到下一个分块
+                ciph1_0_tile_iter++;
+                ciph1_1_tile_iter++;
+                ciph1_2_tile_iter++;
+                ciph2_0_tile_iter++;
+                ciph2_1_tile_iter++;
+            }
+        }
     }
     else
     {

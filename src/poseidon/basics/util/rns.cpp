@@ -874,33 +874,69 @@ void RNSTool::divide_and_round_q_last_inplace(RNSIter input, MemoryPoolHandle po
         POSEIDON_THROW(invalid_argument_error, "pool is uninitialized");
     }
 #endif
+    // size_t base_q_size = base_q_->size();
+    // CoeffIter last_input = input[base_q_size - 1];
+
+    // // Add (qi-1)/2 to change from flooring to rounding
+    // Modulus last_modulus = (*base_q_)[base_q_size - 1];
+    // uint64_t half = last_modulus.value() >> 1;
+    // add_poly_scalar_coeffmod(last_input, coeff_count_, half, last_modulus, last_input);
+
+    // POSEIDON_ALLOCATE_GET_COEFF_ITER(temp, coeff_count_, pool);
+    // POSEIDON_ITERATE(iter(input, inv_q_last_mod_q_, base_q_->base()), base_q_size - 1,
+    //                  [&](auto I)
+    //                  {
+    //                      // (ct mod qk) mod qi
+    //                      modulo_poly_coeffs(last_input, coeff_count_, get<2>(I), temp);
+
+    //                      // Subtract rounding correction here; the negative sign will turn into a
+    //                      // plus in the next subtraction
+    //                      uint64_t half_mod = barrett_reduce_64(half, get<2>(I));
+    //                      sub_poly_scalar_coeffmod(temp, coeff_count_, half_mod, get<2>(I), temp);
+
+    //                      // (ct mod qi) - (ct mod qk) mod qi
+    //                      sub_poly_coeffmod(get<0>(I), temp, coeff_count_, get<2>(I), get<0>(I));
+
+    //                      // qk^(-1) * ((ct mod qi) - (ct mod qk)) mod qi
+    //                      multiply_poly_scalar_coeffmod(get<0>(I), coeff_count_, get<1>(I),
+    //                                                    get<2>(I), get<0>(I));
+    //                  });
     size_t base_q_size = base_q_->size();
     CoeffIter last_input = input[base_q_size - 1];
 
-    // Add (qi-1)/2 to change from flooring to rounding
+    // 1. 添加修正值以实现四舍五入
     Modulus last_modulus = (*base_q_)[base_q_size - 1];
     uint64_t half = last_modulus.value() >> 1;
     add_poly_scalar_coeffmod(last_input, coeff_count_, half, last_modulus, last_input);
 
-    POSEIDON_ALLOCATE_GET_COEFF_ITER(temp, coeff_count_, pool);
-    POSEIDON_ITERATE(iter(input, inv_q_last_mod_q_, base_q_->base()), base_q_size - 1,
-                     [&](auto I)
-                     {
-                         // (ct mod qk) mod qi
-                         modulo_poly_coeffs(last_input, coeff_count_, get<2>(I), temp);
+    // 2. 使用 OpenMP 并行化 RNS 循环
+    #pragma omp parallel for
+    for (size_t i = 0; i < base_q_size - 1; i++) 
+    {
+        // 关键点 A: 获取当前分量的迭代器或指针
+        // 根据 POSEIDON/SEAL 惯例，input[i] 返回的是 CoeffIter
+        CoeffIter current_input = input[i]; 
+        uint64_t inv_q_last = inv_q_last_mod_q_[i].operand;
+        const Modulus &current_modulus = base_q_->base()[i];
 
-                         // Subtract rounding correction here; the negative sign will turn into a
-                         // plus in the next subtraction
-                         uint64_t half_mod = barrett_reduce_64(half, get<2>(I));
-                         sub_poly_scalar_coeffmod(temp, coeff_count_, half_mod, get<2>(I), temp);
+        // 关键点 B: 避免在循环内部使用 std::vector (昂贵的内存分配)
+        // 每个线程需要独立的 temp，使用 pool 分配或栈上固定大小数组
+        uint64_t local_temp_array[coeff_count_]; 
+        CoeffIter local_temp(local_temp_array);
 
-                         // (ct mod qi) - (ct mod qk) mod qi
-                         sub_poly_coeffmod(get<0>(I), temp, coeff_count_, get<2>(I), get<0>(I));
+        // 1. (ct mod qk) mod qi
+        modulo_poly_coeffs(last_input, coeff_count_, current_modulus, local_temp);
 
-                         // qk^(-1) * ((ct mod qi) - (ct mod qk)) mod qi
-                         multiply_poly_scalar_coeffmod(get<0>(I), coeff_count_, get<1>(I),
-                                                       get<2>(I), get<0>(I));
-                     });
+        // 2. 减去舍入修正 (Rounding correction)
+        uint64_t half_mod = barrett_reduce_64(half, current_modulus);
+        sub_poly_scalar_coeffmod(local_temp, coeff_count_, half_mod, current_modulus, local_temp);
+
+        // 3. (ct mod qi) - (ct mod qk) mod qi
+        sub_poly_coeffmod(current_input, local_temp, coeff_count_, current_modulus, current_input);
+
+        // 4. qk^(-1) * ((ct mod qi) - (ct mod qk)) mod qi
+        multiply_poly_scalar_coeffmod(current_input, coeff_count_, inv_q_last, current_modulus, current_input);
+    }
 }
 
 void RNSTool::divide_and_round_q_last_ntt_inplace(RNSIter input, ConstNTTTablesIter rns_ntt_tables,
@@ -936,51 +972,63 @@ void RNSTool::divide_and_round_q_last_ntt_inplace(RNSIter input, ConstNTTTablesI
     add_poly_scalar_coeffmod(last_input, coeff_count_, half, last_modulus, last_input);
 
     POSEIDON_ALLOCATE_GET_COEFF_ITER(temp, coeff_count_, pool);
-    POSEIDON_ITERATE(
-        iter(input, inv_q_last_mod_q_, base_q_->base(), rns_ntt_tables), base_q_size - 1,
-        [&](auto I)
+    size_t base_q_size_minus_1 = base_q_size - 1;
+
+    // 开启并行区域
+    #pragma omp parallel
+    {
+        // 每个线程分配自己的临时缓冲区，coeff_count_ 是多项式的度
+        POSEIDON_ALLOCATE_GET_COEFF_ITER(thread_temp, coeff_count_, pool);
+
+        #pragma omp for
+        for (size_t i = 0; i < base_q_size_minus_1; i++)
         {
-            // (ct mod qk) mod qi
-            if (get<2>(I).value() < last_modulus.value())
+            auto current_input_poly = input[i];                  // get<0>(I)
+            uint64_t inv_q_last_val = inv_q_last_mod_q_[i].operand;  // get<1>(I)
+            Modulus qi = (*base_q_)[i];                          // get<2>(I)        
+            const auto &current_ntt_table = rns_ntt_tables[i];   // get<3>(I)
+
+            // 1. (ct mod qk) mod qi
+            if (qi.value() < last_modulus.value())
             {
-                modulo_poly_coeffs(last_input, coeff_count_, get<2>(I), temp);
+                modulo_poly_coeffs(last_input, coeff_count_, qi, thread_temp);
             }
             else
             {
-                set_uint(last_input, coeff_count_, temp);
+                set_uint(last_input, coeff_count_, thread_temp);
             }
 
-            // Lazy subtraction here. ntt_negacyclic_harvey_lazy can take 0 < x < 4*qi input.
-            uint64_t neg_half_mod = get<2>(I).value() - barrett_reduce_64(half, get<2>(I));
+            // 准备修正项
+            uint64_t neg_half_mod = qi.value() - barrett_reduce_64(half, qi);
 
-            // Note: lambda function parameter must be passed by reference here
-            POSEIDON_ITERATE(temp, coeff_count_, [&](auto &J) { J += neg_half_mod; });
-#if POSEIDON_USER_MOD_BIT_COUNT_MAX <= 60
-            // Since POSEIDON uses at most 60-bit moduli, 8*qi < 2^63.
-            // This ntt_negacyclic_harvey_lazy results in [0, 4*qi).
-            uint64_t qi_lazy = get<2>(I).value() << 2;
-            ntt_negacyclic_harvey_lazy(temp, get<3>(I));
-#else
-            // 2^60 < pi < 2^62, then 4*pi < 2^64, we perfrom one reduction from [0, 4*qi) to [0,
-            // 2*qi) after ntt.
-            uint64_t qi_lazy = get<2>(I).value() << 1;
-            ntt_negacyclic_harvey_lazy(temp, get<3>(I));
+            // 处理 thread_temp 上的每一个系数
+            for (size_t j = 0; j < coeff_count_; j++)
+            {
+                thread_temp[j] += neg_half_mod;
+            }
 
-            // Note: lambda function parameter must be passed by reference here
-            POSEIDON_ITERATE(
-                temp, coeff_count_,
-                [&](auto &J)
-                { J -= (qi_lazy & static_cast<uint64_t>(-static_cast<int64_t>(J >= qi_lazy))); });
-#endif
-            // Lazy subtraction again, results in [0, 2*qi_lazy),
-            // The reduction [0, 2*qi_lazy) -> [0, qi) is done implicitly in
-            // multiply_poly_scalar_coeffmod.
-            POSEIDON_ITERATE(iter(get<0>(I), temp), coeff_count_,
-                             [&](auto J) { get<0>(J) += qi_lazy - get<1>(J); });
+    #if POSEIDON_USER_MOD_BIT_COUNT_MAX <= 60
+            uint64_t qi_lazy = qi.value() << 2;
+            ntt_negacyclic_harvey_lazy(thread_temp, current_ntt_table);
+    #else
+            uint64_t qi_lazy = qi.value() << 1;
+            ntt_negacyclic_harvey_lazy(thread_temp, current_ntt_table);
 
-            // qk^(-1) * ((ct mod qi) - (ct mod qk)) mod qi
-            multiply_poly_scalar_coeffmod(get<0>(I), coeff_count_, get<1>(I), get<2>(I), get<0>(I));
-        });
+            for (size_t j = 0; j < coeff_count_; j++)
+            {
+                thread_temp[j] -= (qi_lazy & static_cast<uint64_t>(-static_cast<int64_t>(thread_temp[j] >= qi_lazy)));
+            }
+    #endif
+            // 执行减法：(ct mod qi) - (ct mod qk)
+            for (size_t j = 0; j < coeff_count_; j++)
+            {
+                current_input_poly[j] += qi_lazy - thread_temp[j];
+            }
+            // 乘上 qk^(-1) mod qi
+            multiply_poly_scalar_coeffmod(current_input_poly, coeff_count_, inv_q_last_val, qi, current_input_poly);
+        }
+    }
+
 }
 
 void RNSTool::fastbconv_sk(ConstRNSIter input, RNSIter destination, MemoryPoolHandle pool) const
@@ -1343,33 +1391,81 @@ void RNSTool::mod_t_and_divide_q_last_ntt_inplace(RNSIter input, ConstNTTTablesI
                                       plain_modulus, neg_c_last_mod_t);
     }
 
-    POSEIDON_ALLOCATE_ZERO_GET_COEFF_ITER(delta_mod_q_i, coeff_count_, pool);
+    // POSEIDON_ALLOCATE_ZERO_GET_COEFF_ITER(delta_mod_q_i, coeff_count_, pool);
 
-    POSEIDON_ITERATE(
-        iter(input, curr_modulus, inv_q_last_mod_q_, rns_ntt_tables), modulus_size - 1,
-        [&](auto I)
+    // POSEIDON_ITERATE(
+    //     iter(input, curr_modulus, inv_q_last_mod_q_, rns_ntt_tables), modulus_size - 1,
+    //     [&](auto I)
+    //     {
+    //         // delta_mod_q_i = neg_c_last_mod_t (mod q_i)
+    //         modulo_poly_coeffs(neg_c_last_mod_t, coeff_count_, get<1>(I), delta_mod_q_i);
+
+    //         // delta_mod_q_i *= q_last (mod q_i)
+    //         multiply_poly_scalar_coeffmod(delta_mod_q_i, coeff_count_, last_modulus_value,
+    //                                       get<1>(I), delta_mod_q_i);
+
+    //         // c_i = c_i - c_last - neg_c_last_mod_t * q_last (mod 2q_i)
+    //         POSEIDON_ITERATE(iter(delta_mod_q_i, c_last), coeff_count_,
+    //                          [&](auto J) {
+    //                              get<0>(J) = add_uint_mod(
+    //                                  get<0>(J), barrett_reduce_64(get<1>(J), get<1>(I)), get<1>(I));
+    //                          });
+    //         ntt_negacyclic_harvey(delta_mod_q_i, get<3>(I));
+    //         POSEIDON_ITERATE(iter(get<0>(I), delta_mod_q_i), coeff_count_,
+    //                          [&](auto J)
+    //                          { get<0>(J) = sub_uint_mod(get<0>(J), get<1>(J), get<1>(I)); });
+
+    //         // c_i = c_i * inv_q_last_mod_q_i (mod q_i)
+    //         multiply_poly_scalar_coeffmod(get<0>(I), coeff_count_, get<2>(I), get<1>(I), get<0>(I));
+    //     });
+    // 每个 RNS 分量需要一个大小为 coeff_count_ 的缓冲区用于 delta_mod_q_i
+    POSEIDON_ALLOCATE_GET_COEFF_ITER(delta_all, (modulus_size - 1) * coeff_count_, pool);
+
+    // 2. 开启 RNS 分量级别的并行
+    #pragma omp parallel for
+    for (size_t i = 0; i < modulus_size - 1; i++) 
+    {
+        // --- A. 提取当前分量所需的各种迭代器和参数 ---
+        CoeffIter current_c_i = input[i];          // get<0>(I)
+        const Modulus &qi = curr_modulus[i];       // get<1>(I)
+        
+        // 修复之前的报错：正确提取 MultiplyUIntModOperand 操作数
+        const auto &inv_qk_qi = inv_q_last_mod_q_[i]; // get<2>(I)
+        
+        const auto &ntt_table = rns_ntt_tables[i]; // get<3>(I)
+        
+        // 指向该线程专门使用的临时缓冲区
+        CoeffIter delta_mod_q_i = delta_all + (i * coeff_count_);
+
+        // --- B. 执行计算逻辑 ---
+
+        // 1. delta_mod_q_i = neg_c_last_mod_t (mod q_i)
+        modulo_poly_coeffs(neg_c_last_mod_t, coeff_count_, qi, delta_mod_q_i);
+
+        // 2. delta_mod_q_i *= q_last (mod q_i)
+        multiply_poly_scalar_coeffmod(delta_mod_q_i, coeff_count_, last_modulus_value, qi, delta_mod_q_i);
+
+        // 3. 内部系数级循环：c_i = c_i - c_last - neg_c_last_mod_t * q_last (mod 2q_i)
+        // 注意：这里是系数级别的密集计算，通常不再嵌套并行，而是依赖 SIMD (自动向量化)
+        for (size_t j = 0; j < coeff_count_; j++)
         {
-            // delta_mod_q_i = neg_c_last_mod_t (mod q_i)
-            modulo_poly_coeffs(neg_c_last_mod_t, coeff_count_, get<1>(I), delta_mod_q_i);
+            uint64_t c_last_qi = barrett_reduce_64(c_last[j], qi);
+            delta_mod_q_i[j] = add_uint_mod(delta_mod_q_i[j], c_last_qi, qi);
+        }
 
-            // delta_mod_q_i *= q_last (mod q_i)
-            multiply_poly_scalar_coeffmod(delta_mod_q_i, coeff_count_, last_modulus_value,
-                                          get<1>(I), delta_mod_q_i);
+        // 4. NTT 变换 (Harvey 算法)
+        ntt_negacyclic_harvey(delta_mod_q_i, ntt_table);
 
-            // c_i = c_i - c_last - neg_c_last_mod_t * q_last (mod 2q_i)
-            POSEIDON_ITERATE(iter(delta_mod_q_i, c_last), coeff_count_,
-                             [&](auto J) {
-                                 get<0>(J) = add_uint_mod(
-                                     get<0>(J), barrett_reduce_64(get<1>(J), get<1>(I)), get<1>(I));
-                             });
-            ntt_negacyclic_harvey(delta_mod_q_i, get<3>(I));
-            POSEIDON_ITERATE(iter(get<0>(I), delta_mod_q_i), coeff_count_,
-                             [&](auto J)
-                             { get<0>(J) = sub_uint_mod(get<0>(J), get<1>(J), get<1>(I)); });
+        // 5. 系数减法：c_i = c_i - delta_mod_q_i
+        for (size_t j = 0; j < coeff_count_; j++)
+        {
+            current_c_i[j] = sub_uint_mod(current_c_i[j], delta_mod_q_i[j], qi);
+        }
 
-            // c_i = c_i * inv_q_last_mod_q_i (mod q_i)
-            multiply_poly_scalar_coeffmod(get<0>(I), coeff_count_, get<2>(I), get<1>(I), get<0>(I));
-        });
+        // 6. 最终缩放：c_i = c_i * inv_q_last_mod_q_i (mod q_i)
+        // 传入 MultiplyUIntModOperand 对象以利用预计算的比例因子
+        multiply_poly_scalar_coeffmod(current_c_i, coeff_count_, inv_qk_qi, qi, current_c_i);
+    }
 }
 
 void RNSTool::decrypt_modt(RNSIter phase, CoeffIter destination, MemoryPoolHandle pool) const

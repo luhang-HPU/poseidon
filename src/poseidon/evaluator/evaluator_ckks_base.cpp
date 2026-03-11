@@ -523,7 +523,7 @@ void EvaluatorCkksBase::recurse(const map<uint32_t, Ciphertext> &monomial_basis,
             num++;
             target_scale_new *= current_qi;
             tmp_scale = target_scale_new / x_pow.scale();
-            if (tmp_scale >= min_target_scale)
+            if (tmp_scale + 1000000000 >= min_target_scale)
             {
                 target_scale_new = tmp_scale;
                 target_scale_pass = true;
@@ -539,7 +539,7 @@ void EvaluatorCkksBase::recurse(const map<uint32_t, Ciphertext> &monomial_basis,
             auto current_qi = safe_cast<double>(modulus[new_target_level].value());
             target_scale_new *= current_qi;
             tmp_scale = target_scale_new / x_pow.scale();
-            if (tmp_scale >= min_target_scale)
+            if (tmp_scale + 1000000000 >= min_target_scale)
             {
                 target_scale_new = tmp_scale;
                 target_scale_pass = true;
@@ -556,7 +556,7 @@ void EvaluatorCkksBase::recurse(const map<uint32_t, Ciphertext> &monomial_basis,
             auto current_qi = safe_cast<double>(modulus[new_target_level].value());
             target_scale_new *= current_qi;
             tmp_scale = target_scale_new / x_pow.scale();
-            if (tmp_scale >= min_target_scale)
+            if (tmp_scale + 1000000000 >= min_target_scale)
             {
                 target_scale_pass = true;
             }
@@ -645,7 +645,7 @@ tuple<uint32_t, double> EvaluatorCkksBase::pre_scalar_level(
         {
             while (1)
             {
-                if (target_scale >= min_scale_)
+                if (target_scale + 1000000000 >= min_scale_)
                 {
                     break;
                 }
@@ -1392,43 +1392,44 @@ void EvaluatorCkksBase::ckks_multiply(Ciphertext &ciph1, const Ciphertext &ciph2
             // Given input tuples of polynomials x = (x[0], x[1], x[2]), y = (y[0], y[1]), computes
             // x = (x[0] * y[0], x[0] * y[1] + x[1] * y[0], x[1] * y[1])
             // with appropriate modular reduction
-            POSEIDON_ITERATE(coeff_modulus, coeff_modulus_size,
-                             [&](auto I)
-                             {
-                                 POSEIDON_ITERATE(
-                                     iter(size_t(0)), num_tiles,
-                                     [&](POSEIDON_MAYBE_UNUSED auto J)
-                                     {
-                                         // Compute third output polynomial, overwriting input
-                                         // x[2] = x[1] * y[1]
-                                         dyadic_product_coeffmod(ciph1_1_iter[0], ciph2_1_iter[0],
-                                                                 tile_size, I, ciph1_2_iter[0]);
 
-                                         // Compute second output polynomial, overwriting input
+            // 开启 OpenMP 并行化 (作用于最外层模数循环)，每个线程需要处理不同的模数，互不干扰
+            #pragma omp parallel for
+            for (size_t i = 0; i < coeff_modulus_size; i++) 
+            {
+                auto &modulus = coeff_modulus[i];
 
-                                         // temp = x[1] * y[0]
-                                         dyadic_product_coeffmod(ciph1_1_iter[0], ciph2_0_iter[0],
-                                                                 tile_size, I, temp);
-                                         // x[1] = x[0] * y[1]
-                                         dyadic_product_coeffmod(ciph1_0_iter[0], ciph2_1_iter[0],
-                                                                 tile_size, I, ciph1_1_iter[0]);
-                                         // x[1] += temp
-                                         add_poly_coeffmod(ciph1_1_iter[0], temp, tile_size, I,
-                                                           ciph1_1_iter[0]);
+                // 为每个线程准备独立的临时缓冲区
+                POSEIDON_ALLOCATE_GET_COEFF_ITER(local_temp, tile_size, pool);
 
-                                         // Compute first output polynomial, overwriting input
-                                         // x[0] = x[0] * y[0]
-                                         dyadic_product_coeffmod(ciph1_0_iter[0], ciph2_0_iter[0],
-                                                                 tile_size, I, ciph1_0_iter[0]);
+                // 获取第 i 个模数对应的 RNS 迭代器
+                // ciph1_iter[0] 指向第 0 个多项式，ciph1_iter[0][i] 指向该多项式的第 i 个 RNS 分量
+                RNSIter it_x0(ciph1_iter[0][i], tile_size);
+                RNSIter it_x1(ciph1_iter[1][i], tile_size);
+                RNSIter it_x2(ciph1_iter[2][i], tile_size);
+                ConstRNSIter it_y0(ciph2_iter[0][i], tile_size);
+                ConstRNSIter it_y1(ciph2_iter[1][i], tile_size);
 
-                                         // Manually increment iterators
-                                         ciph1_0_iter++;
-                                         ciph1_1_iter++;
-                                         ciph1_2_iter++;
-                                         ciph2_0_iter++;
-                                         ciph2_1_iter++;
-                                     });
-                             });
+                // 中层循环：遍历 Tile
+                for (size_t j = 0; j < num_tiles; j++) 
+                {
+                    // 逻辑：x[2] = x[1] * y[1]，这里 it_x1[0] 返回的是当前 Tile 的 CoeffIter（即双重解引用后的指针）
+                    dyadic_product_coeffmod(it_x1[0], it_y1[0], tile_size, modulus, it_x2[0]);
+                    // 逻辑：temp = x[1] * y[0]
+                    dyadic_product_coeffmod(it_x1[0], it_y0[0], tile_size, modulus, local_temp);
+                    
+                    // 逻辑：x[1] = x[0] * y[1]
+                    dyadic_product_coeffmod(it_x0[0], it_y1[0], tile_size, modulus, it_x1[0]);
+                    
+                    // 逻辑：x[1] += temp
+                    add_poly_coeffmod(it_x1[0], local_temp, tile_size, modulus, it_x1[0]);
+                    // 逻辑：x[0] = x[0] * y[0]
+                    dyadic_product_coeffmod(it_x0[0], it_y0[0], tile_size, modulus, it_x0[0]);
+                    // 指针自增（跳向下一个 Tile）
+                    it_x0++; it_x1++; it_x2++;
+                    it_y0++; it_y1++;
+                }
+            }
         }
     }
     else
