@@ -96,8 +96,8 @@ void bm_ckks_add_ct(State &state, shared_ptr<BMEnv> bm_env)
         state.PauseTiming();
         bm_env->randomize_ct_ckks(ct[0], scale);
         bm_env->randomize_ct_ckks(ct[1], scale);
-        state.ResumeTiming();
         Ciphertext res;
+        state.ResumeTiming();
         bm_env->evaluator()->add(ct[0], ct[1], res);
     }
 }
@@ -219,8 +219,8 @@ void bm_ckks_mul_relinearize(State &state, shared_ptr<BMEnv> bm_env)
         bm_env->randomize_ct_ckks(ct[0], scale);
         bm_env->randomize_ct_ckks(ct[1], scale);
 
-        state.ResumeTiming();
         Ciphertext temp;
+        state.ResumeTiming();
         bm_env->evaluator()->multiply(ct[0], ct[1], temp);
         bm_env->evaluator()->relinearize(temp, ct[0], bm_env->rlk());
     }
@@ -238,4 +238,47 @@ void bm_ckks_rotate(State &state, shared_ptr<BMEnv> bm_env)
         bm_env->evaluator()->rotate(ct[0], ct[2], 1, bm_env->glk());
     }
 }
+
+void bm_ckks_conjungate(State &state, shared_ptr<BMEnv> bm_env)
+{
+    vector<Ciphertext> &ct = bm_env->ct();
+    double scale = bm_env->safe_scale();
+    for (auto _ : state)
+    {
+        state.PauseTiming();
+        bm_env->randomize_ct_ckks(ct[0], scale);
+        poseidon::EvaluatorCkksBase *ckks_evaluator =
+            dynamic_cast<poseidon::EvaluatorCkksBase *>(bm_env->evaluator().get());
+        state.ResumeTiming();
+        ckks_evaluator->conjugate(ct[0], bm_env->glk(), ct[0]);
+    }
+}
+
+void bm_ckks_ntt(State &state, shared_ptr<BMEnv> bm_env)
+{
+    vector<Ciphertext> &ct = bm_env->ct();
+    double scale = bm_env->safe_scale();
+    for (auto _ : state)
+    {
+        state.PauseTiming();
+        bm_env->randomize_ct_ckks(ct[0], scale);
+        bm_env->evaluator()->ntt_inv(ct[0], ct[0]);
+        state.ResumeTiming();
+        bm_env->evaluator()->ntt_fwd(ct[0], ct[0]);
+    }
+}
+
+void bm_ckks_intt(State &state, shared_ptr<BMEnv> bm_env)
+{
+    vector<Ciphertext> &ct = bm_env->ct();
+    double scale = bm_env->safe_scale();
+    for (auto _ : state)
+    {
+        state.PauseTiming();
+        bm_env->randomize_ct_ckks(ct[0], scale);
+        state.ResumeTiming();
+        bm_env->evaluator()->ntt_inv(ct[0], ct[0]);
+    }
+}
+
 }  // namespace poseidonbench

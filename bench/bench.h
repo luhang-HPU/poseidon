@@ -352,4 +352,7 @@ private:
     void bm_ckks_relinearize(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
     void bm_ckks_mul_relinearize(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
     void bm_ckks_rotate(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_ckks_conjungate(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_ckks_ntt(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_ckks_intt(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
 } // namespace poseidonbench
