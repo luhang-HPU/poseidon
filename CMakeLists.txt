@@ -189,6 +189,18 @@ if(POSEIDON_USE_INTEL_HEXL)
     endif()
 endif()
 
+# [option] POSEIDON_USE_SPDLOG (default: ON)
+option(POSEIDON_USE_SPDLOG "Enable spdlog for POSEIDON" ON)
+message(STATUS "POSEIDON_USE_SPDLOG: ${POSEIDON_USE_SPDLOG}")
+if(POSEIDON_USE_SPDLOG)
+    if(POSEIDON_BUILD_DEPS)
+        message(STATUS "spdlog: download ...")
+        poseidon_fetch_thirdparty_content(ExternalSpdlog)
+    else()
+        find_package(spdlog REQUIRED)
+    endif()
+endif()
+
 # Create the config file
 configure_file(${POSEIDON_CONFIG_H_IN_FILENAME} ${POSEIDON_CONFIG_H_FILENAME})
 install(
@@ -269,6 +281,14 @@ if(POSEIDON_USE_INTEL_HEXL)
             DESTINATION ${CMAKE_INSTALL_PREFIX}/${CMAKE_LIBRARY_PREFIX}
             FILES_MATCHING PATTERN "*hexl*"
     )
+endif()
+
+if(POSEIDON_USE_SPDLOG)
+    if(POSEIDON_BUILD_DEPS)
+        target_include_directories(poseidon_shared PUBLIC $<BUILD_INTERFACE:${spdlog_SOURCE_DIR}/include>)
+    else()
+        target_link_libraries(poseidon_shared PUBLIC spdlog::spdlog)
+    endif()
 endif()
 
 install(
