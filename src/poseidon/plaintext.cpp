@@ -100,7 +100,7 @@ Plaintext &Plaintext::operator=(const string &hex_poly)
 {
     if (is_ntt_form())
     {
-        throw logic_error("cannot set an NTT transformed Plaintext");
+        POSEIDON_THROW(logic_error, "cannot set an NTT transformed Plaintext");
     }
     if (unsigned_gt(hex_poly.size(), numeric_limits<int>::max()))
     {
@@ -238,7 +238,7 @@ void Plaintext::save_members(ostream &stream) const
     catch (const ios_base::failure &)
     {
         stream.exceptions(old_except_mask);
-        throw runtime_error("I/O error");
+        POSEIDON_THROW(runtime_error, "I/O error");
     }
     catch (...)
     {
@@ -285,7 +285,7 @@ void Plaintext::load_members(const PoseidonContext &context, istream &stream,
     catch (const ios_base::failure &)
     {
         stream.exceptions(old_except_mask);
-        throw runtime_error("I/O error");
+        POSEIDON_THROW(runtime_error, "I/O error");
     }
     catch (...)
     {

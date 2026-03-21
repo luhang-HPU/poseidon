@@ -9,7 +9,7 @@
 #include <mutex>
 #include <vector>
 
-using namespace std;
+
 namespace poseidon
 {
 namespace util

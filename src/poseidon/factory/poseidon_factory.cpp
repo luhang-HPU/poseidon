@@ -8,7 +8,7 @@
 
 namespace poseidon
 {
-PoseidonFactory *PoseidonFactory::factory_{nullptr};
+std::unique_ptr<PoseidonFactory> PoseidonFactory::factory_{nullptr};
 std::mutex PoseidonFactory::mtx_;
 
 PoseidonFactory::PoseidonFactory(DEVICE_TYPE type) : device_type_(type) {}
@@ -19,12 +19,12 @@ PoseidonFactory *PoseidonFactory::get_instance()
     if (factory_ == nullptr)
     {
 #ifdef USING_HARDWARE
-        factory_ = new PoseidonFactory(DEVICE_TYPE::DEVICE_HARDWARE);
+        factory_ = std::make_unique<PoseidonFactory>(DEVICE_TYPE::DEVICE_HARDWARE);
 #else
-        factory_ = new PoseidonFactory(DEVICE_TYPE::DEVICE_SOFTWARE);
+        factory_ = std::make_unique<PoseidonFactory>(DEVICE_TYPE::DEVICE_SOFTWARE);
 #endif
     }
-    return factory_;
+    return factory_.get();
 }
 
 PoseidonContext
@@ -93,4 +93,4 @@ void PoseidonFactory::set_device_type(DEVICE_TYPE type)
     device_type_ = type;
 }
 
-}  // namespace poseidon
+} // namespace poseidon

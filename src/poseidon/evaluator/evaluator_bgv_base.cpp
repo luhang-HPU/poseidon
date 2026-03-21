@@ -55,7 +55,7 @@ void EvaluatorBgvBase::square_inplace(Ciphertext &ciph, MemoryPoolHandle pool) c
     // Size check
     if (!product_fits_in(dest_size, coeff_count, coeff_modulus_size))
     {
-        throw logic_error("invalid parameters");
+        POSEIDON_THROW(logic_error, "invalid parameters");
     }
 
     // Set up iterator for the base
@@ -218,14 +218,14 @@ void EvaluatorBgvBase::sub(const Ciphertext &ciph1, const Ciphertext &ciph2,
     size_t coeff_count = parms.degree();
     size_t coeff_modulus_size = coeff_modulus.size();
     size_t ciph1_size = ciph1.size();
-    size_t ciph2_size = ciph1.size();
+    size_t ciph2_size = ciph2.size();
     size_t max_count = max(ciph1_size, ciph2_size);
     size_t min_count = min(ciph1_size, ciph2_size);
 
     // Size check
     if (!product_fits_in(max_count, coeff_count))
     {
-        throw logic_error("invalid parameters");
+        POSEIDON_THROW(logic_error, "invalid parameters");
     }
 
     // Prepare result
@@ -394,7 +394,7 @@ void EvaluatorBgvBase::add_inplace(Ciphertext &ciph1, const Ciphertext &ciph2) c
     // Size check
     if (!product_fits_in(max_count, coeff_count))
     {
-        throw logic_error("invalid parameters");
+        POSEIDON_THROW(logic_error, "invalid parameters");
     }
     // Prepare result
     ciph1.resize(context_, context_data.parms().parms_id(), max_count);
@@ -477,7 +477,9 @@ void EvaluatorBgvBase::bgv_multiply(Ciphertext &ciph1, const Ciphertext &ciph2,
         // x = (x[0] * y[0], x[0] * y[1] + x[1] * y[0], x[1] * y[1])
         // with appropriate modular reduction
         // 外层循环：并行遍历 RNS 模数分量
+#ifdef USING_OPENMP
         #pragma omp parallel for
+#endif
         for (size_t i = 0; i < coeff_modulus_size; i++)
         {
             // 获取当前模数对象
@@ -623,7 +625,7 @@ void EvaluatorBgvBase::multiply_plain_inplace(Ciphertext &ciph, const Plaintext 
     // Transparent ciph output is not allowed.
     if (ciph.is_transparent())
     {
-        throw logic_error("result ciph is transparent");
+        POSEIDON_THROW(logic_error, "result ciph is transparent");
     }
 #endif
 }
@@ -651,7 +653,7 @@ void EvaluatorBgvBase::multiply_plain_ntt(Ciphertext &ciph_ntt, const Plaintext 
     // Size check
     if (!product_fits_in(encrypted_ntt_size, coeff_count, coeff_modulus_size))
     {
-        throw logic_error("invalid parameters");
+        POSEIDON_THROW(logic_error, "invalid parameters");
     }
 
     ConstRNSIter plain_ntt_iter(plain_ntt.data(), coeff_count);
@@ -685,7 +687,7 @@ void EvaluatorBgvBase::multiply_plain_ntt(Ciphertext &ciph_ntt, const Plaintext 
 //     // Size check
 //     if (!product_fits_in(encrypted_size, coeff_count, coeff_modulus_size))
 //     {
-//         throw logic_error("invalid parameters");
+//         POSEIDON_THROW(logic_error, "invalid parameters");
 //     }
 
 //     /*

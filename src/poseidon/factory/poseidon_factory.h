@@ -4,6 +4,7 @@
 #include "poseidon/evaluator/software/evaluator_bgv_software.h"
 #include "poseidon/evaluator/software/evaluator_ckks_software.h"
 #include "poseidon/poseidon_context.h"
+#include <memory>
 #include <mutex>
 
 namespace poseidon
@@ -42,12 +43,11 @@ public:
     DEVICE_TYPE get_device_type() const;
     void set_device_type(DEVICE_TYPE type);
 
-private:
     PoseidonFactory(DEVICE_TYPE type);
     ~PoseidonFactory() = default;
 
 private:
-    static PoseidonFactory *factory_;
+    static std::unique_ptr<PoseidonFactory> factory_;
     static std::mutex mtx_;
 
     DEVICE_TYPE device_type_;

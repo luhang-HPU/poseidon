@@ -125,7 +125,9 @@ void RNSPoly::set_random(const PoseidonContext &context, PolyType random_type,
 void RNSPoly::coeff_to_dot()
 {
     auto ntt_table = crt_context_->small_ntt_tables();
+#ifdef USING_OPENMP
     #pragma omp parallel for
+#endif
     for (auto i = 0; i < rns_num_q_; ++i)
     {
         ntt_negacyclic_harvey(data_ + i * poly_degree_, ntt_table[i]);
@@ -141,7 +143,9 @@ void RNSPoly::coeff_to_dot()
 void RNSPoly::coeff_to_dot_lazy()
 {
     auto ntt_table = crt_context_->small_ntt_tables();
+#ifdef USING_OPENMP
     #pragma omp parallel for
+#endif
     for (auto i = 0; i < rns_num_q_; ++i)
     {
         ntt_negacyclic_harvey_lazy(data_ + i * poly_degree_, ntt_table[i]);
@@ -157,7 +161,9 @@ void RNSPoly::coeff_to_dot_lazy()
 void RNSPoly::dot_to_coeff()
 {
     auto ntt_table = crt_context_->small_ntt_tables();
+#ifdef USING_OPENMP
     #pragma omp parallel for
+#endif
     for (auto i = 0; i < rns_num_q_; ++i)
     {
         inverse_ntt_negacyclic_harvey(data_ + i * poly_degree_, ntt_table[i]);
@@ -173,7 +179,9 @@ void RNSPoly::dot_to_coeff()
 void RNSPoly::dot_to_coeff_lazy()
 {
     auto ntt_table = crt_context_->small_ntt_tables();
+#ifdef USING_OPENMP
     #pragma omp parallel for
+#endif
     for (auto i = 0; i < rns_num_q_; ++i)
     {
         inverse_ntt_negacyclic_harvey_lazy(data_ + i * poly_degree_, ntt_table[i]);
@@ -191,7 +199,7 @@ RNSIter RNSPoly::operator[](std::size_t rns_index) const
 
     if (rns_index >= rns_num_total_)
     {
-        throw std::invalid_argument("rns_index is out of range");
+        POSEIDON_THROW_INVALID_ARGUMENT("rns_index is out of range");
     }
     return poly_iter_.data(rns_index);
 }
@@ -295,7 +303,7 @@ void RNSPoly::operator-=(const RNSPoly &poly)
         POSEIDON_THROW(invalid_argument_error, "RNSPoly -= : param_id not match!");
     }
 
-    if (rns_num_p_ == poly.rns_num_p_)
+    if (rns_num_p_ != poly.rns_num_p_)
     {
         POSEIDON_THROW(invalid_argument_error, "RNSPoly -= : rns_num_p not match!");
     }
@@ -320,7 +328,9 @@ void RNSPoly::negate()
     auto &modulus_q = context_data->parms().q();
     auto &modulus_p = key_context_data->parms().p();
 
+#ifdef USING_OPENMP
     #pragma omp parallel for
+#endif
     for (auto i = 0; i < rns_num_q_; ++i)
     {
         negate_poly_coeffmod(data_ + i * poly_degree_, poly_degree_, modulus_q[i],
@@ -345,7 +355,9 @@ void RNSPoly::add(const RNSPoly &operand, RNSPoly &result) const
             auto &modulus_q = context_data->parms().q();
             auto &modulus_p = key_context_data->parms().p();
 
+#ifdef USING_OPENMP
             #pragma omp parallel for
+#endif
             for (int i = 0; i < rns_num_q_; ++i)
             {
                 add_poly_coeffmod(data_ + i * poly_degree_, operand.data_ + i * poly_degree_,
@@ -378,7 +390,9 @@ void RNSPoly::add(const RNSPoly &operand, RNSPoly &result) const
     auto &modulus_q = context_data->parms().q();
     auto &modulus_p = key_context_data->parms().p();
 
+#ifdef USING_OPENMP
     #pragma omp parallel for
+#endif
     for (auto i = 0; i < rns_num_q_; ++i)
     {
         add_poly_coeffmod(data_ + i * poly_degree_, operand.data_ + i * poly_degree_, poly_degree_,
@@ -434,7 +448,9 @@ void RNSPoly::sub(const RNSPoly &operand, RNSPoly &result) const
     auto &modulus_q = context_data->parms().q();
     auto &modulus_p = key_context_data->parms().p();
 
+#ifdef USING_OPENMP
     #pragma omp parallel for
+#endif
     for (auto i = 0; i < rns_num_q_; ++i)
     {
         sub_poly_coeffmod(data_ + i * poly_degree_, operand.data_ + i * poly_degree_, poly_degree_,
@@ -459,7 +475,9 @@ void RNSPoly::multiply(const RNSPoly &operand, RNSPoly &result) const
             auto &modulus_q = context_data->parms().q();
             auto &modulus_p = key_context_data->parms().p();
 
+#ifdef USING_OPENMP
             #pragma omp parallel for
+#endif
             for (int i = 0; i < rns_num_q_; ++i)
             {
                 dyadic_product_coeffmod(data_ + i * poly_degree_, operand.data_ + i * poly_degree_,
@@ -492,7 +510,9 @@ void RNSPoly::multiply(const RNSPoly &operand, RNSPoly &result) const
     auto &modulus_q = context_data->parms().q();
     auto &modulus_p = key_context_data->parms().p();
 
+#ifdef USING_OPENMP
     #pragma omp parallel for
+#endif
     for (auto i = 0; i < rns_num_q_; ++i)
     {
         dyadic_product_coeffmod(data_ + i * poly_degree_, operand.data_ + i * poly_degree_,
@@ -519,7 +539,9 @@ void RNSPoly::add_scalar(uint64_t scalar, RNSPoly &result) const
     auto &modulus_q = context_data->parms().q();
     auto &modulus_p = key_context_data->parms().p();
 
+#ifdef USING_OPENMP
     #pragma omp parallel for
+#endif
     for (auto i = 0; i < rns_num_q_; ++i)
     {
         add_poly_scalar_coeffmod(data_ + i * poly_degree_, poly_degree_, scalar, modulus_q[i],
@@ -545,7 +567,9 @@ void RNSPoly::multiply_scalar(uint64_t scalar, RNSPoly &result) const
     auto &modulus_q = context_data->parms().q();
     auto &modulus_p = key_context_data->parms().p();
 
+#ifdef USING_OPENMP
     #pragma omp parallel for
+#endif
     for (auto i = 0; i < rns_num_q_; ++i)
     {
         multiply_poly_scalar_coeffmod(data_ + i * poly_degree_, poly_degree_, scalar, modulus_q[i],

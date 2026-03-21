@@ -16,7 +16,7 @@ void KSwitchGenGHS::generate_one_kswitch_key(const SecretKey &prev_secret_key, C
     // Size check
     if (!product_fits_in(coeff_count, decomp_mod_count))
     {
-        throw logic_error("invalid parameters");
+        POSEIDON_THROW(logic_error, "invalid parameters");
     }
     auto p_mod_qi = key_context_data.qp_rns_tool()->p_mod_qi();
     auto base_q = key_context_data.qp_rns_tool()->base_q();
@@ -208,7 +208,7 @@ void KSwitchGHS::apply_galois_inplace(Ciphertext &encrypted, uint32_t galois_elt
     // Size check
     if (!product_fits_in(coeff_count, coeff_modulus_size))
     {
-        throw logic_error("invalid parameters");
+        POSEIDON_THROW(logic_error, "invalid parameters");
     }
 
     // Check if Galois key is generated or not.
@@ -268,7 +268,7 @@ void KSwitchGHS::apply_galois_inplace(Ciphertext &encrypted, uint32_t galois_elt
     }
     else
     {
-        throw logic_error("scheme not implemented");
+        POSEIDON_THROW(logic_error, "scheme not implemented");
     }
 
     // Wipe encrypted.data(1)

@@ -26,7 +26,7 @@ Encryptor::Encryptor(const PoseidonContext &context, const PublicKey &public_key
     // Quick sanity check
     if (!product_fits_in(coeff_count, coeff_modulus_size, size_t(2)))
     {
-        throw logic_error("invalid parameters");
+        POSEIDON_THROW(logic_error, "invalid parameters");
     }
 }
 
@@ -44,7 +44,7 @@ Encryptor::Encryptor(const PoseidonContext &context, const SecretKey &secret_key
     // Quick sanity check
     if (!product_fits_in(coeff_count, coeff_modulus_size, size_t(2)))
     {
-        throw logic_error("invalid parameters");
+        POSEIDON_THROW(logic_error, "invalid parameters");
     }
 }
 
@@ -64,7 +64,7 @@ Encryptor::Encryptor(const PoseidonContext &context, const PublicKey &public_key
     // Quick sanity check
     if (!product_fits_in(coeff_count, coeff_modulus_size, size_t(2)))
     {
-        throw logic_error("invalid parameters");
+        POSEIDON_THROW(logic_error, "invalid parameters");
     }
 }
 

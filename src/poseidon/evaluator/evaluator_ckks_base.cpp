@@ -858,7 +858,7 @@ void EvaluatorCkksBase::evaluate_poly_from_poly_nomial_basis(
             destination.scale() = target_scale;
             if (destination.level() < target_level)
             {
-                throw logic_error("destination : destination level is small than target_level level!");
+                POSEIDON_THROW(logic_error, "destination : destination level is small than target_level level!");
             }
             else if (target_level < destination.level())
             {
@@ -1193,14 +1193,14 @@ void EvaluatorCkksBase::sub(const Ciphertext &ciph1, const Ciphertext &ciph2,
     size_t coeff_count = parms.degree();
     size_t coeff_modulus_size = coeff_modulus.size();
     size_t ciph1_size = ciph1.size();
-    size_t ciph2_size = ciph1.size();
+    size_t ciph2_size = ciph2.size();
     size_t max_count = max(ciph1_size, ciph2_size);
     size_t min_count = min(ciph1_size, ciph2_size);
 
     // Size check
     if (!product_fits_in(max_count, coeff_count))
     {
-        throw logic_error("invalid parameters");
+        POSEIDON_THROW(logic_error, "invalid parameters");
     }
 
     // Prepare result
@@ -1248,7 +1248,7 @@ void EvaluatorCkksBase::add_inplace(poseidon::Ciphertext &ciph1,
     // Size check
     if (!product_fits_in(max_count, coeff_count))
     {
-        throw logic_error("invalid parameters");
+        POSEIDON_THROW(logic_error, "invalid parameters");
     }
     // Prepare result
     ciph1.resize(context_, context_data.parms().parms_id(), max_count);
@@ -1329,7 +1329,7 @@ void EvaluatorCkksBase::ckks_multiply(Ciphertext &ciph1, const Ciphertext &ciph2
     // Size check
     if (!product_fits_in(dest_size, coeff_count, coeff_modulus_size))
     {
-        throw logic_error("invalid parameters");
+        POSEIDON_THROW(logic_error, "invalid parameters");
     }
 
     // Set up iterator for the base
@@ -1394,7 +1394,9 @@ void EvaluatorCkksBase::ckks_multiply(Ciphertext &ciph1, const Ciphertext &ciph2
             // with appropriate modular reduction
 
             // 开启 OpenMP 并行化 (作用于最外层模数循环)，每个线程需要处理不同的模数，互不干扰
+#ifdef USING_OPENMP
             #pragma omp parallel for
+#endif
             for (size_t i = 0; i < coeff_modulus_size; i++) 
             {
                 auto &modulus = coeff_modulus[i];
@@ -1486,7 +1488,7 @@ void EvaluatorCkksBase::ckks_multiply(Ciphertext &ciph1, const Ciphertext &ciph2
     ciph1.scale() *= ciph2.scale();
     if (ciph1.scale() <= 0 || (static_cast<uint32_t>(log2(ciph1.scale())) >= scale_bit_count_bound))
     {
-        throw invalid_argument("scale out of bounds");
+        POSEIDON_THROW(invalid_argument_error, "scale out of bounds");
     }
 }
 

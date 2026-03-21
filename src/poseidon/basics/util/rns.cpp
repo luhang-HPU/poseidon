@@ -104,7 +104,7 @@ RNSBase RNSBase::extend(const Modulus &value) const
                          // The base must be coprime
                          if (!are_coprime(I.value(), value.value()))
                          {
-                             throw logic_error("cannot extend by given value");
+                             POSEIDON_THROW(logic_error, "cannot extend by given value");
                          }
                      });
 
@@ -120,7 +120,7 @@ RNSBase RNSBase::extend(const Modulus &value) const
     // Initialize CRT data
     if (!newbase.initialize())
     {
-        throw logic_error("cannot extend by given value");
+        POSEIDON_THROW(logic_error, "cannot extend by given value");
     }
 
     return newbase;
@@ -152,7 +152,7 @@ RNSBase RNSBase::extend(const RNSBase &other) const
     // Initialize CRT data
     if (!newbase.initialize())
     {
-        throw logic_error("cannot extend by given base");
+        POSEIDON_THROW(logic_error, "cannot extend by given base");
     }
 
     return newbase;
@@ -162,7 +162,7 @@ RNSBase RNSBase::drop() const
 {
     if (size_ == 1)
     {
-        throw logic_error("cannot drop from base of size 1");
+        POSEIDON_THROW(logic_error, "cannot drop from base of size 1");
     }
 
     // Copy over this base
@@ -181,11 +181,11 @@ RNSBase RNSBase::drop(const Modulus &value) const
 {
     if (size_ == 1)
     {
-        throw logic_error("cannot drop from base of size 1");
+        POSEIDON_THROW(logic_error, "cannot drop from base of size 1");
     }
     if (!contains(value))
     {
-        throw logic_error("base does not contain value");
+        POSEIDON_THROW(logic_error, "base does not contain value");
     }
 
     // Copy over this base
@@ -300,7 +300,7 @@ void RNSBase::decompose_array(uint64_t *value, size_t count, MemoryPoolHandle po
     {
         if (!product_fits_in(count, size_))
         {
-            throw logic_error("invalid parameters");
+            POSEIDON_THROW(logic_error, "invalid parameters");
         }
 
         // Decompose an array of multi-precision integers into an array of arrays, one per each base
@@ -381,7 +381,7 @@ void RNSBase::compose_array(uint64_t *value, size_t count, MemoryPoolHandle pool
     {
         if (!product_fits_in(count, size_))
         {
-            throw logic_error("invalid parameters");
+            POSEIDON_THROW(logic_error, "invalid parameters");
         }
 
         // Merge the coefficients first
@@ -595,7 +595,7 @@ void BaseConverter::initialize()
     // Verify that the size is not too large
     if (!product_fits_in(ibase_.size(), obase_.size()))
     {
-        throw logic_error("invalid parameters");
+        POSEIDON_THROW(logic_error, "invalid parameters");
     }
 
     // Create the base-change matrix rows
@@ -678,7 +678,7 @@ void RNSTool::initialize(size_t poly_modulus_degree, const RNSBase &q, const Mod
     // Size check
     if (!product_fits_in(coeff_count_, base_bsk_m_tilde_size))
     {
-        throw logic_error("invalid parameters");
+        POSEIDON_THROW(logic_error, "invalid parameters");
     }
 
     // Sample primes for B and two more primes: m_sk and gamma
@@ -715,7 +715,7 @@ void RNSTool::initialize(size_t poly_modulus_degree, const RNSBase &q, const Mod
     }
     catch (const logic_error &)
     {
-        throw logic_error("invalid rns bases");
+        POSEIDON_THROW(logic_error, "invalid rns bases");
     }
 
     if (!t_.is_zero())
@@ -758,7 +758,7 @@ void RNSTool::initialize(size_t poly_modulus_degree, const RNSBase &q, const Mod
         temp = modulo_uint(base_q_->base_prod(), base_q_size, (*base_bsk_)[i]);
         if (!try_invert_uint_mod(temp, (*base_bsk_)[i], temp))
         {
-            throw logic_error("invalid rns bases");
+            POSEIDON_THROW(logic_error, "invalid rns bases");
         }
         inv_prod_q_mod_bsk_[i].set(temp, (*base_bsk_)[i]);
     }
@@ -767,7 +767,7 @@ void RNSTool::initialize(size_t poly_modulus_degree, const RNSBase &q, const Mod
     temp = modulo_uint(base_b_->base_prod(), base_b_size, m_sk_);
     if (!try_invert_uint_mod(temp, m_sk_, temp))
     {
-        throw logic_error("invalid rns bases");
+        POSEIDON_THROW(logic_error, "invalid rns bases");
     }
     inv_prod_b_mod_m_sk_.set(temp, m_sk_);
 
@@ -779,7 +779,7 @@ void RNSTool::initialize(size_t poly_modulus_degree, const RNSBase &q, const Mod
                          if (!try_invert_uint_mod(barrett_reduce_64(m_tilde_.value(), get<1>(I)),
                                                   get<1>(I), temp))
                          {
-                             throw logic_error("invalid rns bases");
+                             POSEIDON_THROW(logic_error, "invalid rns bases");
                          }
                          get<0>(I).set(temp, get<1>(I));
                      });
@@ -788,7 +788,7 @@ void RNSTool::initialize(size_t poly_modulus_degree, const RNSBase &q, const Mod
     temp = modulo_uint(base_q_->base_prod(), base_q_size, m_tilde_);
     if (!try_invert_uint_mod(temp, m_tilde_, temp))
     {
-        throw logic_error("invalid rns bases");
+        POSEIDON_THROW(logic_error, "invalid rns bases");
     }
     neg_inv_prod_q_mod_m_tilde_.set(negate_uint_mod(temp, m_tilde_), m_tilde_);
 
@@ -803,7 +803,7 @@ void RNSTool::initialize(size_t poly_modulus_degree, const RNSBase &q, const Mod
         // Compute gamma^(-1) mod t
         if (!try_invert_uint_mod(barrett_reduce_64(gamma_.value(), t_), t_, temp))
         {
-            throw logic_error("invalid rns bases");
+            POSEIDON_THROW(logic_error, "invalid rns bases");
         }
         inv_gamma_mod_t_.set(temp, t_);
 
@@ -827,7 +827,7 @@ void RNSTool::initialize(size_t poly_modulus_degree, const RNSBase &q, const Mod
                 get<0>(I).operand = modulo_uint(base_q_->base_prod(), base_q_size, get<1>(I));
                 if (!try_invert_uint_mod(get<0>(I).operand, get<1>(I), get<0>(I).operand))
                 {
-                    throw logic_error("invalid rns bases");
+                    POSEIDON_THROW(logic_error, "invalid rns bases");
                 }
                 get<0>(I).set(negate_uint_mod(get<0>(I).operand, get<1>(I)), get<1>(I));
             });
@@ -842,7 +842,7 @@ void RNSTool::initialize(size_t poly_modulus_degree, const RNSBase &q, const Mod
         {
             if (!try_invert_uint_mod((*base_q_)[base_q_size - 1].value(), get<1>(I), temp))
             {
-                throw logic_error("invalid rns bases");
+                POSEIDON_THROW(logic_error, "invalid rns bases");
             }
             get<0>(I).set(temp, get<1>(I));
         });
@@ -851,7 +851,7 @@ void RNSTool::initialize(size_t poly_modulus_degree, const RNSBase &q, const Mod
     {
         if (!try_invert_uint_mod(base_q_->base()[base_q_size - 1].value(), t_, inv_q_last_mod_t_))
         {
-            throw logic_error("invalid rns bases");
+            POSEIDON_THROW(logic_error, "invalid rns bases");
         }
 
         q_last_mod_t_ = barrett_reduce_64(base_q_->base()[base_q_size - 1].value(), t_);
@@ -910,7 +910,9 @@ void RNSTool::divide_and_round_q_last_inplace(RNSIter input, MemoryPoolHandle po
     add_poly_scalar_coeffmod(last_input, coeff_count_, half, last_modulus, last_input);
 
     // 2. 使用 OpenMP 并行化 RNS 循环
+#ifdef USING_OPENMP
     #pragma omp parallel for
+#endif
     for (size_t i = 0; i < base_q_size - 1; i++) 
     {
         // 关键点 A: 获取当前分量的迭代器或指针
@@ -975,7 +977,9 @@ void RNSTool::divide_and_round_q_last_ntt_inplace(RNSIter input, ConstNTTTablesI
     size_t base_q_size_minus_1 = base_q_size - 1;
 
     // 开启并行区域
+#ifdef USING_OPENMP
     #pragma omp parallel
+#endif
     {
         // 每个线程分配自己的临时缓冲区，coeff_count_ 是多项式的度
         POSEIDON_ALLOCATE_GET_COEFF_ITER(thread_temp, coeff_count_, pool);
@@ -1422,7 +1426,9 @@ void RNSTool::mod_t_and_divide_q_last_ntt_inplace(RNSIter input, ConstNTTTablesI
     POSEIDON_ALLOCATE_GET_COEFF_ITER(delta_all, (modulus_size - 1) * coeff_count_, pool);
 
     // 2. 开启 RNS 分量级别的并行
+#ifdef USING_OPENMP
     #pragma omp parallel for
+#endif
     for (size_t i = 0; i < modulus_size - 1; i++) 
     {
         // --- A. 提取当前分量所需的各种迭代器和参数 ---

@@ -90,14 +90,14 @@ void CKKSEncoder::encode_internal(double value, parms_id_type parms_id, double s
     // Quick sanity check
     if (!product_fits_in(coeff_modulus_size, coeff_count))
     {
-        throw logic_error("invalid parameters");
+        POSEIDON_THROW(logic_error, "invalid parameters");
     }
 
     // Check that scale is positive and not too large
     if (scale <= 0 ||
         (static_cast<int>(log2(scale)) >= context_data.total_coeff_modulus_bit_count()))
     {
-        throw invalid_argument("scale out of bounds");
+        POSEIDON_THROW(invalid_argument_error, "scale out of bounds");
     }
 
     // Compute the scaled value
@@ -218,7 +218,7 @@ void CKKSEncoder::encode_internal(int64_t value, parms_id_type parms_id,
     // Quick sanity check
     if (!product_fits_in(coeff_modulus_size, coeff_count))
     {
-        throw logic_error("invalid parameters");
+        POSEIDON_THROW(logic_error, "invalid parameters");
     }
 
     int coeff_bit_count = get_significant_bit_count(static_cast<uint64_t>(llabs(value))) + 2;
