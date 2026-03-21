@@ -267,7 +267,7 @@ void KSwitchBV::switch_key_inplace(Ciphertext &encrypted, ConstRNSIter target_it
     auto t_poly_prod(allocate_zero_poly_array(key_component_count, coeff_count, rns_modulus_size, pool));
 
 #ifdef USING_OPENMP
-    #pragma omp parallel for schedule(static)
+    #pragma omp parallel for if(rns_modulus_size > 4) schedule(dynamic, 2)
 #endif
     for (size_t I = 0; I < rns_modulus_size; ++I)
     {

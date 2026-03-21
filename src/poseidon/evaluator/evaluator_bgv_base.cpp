@@ -476,48 +476,68 @@ void EvaluatorBgvBase::bgv_multiply(Ciphertext &ciph1, const Ciphertext &ciph2,
         // Given input tuples of polynomials x = (x[0], x[1], x[2]), y = (y[0], y[1]), computes
         // x = (x[0] * y[0], x[0] * y[1] + x[1] * y[0], x[1] * y[1])
         // with appropriate modular reduction
-        // 外层循环：并行遍历 RNS 模数分量
+        // Optimized OpenMP parallelization with collapse(2)
 #ifdef USING_OPENMP
-        #pragma omp parallel for
-#endif
-        for (size_t i = 0; i < coeff_modulus_size; i++)
+        #pragma omp parallel if(coeff_modulus_size * num_tiles > 16)
         {
-            // 获取当前模数对象
-            auto &I = coeff_modulus[i];
-            // 每一层模数需要独立的临时空间，防止多线程冲突
-            std::vector<uint64_t> temp_tile(tile_size); 
-            uint64_t* temp = temp_tile.data();
-
-            // 初始化指向当前模数 i 的起始位置迭代器，确保 ciph1_iter[poly_index][i] 返回的是指向第 i 个模数分量数据的指针
-            RNSIter ciph1_0_tile_iter(ciph1_iter[0][i], tile_size);
-            RNSIter ciph1_1_tile_iter(ciph1_iter[1][i], tile_size);
-            RNSIter ciph1_2_tile_iter(ciph1_iter[2][i], tile_size);
-            ConstRNSIter ciph2_0_tile_iter(ciph2_iter[0][i], tile_size);
-            ConstRNSIter ciph2_1_tile_iter(ciph2_iter[1][i], tile_size);
-
-            // 内层循环：遍历当前模数分量下的每一个 Tile
-            for (size_t j = 0; j < num_tiles; j++)
+            std::vector<uint64_t> thread_local_temp_tile(tile_size);
+            uint64_t* thread_local_temp = thread_local_temp_tile.data();
+            
+            #pragma omp for collapse(2) schedule(dynamic, 4)
+#else
+            std::vector<uint64_t> local_temp_tile(tile_size);
+            uint64_t* local_temp = local_temp_tile.data();
+#endif
+            for (size_t i = 0; i < coeff_modulus_size; i++)
             {
-                // 1. x[2] = x[1] * y[1]
-                dyadic_product_coeffmod(ciph1_1_tile_iter[0], ciph2_1_tile_iter[0], tile_size, I, ciph1_2_tile_iter[0]);
-                // 2. temp = x[1] * y[0]
-                dyadic_product_coeffmod(ciph1_1_tile_iter[0], ciph2_0_tile_iter[0], tile_size, I, temp);
-
-                // 3. x[1] = x[0] * y[1]
-                dyadic_product_coeffmod(ciph1_0_tile_iter[0], ciph2_1_tile_iter[0], tile_size, I, ciph1_1_tile_iter[0]);
-
-                // 4. x[1] = x[1] + temp
-                add_poly_coeffmod(ciph1_1_tile_iter[0], temp, tile_size, I, ciph1_1_tile_iter[0]);
-                // 5. x[0] = x[0] * y[0]
-                dyadic_product_coeffmod(ciph1_0_tile_iter[0], ciph2_0_tile_iter[0], tile_size, I, ciph1_0_tile_iter[0]);
-                // 迭代器移动到下一个分块
-                ciph1_0_tile_iter++;
-                ciph1_1_tile_iter++;
-                ciph1_2_tile_iter++;
-                ciph2_0_tile_iter++;
-                ciph2_1_tile_iter++;
+                for (size_t j = 0; j < num_tiles; j++)
+                {
+#ifdef USING_OPENMP
+                    auto &I = coeff_modulus[i];
+                    
+                    RNSIter ciph1_0_tile_iter(ciph1_iter[0][i], tile_size);
+                    RNSIter ciph1_1_tile_iter(ciph1_iter[1][i], tile_size);
+                    RNSIter ciph1_2_tile_iter(ciph1_iter[2][i], tile_size);
+                    ConstRNSIter ciph2_0_tile_iter(ciph2_iter[0][i], tile_size);
+                    ConstRNSIter ciph2_1_tile_iter(ciph2_iter[1][i], tile_size);
+                    
+                    ciph1_0_tile_iter += j;
+                    ciph1_1_tile_iter += j;
+                    ciph1_2_tile_iter += j;
+                    ciph2_0_tile_iter += j;
+                    ciph2_1_tile_iter += j;
+                    
+                    dyadic_product_coeffmod(ciph1_1_tile_iter[0], ciph2_1_tile_iter[0], tile_size, I, ciph1_2_tile_iter[0]);
+                    dyadic_product_coeffmod(ciph1_1_tile_iter[0], ciph2_0_tile_iter[0], tile_size, I, thread_local_temp);
+                    dyadic_product_coeffmod(ciph1_0_tile_iter[0], ciph2_1_tile_iter[0], tile_size, I, ciph1_1_tile_iter[0]);
+                    add_poly_coeffmod(ciph1_1_tile_iter[0], thread_local_temp, tile_size, I, ciph1_1_tile_iter[0]);
+                    dyadic_product_coeffmod(ciph1_0_tile_iter[0], ciph2_0_tile_iter[0], tile_size, I, ciph1_0_tile_iter[0]);
+#else
+                    auto &I = coeff_modulus[i];
+                    
+                    RNSIter ciph1_0_tile_iter(ciph1_iter[0][i], tile_size);
+                    RNSIter ciph1_1_tile_iter(ciph1_iter[1][i], tile_size);
+                    RNSIter ciph1_2_tile_iter(ciph1_iter[2][i], tile_size);
+                    ConstRNSIter ciph2_0_tile_iter(ciph2_iter[0][i], tile_size);
+                    ConstRNSIter ciph2_1_tile_iter(ciph2_iter[1][i], tile_size);
+                    
+                    ciph1_0_tile_iter += j;
+                    ciph1_1_tile_iter += j;
+                    ciph1_2_tile_iter += j;
+                    ciph2_0_tile_iter += j;
+                    ciph2_1_tile_iter += j;
+                    
+                    dyadic_product_coeffmod(ciph1_1_tile_iter[0], ciph2_1_tile_iter[0], tile_size, I, ciph1_2_tile_iter[0]);
+                    dyadic_product_coeffmod(ciph1_1_tile_iter[0], ciph2_0_tile_iter[0], tile_size, I, local_temp);
+                    dyadic_product_coeffmod(ciph1_0_tile_iter[0], ciph2_1_tile_iter[0], tile_size, I, ciph1_1_tile_iter[0]);
+                    add_poly_coeffmod(ciph1_1_tile_iter[0], local_temp, tile_size, I, ciph1_1_tile_iter[0]);
+                    dyadic_product_coeffmod(ciph1_0_tile_iter[0], ciph2_0_tile_iter[0], tile_size, I, ciph1_0_tile_iter[0]);
+#endif
+                }
             }
+#ifdef USING_OPENMP
         }
+#endif
     }
     else
     {
