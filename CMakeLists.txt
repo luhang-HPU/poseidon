@@ -187,6 +187,7 @@ if(POSEIDON_USE_INTEL_HEXL)
     endif()
 endif()
 
+<<<<<<< HEAD
 option(POSEIDON_USE_OPENMP "Enable OpenMP for POSEIDON" OFF)
 message(STATUS "POSEIDON_USE_OPENMP: ${POSEIDON_USE_OPENMP}")
 if(POSEIDON_USE_OPENMP)
@@ -194,6 +195,17 @@ if(POSEIDON_USE_OPENMP)
     find_package(OpenMP REQUIRED)
     if(OpenMP_CXX_FOUND)
         set(USING_OPENMP ON)
+=======
+# [option] POSEIDON_USE_SPDLOG (default: ON)
+option(POSEIDON_USE_SPDLOG "Enable spdlog for POSEIDON" ON)
+message(STATUS "POSEIDON_USE_SPDLOG: ${POSEIDON_USE_SPDLOG}")
+if(POSEIDON_USE_SPDLOG)
+    if(POSEIDON_BUILD_DEPS)
+        message(STATUS "spdlog: download ...")
+        poseidon_fetch_thirdparty_content(ExternalSpdlog)
+    else()
+        find_package(spdlog REQUIRED)
+>>>>>>> main
     endif()
 endif()
 
@@ -283,6 +295,14 @@ if(POSEIDON_USE_INTEL_HEXL)
             DESTINATION ${CMAKE_INSTALL_PREFIX}/${CMAKE_LIBRARY_PREFIX}
             FILES_MATCHING PATTERN "*hexl*"
     )
+endif()
+
+if(POSEIDON_USE_SPDLOG)
+    if(POSEIDON_BUILD_DEPS)
+        target_include_directories(poseidon_shared PUBLIC $<BUILD_INTERFACE:${spdlog_SOURCE_DIR}/include>)
+    else()
+        target_link_libraries(poseidon_shared PUBLIC spdlog::spdlog)
+    endif()
 endif()
 
 install(
