@@ -187,15 +187,22 @@ if(POSEIDON_USE_INTEL_HEXL)
     endif()
 endif()
 
-<<<<<<< HEAD
+# [option] POSEIDON_USE_OPENMP (default: OFF)
 option(POSEIDON_USE_OPENMP "Enable OpenMP for POSEIDON" OFF)
 message(STATUS "POSEIDON_USE_OPENMP: ${POSEIDON_USE_OPENMP}")
 if(POSEIDON_USE_OPENMP)
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
     find_package(OpenMP REQUIRED)
     if(OpenMP_CXX_FOUND)
-        set(USING_OPENMP ON)
-=======
+        if(TARGET poseidon_shared)
+            target_link_libraries(poseidon_shared PUBLIC OpenMP::OpenMP_CXX)
+            target_compile_definitions(poseidon_shared PUBLIC POSEIDON_USE_OPENMP)
+        endif()
+    else()
+        message(WARNING "OpenMP requested but not found. Building without OpenMP.")
+    endif()
+endif()
+
+
 # [option] POSEIDON_USE_SPDLOG (default: ON)
 option(POSEIDON_USE_SPDLOG "Enable spdlog for POSEIDON" ON)
 message(STATUS "POSEIDON_USE_SPDLOG: ${POSEIDON_USE_SPDLOG}")
@@ -205,7 +212,6 @@ if(POSEIDON_USE_SPDLOG)
         poseidon_fetch_thirdparty_content(ExternalSpdlog)
     else()
         find_package(spdlog REQUIRED)
->>>>>>> main
     endif()
 endif()
 
@@ -245,12 +251,6 @@ target_include_directories(poseidon_shared PUBLIC ${POSEIDON_INCLUDES_DIR}/src)
 target_link_libraries(poseidon_shared PRIVATE gmp)
 if(POSEIDON_USE_HARDWARE)    
     target_link_libraries(poseidon_shared PUBLIC poseidon_hardware)
-endif()
-
-option(POSEIDON_USE_OPENMP "Enable OpenMP for POSEIDON" OFF)
-if(POSEIDON_USE_OPENMP)
-    target_link_libraries(poseidon_shared PUBLIC OpenMP::OpenMP_CXX)
-    target_compile_definitions(poseidon_shared PUBLIC POSEIDON_USE_OPENMP)
 endif()
 
 if(POSEIDON_USE_MSGSL)
