@@ -114,10 +114,7 @@ public:
             return using_fast_plain_lift_;
         }
 
-        POSEIDON_NODISCARD inline std::size_t chain_index() const noexcept
-        {
-            return chain_index_;
-        }
+        POSEIDON_NODISCARD inline std::size_t chain_index() const noexcept { return chain_index_; }
 
     private:
         ContextData(ParametersLiteral parms, MemoryPoolHandle pool)

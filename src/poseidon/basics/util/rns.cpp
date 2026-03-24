@@ -911,19 +911,19 @@ void RNSTool::divide_and_round_q_last_inplace(RNSIter input, MemoryPoolHandle po
 
     // 2. 使用 OpenMP 并行化 RNS 循环
 #ifdef USING_OPENMP
-    #pragma omp parallel for
+#pragma omp parallel for
 #endif
-    for (size_t i = 0; i < base_q_size - 1; i++) 
+    for (size_t i = 0; i < base_q_size - 1; i++)
     {
         // 关键点 A: 获取当前分量的迭代器或指针
         // 根据 POSEIDON/SEAL 惯例，input[i] 返回的是 CoeffIter
-        CoeffIter current_input = input[i]; 
+        CoeffIter current_input = input[i];
         uint64_t inv_q_last = inv_q_last_mod_q_[i].operand;
         const Modulus &current_modulus = base_q_->base()[i];
 
         // 关键点 B: 避免在循环内部使用 std::vector (昂贵的内存分配)
         // 每个线程需要独立的 temp，使用 pool 分配或栈上固定大小数组
-        uint64_t local_temp_array[coeff_count_]; 
+        uint64_t local_temp_array[coeff_count_];
         CoeffIter local_temp(local_temp_array);
 
         // 1. (ct mod qk) mod qi
@@ -937,7 +937,8 @@ void RNSTool::divide_and_round_q_last_inplace(RNSIter input, MemoryPoolHandle po
         sub_poly_coeffmod(current_input, local_temp, coeff_count_, current_modulus, current_input);
 
         // 4. qk^(-1) * ((ct mod qi) - (ct mod qk)) mod qi
-        multiply_poly_scalar_coeffmod(current_input, coeff_count_, inv_q_last, current_modulus, current_input);
+        multiply_poly_scalar_coeffmod(current_input, coeff_count_, inv_q_last, current_modulus,
+                                      current_input);
     }
 }
 
@@ -978,19 +979,19 @@ void RNSTool::divide_and_round_q_last_ntt_inplace(RNSIter input, ConstNTTTablesI
 
     // 开启并行区域
 #ifdef USING_OPENMP
-    #pragma omp parallel
+#pragma omp parallel
 #endif
     {
         // 每个线程分配自己的临时缓冲区，coeff_count_ 是多项式的度
         POSEIDON_ALLOCATE_GET_COEFF_ITER(thread_temp, coeff_count_, pool);
 
-        #pragma omp for
+#pragma omp for
         for (size_t i = 0; i < base_q_size_minus_1; i++)
         {
-            auto current_input_poly = input[i];                  // get<0>(I)
+            auto current_input_poly = input[i];                      // get<0>(I)
             uint64_t inv_q_last_val = inv_q_last_mod_q_[i].operand;  // get<1>(I)
-            Modulus qi = (*base_q_)[i];                          // get<2>(I)        
-            const auto &current_ntt_table = rns_ntt_tables[i];   // get<3>(I)
+            Modulus qi = (*base_q_)[i];                              // get<2>(I)
+            const auto &current_ntt_table = rns_ntt_tables[i];       // get<3>(I)
 
             // 1. (ct mod qk) mod qi
             if (qi.value() < last_modulus.value())
@@ -1011,28 +1012,29 @@ void RNSTool::divide_and_round_q_last_ntt_inplace(RNSIter input, ConstNTTTablesI
                 thread_temp[j] += neg_half_mod;
             }
 
-    #if POSEIDON_USER_MOD_BIT_COUNT_MAX <= 60
+#if POSEIDON_USER_MOD_BIT_COUNT_MAX <= 60
             uint64_t qi_lazy = qi.value() << 2;
             ntt_negacyclic_harvey_lazy(thread_temp, current_ntt_table);
-    #else
+#else
             uint64_t qi_lazy = qi.value() << 1;
             ntt_negacyclic_harvey_lazy(thread_temp, current_ntt_table);
 
             for (size_t j = 0; j < coeff_count_; j++)
             {
-                thread_temp[j] -= (qi_lazy & static_cast<uint64_t>(-static_cast<int64_t>(thread_temp[j] >= qi_lazy)));
+                thread_temp[j] -= (qi_lazy & static_cast<uint64_t>(
+                                                 -static_cast<int64_t>(thread_temp[j] >= qi_lazy)));
             }
-    #endif
+#endif
             // 执行减法：(ct mod qi) - (ct mod qk)
             for (size_t j = 0; j < coeff_count_; j++)
             {
                 current_input_poly[j] += qi_lazy - thread_temp[j];
             }
             // 乘上 qk^(-1) mod qi
-            multiply_poly_scalar_coeffmod(current_input_poly, coeff_count_, inv_q_last_val, qi, current_input_poly);
+            multiply_poly_scalar_coeffmod(current_input_poly, coeff_count_, inv_q_last_val, qi,
+                                          current_input_poly);
         }
     }
-
 }
 
 void RNSTool::fastbconv_sk(ConstRNSIter input, RNSIter destination, MemoryPoolHandle pool) const
@@ -1412,7 +1414,8 @@ void RNSTool::mod_t_and_divide_q_last_ntt_inplace(RNSIter input, ConstNTTTablesI
     //         POSEIDON_ITERATE(iter(delta_mod_q_i, c_last), coeff_count_,
     //                          [&](auto J) {
     //                              get<0>(J) = add_uint_mod(
-    //                                  get<0>(J), barrett_reduce_64(get<1>(J), get<1>(I)), get<1>(I));
+    //                                  get<0>(J), barrett_reduce_64(get<1>(J), get<1>(I)),
+    //                                  get<1>(I));
     //                          });
     //         ntt_negacyclic_harvey(delta_mod_q_i, get<3>(I));
     //         POSEIDON_ITERATE(iter(get<0>(I), delta_mod_q_i), coeff_count_,
@@ -1420,26 +1423,27 @@ void RNSTool::mod_t_and_divide_q_last_ntt_inplace(RNSIter input, ConstNTTTablesI
     //                          { get<0>(J) = sub_uint_mod(get<0>(J), get<1>(J), get<1>(I)); });
 
     //         // c_i = c_i * inv_q_last_mod_q_i (mod q_i)
-    //         multiply_poly_scalar_coeffmod(get<0>(I), coeff_count_, get<2>(I), get<1>(I), get<0>(I));
+    //         multiply_poly_scalar_coeffmod(get<0>(I), coeff_count_, get<2>(I), get<1>(I),
+    //         get<0>(I));
     //     });
     // 每个 RNS 分量需要一个大小为 coeff_count_ 的缓冲区用于 delta_mod_q_i
     POSEIDON_ALLOCATE_GET_COEFF_ITER(delta_all, (modulus_size - 1) * coeff_count_, pool);
 
     // 2. 开启 RNS 分量级别的并行
 #ifdef USING_OPENMP
-    #pragma omp parallel for
+#pragma omp parallel for
 #endif
-    for (size_t i = 0; i < modulus_size - 1; i++) 
+    for (size_t i = 0; i < modulus_size - 1; i++)
     {
         // --- A. 提取当前分量所需的各种迭代器和参数 ---
-        CoeffIter current_c_i = input[i];          // get<0>(I)
-        const Modulus &qi = curr_modulus[i];       // get<1>(I)
-        
+        CoeffIter current_c_i = input[i];     // get<0>(I)
+        const Modulus &qi = curr_modulus[i];  // get<1>(I)
+
         // 修复之前的报错：正确提取 MultiplyUIntModOperand 操作数
-        const auto &inv_qk_qi = inv_q_last_mod_q_[i]; // get<2>(I)
-        
-        const auto &ntt_table = rns_ntt_tables[i]; // get<3>(I)
-        
+        const auto &inv_qk_qi = inv_q_last_mod_q_[i];  // get<2>(I)
+
+        const auto &ntt_table = rns_ntt_tables[i];  // get<3>(I)
+
         // 指向该线程专门使用的临时缓冲区
         CoeffIter delta_mod_q_i = delta_all + (i * coeff_count_);
 
@@ -1449,7 +1453,8 @@ void RNSTool::mod_t_and_divide_q_last_ntt_inplace(RNSIter input, ConstNTTTablesI
         modulo_poly_coeffs(neg_c_last_mod_t, coeff_count_, qi, delta_mod_q_i);
 
         // 2. delta_mod_q_i *= q_last (mod q_i)
-        multiply_poly_scalar_coeffmod(delta_mod_q_i, coeff_count_, last_modulus_value, qi, delta_mod_q_i);
+        multiply_poly_scalar_coeffmod(delta_mod_q_i, coeff_count_, last_modulus_value, qi,
+                                      delta_mod_q_i);
 
         // 3. 内部系数级循环：c_i = c_i - c_last - neg_c_last_mod_t * q_last (mod 2q_i)
         // 注意：这里是系数级别的密集计算，通常不再嵌套并行，而是依赖 SIMD (自动向量化)

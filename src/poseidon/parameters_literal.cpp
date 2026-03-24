@@ -6,10 +6,10 @@ namespace poseidon
 {
 using namespace util;
 ParametersLiteral::ParametersLiteral(SchemeType type, std::uint32_t log_n, std::uint32_t log_slots,
-                                     std::uint32_t log_scale, std::uint32_t hamming_weight, std::uint32_t q0_level,
-                                     Modulus plain_modulus, const std::vector<Modulus> &q,
-                                     const std::vector<Modulus> &p, sec_level_type sec_level,
-                                     MemoryPoolHandle pool)
+                                     std::uint32_t log_scale, std::uint32_t hamming_weight,
+                                     std::uint32_t q0_level, Modulus plain_modulus,
+                                     const std::vector<Modulus> &q, const std::vector<Modulus> &p,
+                                     sec_level_type sec_level, MemoryPoolHandle pool)
     : type_(type), log_n_(log_n), log_slots_(log_slots), q_(q), p_(p), log_scale_(log_scale),
       hamming_weight_(hamming_weight), plain_modulus_(plain_modulus), q0_level_(q0_level),
       pool_(std::move(pool)), sec_level_(sec_level)
@@ -303,13 +303,14 @@ GetDefaultCoeffModulus128()
             Total bit count: 1857 = 31 * 58 + 59
             */
             {65536,
-            {{ 0x3fffffffa320001, 0x3fffffffa800001, 0x3fffffffaa20001, 0x3fffffffaa40001, 0x3fffffffad20001,
-               0x3fffffffaf20001, 0x3fffffffb4a0001, 0x3fffffffbb20001, 0x3fffffffbbc0001, 0x3fffffffc600001,
-               0x3fffffffc8a0001, 0x3fffffffcb20001, 0x3fffffffcc00001, 0x3fffffffcca0001, 0x3fffffffce80001,
-               0x3fffffffd3c0001, 0x3fffffffd900001, 0x3fffffffdc80001, 0x3fffffffdd80001, 0x3fffffffdfe0001,
-               0x3fffffffe2c0001, 0x3fffffffe320001, 0x3fffffffe440001, 0x3fffffffe800001, 0x3fffffffea00001,
-               0x3fffffffeb00001, 0x3fffffffed00001, 0x3fffffffed60001, 0x3ffffffff040001, 0x3ffffffff3a0001,
-               0x3ffffffffbe0001},
+             {{0x3fffffffa320001, 0x3fffffffa800001, 0x3fffffffaa20001, 0x3fffffffaa40001,
+               0x3fffffffad20001, 0x3fffffffaf20001, 0x3fffffffb4a0001, 0x3fffffffbb20001,
+               0x3fffffffbbc0001, 0x3fffffffc600001, 0x3fffffffc8a0001, 0x3fffffffcb20001,
+               0x3fffffffcc00001, 0x3fffffffcca0001, 0x3fffffffce80001, 0x3fffffffd3c0001,
+               0x3fffffffd900001, 0x3fffffffdc80001, 0x3fffffffdd80001, 0x3fffffffdfe0001,
+               0x3fffffffe2c0001, 0x3fffffffe320001, 0x3fffffffe440001, 0x3fffffffe800001,
+               0x3fffffffea00001, 0x3fffffffeb00001, 0x3fffffffed00001, 0x3fffffffed60001,
+               0x3ffffffff040001, 0x3ffffffff3a0001, 0x3ffffffffbe0001},
               {0x7ffffffffcc0001},
               40}}};
 
@@ -405,10 +406,12 @@ GetDefaultCoeffModulus256()
     return default_coeff_modulus_256;
 }
 
-const std::map<size_t, std::tuple<std::vector<std::uint32_t>, std::vector<std::uint32_t>, std::uint32_t>> &
+const std::map<size_t,
+               std::tuple<std::vector<std::uint32_t>, std::vector<std::uint32_t>, std::uint32_t>> &
 GetDefaultLogCoeffModulus128()
 {
-    static const std::map<size_t, std::tuple<std::vector<std::uint32_t>, std::vector<std::uint32_t>, std::uint32_t>>
+    static const std::map<
+        size_t, std::tuple<std::vector<std::uint32_t>, std::vector<std::uint32_t>, std::uint32_t>>
         default_log_coeff_modulus_128{
             /*
             Polynomial modulus: 1x^4096 + 1
@@ -443,16 +446,21 @@ GetDefaultLogCoeffModulus128()
             Modulus count: 32
             Total bit count: 1857 = 31 * 58 + 59
             */
-            {65536, {{58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58,
-                  58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58}, {59}, 40}}};
+            {65536,
+             {{58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58,
+               58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58},
+              {59},
+              40}}};
 
     return default_log_coeff_modulus_128;
 }
 
-const std::map<size_t, std::tuple<std::vector<std::uint32_t>, std::vector<std::uint32_t>, std::uint32_t>> &
+const std::map<size_t,
+               std::tuple<std::vector<std::uint32_t>, std::vector<std::uint32_t>, std::uint32_t>> &
 GetDefaultLogCoeffModulus192()
 {
-    static const std::map<size_t, std::tuple<std::vector<std::uint32_t>, std::vector<std::uint32_t>, std::uint32_t>>
+    static const std::map<
+        size_t, std::tuple<std::vector<std::uint32_t>, std::vector<std::uint32_t>, std::uint32_t>>
         default_log_coeff_modulus_192{
             /*
             Polynomial modulus: 1x^1024 + 1
@@ -499,10 +507,12 @@ GetDefaultLogCoeffModulus192()
     return default_log_coeff_modulus_192;
 }
 
-const std::map<size_t, std::tuple<std::vector<std::uint32_t>, std::vector<std::uint32_t>, std::uint32_t>> &
+const std::map<size_t,
+               std::tuple<std::vector<std::uint32_t>, std::vector<std::uint32_t>, std::uint32_t>> &
 GetDefaultLogCoeffModulus256()
 {
-    static const std::map<size_t, std::tuple<std::vector<std::uint32_t>, std::vector<std::uint32_t>, std::uint32_t>>
+    static const std::map<
+        size_t, std::tuple<std::vector<std::uint32_t>, std::vector<std::uint32_t>, std::uint32_t>>
         default_log_coeff_modulus_256{/*
                                       Polynomial modulus: 1x^1024 + 1
                                       Modulus count: 1

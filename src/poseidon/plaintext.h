@@ -755,7 +755,7 @@ private:
                       PoseidonVersion version);
 
     std::size_t coeff_count_ = 0;  // degree
-    double scale_ = 1.0;  // for ckks
+    double scale_ = 1.0;           // for ckks
     parms_id_type parms_id_ = parms_id_zero;
     DynArray<pt_coeff_type> data_;
 

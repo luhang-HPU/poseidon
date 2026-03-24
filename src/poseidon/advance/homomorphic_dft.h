@@ -6,8 +6,6 @@
 #include <map>
 #include <vector>
 
-
-
 namespace poseidon
 {
 typedef int LinearType;
@@ -16,13 +14,17 @@ const LinearType decode = 1;
 
 std::vector<std::complex<double>> get_roots_float64(int nth_root);
 
-std::tuple<std::vector<std::vector<std::complex<double>>>, std::vector<std::vector<std::complex<double>>>,
-      std::vector<std::vector<std::complex<double>>>>
-ifft_plain_vec(uint32_t log_n, uint32_t dslots, std::vector<std::complex<double>> roots, std::vector<int> pow5);
+std::tuple<std::vector<std::vector<std::complex<double>>>,
+           std::vector<std::vector<std::complex<double>>>,
+           std::vector<std::vector<std::complex<double>>>>
+ifft_plain_vec(uint32_t log_n, uint32_t dslots, std::vector<std::complex<double>> roots,
+               std::vector<int> pow5);
 
-std::tuple<std::vector<std::vector<std::complex<double>>>, std::vector<std::vector<std::complex<double>>>,
-      std::vector<std::vector<std::complex<double>>>>
-fft_plain_vec(uint32_t log_n, uint32_t dslots, std::vector<std::complex<double>> roots, std::vector<int> pow5);
+std::tuple<std::vector<std::vector<std::complex<double>>>,
+           std::vector<std::vector<std::complex<double>>>,
+           std::vector<std::vector<std::complex<double>>>>
+fft_plain_vec(uint32_t log_n, uint32_t dslots, std::vector<std::complex<double>> roots,
+              std::vector<int> pow5);
 
 void slice_bit_reverse_in_place(std::vector<std::complex<double>> &slice, int n);
 void add_to_diag_matrix(std::map<int, std::vector<std::complex<double>>> &diag_mat, int index,
@@ -41,7 +43,8 @@ std::map<int, std::vector<std::complex<double>>> multiply_fft_matrix_with_next_f
     const std::map<int, std::vector<std::complex<double>>> &vec, uint32_t log_l, uint32_t n,
     uint32_t next_level, std::vector<std::complex<double>> a, std::vector<std::complex<double>> b,
     std::vector<std::complex<double>> c, LinearType lt_type, bool bit_reversed);
-std::map<int, std::vector<std::complex<double>>> gen_repack_matrix(uint32_t log_l, bool bit_reversed);
+std::map<int, std::vector<std::complex<double>>> gen_repack_matrix(uint32_t log_l,
+                                                                   bool bit_reversed);
 
 class HomomorphicDFTMatrixLiteral
 {

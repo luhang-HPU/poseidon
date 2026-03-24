@@ -78,8 +78,7 @@ void EvaluatorBgvBase::square_inplace(Ciphertext &ciph, MemoryPoolHandle pool) c
     // Compute 2*c0*c1
     dyadic_product_coeffmod(ciph_iter[0], ciph_iter[1], coeff_modulus_size, coeff_modulus,
                             ciph_iter[1]);
-    add_poly_coeffmod(ciph_iter[1], ciph_iter[1], coeff_modulus_size, coeff_modulus,
-                      ciph_iter[1]);
+    add_poly_coeffmod(ciph_iter[1], ciph_iter[1], coeff_modulus_size, coeff_modulus, ciph_iter[1]);
 
     // Compute c0^2
     dyadic_product_coeffmod(ciph_iter[0], ciph_iter[0], coeff_modulus_size, coeff_modulus,
@@ -150,11 +149,13 @@ void EvaluatorBgvBase::rescale(Ciphertext &ciph) const
     Ciphertext ciphertext_copy(pool);
     ciphertext_copy = ciphertext;
 
-    POSEIDON_ITERATE(iter(ciphertext_copy), ciphertext_size, [&](auto I)
+    POSEIDON_ITERATE(iter(ciphertext_copy), ciphertext_size,
+                     [&](auto I)
                      { rns_tool->mod_t_and_divide_q_last_ntt_inplace(I, ntt_table, pool); });
 
     result.resize(context_, next_context_data.parms().parms_id(), ciphertext_size);
-    POSEIDON_ITERATE(iter(ciphertext_copy, result), ciphertext_size, [&](auto I)
+    POSEIDON_ITERATE(iter(ciphertext_copy, result), ciphertext_size,
+                     [&](auto I)
                      { set_poly(get<0>(I), coeff_count, next_coeff_modulus_size, get<1>(I)); });
 
     // Set other attributes
@@ -317,7 +318,6 @@ void EvaluatorBgvBase::drop_modulus(const Ciphertext &ciph, Ciphertext &result,
     {
         drop_modulus_to_next(result, result);
     }
-
 }
 
 void EvaluatorBgvBase::add_plain_inplace(Ciphertext &ciph, const Plaintext &plain) const
@@ -478,15 +478,15 @@ void EvaluatorBgvBase::bgv_multiply(Ciphertext &ciph1, const Ciphertext &ciph2,
         // with appropriate modular reduction
         // Optimized OpenMP parallelization with collapse(2)
 #ifdef USING_OPENMP
-        #pragma omp parallel if(coeff_modulus_size * num_tiles > 16)
+#pragma omp parallel if (coeff_modulus_size * num_tiles > 16)
         {
             std::vector<uint64_t> thread_local_temp_tile(tile_size);
-            uint64_t* thread_local_temp = thread_local_temp_tile.data();
-            
-            #pragma omp for collapse(2) schedule(dynamic, 4)
+            uint64_t *thread_local_temp = thread_local_temp_tile.data();
+
+#pragma omp for collapse(2) schedule(dynamic, 4)
 #else
-            std::vector<uint64_t> local_temp_tile(tile_size);
-            uint64_t* local_temp = local_temp_tile.data();
+        std::vector<uint64_t> local_temp_tile(tile_size);
+        uint64_t *local_temp = local_temp_tile.data();
 #endif
             for (size_t i = 0; i < coeff_modulus_size; i++)
             {
@@ -494,44 +494,54 @@ void EvaluatorBgvBase::bgv_multiply(Ciphertext &ciph1, const Ciphertext &ciph2,
                 {
 #ifdef USING_OPENMP
                     auto &I = coeff_modulus[i];
-                    
+
                     RNSIter ciph1_0_tile_iter(ciph1_iter[0][i], tile_size);
                     RNSIter ciph1_1_tile_iter(ciph1_iter[1][i], tile_size);
                     RNSIter ciph1_2_tile_iter(ciph1_iter[2][i], tile_size);
                     ConstRNSIter ciph2_0_tile_iter(ciph2_iter[0][i], tile_size);
                     ConstRNSIter ciph2_1_tile_iter(ciph2_iter[1][i], tile_size);
-                    
+
                     ciph1_0_tile_iter += j;
                     ciph1_1_tile_iter += j;
                     ciph1_2_tile_iter += j;
                     ciph2_0_tile_iter += j;
                     ciph2_1_tile_iter += j;
-                    
-                    dyadic_product_coeffmod(ciph1_1_tile_iter[0], ciph2_1_tile_iter[0], tile_size, I, ciph1_2_tile_iter[0]);
-                    dyadic_product_coeffmod(ciph1_1_tile_iter[0], ciph2_0_tile_iter[0], tile_size, I, thread_local_temp);
-                    dyadic_product_coeffmod(ciph1_0_tile_iter[0], ciph2_1_tile_iter[0], tile_size, I, ciph1_1_tile_iter[0]);
-                    add_poly_coeffmod(ciph1_1_tile_iter[0], thread_local_temp, tile_size, I, ciph1_1_tile_iter[0]);
-                    dyadic_product_coeffmod(ciph1_0_tile_iter[0], ciph2_0_tile_iter[0], tile_size, I, ciph1_0_tile_iter[0]);
+
+                    dyadic_product_coeffmod(ciph1_1_tile_iter[0], ciph2_1_tile_iter[0], tile_size,
+                                            I, ciph1_2_tile_iter[0]);
+                    dyadic_product_coeffmod(ciph1_1_tile_iter[0], ciph2_0_tile_iter[0], tile_size,
+                                            I, thread_local_temp);
+                    dyadic_product_coeffmod(ciph1_0_tile_iter[0], ciph2_1_tile_iter[0], tile_size,
+                                            I, ciph1_1_tile_iter[0]);
+                    add_poly_coeffmod(ciph1_1_tile_iter[0], thread_local_temp, tile_size, I,
+                                      ciph1_1_tile_iter[0]);
+                    dyadic_product_coeffmod(ciph1_0_tile_iter[0], ciph2_0_tile_iter[0], tile_size,
+                                            I, ciph1_0_tile_iter[0]);
 #else
-                    auto &I = coeff_modulus[i];
-                    
-                    RNSIter ciph1_0_tile_iter(ciph1_iter[0][i], tile_size);
-                    RNSIter ciph1_1_tile_iter(ciph1_iter[1][i], tile_size);
-                    RNSIter ciph1_2_tile_iter(ciph1_iter[2][i], tile_size);
-                    ConstRNSIter ciph2_0_tile_iter(ciph2_iter[0][i], tile_size);
-                    ConstRNSIter ciph2_1_tile_iter(ciph2_iter[1][i], tile_size);
-                    
-                    ciph1_0_tile_iter += j;
-                    ciph1_1_tile_iter += j;
-                    ciph1_2_tile_iter += j;
-                    ciph2_0_tile_iter += j;
-                    ciph2_1_tile_iter += j;
-                    
-                    dyadic_product_coeffmod(ciph1_1_tile_iter[0], ciph2_1_tile_iter[0], tile_size, I, ciph1_2_tile_iter[0]);
-                    dyadic_product_coeffmod(ciph1_1_tile_iter[0], ciph2_0_tile_iter[0], tile_size, I, local_temp);
-                    dyadic_product_coeffmod(ciph1_0_tile_iter[0], ciph2_1_tile_iter[0], tile_size, I, ciph1_1_tile_iter[0]);
-                    add_poly_coeffmod(ciph1_1_tile_iter[0], local_temp, tile_size, I, ciph1_1_tile_iter[0]);
-                    dyadic_product_coeffmod(ciph1_0_tile_iter[0], ciph2_0_tile_iter[0], tile_size, I, ciph1_0_tile_iter[0]);
+                auto &I = coeff_modulus[i];
+
+                RNSIter ciph1_0_tile_iter(ciph1_iter[0][i], tile_size);
+                RNSIter ciph1_1_tile_iter(ciph1_iter[1][i], tile_size);
+                RNSIter ciph1_2_tile_iter(ciph1_iter[2][i], tile_size);
+                ConstRNSIter ciph2_0_tile_iter(ciph2_iter[0][i], tile_size);
+                ConstRNSIter ciph2_1_tile_iter(ciph2_iter[1][i], tile_size);
+
+                ciph1_0_tile_iter += j;
+                ciph1_1_tile_iter += j;
+                ciph1_2_tile_iter += j;
+                ciph2_0_tile_iter += j;
+                ciph2_1_tile_iter += j;
+
+                dyadic_product_coeffmod(ciph1_1_tile_iter[0], ciph2_1_tile_iter[0], tile_size, I,
+                                        ciph1_2_tile_iter[0]);
+                dyadic_product_coeffmod(ciph1_1_tile_iter[0], ciph2_0_tile_iter[0], tile_size, I,
+                                        local_temp);
+                dyadic_product_coeffmod(ciph1_0_tile_iter[0], ciph2_1_tile_iter[0], tile_size, I,
+                                        ciph1_1_tile_iter[0]);
+                add_poly_coeffmod(ciph1_1_tile_iter[0], local_temp, tile_size, I,
+                                  ciph1_1_tile_iter[0]);
+                dyadic_product_coeffmod(ciph1_0_tile_iter[0], ciph2_0_tile_iter[0], tile_size, I,
+                                        ciph1_0_tile_iter[0]);
 #endif
                 }
             }
@@ -678,7 +688,8 @@ void EvaluatorBgvBase::multiply_plain_ntt(Ciphertext &ciph_ntt, const Plaintext 
 
     ConstRNSIter plain_ntt_iter(plain_ntt.data(), coeff_count);
     POSEIDON_ITERATE(
-        iter(ciph_ntt), encrypted_ntt_size, [&](auto I)
+        iter(ciph_ntt), encrypted_ntt_size,
+        [&](auto I)
         { dyadic_product_coeffmod(I, plain_ntt_iter, coeff_modulus_size, coeff_modulus, I); });
 
     // Set the scale
@@ -869,7 +880,8 @@ void EvaluatorBgvBase::drop_modulus_to_next(const Ciphertext &ciph, Ciphertext &
                              I, context_.crt_context()->small_ntt_tables(), pool_);
                      });
     result.resize(context_, next_context_data.parms().parms_id(), ciph_size);
-    POSEIDON_ITERATE(iter(ciph_copy, result), ciph_size, [&](auto I)
+    POSEIDON_ITERATE(iter(ciph_copy, result), ciph_size,
+                     [&](auto I)
                      { set_poly(get<0>(I), coeff_count, next_coeff_modulus_size, get<1>(I)); });
 
     // Set other attributes

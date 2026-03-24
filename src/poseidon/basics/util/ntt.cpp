@@ -37,10 +37,10 @@ struct NTT::AllocatorAdapter<poseidon::MemoryPoolHandle>
 
     void deallocate_impl(void *p, POSEIDON_MAYBE_UNUSED std::size_t n)
     {
-        auto it =
-            std::remove_if(cache_.begin(), cache_.end(),
-                           [p](const poseidon::util::Pointer<poseidon::poseidon_byte> &poseidon_pointer)
-                           { return p == poseidon_pointer.get(); });
+        auto it = std::remove_if(
+            cache_.begin(), cache_.end(),
+            [p](const poseidon::util::Pointer<poseidon::poseidon_byte> &poseidon_pointer)
+            { return p == poseidon_pointer.get(); });
 
 #ifdef POSEIDON_DEBUG
         if (it == cache_.end())
@@ -103,10 +103,10 @@ struct NTT::AllocatorAdapter<poseidon::MemoryPoolHandle, SimpleThreadSafePolicy>
         {
             // to prevent inline optimization with deadlock
             auto accessor = policy_.locker();
-            auto it =
-                std::remove_if(cache_.begin(), cache_.end(),
-                               [p](const poseidon::util::Pointer<poseidon::poseidon_byte> &poseidon_pointer)
-                               { return p == poseidon_pointer.get(); });
+            auto it = std::remove_if(
+                cache_.begin(), cache_.end(),
+                [p](const poseidon::util::Pointer<poseidon::poseidon_byte> &poseidon_pointer)
+                { return p == poseidon_pointer.get(); });
 
 #ifdef POSEIDON_DEBUG
             if (it == cache_.end())
