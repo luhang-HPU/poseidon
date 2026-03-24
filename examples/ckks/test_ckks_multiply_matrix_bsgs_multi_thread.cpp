@@ -92,15 +92,15 @@ int main()
                                                       ref2, ref3);
 
     timestacs.end();
-    timestacs.print_time("PIR TIME : ");
+    timestacs.print_time("Matrix Mul BSGS TIME : ");
     ckks_eva->read(cipher_res);
     dec.decrypt(cipher_res, plaintext2);
 
     ckks_encoder.decode(plaintext2, message2);
     for (int i = 0; i < 8; i++)
     {
-        printf("result vec[%d] : %0.10f + %0.10f I \n", i, real(mat[1][i]), imag(mat[1][i]));
-        printf("result vec[%d] : %0.10f + %0.10f I \n", i, real(message2[i]), imag(message2[i]));
+        printf("expect value[%d] : %0.10f + %0.10f I \n", i, real(mat[1][i]), imag(mat[1][i]));
+        printf("result value[%d] : %0.10f + %0.10f I \n", i, real(message2[i]), imag(message2[i]));
     }
 
     t1.join();

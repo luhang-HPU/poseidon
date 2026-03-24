@@ -205,7 +205,7 @@ void Decryptor::bgv_decrypt(const Ciphertext &encrypted, Plaintext &destination,
         uint64_t fix = 1;
         if (!try_invert_uint_mod(encrypted.correction_factor(), plain_modulus, fix))
         {
-            throw logic_error("invalid correction factor");
+            POSEIDON_THROW(logic_error, "invalid correction factor");
         }
         multiply_poly_scalar_coeffmod(CoeffIter(destination.data()), coeff_count, fix,
                                       plain_modulus, CoeffIter(destination.data()));
@@ -227,7 +227,7 @@ void Decryptor::compute_secret_key_array(size_t max_power)
     }
     if (!secret_key_array_size_ || !secret_key_array_)
     {
-        throw logic_error("secret_key_array_ is uninitialized");
+        POSEIDON_THROW(logic_error, "secret_key_array_ is uninitialized");
     }
 #endif
     // WARNING: This function must be called with the original context_data
@@ -400,7 +400,7 @@ int Decryptor::invariant_noise_budget(const Ciphertext &encrypted)
     auto scheme = context_.crt_context()->key_context_data()->parms().scheme();
     if (scheme != SchemeType::BFV && scheme != SchemeType::BGV)
     {
-        throw logic_error("unsupported scheme");
+        POSEIDON_THROW(logic_error, "unsupported scheme");
     }
     if (scheme == SchemeType::BFV && encrypted.is_ntt_form())
     {

@@ -317,7 +317,7 @@ const size_t MemoryPool::max_single_alloc_byte_count = []() -> size_t
     if (bit_shift < 0 ||
         unsigned_geq(bit_shift, sizeof(size_t) * static_cast<size_t>(bits_per_byte)))
     {
-        throw logic_error("alloc_size_multiplier too large");
+        POSEIDON_THROW(logic_error, "alloc_size_multiplier too large");
     }
     return numeric_limits<size_t>::max() >> bit_shift;
 }();
@@ -328,7 +328,7 @@ const size_t MemoryPool::max_batch_alloc_byte_count = []() -> size_t
     if (bit_shift < 0 ||
         unsigned_geq(bit_shift, sizeof(size_t) * static_cast<size_t>(bits_per_byte)))
     {
-        throw logic_error("alloc_size_multiplier too large");
+        POSEIDON_THROW(logic_error, "alloc_size_multiplier too large");
     }
     return numeric_limits<size_t>::max() >> bit_shift;
 }();
@@ -405,7 +405,7 @@ Pointer<poseidon_byte> MemoryPoolMT::get_for_byte_count(size_t byte_count)
     // but first check if we are at maximum pool head count already.
     if (pools_.size() >= max_pool_head_count)
     {
-        throw runtime_error("maximum pool head count reached");
+        POSEIDON_THROW(runtime_error, "maximum pool head count reached");
     }
 
     MemoryPoolHead *new_head = new MemoryPoolHeadMT(byte_count, clear_on_destruction_);
@@ -477,7 +477,7 @@ Pointer<poseidon_byte> MemoryPoolST::get_for_byte_count(size_t byte_count)
     // maximum pool head count already.
     if (pools_.size() >= max_pool_head_count)
     {
-        throw runtime_error("maximum pool head count reached");
+        POSEIDON_THROW(runtime_error, "maximum pool head count reached");
     }
 
     MemoryPoolHead *new_head = new MemoryPoolHeadST(byte_count, clear_on_destruction_);

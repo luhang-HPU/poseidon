@@ -31,7 +31,7 @@ bool try_invert_uint_mod(const uint64_t *operand, const uint64_t *modulus, size_
     }
     if (is_greater_than_or_equal_uint(operand, modulus, uint64_count))
     {
-        throw logic_error("operand");
+        POSEIDON_THROW(logic_error, "operand");
     }
 #endif
     // Cannot invert 0.

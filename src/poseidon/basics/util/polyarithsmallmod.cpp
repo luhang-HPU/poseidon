@@ -18,15 +18,15 @@ void modulo_poly_coeffs(ConstCoeffIter poly, std::size_t coeff_count, const Modu
 #ifdef POSEIDON_DEBUG
     if (!poly && coeff_count > 0)
     {
-        throw std::invalid_argument("poly");
+        POSEIDON_THROW_INVALID_ARGUMENT("poly");
     }
     if (!result && coeff_count > 0)
     {
-        throw std::invalid_argument("result");
+        POSEIDON_THROW_INVALID_ARGUMENT("result");
     }
     if (modulus.is_zero())
     {
-        throw std::invalid_argument("modulus");
+        POSEIDON_THROW_INVALID_ARGUMENT("modulus");
     }
 #endif
 
@@ -44,19 +44,19 @@ void add_poly_coeffmod(ConstCoeffIter operand1, ConstCoeffIter operand2, std::si
 #ifdef POSEIDON_DEBUG
     if (!operand1 && coeff_count > 0)
     {
-        throw std::invalid_argument("operand1");
+        POSEIDON_THROW_INVALID_ARGUMENT("operand1");
     }
     if (!operand2 && coeff_count > 0)
     {
-        throw std::invalid_argument("operand2");
+        POSEIDON_THROW_INVALID_ARGUMENT("operand2");
     }
     if (modulus.is_zero())
     {
-        throw std::invalid_argument("modulus");
+        POSEIDON_THROW_INVALID_ARGUMENT("modulus");
     }
     if (!result && coeff_count > 0)
     {
-        throw std::invalid_argument("result");
+        POSEIDON_THROW_INVALID_ARGUMENT("result");
     }
 #endif
     const uint64_t modulus_value = modulus.value();
@@ -71,11 +71,11 @@ void add_poly_coeffmod(ConstCoeffIter operand1, ConstCoeffIter operand2, std::si
 #ifdef POSEIDON_DEBUG
                          if (get<0>(I) >= modulus_value)
                          {
-                             throw std::invalid_argument("operand1");
+                             POSEIDON_THROW_INVALID_ARGUMENT("operand1");
                          }
                          if (get<1>(I) >= modulus_value)
                          {
-                             throw std::invalid_argument("operand2");
+                             POSEIDON_THROW_INVALID_ARGUMENT("operand2");
                          }
 #endif
                          auto aa = get<0>(I);
@@ -93,19 +93,19 @@ void sub_poly_coeffmod(ConstCoeffIter operand1, ConstCoeffIter operand2, std::si
 #ifdef POSEIDON_DEBUG
     if (!operand1 && coeff_count > 0)
     {
-        throw std::invalid_argument("operand1");
+        POSEIDON_THROW_INVALID_ARGUMENT("operand1");
     }
     if (!operand2 && coeff_count > 0)
     {
-        throw std::invalid_argument("operand2");
+        POSEIDON_THROW_INVALID_ARGUMENT("operand2");
     }
     if (modulus.is_zero())
     {
-        throw std::invalid_argument("modulus");
+        POSEIDON_THROW_INVALID_ARGUMENT("modulus");
     }
     if (!result && coeff_count > 0)
     {
-        throw std::invalid_argument("result");
+        POSEIDON_THROW_INVALID_ARGUMENT("result");
     }
 #endif
 
@@ -119,11 +119,11 @@ void sub_poly_coeffmod(ConstCoeffIter operand1, ConstCoeffIter operand2, std::si
 #ifdef POSEIDON_DEBUG
                          if (get<0>(I) >= modulus_value)
                          {
-                             throw std::invalid_argument("operand1");
+                             POSEIDON_THROW_INVALID_ARGUMENT("operand1");
                          }
                          if (get<1>(I) >= modulus_value)
                          {
-                             throw std::invalid_argument("operand2");
+                             POSEIDON_THROW_INVALID_ARGUMENT("operand2");
                          }
 #endif
                          unsigned long long temp_result;
