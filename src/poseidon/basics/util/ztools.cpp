@@ -395,7 +395,7 @@ void zlib_write_header_deflate_buffer(DynArray<poseidon_byte> &in, void *header_
         stringstream ss;
         ss << "ZLIB compression failed with error code ";
         ss << ret;
-        throw logic_error(ss.str());
+        throw std::logic_error(ss.str());
     }
 
     // Populate the header
@@ -760,7 +760,7 @@ void zstd_write_header_deflate_buffer(DynArray<poseidon_byte> &in, void *header_
         ss << "Zstandard compression failed with error code ";
         ss << ret;
         ss << " (" << ZSTD_getErrorName(ret) << ")";
-        throw logic_error(ss.str());
+        throw std::logic_error(ss.str());
     }
 
     // Populate the header

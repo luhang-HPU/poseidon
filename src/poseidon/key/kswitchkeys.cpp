@@ -70,7 +70,7 @@ void KSwitchKeys::save_members(ostream &stream) const
     catch (const ios_base::failure &)
     {
         stream.exceptions(old_except_mask);
-        throw runtime_error("I/O error");
+        POSEIDON_THROW(runtime_error, "I/O error");
     }
     catch (...)
     {
@@ -123,7 +123,7 @@ void KSwitchKeys::load_members(const PoseidonContext &context, istream &stream,
     catch (const ios_base::failure &)
     {
         stream.exceptions(old_except_mask);
-        throw runtime_error("I/O error");
+        POSEIDON_THROW(runtime_error, "I/O error");
     }
     catch (...)
     {

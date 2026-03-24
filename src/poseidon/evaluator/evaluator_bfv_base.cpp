@@ -127,14 +127,14 @@ void EvaluatorBfvBase::sub(const Ciphertext &ciph1, const Ciphertext &ciph2,
     size_t coeff_count = parms.degree();
     size_t coeff_modulus_size = coeff_modulus.size();
     size_t ciph1_size = ciph1.size();
-    size_t ciph2_size = ciph1.size();
+    size_t ciph2_size = ciph2.size();
     size_t max_count = max(ciph1_size, ciph2_size);
     size_t min_count = min(ciph1_size, ciph2_size);
 
     // Size check
     if (!product_fits_in(max_count, coeff_count))
     {
-        throw logic_error("invalid parameters");
+        POSEIDON_THROW(logic_error, "invalid parameters");
     }
 
     // Prepare result
@@ -187,7 +187,7 @@ void EvaluatorBfvBase::add_inplace(Ciphertext &ciph1, const Ciphertext &ciph2) c
     // Size check
     if (!product_fits_in(max_count, coeff_count))
     {
-        throw logic_error("invalid parameters");
+        POSEIDON_THROW(logic_error, "invalid parameters");
     }
     // Prepare result
     ciph1.resize(context_, context_data.parms().parms_id(), max_count);
@@ -441,7 +441,7 @@ void EvaluatorBfvBase::multiply_inplace(Ciphertext &ciph1, const Ciphertext &cip
     // Size check
     if (!product_fits_in(dest_size, coeff_count, base_bsk_m_tilde_size))
     {
-        throw logic_error("invalid parameters");
+        POSEIDON_THROW(logic_error, "invalid parameters");
     }
 
     // Set up iterators for bases
@@ -616,16 +616,42 @@ void EvaluatorBfvBase::multiply_inplace(Ciphertext &ciph1, const Ciphertext &cip
                         iter(shifted_in1_iter, shifted_reversed_in2_iter), steps,
                         [&](auto J)
                         {
-                            POSEIDON_ITERATE(
-                                iter(J, base_iter, shifted_out_iter), base_size,
-                                [&](auto K)
+                            // 优化：创建并行区域，避免每次循环迭代都分配内存
+#ifdef USING_OPENMP
+                            #pragma omp parallel if(base_size > 4)
+                            {
+                                // 每个线程分配一次临时缓冲区
+                                POSEIDON_ALLOCATE_GET_COEFF_ITER(thread_local_temp, coeff_count, pool);
+                                
+                                #pragma omp for schedule(dynamic, 2)
+#else
+                            POSEIDON_ALLOCATE_GET_COEFF_ITER(local_temp, coeff_count, pool);
+#endif
+                                for (size_t k = 0; k < base_size; k++)
                                 {
-                                    POSEIDON_ALLOCATE_GET_COEFF_ITER(temp, coeff_count, pool);
-                                    dyadic_product_coeffmod(get<0, 0>(K), get<0, 1>(K), coeff_count,
-                                                            get<1>(K), temp);
-                                    add_poly_coeffmod(temp, get<2>(K), coeff_count, get<1>(K),
-                                                      get<2>(K));
-                                });
+#ifdef USING_OPENMP
+                                    auto poly1_at_k = get<0>(J)[k];
+                                    auto poly2_at_k = get<1>(J)[k];
+                                    auto mod_k = base_iter[k];
+                                    auto out_poly_k = shifted_out_iter[k];
+                                    
+                                    // 使用线程本地临时缓冲区
+                                    dyadic_product_coeffmod(poly1_at_k, poly2_at_k, coeff_count, mod_k, thread_local_temp);
+                                    add_poly_coeffmod(thread_local_temp, out_poly_k, coeff_count, mod_k, out_poly_k);
+#else
+                                    auto poly1_at_k = get<0>(J)[k];
+                                    auto poly2_at_k = get<1>(J)[k];
+                                    auto mod_k = base_iter[k];
+                                    auto out_poly_k = shifted_out_iter[k];
+                                    
+                                    // 非OpenMP模式：使用局部临时缓冲区
+                                    dyadic_product_coeffmod(poly1_at_k, poly2_at_k, coeff_count, mod_k, local_temp);
+                                    add_poly_coeffmod(local_temp, out_poly_k, coeff_count, mod_k, out_poly_k);
+#endif
+                                }
+#ifdef USING_OPENMP
+                            }
+#endif
                         });
                 };
 
@@ -698,7 +724,7 @@ void EvaluatorBfvBase::multiply_plain_inplace(Ciphertext &ciph, const Plaintext 
     // Transparent ciph output is not allowed.
     if (ciph.is_transparent())
     {
-        throw logic_error("result ciph is transparent");
+        POSEIDON_THROW(logic_error, "result ciph is transparent");
     }
 #endif
 }
@@ -729,7 +755,7 @@ void EvaluatorBfvBase::multiply_plain_ntt(Ciphertext &ciph_ntt, const Plaintext 
     // Size check
     if (!product_fits_in(ciph_ntt_size, coeff_count, coeff_modulus_size))
     {
-        throw logic_error("invalid parameters");
+        POSEIDON_THROW(logic_error, "invalid parameters");
     }
 
     ConstRNSIter plain_ntt_iter(plain_ntt.data(), coeff_count);
@@ -769,7 +795,7 @@ void EvaluatorBfvBase::multiply_plain_normal(Ciphertext &ciph, const Plaintext &
     // Size check
     if (!product_fits_in(ciph_size, coeff_count, coeff_modulus_size))
     {
-        throw logic_error("invalid parameters");
+        POSEIDON_THROW(logic_error, "invalid parameters");
     }
 
     /*

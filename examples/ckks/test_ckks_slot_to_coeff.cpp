@@ -71,19 +71,29 @@ int main()
     ckks_encoder.encode(message1, scale, plaintext);
     Ciphertext ct, ct2;
     enc.encrypt(plaintext, ct);
+    Timestacs timer;
+    timer.start();
     ckks_eva->coeff_to_slot(ct, mat_group1, cipher_res, cipher_res1, rot_keys, ckks_encoder);
+    timer.end();
+    auto time_cts = timer.microseconds();
+
+    timer.start();
     ckks_eva->slot_to_coeff(cipher_res, cipher_res1, mat_group2, cipher_res, rot_keys,
                             ckks_encoder);
-    ckks_eva->read(cipher_res);
+    timer.end();
+    auto time_stc = timer.microseconds();
 
     dec.decrypt(cipher_res, plaintext2);
     ckks_encoder.decode(plaintext2, message2);
 
-    auto ntt_inv = message2;
+
+    std::cout << "Coeff to Slot TIME: " << time_cts << " microseconds" << std::endl;
+    std::cout << "Slot to Coeff TIME: " << time_stc << " microseconds" << std::endl;
+
     for (auto i = 0; i < 8; i++)
     {
         printf("source_data[%d] : %.10lf + %.10lf I\n", i, message1[i].real(), message1[i].imag());
-        printf("resu  vec[%d]   : %.10lf + %.10lf I\n", i, message2[i].real(), message2[i].imag());
+        printf("result_data[%d] : %.10lf + %.10lf I\n", i, message2[i].real(), message2[i].imag());
     }
 
     util::GetPrecisionStats(message1, message2);

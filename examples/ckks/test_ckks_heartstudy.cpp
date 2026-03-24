@@ -150,7 +150,7 @@ int main()
     ckks_eva->read(cipher_result);
     auto stop = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
-    std::cout << "EXP TIME: " << duration.count() << " microseconds" << std::endl;
+    std::cout << "HeartStudy TIME: " << duration.count() << " microseconds" << std::endl;
 
     // decode & decrypt
     dec.decrypt(cipher_result, plain_result);

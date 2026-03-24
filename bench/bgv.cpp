@@ -209,6 +209,22 @@ void bm_bgv_relinearize(State &state, shared_ptr<BMEnv> bm_env)
     }
 }
 
+void bm_bgv_mul_relinearize(State &state, shared_ptr<BMEnv> bm_env)
+{
+    vector<Ciphertext> &ct = bm_env->ct();
+    for (auto _ : state)
+    {
+        state.PauseTiming();
+        bm_env->randomize_ct_bgv(ct[0]);
+        bm_env->randomize_ct_bgv(ct[1]);
+
+        state.ResumeTiming();
+        Ciphertext temp;
+        bm_env->evaluator()->multiply(ct[0], ct[1], temp);
+        bm_env->evaluator()->relinearize(temp, ct[0], bm_env->rlk());
+    }
+}
+
 void bm_bgv_rotate_rows(State &state, shared_ptr<BMEnv> bm_env)
 {
     vector<Ciphertext> &ct = bm_env->ct();

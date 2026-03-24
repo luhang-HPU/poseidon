@@ -25,7 +25,7 @@ void Modulus::save_members(ostream &stream) const
     catch (const ios_base::failure &)
     {
         stream.exceptions(old_except_mask);
-        throw runtime_error("I/O error");
+        POSEIDON_THROW(runtime_error, "I/O error");
     }
     catch (...)
     {
@@ -50,7 +50,7 @@ void Modulus::load_members(istream &stream, POSEIDON_MAYBE_UNUSED PoseidonVersio
     catch (const ios_base::failure &)
     {
         stream.exceptions(old_except_mask);
-        throw runtime_error("I/O error");
+        POSEIDON_THROW(runtime_error, "I/O error");
     }
     catch (...)
     {
@@ -105,7 +105,7 @@ uint64_t Modulus::reduce(uint64_t value) const
 {
     if (value_ == 0)
     {
-        throw logic_error("cannot reduce modulo a zero modulus");
+        POSEIDON_THROW(logic_error, "cannot reduce modulo a zero modulus");
     }
     return barrett_reduce_64(value, *this);
 }
@@ -133,7 +133,7 @@ vector<Modulus> CoeffModulus::BFVDefault(size_t poly_modulus_degree, sec_level_t
         return global_variables::GetDefaultCoeffModulus256().at(poly_modulus_degree);
 
     default:
-        throw runtime_error("invalid security level");
+        POSEIDON_THROW(runtime_error, "invalid security level");
     }
 }
 

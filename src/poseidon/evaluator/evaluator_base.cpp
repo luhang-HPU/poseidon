@@ -118,7 +118,7 @@ void EvaluatorBase::transform_to_ntt_inplace(Plaintext &plain,
     // Size check
     if (!product_fits_in(coeff_count, coeff_modulus_size))
     {
-        throw logic_error("invalid parameters");
+        POSEIDON_THROW(logic_error, "invalid parameters");
     }
 
     // Resize to fit the entire NTT transformed (ciph size) polynomial
@@ -207,7 +207,7 @@ void EvaluatorBase::transform_to_ntt_inplace(Ciphertext &ciph) const
     // Size check
     if (!product_fits_in(coeff_count, coeff_modulus_size))
     {
-        throw logic_error("invalid parameters");
+        POSEIDON_THROW(logic_error, "invalid parameters");
     }
 
     // Transform each polynomial from NTT domain
@@ -240,7 +240,7 @@ void EvaluatorBase::transform_from_ntt_inplace(Ciphertext &ciph) const
     // Size check
     if (!product_fits_in(coeff_count, coeff_modulus_size))
     {
-        throw logic_error("invalid parameters");
+        POSEIDON_THROW(logic_error, "invalid parameters");
     }
 
     // Transform each polynomial from NTT domain
@@ -252,7 +252,7 @@ void EvaluatorBase::transform_from_ntt_inplace(Ciphertext &ciph) const
     // Transparent ciphertext output is not allowed.
     if (ciph.is_transparent())
     {
-        throw logic_error("result ciphertext is transparent");
+        POSEIDON_THROW(logic_error, "result ciphertext is transparent");
     }
 #endif
 }

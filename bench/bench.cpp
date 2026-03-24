@@ -82,6 +82,7 @@ void register_bm_family(
     POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateSquare, bm_bfv_square, bm_env_bfv);
     POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateModSwitch, bm_bfv_modswitch, bm_env_bfv);
     POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateRelinearize, bm_bfv_relinearize, bm_env_bfv);
+    POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateMulRelinearize, bm_bfv_mul_relinearize, bm_env_bfv);
     POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateRotateRows, bm_bfv_rotate_rows, bm_env_bfv);
     POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateRotateCols, bm_bfv_rotate_cols, bm_env_bfv);
 
@@ -99,6 +100,7 @@ void register_bm_family(
     POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateSquareInplace, bm_bgv_square_inplace, bm_env_bgv);
     POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateModSwitch, bm_bgv_modswitch, bm_env_bgv);
     POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateRelinearize, bm_bgv_relinearize, bm_env_bgv);
+    POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateMulRelinearize, bm_bgv_mul_relinearize, bm_env_bgv);
     POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateRotateRows, bm_bgv_rotate_rows, bm_env_bgv);
     POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateRotateCols, bm_bgv_rotate_cols, bm_env_bgv);
     POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateToNTTInplace, bm_bgv_to_ntt_inplace, bm_env_bgv);
@@ -117,7 +119,12 @@ void register_bm_family(
     POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateSquare, bm_ckks_square, bm_env_ckks);
     POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateRescale, bm_ckks_rescale, bm_env_ckks);
     POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateRelinearize, bm_ckks_relinearize, bm_env_ckks);
+    POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateMulRelinearize, bm_ckks_mul_relinearize, bm_env_ckks);
     POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateRotate, bm_ckks_rotate, bm_env_ckks);
+    POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateConjugate, bm_ckks_conjungate, bm_env_ckks);
+    POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateNTT, bm_ckks_ntt, bm_env_ckks);
+    POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateINTT, bm_ckks_intt, bm_env_ckks);
+    POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateRescale, bm_ckks_rescale, bm_env_ckks);
 
     // POSEIDON_BENCHMARK_REGISTER(UTIL, n, log_q, NTTForward, bm_util_ntt_forward, bm_env_bfv);
     // POSEIDON_BENCHMARK_REGISTER(UTIL, n, log_q, NTTInverse, bm_util_ntt_inverse, bm_env_bfv);

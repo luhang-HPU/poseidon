@@ -56,7 +56,7 @@ void random_bytes(poseidon_byte *buf, size_t count)
     if (!hAdvApi)
     {
         last_genrandom_error = GetLastError();
-        throw runtime_error("Failed to load ADVAPI32.DLL");
+        POSEIDON_THROW(runtime_error, "Failed to load ADVAPI32.DLL");
     }
 
     BOOLEAN(APIENTRY * RtlGenRandom)
@@ -74,7 +74,7 @@ void random_bytes(poseidon_byte *buf, size_t count)
     if (!genrand_result)
     {
         last_genrandom_error = dwError;
-        throw runtime_error("Failed to call RtlGenRandom");
+        POSEIDON_THROW(runtime_error, "Failed to call RtlGenRandom");
     }
 #elif SEAL_SYSTEM == SEAL_SYSTEM_OTHER
 #warning                                                                                           \
@@ -108,7 +108,7 @@ void UniformRandomGeneratorInfo::save_members(ostream &stream) const
     catch (const ios_base::failure &)
     {
         stream.exceptions(old_except_mask);
-        throw runtime_error("I/O error");
+        POSEIDON_THROW(runtime_error, "I/O error");
     }
     catch (...)
     {
@@ -133,7 +133,7 @@ void UniformRandomGeneratorInfo::load_members(istream &stream,
         stream.read(reinterpret_cast<char *>(&info.type_), sizeof(prng_type));
         if (!info.has_valid_prng_type())
         {
-            throw logic_error("prng_type is invalid");
+            POSEIDON_THROW(logic_error, "prng_type is invalid");
         }
 
         // Read the seed data
@@ -146,7 +146,7 @@ void UniformRandomGeneratorInfo::load_members(istream &stream,
     catch (const ios_base::failure &)
     {
         stream.exceptions(old_except_mask);
-        throw runtime_error("I/O error");
+        POSEIDON_THROW(runtime_error, "I/O error");
     }
     catch (...)
     {
@@ -204,7 +204,7 @@ void Blake2xbPRNG::refill_buffer()
     if (blake2xb(buffer_begin_, buffer_size_, &counter_, sizeof(counter_), seed_.cbegin(),
                  seed_.size() * sizeof(decltype(seed_)::type)) != 0)
     {
-        throw runtime_error("blake2xb failed");
+        POSEIDON_THROW(runtime_error, "blake2xb failed");
     }
     counter_++;
 }

@@ -120,7 +120,7 @@ PublicKey KeyGenerator::generate_pk(bool save_seed) const
 {
     if (!sk_generated_)
     {
-        throw logic_error("cannot generate public key for unspecified secret key");
+        POSEIDON_THROW(logic_error, "cannot generate public key for unspecified secret key");
     }
 
     // Extract encryption parameters.
@@ -135,7 +135,7 @@ PublicKey KeyGenerator::generate_pk(bool save_seed) const
     // Size check
     if (!product_fits_in(coeff_count, coeff_modulus_size))
     {
-        throw logic_error("invalid parameters");
+        POSEIDON_THROW(logic_error, "invalid parameters");
     }
 
     PublicKey public_key;
@@ -151,7 +151,7 @@ const SecretKey &KeyGenerator::secret_key() const
 {
     if (!sk_generated_)
     {
-        throw logic_error("secret key has not been generated");
+        POSEIDON_THROW(logic_error, "secret key has not been generated");
     }
     return secret_key_;
 }

@@ -311,6 +311,7 @@ private:
     void bm_bfv_square(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
     void bm_bfv_modswitch(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
     void bm_bfv_relinearize(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_bfv_mul_relinearize(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
     void bm_bfv_rotate_rows(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
     void bm_bfv_rotate_cols(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
 
@@ -329,6 +330,7 @@ private:
     void bm_bgv_square_inplace(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
     void bm_bgv_modswitch(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
     void bm_bgv_relinearize(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_bgv_mul_relinearize(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
     void bm_bgv_rotate_rows(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
     void bm_bgv_rotate_cols(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
     void bm_bgv_to_ntt_inplace(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
@@ -348,5 +350,9 @@ private:
     void bm_ckks_square(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
     void bm_ckks_rescale(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
     void bm_ckks_relinearize(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_ckks_mul_relinearize(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
     void bm_ckks_rotate(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_ckks_conjungate(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_ckks_ntt(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
+    void bm_ckks_intt(benchmark::State &state, std::shared_ptr<BMEnv> bm_env);
 } // namespace poseidonbench

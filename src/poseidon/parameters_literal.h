@@ -8,7 +8,7 @@
 #include <iostream>
 #include <vector>
 
-using namespace std;
+
 
 namespace poseidon
 {
@@ -24,9 +24,9 @@ public:
     {
     }
 
-    ParametersLiteral(SchemeType scheme_type, uint32_t log_n, uint32_t log_slots,
-                      uint32_t log_scale, uint32_t hamming_weight, uint32_t q0_level,
-                      Modulus plain_modulus, const vector<Modulus> &q, const vector<Modulus> &p,
+    ParametersLiteral(SchemeType scheme_type, std::uint32_t log_n, std::uint32_t log_slots,
+                      std::uint32_t log_scale, std::uint32_t hamming_weight, std::uint32_t q0_level,
+                      Modulus plain_modulus, const std::vector<Modulus> &q, const std::vector<Modulus> &p,
                       sec_level_type sec_level = poseidon::sec_level_type::none,
                       MemoryPoolHandle pool = MemoryManager::GetPool());
 
@@ -36,10 +36,10 @@ public:
         set_plain_modulus(Modulus(plain_modulus));
     }
     void set_plain_modulus(const Modulus &plain_modulus);
-    void set_log_modulus(const vector<uint32_t> &log_q, const vector<uint32_t> &log_p);
+    void set_log_modulus(const std::vector<std::uint32_t> &log_q, const std::vector<std::uint32_t> &log_p);
     void set_sec_level(sec_level_type &sec_level) { this->sec_level_ = sec_level; }
 
-    inline void set_modulus(const vector<Modulus> &mod_chain_q, const vector<Modulus> &mod_chain_p)
+    inline void set_modulus(const std::vector<Modulus> &mod_chain_q, const std::vector<Modulus> &mod_chain_p)
     {
         this->q_ = mod_chain_q;
         this->p_ = mod_chain_p;
@@ -47,30 +47,30 @@ public:
     }
 
     void compute_params_id();
-    POSEIDON_NODISCARD inline uint32_t degree() const { return 1 << log_n_; }
+    POSEIDON_NODISCARD inline std::uint32_t degree() const { return 1 << log_n_; }
 
-    POSEIDON_NODISCARD inline uint32_t slot() const { return 1 << log_slots_; }
+    POSEIDON_NODISCARD inline std::uint32_t slot() const { return 1 << log_slots_; }
 
     POSEIDON_NODISCARD inline const parms_id_type &parms_id() const { return params_id_; }
 
     POSEIDON_NODISCARD inline const SchemeType &scheme() const { return type_; }
 
-    POSEIDON_NODISCARD inline uint32_t log_n() const { return log_n_; }
+    POSEIDON_NODISCARD inline std::uint32_t log_n() const { return log_n_; }
 
-    POSEIDON_NODISCARD inline uint32_t log_slots() const { return log_slots_; }
+    POSEIDON_NODISCARD inline std::uint32_t log_slots() const { return log_slots_; }
 
-    POSEIDON_NODISCARD inline uint32_t hamming_weight() const { return hamming_weight_; }
+    POSEIDON_NODISCARD inline std::uint32_t hamming_weight() const { return hamming_weight_; }
 
-    POSEIDON_NODISCARD inline uint32_t q0_level() const { return q0_level_; }
+    POSEIDON_NODISCARD inline std::uint32_t q0_level() const { return q0_level_; }
 
     POSEIDON_NODISCARD inline const Modulus &plain_modulus() const { return plain_modulus_; }
 
-    POSEIDON_NODISCARD inline const vector<Modulus> &q() const { return q_; }
+    POSEIDON_NODISCARD inline const std::vector<Modulus> &q() const { return q_; }
 
-    POSEIDON_NODISCARD inline const vector<Modulus> &p() const { return p_; }
-    POSEIDON_NODISCARD inline const vector<Modulus> coeff_modulus() const
+    POSEIDON_NODISCARD inline const std::vector<Modulus> &p() const { return p_; }
+    POSEIDON_NODISCARD inline const std::vector<Modulus> coeff_modulus() const
     {
-        vector<Modulus> result(q_.begin(), q_.end());
+        std::vector<Modulus> result(q_.begin(), q_.end());
         result.insert(result.end(), p_.begin(), p_.end());
         return result;
     }
@@ -135,7 +135,7 @@ public:
         return in_size;
     }
 
-    POSEIDON_NODISCARD inline uint32_t log_scale() const { return log_scale_; }
+    POSEIDON_NODISCARD inline std::uint32_t log_scale() const { return log_scale_; }
 
     POSEIDON_NODISCARD inline double scale() const { return pow(2.0, log_scale_); }
 
@@ -143,14 +143,14 @@ public:
 
 protected:
     SchemeType type_;
-    uint32_t log_n_ = 0;
-    uint32_t log_slots_ = 0;
-    uint32_t log_scale_ = 0;
-    uint32_t hamming_weight_ = 0;
-    uint32_t q0_level_ = 0;  // merge primes as q0
+    std::uint32_t log_n_ = 0;
+    std::uint32_t log_slots_ = 0;
+    std::uint32_t log_scale_ = 0;
+    std::uint32_t hamming_weight_ = 0;
+    std::uint32_t q0_level_ = 0;  // merge primes as q0
     Modulus plain_modulus_ = 0;
-    vector<Modulus> q_{};
-    vector<Modulus> p_{};
+    std::vector<Modulus> q_{};
+    std::vector<Modulus> p_{};
     MemoryPoolHandle pool_;
     parms_id_type params_id_ = parms_id_zero;
     poseidon::sec_level_type sec_level_;
@@ -159,10 +159,10 @@ protected:
 class ParametersLiteralDefault : public ParametersLiteral
 {
 private:
-    void init(SchemeType scheme_type, uint32_t degree, sec_level_type sec_level);
+    void init(SchemeType scheme_type, std::uint32_t degree, sec_level_type sec_level);
 
 public:
-    ParametersLiteralDefault(SchemeType scheme_type, uint32_t degree,
+    ParametersLiteralDefault(SchemeType scheme_type, std::uint32_t degree,
                              sec_level_type sec_level = poseidon::sec_level_type::tc128,
                              MemoryPoolHandle pool = MemoryManager::GetPool());
 };

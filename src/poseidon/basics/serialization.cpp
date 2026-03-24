@@ -30,7 +30,7 @@ namespace
 {
     if (!stream.rdbuf())
     {
-        throw runtime_error("I/O error: output stream has no associated buffer");
+        POSEIDON_THROW(runtime_error, "I/O error: output stream has no associated buffer");
     }
 
     // Use RTTI to determine if this is an ArrayPutBuffer
@@ -43,19 +43,19 @@ namespace
         if (buffer->at_end())
         {
             // Return a more expressive error
-            throw runtime_error("I/O error: insufficient output buffer");
+            POSEIDON_THROW(runtime_error, "I/O error: insufficient output buffer");
         }
     }
 
     // Generic message
-    throw runtime_error("I/O error");
+    POSEIDON_THROW(runtime_error, "I/O error");
 }
 
 [[noreturn]] void expressive_rethrow_on_ios_base_failure(const istream &stream)
 {
     if (!stream.rdbuf())
     {
-        throw runtime_error("I/O error: input stream has no associated buffer");
+        POSEIDON_THROW(runtime_error, "I/O error: input stream has no associated buffer");
     }
 
     // Use RTTI to determine if this is an ArrayGetBuffer
@@ -65,17 +65,17 @@ namespace
         if (typeid(rdbuf_ref).hash_code() == typeid(ArrayGetBuffer).hash_code())
         {
             // Report buffer underflow
-            throw runtime_error("I/O error: input buffer ended unexpectedly");
+            POSEIDON_THROW(runtime_error, "I/O error: input buffer ended unexpectedly");
         }
         else
         {
             // Report generic underflow
-            throw runtime_error("I/O error: input stream ended unexpectedly");
+            POSEIDON_THROW(runtime_error, "I/O error: input stream ended unexpectedly");
         }
     }
 
     // Generic message
-    throw runtime_error("I/O error");
+    POSEIDON_THROW(runtime_error, "I/O error");
 }
 }  // namespace
 
@@ -364,11 +364,11 @@ streamoff Serialization::Load(function<void(istream &, PoseidonVersion)> load_me
         LoadHeader(stream, header);
         if (!IsCompatibleVersion(header))
         {
-            throw logic_error("incompatible version");
+            POSEIDON_THROW(logic_error, "incompatible version");
         }
         if (!IsValidHeader(header))
         {
-            throw logic_error("loaded PoseidonHeader is invalid");
+            POSEIDON_THROW(logic_error, "loaded PoseidonHeader is invalid");
         }
 
         // Read header version information so we can call, if necessary, the
@@ -382,7 +382,7 @@ streamoff Serialization::Load(function<void(istream &, PoseidonVersion)> load_me
             load_members(stream, version);
             if (header.size != safe_cast<uint64_t>(stream.tellg() - stream_start_pos))
             {
-                throw logic_error("invalid data size");
+                POSEIDON_THROW(logic_error, "invalid data size");
             }
             break;
 #ifdef POSEIDON_USE_ZLIB
@@ -403,7 +403,7 @@ streamoff Serialization::Load(function<void(istream &, PoseidonVersion)> load_me
             if (ztools::zlib_inflate_stream(stream, safe_cast<streamoff>(compr_size), temp_stream,
                                             safe_pool))
             {
-                throw logic_error("stream decompression failed");
+                POSEIDON_THROW(logic_error, "stream decompression failed");
             }
             load_members(temp_stream, version);
             break;
@@ -427,7 +427,7 @@ streamoff Serialization::Load(function<void(istream &, PoseidonVersion)> load_me
             if (ztools::zstd_inflate_stream(stream, safe_cast<streamoff>(compr_size), temp_stream,
                                             safe_pool))
             {
-                throw logic_error("stream decompression failed");
+                POSEIDON_THROW(logic_error, "stream decompression failed");
             }
             load_members(temp_stream, version);
             break;

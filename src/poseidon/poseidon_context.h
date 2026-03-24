@@ -9,7 +9,7 @@
 #include "poseidon_hardware/hardware_context.h"
 #endif
 
-using namespace std;
+
 
 namespace poseidon
 {
