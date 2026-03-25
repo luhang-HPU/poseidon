@@ -5,9 +5,9 @@
 #include "basics/serialization.h"
 #include "basics/util/common.h"
 #include "basics/util/defines.h"
+#include "poseidon/basics/dynarray.h"
 #include "poseidon_context.h"
 #include "rns_poly.h"
-#include "poseidon/basics/dynarray.h"
 #include <algorithm>
 #include <cstddef>
 #include <cstdint>

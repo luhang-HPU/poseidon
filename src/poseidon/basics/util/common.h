@@ -4,13 +4,13 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdint>
+#include <iostream>
 #include <limits>
 #include <stdexcept>
 #include <tuple>
 #include <type_traits>
 #include <utility>
 #include <vector>
-#include <iostream>
 
 namespace poseidon
 {

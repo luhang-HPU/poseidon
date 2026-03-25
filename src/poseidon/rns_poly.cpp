@@ -126,7 +126,7 @@ void RNSPoly::coeff_to_dot()
 {
     auto ntt_table = crt_context_->small_ntt_tables();
 #ifdef USING_OPENMP
-    #pragma omp parallel for
+#pragma omp parallel for
 #endif
     for (auto i = 0; i < rns_num_q_; ++i)
     {
@@ -144,7 +144,7 @@ void RNSPoly::coeff_to_dot_lazy()
 {
     auto ntt_table = crt_context_->small_ntt_tables();
 #ifdef USING_OPENMP
-    #pragma omp parallel for
+#pragma omp parallel for
 #endif
     for (auto i = 0; i < rns_num_q_; ++i)
     {
@@ -162,7 +162,7 @@ void RNSPoly::dot_to_coeff()
 {
     auto ntt_table = crt_context_->small_ntt_tables();
 #ifdef USING_OPENMP
-    #pragma omp parallel for
+#pragma omp parallel for
 #endif
     for (auto i = 0; i < rns_num_q_; ++i)
     {
@@ -180,7 +180,7 @@ void RNSPoly::dot_to_coeff_lazy()
 {
     auto ntt_table = crt_context_->small_ntt_tables();
 #ifdef USING_OPENMP
-    #pragma omp parallel for
+#pragma omp parallel for
 #endif
     for (auto i = 0; i < rns_num_q_; ++i)
     {
@@ -329,7 +329,7 @@ void RNSPoly::negate()
     auto &modulus_p = key_context_data->parms().p();
 
 #ifdef USING_OPENMP
-    #pragma omp parallel for
+#pragma omp parallel for
 #endif
     for (auto i = 0; i < rns_num_q_; ++i)
     {
@@ -356,7 +356,7 @@ void RNSPoly::add(const RNSPoly &operand, RNSPoly &result) const
             auto &modulus_p = key_context_data->parms().p();
 
 #ifdef USING_OPENMP
-            #pragma omp parallel for
+#pragma omp parallel for
 #endif
             for (int i = 0; i < rns_num_q_; ++i)
             {
@@ -391,7 +391,7 @@ void RNSPoly::add(const RNSPoly &operand, RNSPoly &result) const
     auto &modulus_p = key_context_data->parms().p();
 
 #ifdef USING_OPENMP
-    #pragma omp parallel for
+#pragma omp parallel for
 #endif
     for (auto i = 0; i < rns_num_q_; ++i)
     {
@@ -449,7 +449,7 @@ void RNSPoly::sub(const RNSPoly &operand, RNSPoly &result) const
     auto &modulus_p = key_context_data->parms().p();
 
 #ifdef USING_OPENMP
-    #pragma omp parallel for
+#pragma omp parallel for
 #endif
     for (auto i = 0; i < rns_num_q_; ++i)
     {
@@ -476,7 +476,7 @@ void RNSPoly::multiply(const RNSPoly &operand, RNSPoly &result) const
             auto &modulus_p = key_context_data->parms().p();
 
 #ifdef USING_OPENMP
-            #pragma omp parallel for
+#pragma omp parallel for
 #endif
             for (int i = 0; i < rns_num_q_; ++i)
             {
@@ -511,7 +511,7 @@ void RNSPoly::multiply(const RNSPoly &operand, RNSPoly &result) const
     auto &modulus_p = key_context_data->parms().p();
 
 #ifdef USING_OPENMP
-    #pragma omp parallel for
+#pragma omp parallel for
 #endif
     for (auto i = 0; i < rns_num_q_; ++i)
     {
@@ -540,7 +540,7 @@ void RNSPoly::add_scalar(uint64_t scalar, RNSPoly &result) const
     auto &modulus_p = key_context_data->parms().p();
 
 #ifdef USING_OPENMP
-    #pragma omp parallel for
+#pragma omp parallel for
 #endif
     for (auto i = 0; i < rns_num_q_; ++i)
     {
@@ -568,7 +568,7 @@ void RNSPoly::multiply_scalar(uint64_t scalar, RNSPoly &result) const
     auto &modulus_p = key_context_data->parms().p();
 
 #ifdef USING_OPENMP
-    #pragma omp parallel for
+#pragma omp parallel for
 #endif
     for (auto i = 0; i < rns_num_q_; ++i)
     {

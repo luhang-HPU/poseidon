@@ -79,7 +79,7 @@ int get_plus(const char *poly)
 }
 }  // namespace
 
-Plaintext &Plaintext::operator= (const Plaintext &assign)
+Plaintext &Plaintext::operator=(const Plaintext &assign)
 {
     if (this != &assign)
     {

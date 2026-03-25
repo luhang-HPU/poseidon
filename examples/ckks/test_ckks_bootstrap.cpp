@@ -62,9 +62,8 @@ int main()
     ckks_eva->multiply_relin(cipher, cipher, cipher, relin_keys);
     ckks_eva->rescale_dynamic(cipher, cipher, (int64_t)1 << 45);
 
-    EvalModPoly eval_mod_poly(context, CosDiscrete, (uint64_t)1 << 40, 1,
-                              9, 3, 16, 0, 30);
-    ckks_eva->bootstrap(cipher, cipher, relin_keys,rot_keys, ckks_encoder, eval_mod_poly);
+    EvalModPoly eval_mod_poly(context, CosDiscrete, (uint64_t)1 << 40, 1, 9, 3, 16, 0, 30);
+    ckks_eva->bootstrap(cipher, cipher, relin_keys, rot_keys, ckks_encoder, eval_mod_poly);
     auto stop = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
     std::cout << "Bootstrap TIME: " << duration.count() << " microseconds" << std::endl;

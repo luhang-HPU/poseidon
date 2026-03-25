@@ -9,12 +9,12 @@ using namespace std;
 namespace poseidonbench
 {
 
-#define POSEIDON_BENCHMARK_REGISTER(category, n, log_q, name, func, ...)                                                  \
-    RegisterBenchmark(                                                                                                \
-        (string("n=") + to_string(n) + string(" / log(q)=") + to_string(log_q) + string(" / " #category " / " #name)) \
-            .c_str(),                                                                                                 \
-        [=](State &st) { func(st, __VA_ARGS__); })                                                                    \
-        ->Unit(benchmark::kMicrosecond)                                                                               \
+#define POSEIDON_BENCHMARK_REGISTER(category, n, log_q, name, func, ...)                           \
+    RegisterBenchmark((string("n=") + to_string(n) + string(" / log(q)=") + to_string(log_q) +     \
+                       string(" / " #category " / " #name))                                        \
+                          .c_str(),                                                                \
+                      [=](State &st) { func(st, __VA_ARGS__); })                                   \
+        ->Unit(benchmark::kMicrosecond)                                                            \
         ->Iterations(10);
 
 struct ParametersLiteralComparator
@@ -82,7 +82,8 @@ void register_bm_family(
     POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateSquare, bm_bfv_square, bm_env_bfv);
     POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateModSwitch, bm_bfv_modswitch, bm_env_bfv);
     POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateRelinearize, bm_bfv_relinearize, bm_env_bfv);
-    POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateMulRelinearize, bm_bfv_mul_relinearize, bm_env_bfv);
+    POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateMulRelinearize, bm_bfv_mul_relinearize,
+                                bm_env_bfv);
     POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateRotateRows, bm_bfv_rotate_rows, bm_env_bfv);
     POSEIDON_BENCHMARK_REGISTER(BFV, n, log_q, EvaluateRotateCols, bm_bfv_rotate_cols, bm_env_bfv);
 
@@ -91,20 +92,25 @@ void register_bm_family(
     POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, Decrypt, bm_bgv_decrypt, bm_env_bgv);
     POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EncodeBatch, bm_bgv_encode_batch, bm_env_bgv);
     POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, DecodeBatch, bm_bgv_decode_batch, bm_env_bgv);
-    POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateAddCt, bm_bgv_add_ct,bm_env_bgv);
-    POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateAddPt,bm_bgv_add_pt, bm_env_bgv);
+    POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateAddCt, bm_bgv_add_ct, bm_env_bgv);
+    POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateAddPt, bm_bgv_add_pt, bm_env_bgv);
     POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateMulCt, bm_bgv_mul_ct, bm_env_bgv);
     POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateMulPt, bm_bgv_mul_pt, bm_env_bgv);
-    POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateMulPtInplace, bm_bgv_mul_pt_inplace, bm_env_bgv);
+    POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateMulPtInplace, bm_bgv_mul_pt_inplace,
+                                bm_env_bgv);
     POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateSquare, bm_bgv_square, bm_env_bgv);
-    POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateSquareInplace, bm_bgv_square_inplace, bm_env_bgv);
+    POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateSquareInplace, bm_bgv_square_inplace,
+                                bm_env_bgv);
     POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateModSwitch, bm_bgv_modswitch, bm_env_bgv);
     POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateRelinearize, bm_bgv_relinearize, bm_env_bgv);
-    POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateMulRelinearize, bm_bgv_mul_relinearize, bm_env_bgv);
+    POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateMulRelinearize, bm_bgv_mul_relinearize,
+                                bm_env_bgv);
     POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateRotateRows, bm_bgv_rotate_rows, bm_env_bgv);
     POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateRotateCols, bm_bgv_rotate_cols, bm_env_bgv);
-    POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateToNTTInplace, bm_bgv_to_ntt_inplace, bm_env_bgv);
-    POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateFromNTTInplace, bm_bgv_from_ntt_inplace, bm_env_bgv);
+    POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateToNTTInplace, bm_bgv_to_ntt_inplace,
+                                bm_env_bgv);
+    POSEIDON_BENCHMARK_REGISTER(BGV, n, log_q, EvaluateFromNTTInplace, bm_bgv_from_ntt_inplace,
+                                bm_env_bgv);
 
     POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EncryptSecret, bm_ckks_encrypt_secret, bm_env_ckks);
     POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EncryptPublic, bm_ckks_encrypt_public, bm_env_ckks);
@@ -118,8 +124,10 @@ void register_bm_family(
     POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateMulPt, bm_ckks_mul_pt, bm_env_ckks);
     POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateSquare, bm_ckks_square, bm_env_ckks);
     POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateRescale, bm_ckks_rescale, bm_env_ckks);
-    POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateRelinearize, bm_ckks_relinearize, bm_env_ckks);
-    POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateMulRelinearize, bm_ckks_mul_relinearize, bm_env_ckks);
+    POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateRelinearize, bm_ckks_relinearize,
+                                bm_env_ckks);
+    POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateMulRelinearize, bm_ckks_mul_relinearize,
+                                bm_env_ckks);
     POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateRotate, bm_ckks_rotate, bm_env_ckks);
     POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateConjugate, bm_ckks_conjungate, bm_env_ckks);
     POSEIDON_BENCHMARK_REGISTER(CKKS, n, log_q, EvaluateNTT, bm_ckks_ntt, bm_env_ckks);
@@ -136,7 +144,7 @@ void register_bm_family(
     // bm_util_ntt_inverse_low_level_lazy, bm_env_bfv);
 }
 
-} // namespace poseidonbench
+}  // namespace poseidonbench
 
 int main(int argc, char **argv)
 {
@@ -160,13 +168,15 @@ int main(int argc, char **argv)
         {
             throw invalid_argument("duplicate parameter sets");
         }
-        if (bm_env_map.emplace(make_pair(parms_ckks, make_shared<BMEnv>(parms_ckks))).second == false)
+        if (bm_env_map.emplace(make_pair(parms_ckks, make_shared<BMEnv>(parms_ckks))).second ==
+            false)
         {
             throw invalid_argument("duplicate parameter sets");
         }
     }
 
-    cout << "[" << setw(7) << right << (poseidon::MemoryManager::GetPool().alloc_byte_count() >> 20) << " MB] "
+    cout << "[" << setw(7) << right << (poseidon::MemoryManager::GetPool().alloc_byte_count() >> 20)
+         << " MB] "
          << "Total allocation from the memory pool" << endl;
 
     // For each parameter set in bm_parms_vec, register a family of benchmark cases.
@@ -177,8 +187,9 @@ int main(int argc, char **argv)
 
     RunSpecifiedBenchmarks();
 
-    // After running all benchmark cases, we print again the total memory consumption by poseidon memory pool.
-    // This value should be larger than the previous amount but not by much.
-    cout << "[" << setw(7) << right << (poseidon::MemoryManager::GetPool().alloc_byte_count() >> 20) << " MB] "
+    // After running all benchmark cases, we print again the total memory consumption by poseidon
+    // memory pool. This value should be larger than the previous amount but not by much.
+    cout << "[" << setw(7) << right << (poseidon::MemoryManager::GetPool().alloc_byte_count() >> 20)
+         << " MB] "
          << "Total allocation from the memory pool" << endl;
 }

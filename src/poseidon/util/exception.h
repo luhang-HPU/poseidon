@@ -2,8 +2,8 @@
 #include <cstdint>
 #include <exception>
 #include <iostream>
-#include <string>
 #include <stdexcept>
+#include <string>
 
 namespace poseidon
 {
@@ -42,7 +42,7 @@ public:
     }
 };
 
-// Configuration-related errors  
+// Configuration-related errors
 class config_error : public poseidon_error
 {
 public:
@@ -96,14 +96,15 @@ public:
 #define POSEIDON_THROW(exc, expr) throw exc(__FILE__, __LINE__, (expr))
 
 // New convenience macros for better error messages
-#define POSEIDON_THROW_INVALID_ARGUMENT(expr)     throw invalid_argument_error(__FILE__, __LINE__, (expr))
+#define POSEIDON_THROW_INVALID_ARGUMENT(expr)                                                      \
+    throw invalid_argument_error(__FILE__, __LINE__, (expr))
 
-#define POSEIDON_THROW_LOGIC_ERROR(expr)     throw logic_error(__FILE__, __LINE__, (expr))
+#define POSEIDON_THROW_LOGIC_ERROR(expr) throw logic_error(__FILE__, __LINE__, (expr))
 
-#define POSEIDON_THROW_RUNTIME_ERROR(expr)     throw runtime_error(__FILE__, __LINE__, (expr))
+#define POSEIDON_THROW_RUNTIME_ERROR(expr) throw runtime_error(__FILE__, __LINE__, (expr))
 
-#define POSEIDON_THROW_OUT_OF_RANGE(expr)     throw out_of_range_error(__FILE__, __LINE__, (expr))
+#define POSEIDON_THROW_OUT_OF_RANGE(expr) throw out_of_range_error(__FILE__, __LINE__, (expr))
 
-#define POSEIDON_THROW_CONFIG_ERROR(expr)     throw config_error(__FILE__, __LINE__, (expr))
+#define POSEIDON_THROW_CONFIG_ERROR(expr) throw config_error(__FILE__, __LINE__, (expr))
 
-} // namespace poseidon
+}  // namespace poseidon

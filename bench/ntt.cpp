@@ -101,4 +101,4 @@ namespace poseidonbench
 //             inverse_ntt_negacyclic_harvey_lazy(ct[0].data(), small_ntt_tables[0]);
 //         }
 //     }
-} // namespace poseidonbench
+}  // namespace poseidonbench

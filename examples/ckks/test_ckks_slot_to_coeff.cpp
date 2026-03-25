@@ -86,7 +86,6 @@ int main()
     dec.decrypt(cipher_res, plaintext2);
     ckks_encoder.decode(plaintext2, message2);
 
-
     std::cout << "Coeff to Slot TIME: " << time_cts << " microseconds" << std::endl;
     std::cout << "Slot to Coeff TIME: " << time_stc << " microseconds" << std::endl;
 

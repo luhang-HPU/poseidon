@@ -120,7 +120,6 @@ public:
         return kswitch_gen_->create_switch_key(prev_key, new_key);
     }
 
-
     /**
     Generates Galois keys and stores the result in destination. Every time
     this function is called, new Galois keys will be generated.
@@ -346,7 +345,6 @@ private:
     @throws std::invalid_argument if count is zero or too large
     */
     RelinKeys create_relin_keys(std::size_t count, bool save_seed) const;
-
 
     std::shared_ptr<KSwitchGenBase> kswitch_gen_{nullptr};
     // We use a fresh memory pool with `clear_on_destruction' enabled.

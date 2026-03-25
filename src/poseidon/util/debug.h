@@ -9,7 +9,6 @@
 #include <mutex>
 #include <vector>
 
-
 namespace poseidon
 {
 namespace util
@@ -40,11 +39,11 @@ public:
     }
     inline void print_time_ms(const std::string &str)
     {
-        std::cout << str << microseconds()/1000 << " ms" << endl;
+        std::cout << str << microseconds() / 1000 << " ms" << endl;
     }
     inline void print_time_s(const std::string &str)
     {
-        std::cout << str << microseconds()/1000/1000 << " s" << endl;
+        std::cout << str << microseconds() / 1000 / 1000 << " s" << endl;
     }
     inline std::string get_time_s(const std::string &prefix = "")
     {
@@ -57,7 +56,7 @@ public:
 class LocalTimer
 {
 public:
-    explicit LocalTimer(const std::string& str) : str_(str), is_owner_(false)
+    explicit LocalTimer(const std::string &str) : str_(str), is_owner_(false)
     {
         {
             std::lock_guard<std::mutex> lck(mtx_);
@@ -116,8 +115,8 @@ public:
         // 打印标题
         std::cout << DIVIDER << std::endl;
         std::cout << "| " << std::left << std::setw(COL1_WIDTH) << "OPERATOR"
-                  << " | " << std::right << std::setw(COL2_WIDTH) << "TIME" << " |"
-                  << std::endl;
+                  << " | " << std::right << std::setw(COL2_WIDTH) << "TIME"
+                  << " |" << std::endl;
         std::cout << DIVIDER << std::endl;
 
         // 打印数据行
@@ -127,12 +126,14 @@ public:
             total += iter.second;
             std::cout << "| " << std::left << std::setw(COL1_WIDTH) << iter.first << " | "
                       << std::right << std::setw(COL2_WIDTH)
-                      << std::to_string(iter.second / 1000) + " ms" << " |" << std::endl;
+                      << std::to_string(iter.second / 1000) + " ms"
+                      << " |" << std::endl;
         }
 
-        std::cout << "| " << std::left << std::setw(COL1_WIDTH) << "TOTAL" << " | " << std::right
-                  << std::setw(COL2_WIDTH) << std::to_string(total / 1000) + " ms" << " |"
-                  << std::endl;
+        std::cout << "| " << std::left << std::setw(COL1_WIDTH) << "TOTAL"
+                  << " | " << std::right << std::setw(COL2_WIDTH)
+                  << std::to_string(total / 1000) + " ms"
+                  << " |" << std::endl;
 
         // 打印底部边框
         if (!function2time_.empty())

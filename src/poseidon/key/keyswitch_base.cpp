@@ -61,8 +61,7 @@ secret_key_array_type KSwitchGenBase::compute_secret_key_array(const SecretKey &
     // one we simply need to compute a dyadic product of the last one with the first one [which is
     // equal to NTT(secret_key_)].
     POSEIDON_ITERATE(iter(secret_key_power, next_secret_key_power), new_size - old_size,
-                     [&](auto I)
-                     {
+                     [&](auto I) {
                          dyadic_product_coeffmod(get<0>(I), secret_key, coeff_modulus_size,
                                                  coeff_modulus, get<1>(I));
                      });
@@ -203,7 +202,7 @@ GaloisKeys KSwitchGenBase::create_galois_keys(const std::vector<uint32_t> &galoi
     // The max number of keys is equal to number of coefficients
     galois_keys.data().resize(coeff_count);
 
-    #pragma omp parallel for
+#pragma omp parallel for
     for (size_t i = 0; i < galois_elts.size(); i++)
     {
         uint32_t galois_elt = galois_elts[i];
@@ -229,10 +228,11 @@ GaloisKeys KSwitchGenBase::create_galois_keys(const std::vector<uint32_t> &galoi
         // This is the location in the galois_keys vector
         size_t index = GaloisKeys::get_index(galois_elt);
 
-        // Create Galois keys.
-        #pragma omp critical
+// Create Galois keys.
+#pragma omp critical
         {
-            generate_one_kswitch_key(prev_secret_key, rotated_secret_key, galois_keys.data()[index]);
+            generate_one_kswitch_key(prev_secret_key, rotated_secret_key,
+                                     galois_keys.data()[index]);
         }
     }
 
@@ -243,7 +243,7 @@ GaloisKeys KSwitchGenBase::create_galois_keys(const std::vector<uint32_t> &galoi
 }
 
 GaloisKeys KSwitchGenBase::create_galois_keys_mt(const std::vector<uint32_t> &galois_elts,
-                                              const SecretKey &prev_secret_key) const
+                                                 const SecretKey &prev_secret_key) const
 {
     // TODO: maybe need fix
     // Check to see if secret key and public key have been generated
@@ -336,7 +336,8 @@ void KSwitchGenBase::generate_kswitch_keys(const SecretKey &prev_secret_key, Con
     }
 
     destination.data().resize(num_keys);
-    POSEIDON_ITERATE(iter(new_keys, destination.data()), num_keys, [&](auto I)
+    POSEIDON_ITERATE(iter(new_keys, destination.data()), num_keys,
+                     [&](auto I)
                      { this->generate_one_kswitch_key(prev_secret_key, get<0>(I), get<1>(I)); });
 }
 

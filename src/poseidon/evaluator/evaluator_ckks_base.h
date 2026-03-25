@@ -3,8 +3,8 @@
 #include "evaluator_base.h"
 #include "poseidon/advance/homomorphic_mod.h"
 #include "poseidon/advance/polynomial_evaluation.h"
-#include "poseidon/key/keyswitch.h"
 #include "poseidon/encryptor.h"
+#include "poseidon/key/keyswitch.h"
 
 namespace poseidon
 {
@@ -87,9 +87,9 @@ public:
     void eval_mod(const Ciphertext &ciph, Ciphertext &result, const EvalModPoly &eva_poly,
                   const RelinKeys &relin_keys, const CKKSEncoder &encoder);
 
-    void bootstrap(const Ciphertext &ciph, Ciphertext &result,
-                   const RelinKeys &relin_keys, const GaloisKeys &galois_keys,
-                   const CKKSEncoder &encoder, EvalModPoly &eval_mod_poly);
+    void bootstrap(const Ciphertext &ciph, Ciphertext &result, const RelinKeys &relin_keys,
+                   const GaloisKeys &galois_keys, const CKKSEncoder &encoder,
+                   EvalModPoly &eval_mod_poly);
 
     void multiply_const_direct(const Ciphertext &ciph, int const_data, Ciphertext &result,
                                const CKKSEncoder &encoder) const;
@@ -152,8 +152,9 @@ public:
     void sigmoid_approx(const Ciphertext &ciph, Ciphertext &result, const CKKSEncoder &encoder,
                         const RelinKeys &relin_keys);
 
-    void accumulate_top_n(const Ciphertext &ciph, Ciphertext &result, int n, const CKKSEncoder &encoder,
-                          const Encryptor &enc, const GaloisKeys &rot_keys) const;
+    void accumulate_top_n(const Ciphertext &ciph, Ciphertext &result, int n,
+                          const CKKSEncoder &encoder, const Encryptor &enc,
+                          const GaloisKeys &rot_keys) const;
 
     // result = conv(ciph_f, ciph_g_rev)
     void conv(const Ciphertext &ciph_f, const Ciphertext &ciph_g_rev, Ciphertext &result,
