@@ -51,10 +51,7 @@ public:
 
     inline const Polynomial &arcsine_poly() const { return this->arcsine_poly_; }
 
-    void set_level_start(uint32_t level)
-    {
-        level_start_ = level;
-    }
+    void set_level_start(uint32_t level) { level_start_ = level; }
 
 private:
     SineType type_;

@@ -34,7 +34,7 @@ public:
     secret_key_array_type compute_secret_key_array(const SecretKey &init_secret_key,
                                                    size_t max_power) const;
     GaloisKeys create_galois_keys_mt(const std::vector<uint32_t> &galois_elts,
-                                              const SecretKey &prev_secret_key) const;
+                                     const SecretKey &prev_secret_key) const;
 
 protected:
     virtual void generate_one_kswitch_key(const SecretKey &prev_secret_key, ConstRNSIter new_key,

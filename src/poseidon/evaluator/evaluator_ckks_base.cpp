@@ -1,7 +1,7 @@
 #include "evaluator_ckks_base.h"
 #include "poseidon/advance/homomorphic_dft.h"
-#include "poseidon/util/debug.h"
 #include "poseidon/encryptor.h"
+#include "poseidon/util/debug.h"
 
 namespace poseidon
 {
@@ -858,7 +858,8 @@ void EvaluatorCkksBase::evaluate_poly_from_poly_nomial_basis(
             destination.scale() = target_scale;
             if (destination.level() < target_level)
             {
-                POSEIDON_THROW(logic_error, "destination : destination level is small than target_level level!");
+                POSEIDON_THROW(logic_error,
+                               "destination : destination level is small than target_level level!");
             }
             else if (target_level < destination.level())
             {
@@ -1018,31 +1019,40 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
     Ciphertext ciph_real_mod, ciph_imag_mod;
     Ciphertext res;
 
-    auto coeffs_to_slots_scaling = eval_mod_poly.q_div() / (eval_mod_poly.k() * eval_mod_poly.sc_fac() * eval_mod_poly.q_diff());
+    auto coeffs_to_slots_scaling =
+        eval_mod_poly.q_div() /
+        (eval_mod_poly.k() * eval_mod_poly.sc_fac() * eval_mod_poly.q_diff());
 
-    HomomorphicDFTMatrixLiteral tmp_matrix(0, context_.parameters_literal()->log_n(), context_.parameters_literal()->log_slots(),
-                                    static_cast<uint32_t>(context_.parameters_literal()->q().size() - 1), vector<uint32_t>(3, 1), true,
-                                    coeffs_to_slots_scaling, false, 1);
+    HomomorphicDFTMatrixLiteral tmp_matrix(
+        0, context_.parameters_literal()->log_n(), context_.parameters_literal()->log_slots(),
+        static_cast<uint32_t>(context_.parameters_literal()->q().size() - 1),
+        vector<uint32_t>(3, 1), true, coeffs_to_slots_scaling, false, 1);
     LinearMatrixGroup coeff_to_slot_dft_matrix;
     tmp_matrix.create(coeff_to_slot_dft_matrix, const_cast<CKKSEncoder &>(encoder), 2);
 
     coeff_to_slot(ciph_raise, coeff_to_slot_dft_matrix, ciph_real, ciph_imag, galois_keys, encoder);
 
-    eval_mod_poly.set_level_start(static_cast<uint32_t>(context_.crt_context()->get_context_data(ciph_real.parms_id())->level()));
+    eval_mod_poly.set_level_start(static_cast<uint32_t>(
+        context_.crt_context()->get_context_data(ciph_real.parms_id())->level()));
     eval_mod(ciph_imag, ciph_imag_mod, eval_mod_poly, relin_keys, encoder);
     eval_mod(ciph_real, ciph_real_mod, eval_mod_poly, relin_keys, encoder);
 
     ciph_imag_mod.scale() = context_.parameters_literal()->scale();
     ciph_real_mod.scale() = context_.parameters_literal()->scale();
 
-    auto slots_to_coeffs_scaling = context_.parameters_literal()->scale() / ((double)eval_mod_poly.scaling_factor() /
-                                                         (double)eval_mod_poly.message_ratio());
-    HomomorphicDFTMatrixLiteral tmp_matrix_inverse(1, context_.parameters_literal()->log_n(), context_.parameters_literal()->log_slots(), static_cast<uint32_t>(context_.crt_context()->get_context_data(ciph_real_mod.parms_id())->level()),
-                                                                             vector<uint32_t>(3, 1), true, slots_to_coeffs_scaling, false, 1);
+    auto slots_to_coeffs_scaling =
+        context_.parameters_literal()->scale() /
+        ((double)eval_mod_poly.scaling_factor() / (double)eval_mod_poly.message_ratio());
+    HomomorphicDFTMatrixLiteral tmp_matrix_inverse(
+        1, context_.parameters_literal()->log_n(), context_.parameters_literal()->log_slots(),
+        static_cast<uint32_t>(
+            context_.crt_context()->get_context_data(ciph_real_mod.parms_id())->level()),
+        vector<uint32_t>(3, 1), true, slots_to_coeffs_scaling, false, 1);
     LinearMatrixGroup slot_to_coeff_dft_matrix;
     tmp_matrix_inverse.create(slot_to_coeff_dft_matrix, const_cast<CKKSEncoder &>(encoder), 1);
 
-    slot_to_coeff(ciph_real_mod, ciph_imag_mod, slot_to_coeff_dft_matrix, result, galois_keys, encoder);
+    slot_to_coeff(ciph_real_mod, ciph_imag_mod, slot_to_coeff_dft_matrix, result, galois_keys,
+                  encoder);
 }
 
 void EvaluatorCkksBase::ntt_fwd(const Plaintext &plain, Plaintext &result,
@@ -1283,8 +1293,7 @@ void EvaluatorCkksBase::multiply(const Ciphertext &ciph1, const Ciphertext &ciph
     }
 }
 
-void EvaluatorCkksBase::square_inplace(Ciphertext &ciph,
-                                       MemoryPoolHandle pool) const
+void EvaluatorCkksBase::square_inplace(Ciphertext &ciph, MemoryPoolHandle pool) const
 {
     multiply_inplace(ciph, ciph);
 }
@@ -1399,68 +1408,78 @@ void EvaluatorCkksBase::ckks_multiply(Ciphertext &ciph1, const Ciphertext &ciph2
             // 3. 每个线程在 parallel 区域内分配一次临时缓冲区
             // 4. 使用 dynamic 调度实现负载均衡
 #ifdef USING_OPENMP
-            #pragma omp parallel if(coeff_modulus_size * num_tiles > 16)
+#pragma omp parallel if (coeff_modulus_size * num_tiles > 16)
             {
                 // 每个线程分配一次临时缓冲区，避免在循环中重复分配
                 POSEIDON_ALLOCATE_GET_COEFF_ITER(thread_local_temp, tile_size, pool);
-                
-                #pragma omp for collapse(2) schedule(dynamic, 4)
+
+#pragma omp for collapse(2) schedule(dynamic, 4)
 #else
             // 非 OpenMP 模式保持原样
 #endif
-                for (size_t i = 0; i < coeff_modulus_size; i++) 
+                for (size_t i = 0; i < coeff_modulus_size; i++)
                 {
-                    for (size_t j = 0; j < num_tiles; j++) 
+                    for (size_t j = 0; j < num_tiles; j++)
                     {
 #ifdef USING_OPENMP
                         auto &modulus = coeff_modulus[i];
-                        
+
                         // 为当前 tile 创建迭代器
                         RNSIter it_x0(ciph1_iter[0][i], tile_size);
                         RNSIter it_x1(ciph1_iter[1][i], tile_size);
                         RNSIter it_x2(ciph1_iter[2][i], tile_size);
                         ConstRNSIter it_y0(ciph2_iter[0][i], tile_size);
                         ConstRNSIter it_y1(ciph2_iter[1][i], tile_size);
-                        
+
                         // 移动到当前 tile
-                        it_x0 += j; it_x1 += j; it_x2 += j;
-                        it_y0 += j; it_y1 += j;
-                        
+                        it_x0 += j;
+                        it_x1 += j;
+                        it_x2 += j;
+                        it_y0 += j;
+                        it_y1 += j;
+
                         // 使用线程本地临时缓冲区
                         dyadic_product_coeffmod(it_x1[0], it_y1[0], tile_size, modulus, it_x2[0]);
-                        dyadic_product_coeffmod(it_x1[0], it_y0[0], tile_size, modulus, thread_local_temp);
+                        dyadic_product_coeffmod(it_x1[0], it_y0[0], tile_size, modulus,
+                                                thread_local_temp);
                         dyadic_product_coeffmod(it_x0[0], it_y1[0], tile_size, modulus, it_x1[0]);
-                        add_poly_coeffmod(it_x1[0], thread_local_temp, tile_size, modulus, it_x1[0]);
+                        add_poly_coeffmod(it_x1[0], thread_local_temp, tile_size, modulus,
+                                          it_x1[0]);
                         dyadic_product_coeffmod(it_x0[0], it_y0[0], tile_size, modulus, it_x0[0]);
 #else
-                        auto &modulus = coeff_modulus[i];
+                    auto &modulus = coeff_modulus[i];
 
-                        // 为每个线程准备独立的临时缓冲区
-                        POSEIDON_ALLOCATE_GET_COEFF_ITER(local_temp, tile_size, pool);
+                    // 为每个线程准备独立的临时缓冲区
+                    POSEIDON_ALLOCATE_GET_COEFF_ITER(local_temp, tile_size, pool);
 
-                        // 获取第 i 个模数对应的 RNS 迭代器
-                        // ciph1_iter[0] 指向第 0 个多项式，ciph1_iter[0][i] 指向该多项式的第 i 个 RNS 分量
-                        RNSIter it_x0(ciph1_iter[0][i], tile_size);
-                        RNSIter it_x1(ciph1_iter[1][i], tile_size);
-                        RNSIter it_x2(ciph1_iter[2][i], tile_size);
-                        ConstRNSIter it_y0(ciph2_iter[0][i], tile_size);
-                        ConstRNSIter it_y1(ciph2_iter[1][i], tile_size);
+                    // 获取第 i 个模数对应的 RNS 迭代器
+                    // ciph1_iter[0] 指向第 0 个多项式，ciph1_iter[0][i] 指向该多项式的第 i 个 RNS
+                    // 分量
+                    RNSIter it_x0(ciph1_iter[0][i], tile_size);
+                    RNSIter it_x1(ciph1_iter[1][i], tile_size);
+                    RNSIter it_x2(ciph1_iter[2][i], tile_size);
+                    ConstRNSIter it_y0(ciph2_iter[0][i], tile_size);
+                    ConstRNSIter it_y1(ciph2_iter[1][i], tile_size);
 
-                        // 逻辑：x[2] = x[1] * y[1]，这里 it_x1[0] 返回的是当前 Tile 的 CoeffIter（即双重解引用后的指针）
-                        dyadic_product_coeffmod(it_x1[0], it_y1[0], tile_size, modulus, it_x2[0]);
-                        // 逻辑：temp = x[1] * y[0]
-                        dyadic_product_coeffmod(it_x1[0], it_y0[0], tile_size, modulus, local_temp);
-                        
-                        // 逻辑：x[1] = x[0] * y[1]
-                        dyadic_product_coeffmod(it_x0[0], it_y1[0], tile_size, modulus, it_x1[0]);
-                        
-                        // 逻辑：x[1] += temp
-                        add_poly_coeffmod(it_x1[0], local_temp, tile_size, modulus, it_x1[0]);
-                        // 逻辑：x[0] = x[0] * y[0]
-                        dyadic_product_coeffmod(it_x0[0], it_y0[0], tile_size, modulus, it_x0[0]);
-                        // 指针自增（跳向下一个 Tile）
-                        it_x0++; it_x1++; it_x2++;
-                        it_y0++; it_y1++;
+                    // 逻辑：x[2] = x[1] * y[1]，这里 it_x1[0] 返回的是当前 Tile 的
+                    // CoeffIter（即双重解引用后的指针）
+                    dyadic_product_coeffmod(it_x1[0], it_y1[0], tile_size, modulus, it_x2[0]);
+                    // 逻辑：temp = x[1] * y[0]
+                    dyadic_product_coeffmod(it_x1[0], it_y0[0], tile_size, modulus, local_temp);
+
+                    // 逻辑：x[1] = x[0] * y[1]
+                    dyadic_product_coeffmod(it_x0[0], it_y1[0], tile_size, modulus, it_x1[0]);
+
+                    // 逻辑：x[1] += temp
+                    add_poly_coeffmod(it_x1[0], local_temp, tile_size, modulus, it_x1[0]);
+                    // 逻辑：x[0] = x[0] * y[0]
+                    dyadic_product_coeffmod(it_x0[0], it_y0[0], tile_size, modulus, it_x0[0]);
+                    // 指针自增（跳向下一个 Tile）
+                    it_x0++;
+                    it_x1++;
+                    it_x2++;
+                    it_y0++;
+                    it_y1++;
 #endif
                     }
                 }
@@ -1997,8 +2016,9 @@ void EvaluatorCkksBase::add_dynamic(const Ciphertext &ciph1, const Ciphertext &c
 void EvaluatorCkksBase::read(Ciphertext &ciph) const {}
 void EvaluatorCkksBase::read(Plaintext &plain) const {}
 
-void EvaluatorCkksBase::accumulate_top_n(const Ciphertext &ciph, Ciphertext &result, int n, const CKKSEncoder &encoder,
-                      const Encryptor &enc, const GaloisKeys &rot_keys) const
+void EvaluatorCkksBase::accumulate_top_n(const Ciphertext &ciph, Ciphertext &result, int n,
+                                         const CKKSEncoder &encoder, const Encryptor &enc,
+                                         const GaloisKeys &rot_keys) const
 {
     if (n <= 0)
     {
@@ -2037,8 +2057,8 @@ void EvaluatorCkksBase::accumulate_top_n(const Ciphertext &ciph, Ciphertext &res
     result = ciph_sum;
 }
 
-void EvaluatorCkksBase::sigmoid_approx(const Ciphertext &ciph, Ciphertext &result, const CKKSEncoder &encoder,
-                    const RelinKeys &relin_keys)
+void EvaluatorCkksBase::sigmoid_approx(const Ciphertext &ciph, Ciphertext &result,
+                                       const CKKSEncoder &encoder, const RelinKeys &relin_keys)
 {
     vector<complex<double>> buffer(4, 0);
     buffer[0] = 0.5;
@@ -2048,7 +2068,8 @@ void EvaluatorCkksBase::sigmoid_approx(const Ciphertext &ciph, Ciphertext &resul
     Polynomial approxF(buffer, 0, 0, 4, Monomial);
     approxF.lead() = true;
     vector<Polynomial> poly_v{approxF};
-    vector<vector<int>> slots_index(1, vector<int>(context_.parameters_literal()->degree() >> 1, 0));
+    vector<vector<int>> slots_index(1,
+                                    vector<int>(context_.parameters_literal()->degree() >> 1, 0));
     vector<int> idxF(context_.parameters_literal()->degree() >> 1);
     for (int i = 0; i < context_.parameters_literal()->degree() >> 1; i++)
     {
@@ -2060,9 +2081,10 @@ void EvaluatorCkksBase::sigmoid_approx(const Ciphertext &ciph, Ciphertext &resul
     evaluate_poly_vector(ciph, result, polys, ciph.scale(), relin_keys, encoder);
 }
 
-void EvaluatorCkksBase::conv(const Ciphertext &ciph_f, const Ciphertext &ciph_g_rev, Ciphertext &result,
-          const uint size, const CKKSEncoder &encoder, const Encryptor &enc,
-          const GaloisKeys &galois_keys, const RelinKeys &relin_keys) const
+void EvaluatorCkksBase::conv(const Ciphertext &ciph_f, const Ciphertext &ciph_g_rev,
+                             Ciphertext &result, const uint size, const CKKSEncoder &encoder,
+                             const Encryptor &enc, const GaloisKeys &galois_keys,
+                             const RelinKeys &relin_keys) const
 {
     Ciphertext ciph_res;
     Ciphertext ciph_f_rotate = ciph_f;

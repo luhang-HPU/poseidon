@@ -121,7 +121,9 @@ void sample_poly_cbd(shared_ptr<UniformRandomGenerator> prng, const PoseidonCont
 
     if (!are_close(global_variables::noise_standard_deviation, 3.2))
     {
-        POSEIDON_THROW(invalid_argument_error, "centered binomial distribution only supports standard deviation 3.2; use rounded Gaussian instead");
+        POSEIDON_THROW(invalid_argument_error,
+                       "centered binomial distribution only supports standard deviation 3.2; use "
+                       "rounded Gaussian instead");
     }
 
     auto cbd = [&]() -> int

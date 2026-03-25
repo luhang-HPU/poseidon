@@ -1,5 +1,4 @@
 #include "galoiskeys.h"
-#include "galoiskeys.h"
 #ifdef USING_HARDWARE
 #include "poseidon/factory/poseidon_factory.h"
 #include "poseidon_hardware/hardware_drive/ckks_hardware_api.h"

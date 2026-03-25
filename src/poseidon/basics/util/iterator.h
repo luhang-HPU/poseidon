@@ -1769,8 +1769,8 @@ public:
     template <typename... Ts>
     IterTuple(const std::tuple<Ts...> &tp)
         : IterTuple(poseidon_apply([](auto &&...args) -> IterTuple
-                               { return {std::forward<decltype(args)>(args)...}; },
-                               std::forward<decltype(tp)>(tp)))
+                                   { return {std::forward<decltype(args)>(args)...}; },
+                                   std::forward<decltype(tp)>(tp)))
     {
         static_assert(sizeof...(Ts) == sizeof...(Rest) + 1,
                       "std::tuple size does not match poseidon::util::IterTuple size");
@@ -1779,8 +1779,8 @@ public:
     template <typename... Ts>
     IterTuple(std::tuple<Ts...> &&tp)
         : IterTuple(poseidon_apply([](auto &&...args) -> IterTuple &&
-                               { return {std::forward<decltype(args)>(args)...}; },
-                               std::forward<decltype(tp)>(tp)))
+                                   { return {std::forward<decltype(args)>(args)...}; },
+                                   std::forward<decltype(tp)>(tp)))
     {
         static_assert(sizeof...(Ts) == sizeof...(Rest) + 1,
                       "std::tuple size does not match poseidon::util::IterTuple size");
@@ -2134,7 +2134,7 @@ POSEIDON_NODISCARD inline auto get(const IterTuple<POSEIDONIters...> &it) noexce
 template <typename T, typename... Rest>
 struct IterType<
     poseidon_void_t<std::enable_if_t<(sizeof...(Rest) > 0)>, typename IterType<void, T>::type,
-                typename IterType<void, Rest...>::type>,
+                    typename IterType<void, Rest...>::type>,
     T, Rest...>
 {
     using type = typename extend_iter_tuple<typename IterType<void, T>::type,

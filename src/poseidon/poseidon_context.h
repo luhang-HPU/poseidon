@@ -9,8 +9,6 @@
 #include "poseidon_hardware/hardware_context.h"
 #endif
 
-
-
 namespace poseidon
 {
 class PoseidonContext

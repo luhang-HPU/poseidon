@@ -68,4 +68,4 @@ namespace poseidonbench
 //             keygen->create_galois_keys({ random_one_step() }, glk);
 //         }
 //     }
-} // namespace poseidonbench
+}  // namespace poseidonbench

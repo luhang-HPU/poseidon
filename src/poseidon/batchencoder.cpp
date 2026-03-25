@@ -226,8 +226,7 @@ void BatchEncoder::encode(gsl::span<const uint64_t> values_matrix, Plaintext &de
 
     // Transform destination using inverse of negacyclic NTT
     // Note: We already performed bit-reversal when reading in the matrix
-    inverse_ntt_negacyclic_harvey(
-        destination.data(), *crt_context->plain_ntt_tables());
+    inverse_ntt_negacyclic_harvey(destination.data(), *crt_context->plain_ntt_tables());
 }
 
 void BatchEncoder::encode(gsl::span<const int64_t> values_matrix, Plaintext &destination) const

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "publickey.h"
 #include "poseidon/basics/memorymanager.h"
 #include "poseidon/basics/serialization.h"
+#include "publickey.h"
 #include <iostream>
 #include <numeric>
 #include <vector>
@@ -288,7 +288,7 @@ public:
     @throws std::runtime_error if I/O operations failed
     */
     virtual std::streamoff load(const PoseidonContext &context, const poseidon_byte *in,
-                               std::size_t size)
+                                std::size_t size)
     {
         KSwitchKeys new_keys;
         new_keys.pool_ = pool_;

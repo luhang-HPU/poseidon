@@ -270,8 +270,7 @@ void EvaluatorBfvBase::multiply(const Ciphertext &ciph1, const Ciphertext &ciph2
     }
 }
 
-void EvaluatorBfvBase::square_inplace(Ciphertext &ciph,
-                                      MemoryPoolHandle pool) const
+void EvaluatorBfvBase::square_inplace(Ciphertext &ciph, MemoryPoolHandle pool) const
 {
 #ifdef DEBUG
     poseidon::util::LocalTimer timer("SQUARE");
@@ -612,32 +611,35 @@ void EvaluatorBfvBase::multiply_inplace(Ciphertext &ciph1, const Ciphertext &cip
                     // Create a shifted iterator for the output
                     auto shifted_out_iter = out_iter[I];
 
-                    POSEIDON_ITERATE(
-                        iter(shifted_in1_iter, shifted_reversed_in2_iter), steps,
-                        [&](auto J)
-                        {
-                            // 优化：创建并行区域，避免每次循环迭代都分配内存
+                    POSEIDON_ITERATE(iter(shifted_in1_iter, shifted_reversed_in2_iter), steps,
+                                     [&](auto J)
+                                     {
+                // 优化：创建并行区域，避免每次循环迭代都分配内存
 #ifdef USING_OPENMP
-                            #pragma omp parallel if(base_size > 4)
-                            {
-                                // 每个线程分配一次临时缓冲区
-                                POSEIDON_ALLOCATE_GET_COEFF_ITER(thread_local_temp, coeff_count, pool);
-                                
-                                #pragma omp for schedule(dynamic, 2)
+#pragma omp parallel if (base_size > 4)
+                                         {
+                                             // 每个线程分配一次临时缓冲区
+                                             POSEIDON_ALLOCATE_GET_COEFF_ITER(thread_local_temp,
+                                                                              coeff_count, pool);
+
+#pragma omp for schedule(dynamic, 2)
 #else
                             POSEIDON_ALLOCATE_GET_COEFF_ITER(local_temp, coeff_count, pool);
 #endif
-                                for (size_t k = 0; k < base_size; k++)
-                                {
+                                             for (size_t k = 0; k < base_size; k++)
+                                             {
 #ifdef USING_OPENMP
-                                    auto poly1_at_k = get<0>(J)[k];
-                                    auto poly2_at_k = get<1>(J)[k];
-                                    auto mod_k = base_iter[k];
-                                    auto out_poly_k = shifted_out_iter[k];
-                                    
-                                    // 使用线程本地临时缓冲区
-                                    dyadic_product_coeffmod(poly1_at_k, poly2_at_k, coeff_count, mod_k, thread_local_temp);
-                                    add_poly_coeffmod(thread_local_temp, out_poly_k, coeff_count, mod_k, out_poly_k);
+                                                 auto poly1_at_k = get<0>(J)[k];
+                                                 auto poly2_at_k = get<1>(J)[k];
+                                                 auto mod_k = base_iter[k];
+                                                 auto out_poly_k = shifted_out_iter[k];
+
+                                                 // 使用线程本地临时缓冲区
+                                                 dyadic_product_coeffmod(poly1_at_k, poly2_at_k,
+                                                                         coeff_count, mod_k,
+                                                                         thread_local_temp);
+                                                 add_poly_coeffmod(thread_local_temp, out_poly_k,
+                                                                   coeff_count, mod_k, out_poly_k);
 #else
                                     auto poly1_at_k = get<0>(J)[k];
                                     auto poly2_at_k = get<1>(J)[k];
@@ -648,11 +650,11 @@ void EvaluatorBfvBase::multiply_inplace(Ciphertext &ciph1, const Ciphertext &cip
                                     dyadic_product_coeffmod(poly1_at_k, poly2_at_k, coeff_count, mod_k, local_temp);
                                     add_poly_coeffmod(local_temp, out_poly_k, coeff_count, mod_k, out_poly_k);
 #endif
-                                }
+                                             }
 #ifdef USING_OPENMP
-                            }
+                                         }
 #endif
-                        });
+                                     });
                 };
 
                 // Perform the BEHZ ciph product both for base q and base Bsk

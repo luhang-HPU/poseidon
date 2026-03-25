@@ -73,7 +73,7 @@ public:
     void transform_from_ntt_inplace(Ciphertext &ciph) const;
 
     virtual void multiply_plain_inplace(Ciphertext &ciph, const Plaintext &plain,
-                                       MemoryPoolHandle pool = MemoryManager::GetPool()) const = 0;
+                                        MemoryPoolHandle pool = MemoryManager::GetPool()) const = 0;
 
 protected:
     EvaluatorBase(const PoseidonContext &context, MemoryPoolHandle pool = MemoryManager::GetPool());
@@ -86,7 +86,6 @@ protected:
     }
 
 protected:
-    
     static void ntt_fwd_b(const Plaintext &plain, Plaintext &result);
     static void ntt_fwd_b(const Ciphertext &ciph, Ciphertext &result);
     static void ntt_inv_b(const Plaintext &plain, Plaintext &result);

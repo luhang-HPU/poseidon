@@ -8,8 +8,6 @@
 #include <iostream>
 #include <vector>
 
-
-
 namespace poseidon
 {
 
@@ -26,7 +24,8 @@ public:
 
     ParametersLiteral(SchemeType scheme_type, std::uint32_t log_n, std::uint32_t log_slots,
                       std::uint32_t log_scale, std::uint32_t hamming_weight, std::uint32_t q0_level,
-                      Modulus plain_modulus, const std::vector<Modulus> &q, const std::vector<Modulus> &p,
+                      Modulus plain_modulus, const std::vector<Modulus> &q,
+                      const std::vector<Modulus> &p,
                       sec_level_type sec_level = poseidon::sec_level_type::none,
                       MemoryPoolHandle pool = MemoryManager::GetPool());
 
@@ -36,10 +35,12 @@ public:
         set_plain_modulus(Modulus(plain_modulus));
     }
     void set_plain_modulus(const Modulus &plain_modulus);
-    void set_log_modulus(const std::vector<std::uint32_t> &log_q, const std::vector<std::uint32_t> &log_p);
+    void set_log_modulus(const std::vector<std::uint32_t> &log_q,
+                         const std::vector<std::uint32_t> &log_p);
     void set_sec_level(sec_level_type &sec_level) { this->sec_level_ = sec_level; }
 
-    inline void set_modulus(const std::vector<Modulus> &mod_chain_q, const std::vector<Modulus> &mod_chain_p)
+    inline void set_modulus(const std::vector<Modulus> &mod_chain_q,
+                            const std::vector<Modulus> &mod_chain_p)
     {
         this->q_ = mod_chain_q;
         this->p_ = mod_chain_p;

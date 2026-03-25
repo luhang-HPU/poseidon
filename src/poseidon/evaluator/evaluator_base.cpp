@@ -81,8 +81,8 @@ void EvaluatorBase::ntt_inv_b(const Ciphertext &ciph, Ciphertext &result)
     result.is_ntt_form() = false;
 }
 
-void EvaluatorBase::transform_to_ntt_inplace(Plaintext &plain,
-                                             parms_id_type parms_id, MemoryPoolHandle pool) const
+void EvaluatorBase::transform_to_ntt_inplace(Plaintext &plain, parms_id_type parms_id,
+                                             MemoryPoolHandle pool) const
 {
 #ifdef DEBUG
     poseidon::util::LocalTimer timer("NTT");
