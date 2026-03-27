@@ -1426,10 +1426,10 @@ void EvaluatorCkksBase::ckks_multiply(Ciphertext &ciph1, const Ciphertext &ciph2
                     dyadic_product_coeffmod(it_x1[0], it_y1[0], tile_size, modulus, it_x2[0]);
                     // 逻辑：temp = x[1] * y[0]
                     dyadic_product_coeffmod(it_x1[0], it_y0[0], tile_size, modulus, local_temp);
-                    
+
                     // 逻辑：x[1] = x[0] * y[1]
                     dyadic_product_coeffmod(it_x0[0], it_y1[0], tile_size, modulus, it_x1[0]);
-                    
+
                     // 逻辑：x[1] += temp
                     add_poly_coeffmod(it_x1[0], local_temp, tile_size, modulus, it_x1[0]);
                     // 逻辑：x[0] = x[0] * y[0]
