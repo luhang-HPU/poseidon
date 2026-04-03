@@ -1,0 +1,13 @@
+{
+  "source_file": "examples/ckks/knn.cpp",
+  "function": "sign_2",
+  "critical_path_cost": 9,
+  "max_parallel_width": 1,
+  "ops": 2,
+  "edges": 2,
+  "layers": [
+    "layer 0: op0",
+    "layer 1: op1"
+  ],
+  "unsupported": []
+}

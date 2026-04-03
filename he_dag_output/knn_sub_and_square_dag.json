@@ -1,0 +1,540 @@
+{
+  "edges": [
+    {
+      "dst": "op2",
+      "kind": "data",
+      "reason": "ciph_data[i]",
+      "src": "op0",
+      "value": "ciph_data[i]@1"
+    },
+    {
+      "dst": "op2",
+      "kind": "data",
+      "reason": "ciph_data[i]",
+      "src": "op0",
+      "value": "ciph_data[i]@1"
+    },
+    {
+      "dst": "op2",
+      "kind": "anti",
+      "reason": "overwrite ciph_data[i]",
+      "src": "op0",
+      "value": "ciph_data[i]@2"
+    },
+    {
+      "dst": "op3",
+      "kind": "data",
+      "reason": "ciph_data[i]",
+      "src": "op2",
+      "value": "ciph_data[i]@2"
+    },
+    {
+      "dst": "op3",
+      "kind": "anti",
+      "reason": "overwrite ciph_data[i]",
+      "src": "op2",
+      "value": "ciph_data[i]@3"
+    },
+    {
+      "dst": "op4",
+      "kind": "data",
+      "reason": "ciph_data[i + 10]",
+      "src": "op1",
+      "value": "ciph_data[i + 10]@1"
+    },
+    {
+      "dst": "op4",
+      "kind": "data",
+      "reason": "ciph_data[i + 10]",
+      "src": "op1",
+      "value": "ciph_data[i + 10]@1"
+    },
+    {
+      "dst": "op4",
+      "kind": "anti",
+      "reason": "overwrite ciph_data[i + 10]",
+      "src": "op1",
+      "value": "ciph_data[i + 10]@2"
+    },
+    {
+      "dst": "op5",
+      "kind": "data",
+      "reason": "ciph_data[i + 10]",
+      "src": "op4",
+      "value": "ciph_data[i + 10]@2"
+    },
+    {
+      "dst": "op5",
+      "kind": "anti",
+      "reason": "overwrite ciph_data[i + 10]",
+      "src": "op4",
+      "value": "ciph_data[i + 10]@3"
+    }
+  ],
+  "function": "sub_and_square",
+  "metadata": {
+    "critical_path_cost": 11,
+    "ir_version": 1,
+    "layer_validation": [],
+    "max_parallel_width": 2,
+    "supported_methods": [
+      "add",
+      "add_const",
+      "add_plain",
+      "bootstrap",
+      "conjugate",
+      "create_galois_keys",
+      "create_public_key",
+      "create_relin_keys",
+      "decrypt",
+      "drop_modulus",
+      "drop_modulus_to_next",
+      "encode",
+      "encrypt",
+      "evaluate_poly_vector",
+      "multiply",
+      "multiply_const",
+      "multiply_plain",
+      "multiply_relin",
+      "multiply_relin_dynamic",
+      "ntt_fwd",
+      "ntt_inv",
+      "read",
+      "relinearize",
+      "rescale",
+      "rescale_dynamic",
+      "rotate",
+      "sub",
+      "sub_plain"
+    ],
+    "topological_order": [
+      "op0",
+      "op1",
+      "op2",
+      "op4",
+      "op3",
+      "op5"
+    ],
+    "value_kinds": [
+      "ciphertext",
+      "context",
+      "decryptor",
+      "encoder",
+      "encryptor",
+      "evaluator",
+      "external",
+      "galois_keys",
+      "key_generator",
+      "literal",
+      "plaintext",
+      "public_key",
+      "relin_keys",
+      "secret_key"
+    ]
+  },
+  "ops": [
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "ciph_data[i]",
+          "ciph_query[i]"
+        ],
+        "writes": [
+          "ciph_data[i]"
+        ]
+      },
+      "barrier": false,
+      "constants": [],
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "id": "op0",
+      "inputs": [
+        "ciph_data[i]@0",
+        "ciph_query[i]@0"
+      ],
+      "kind": "sub",
+      "latest_finish": 1,
+      "latest_start": 0,
+      "layer": 0,
+      "level": null,
+      "method": "sub",
+      "outputs": [
+        "ciph_data[i]@1"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [],
+      "scale": null,
+      "slack": 0,
+      "source_line": 254,
+      "source_text": "ckks_eva->sub(ciph_data[i], ciph_query[i], ciph_data[i])"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "ciph_data[i + 10]",
+          "ciph_query[i]"
+        ],
+        "writes": [
+          "ciph_data[i + 10]"
+        ]
+      },
+      "barrier": false,
+      "constants": [],
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "id": "op1",
+      "inputs": [
+        "ciph_data[i + 10]@0",
+        "ciph_query[i]@0"
+      ],
+      "kind": "sub",
+      "latest_finish": 1,
+      "latest_start": 0,
+      "layer": 0,
+      "level": null,
+      "method": "sub",
+      "outputs": [
+        "ciph_data[i + 10]@1"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [],
+      "scale": null,
+      "slack": 0,
+      "source_line": 257,
+      "source_text": "ckks_eva->sub(ciph_data[i + 10], ciph_query[i], ciph_data[i + 10])"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "ciph_data[i]",
+          "ciph_data[i]"
+        ],
+        "writes": [
+          "ciph_data[i]"
+        ]
+      },
+      "barrier": true,
+      "constants": [],
+      "cost": 6,
+      "critical": true,
+      "earliest_finish": 7,
+      "earliest_start": 1,
+      "id": "op2",
+      "inputs": [
+        "ciph_data[i]@1",
+        "ciph_data[i]@1"
+      ],
+      "kind": "multiply_relin",
+      "latest_finish": 7,
+      "latest_start": 1,
+      "layer": 1,
+      "level": null,
+      "method": "multiply_relin",
+      "outputs": [
+        "ciph_data[i]@2"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [
+        "relin_keys@0"
+      ],
+      "scale": null,
+      "slack": 0,
+      "source_line": 259,
+      "source_text": "ckks_eva->multiply_relin(ciph_data[i], ciph_data[i], ciph_data[i], relin_keys)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "ciph_data[i]"
+        ],
+        "writes": [
+          "ciph_data[i]"
+        ]
+      },
+      "barrier": true,
+      "constants": [
+        "scale@0"
+      ],
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 11,
+      "earliest_start": 7,
+      "id": "op3",
+      "inputs": [
+        "ciph_data[i]@2"
+      ],
+      "kind": "rescale_dynamic",
+      "latest_finish": 11,
+      "latest_start": 7,
+      "layer": 3,
+      "level": null,
+      "method": "rescale_dynamic",
+      "outputs": [
+        "ciph_data[i]@3"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [],
+      "scale": null,
+      "slack": 0,
+      "source_line": 260,
+      "source_text": "ckks_eva->rescale_dynamic(ciph_data[i], ciph_data[i], scale)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "ciph_data[i + 10]",
+          "ciph_data[i + 10]"
+        ],
+        "writes": [
+          "ciph_data[i + 10]"
+        ]
+      },
+      "barrier": true,
+      "constants": [],
+      "cost": 6,
+      "critical": true,
+      "earliest_finish": 7,
+      "earliest_start": 1,
+      "id": "op4",
+      "inputs": [
+        "ciph_data[i + 10]@1",
+        "ciph_data[i + 10]@1"
+      ],
+      "kind": "multiply_relin",
+      "latest_finish": 7,
+      "latest_start": 1,
+      "layer": 2,
+      "level": null,
+      "method": "multiply_relin",
+      "outputs": [
+        "ciph_data[i + 10]@2"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [
+        "relin_keys@0"
+      ],
+      "scale": null,
+      "slack": 0,
+      "source_line": 262,
+      "source_text": "ckks_eva->multiply_relin(ciph_data[i + 10], ciph_data[i + 10], ciph_data[i + 10], relin_keys)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "ciph_data[i + 10]"
+        ],
+        "writes": [
+          "ciph_data[i + 10]"
+        ]
+      },
+      "barrier": true,
+      "constants": [
+        "scale@0"
+      ],
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 11,
+      "earliest_start": 7,
+      "id": "op5",
+      "inputs": [
+        "ciph_data[i + 10]@2"
+      ],
+      "kind": "rescale_dynamic",
+      "latest_finish": 11,
+      "latest_start": 7,
+      "layer": 4,
+      "level": null,
+      "method": "rescale_dynamic",
+      "outputs": [
+        "ciph_data[i + 10]@3"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [],
+      "scale": null,
+      "slack": 0,
+      "source_line": 263,
+      "source_text": "ckks_eva->rescale_dynamic(ciph_data[i + 10], ciph_data[i + 10], scale)"
+    }
+  ],
+  "parallel_groups": [
+    [
+      "op0",
+      "op1"
+    ],
+    [
+      "op2"
+    ],
+    [
+      "op4"
+    ],
+    [
+      "op3"
+    ],
+    [
+      "op5"
+    ]
+  ],
+  "source_file": "examples/ckks/knn.cpp",
+  "source_hash": "5c7ae03eb9131a277d3de22e9dcb86aa5ac053f0604e339d9cbf07af1eddd5f5",
+  "unsupported": [],
+  "values": [
+    {
+      "annotations": {},
+      "id": "ckks_eva@0",
+      "is_ephemeral": false,
+      "kind": "evaluator",
+      "name": "ckks_eva",
+      "producer": null,
+      "source_line": 239,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "ciph_data@0",
+      "is_ephemeral": false,
+      "kind": "ciphertext_vector",
+      "name": "ciph_data",
+      "producer": null,
+      "source_line": 239,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "ciph_query@0",
+      "is_ephemeral": false,
+      "kind": "ciphertext_vector",
+      "name": "ciph_query",
+      "producer": null,
+      "source_line": 239,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "relin_keys@0",
+      "is_ephemeral": false,
+      "kind": "relin_keys",
+      "name": "relin_keys",
+      "producer": null,
+      "source_line": 239,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "ciph_data[i]@0",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "ciph_data[i]",
+      "producer": null,
+      "source_line": 254,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "ciph_query[i]@0",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "ciph_query[i]",
+      "producer": null,
+      "source_line": 254,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "ciph_data[i]@1",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "ciph_data[i]",
+      "producer": "op0",
+      "source_line": 254,
+      "version": 1
+    },
+    {
+      "annotations": {},
+      "id": "ciph_data[i + 10]@0",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "ciph_data[i + 10]",
+      "producer": null,
+      "source_line": 257,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "ciph_data[i + 10]@1",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "ciph_data[i + 10]",
+      "producer": "op1",
+      "source_line": 257,
+      "version": 1
+    },
+    {
+      "annotations": {},
+      "id": "ciph_data[i]@2",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "ciph_data[i]",
+      "producer": "op2",
+      "source_line": 259,
+      "version": 2
+    },
+    {
+      "annotations": {},
+      "id": "ciph_data[i]@3",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "ciph_data[i]",
+      "producer": "op3",
+      "source_line": 260,
+      "version": 3
+    },
+    {
+      "annotations": {
+        "expression": "scale"
+      },
+      "id": "scale@0",
+      "is_ephemeral": true,
+      "kind": "external",
+      "name": "scale",
+      "producer": null,
+      "source_line": 260,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "ciph_data[i + 10]@2",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "ciph_data[i + 10]",
+      "producer": "op4",
+      "source_line": 262,
+      "version": 2
+    },
+    {
+      "annotations": {},
+      "id": "ciph_data[i + 10]@3",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "ciph_data[i + 10]",
+      "producer": "op5",
+      "source_line": 263,
+      "version": 3
+    }
+  ]
+}

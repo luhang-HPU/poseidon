@@ -1,0 +1,31 @@
+{
+  "source_file": "examples/ckks/knn.cpp",
+  "function": "accumulate_top_n_block",
+  "critical_path_cost": 7,
+  "max_parallel_width": 1,
+  "ops": 4,
+  "edges": 5,
+  "layers": [
+    "layer 0: op0",
+    "layer 1: op1",
+    "layer 2: op2",
+    "layer 3: op3"
+  ],
+  "unsupported": [
+    {
+      "line": 438,
+      "reason": "supported method without tracked output variable",
+      "statement": "ckks_eva->rotate(ciph_rotate_sum, ciph_rotate_sum, 100, rot_keys)"
+    },
+    {
+      "line": 442,
+      "reason": "supported method without tracked output variable",
+      "statement": "if (n)\n        {\n            ckks_eva->rotate(ciph_rotate_sum, ciph_tmp, n * 100, rot_keys)"
+    },
+    {
+      "line": 445,
+      "reason": "supported method without tracked output variable",
+      "statement": "ckks_eva->add(ciph_rotate_sum, ciph_tmp, ciph_rotate_sum)"
+    }
+  ]
+}

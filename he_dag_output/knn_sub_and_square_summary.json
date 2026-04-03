@@ -1,0 +1,16 @@
+{
+  "source_file": "examples/ckks/knn.cpp",
+  "function": "sub_and_square",
+  "critical_path_cost": 11,
+  "max_parallel_width": 2,
+  "ops": 6,
+  "edges": 10,
+  "layers": [
+    "layer 0: op0, op1",
+    "layer 1: op2",
+    "layer 2: op4",
+    "layer 3: op3",
+    "layer 4: op5"
+  ],
+  "unsupported": []
+}

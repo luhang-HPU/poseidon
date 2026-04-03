@@ -1,0 +1,545 @@
+{
+  "edges": [
+    {
+      "dst": "op2",
+      "kind": "data",
+      "reason": "diff0",
+      "src": "op0",
+      "value": "diff0@1"
+    },
+    {
+      "dst": "op2",
+      "kind": "data",
+      "reason": "diff0",
+      "src": "op0",
+      "value": "diff0@1"
+    },
+    {
+      "dst": "op3",
+      "kind": "data",
+      "reason": "diff1",
+      "src": "op1",
+      "value": "diff1@1"
+    },
+    {
+      "dst": "op3",
+      "kind": "data",
+      "reason": "diff1",
+      "src": "op1",
+      "value": "diff1@1"
+    },
+    {
+      "dst": "op4",
+      "kind": "data",
+      "reason": "sq0",
+      "src": "op2",
+      "value": "sq0@1"
+    },
+    {
+      "dst": "op5",
+      "kind": "data",
+      "reason": "rot0",
+      "src": "op4",
+      "value": "rot0@1"
+    },
+    {
+      "dst": "op5",
+      "kind": "data",
+      "reason": "sq1",
+      "src": "op3",
+      "value": "sq1@1"
+    }
+  ],
+  "function": "knn_ckks_demo",
+  "metadata": {
+    "critical_path_cost": 11,
+    "ir_version": 1,
+    "layer_validation": [],
+    "max_parallel_width": 2,
+    "supported_methods": [
+      "add",
+      "add_const",
+      "add_plain",
+      "bootstrap",
+      "conjugate",
+      "create_galois_keys",
+      "create_public_key",
+      "create_relin_keys",
+      "decrypt",
+      "drop_modulus",
+      "drop_modulus_to_next",
+      "encode",
+      "encrypt",
+      "evaluate_poly_vector",
+      "multiply",
+      "multiply_const",
+      "multiply_plain",
+      "multiply_relin",
+      "ntt_fwd",
+      "ntt_inv",
+      "read",
+      "relinearize",
+      "rescale",
+      "rescale_dynamic",
+      "rotate",
+      "sub",
+      "sub_plain"
+    ],
+    "topological_order": [
+      "op0",
+      "op1",
+      "op2",
+      "op3",
+      "op4",
+      "op5"
+    ],
+    "value_kinds": [
+      "ciphertext",
+      "decryptor",
+      "encoder",
+      "encryptor",
+      "evaluator",
+      "external",
+      "galois_keys",
+      "key_generator",
+      "literal",
+      "plaintext",
+      "public_key",
+      "relin_keys",
+      "secret_key"
+    ]
+  },
+  "ops": [
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [],
+        "writes": [
+          "diff0"
+        ]
+      },
+      "barrier": false,
+      "constants": [
+        "query@0",
+        "train0@0"
+      ],
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "id": "op0",
+      "inputs": [],
+      "kind": "sub",
+      "latest_finish": 1,
+      "latest_start": 0,
+      "layer": 0,
+      "level": null,
+      "method": "sub",
+      "outputs": [
+        "diff0@1"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [],
+      "scale": null,
+      "slack": 0,
+      "source_line": 13,
+      "source_text": "ckks_eva.sub(query, train0, diff0)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [],
+        "writes": [
+          "diff1"
+        ]
+      },
+      "barrier": false,
+      "constants": [
+        "query@0",
+        "train1@0"
+      ],
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "id": "op1",
+      "inputs": [],
+      "kind": "sub",
+      "latest_finish": 5,
+      "latest_start": 4,
+      "layer": 0,
+      "level": null,
+      "method": "sub",
+      "outputs": [
+        "diff1@1"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [],
+      "scale": null,
+      "slack": 4,
+      "source_line": 14,
+      "source_text": "ckks_eva.sub(query, train1, diff1)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "diff0",
+          "diff0"
+        ],
+        "writes": [
+          "sq0"
+        ]
+      },
+      "barrier": false,
+      "constants": [],
+      "cost": 5,
+      "critical": true,
+      "earliest_finish": 6,
+      "earliest_start": 1,
+      "id": "op2",
+      "inputs": [
+        "diff0@1",
+        "diff0@1"
+      ],
+      "kind": "multiply",
+      "latest_finish": 6,
+      "latest_start": 1,
+      "layer": 1,
+      "level": null,
+      "method": "multiply",
+      "outputs": [
+        "sq0@1"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [],
+      "scale": null,
+      "slack": 0,
+      "source_line": 15,
+      "source_text": "ckks_eva.multiply(diff0, diff0, sq0)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "diff1",
+          "diff1"
+        ],
+        "writes": [
+          "sq1"
+        ]
+      },
+      "barrier": false,
+      "constants": [],
+      "cost": 5,
+      "critical": false,
+      "earliest_finish": 6,
+      "earliest_start": 1,
+      "id": "op3",
+      "inputs": [
+        "diff1@1",
+        "diff1@1"
+      ],
+      "kind": "multiply",
+      "latest_finish": 10,
+      "latest_start": 5,
+      "layer": 1,
+      "level": null,
+      "method": "multiply",
+      "outputs": [
+        "sq1@1"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [],
+      "scale": null,
+      "slack": 4,
+      "source_line": 16,
+      "source_text": "ckks_eva.multiply(diff1, diff1, sq1)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "sq0"
+        ],
+        "writes": [
+          "rot0"
+        ]
+      },
+      "barrier": false,
+      "constants": [
+        "1@0"
+      ],
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 10,
+      "earliest_start": 6,
+      "id": "op4",
+      "inputs": [
+        "sq0@1"
+      ],
+      "kind": "rotate",
+      "latest_finish": 10,
+      "latest_start": 6,
+      "layer": 2,
+      "level": null,
+      "method": "rotate",
+      "outputs": [
+        "rot0@1"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [
+        "galois_keys@0"
+      ],
+      "scale": null,
+      "slack": 0,
+      "source_line": 17,
+      "source_text": "ckks_eva.rotate(sq0, rot0, 1, galois_keys)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "rot0",
+          "sq1"
+        ],
+        "writes": [
+          "total"
+        ]
+      },
+      "barrier": false,
+      "constants": [],
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 11,
+      "earliest_start": 10,
+      "id": "op5",
+      "inputs": [
+        "rot0@1",
+        "sq1@1"
+      ],
+      "kind": "add",
+      "latest_finish": 11,
+      "latest_start": 10,
+      "layer": 3,
+      "level": null,
+      "method": "add",
+      "outputs": [
+        "total@1"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [],
+      "scale": null,
+      "slack": 0,
+      "source_line": 18,
+      "source_text": "ckks_eva.add(rot0, sq1, total)"
+    }
+  ],
+  "parallel_groups": [
+    [
+      "op0",
+      "op1"
+    ],
+    [
+      "op2",
+      "op3"
+    ],
+    [
+      "op4"
+    ],
+    [
+      "op5"
+    ]
+  ],
+  "source_file": "tools/he_dag/samples/knn_ckks_demo.cpp",
+  "source_hash": "d013c5847c7b66ae395e75626aca25102c9759ebd5a102bfe7bbd0d01a4a5ed5",
+  "unsupported": [],
+  "values": [
+    {
+      "annotations": {},
+      "id": "diff0@0",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "diff0",
+      "producer": null,
+      "source_line": 11,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "diff1@0",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "diff1",
+      "producer": null,
+      "source_line": 11,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "sq0@0",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "sq0",
+      "producer": null,
+      "source_line": 11,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "sq1@0",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "sq1",
+      "producer": null,
+      "source_line": 11,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "rot0@0",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "rot0",
+      "producer": null,
+      "source_line": 11,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "total@0",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "total",
+      "producer": null,
+      "source_line": 11,
+      "version": 0
+    },
+    {
+      "annotations": {
+        "expression": "query"
+      },
+      "id": "query@0",
+      "is_ephemeral": true,
+      "kind": "external",
+      "name": "query",
+      "producer": null,
+      "source_line": 13,
+      "version": 0
+    },
+    {
+      "annotations": {
+        "expression": "train0"
+      },
+      "id": "train0@0",
+      "is_ephemeral": true,
+      "kind": "external",
+      "name": "train0",
+      "producer": null,
+      "source_line": 13,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "diff0@1",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "diff0",
+      "producer": "op0",
+      "source_line": 13,
+      "version": 1
+    },
+    {
+      "annotations": {
+        "expression": "train1"
+      },
+      "id": "train1@0",
+      "is_ephemeral": true,
+      "kind": "external",
+      "name": "train1",
+      "producer": null,
+      "source_line": 14,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "diff1@1",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "diff1",
+      "producer": "op1",
+      "source_line": 14,
+      "version": 1
+    },
+    {
+      "annotations": {},
+      "id": "sq0@1",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "sq0",
+      "producer": "op2",
+      "source_line": 15,
+      "version": 1
+    },
+    {
+      "annotations": {},
+      "id": "sq1@1",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "sq1",
+      "producer": "op3",
+      "source_line": 16,
+      "version": 1
+    },
+    {
+      "annotations": {},
+      "id": "rot0@1",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "rot0",
+      "producer": "op4",
+      "source_line": 17,
+      "version": 1
+    },
+    {
+      "annotations": {
+        "expression": "1"
+      },
+      "id": "1@0",
+      "is_ephemeral": true,
+      "kind": "literal",
+      "name": "1",
+      "producer": null,
+      "source_line": 17,
+      "version": 0
+    },
+    {
+      "annotations": {
+        "expression": "galois_keys"
+      },
+      "id": "galois_keys@0",
+      "is_ephemeral": true,
+      "kind": "external",
+      "name": "galois_keys",
+      "producer": null,
+      "source_line": 17,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "total@1",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "total",
+      "producer": "op5",
+      "source_line": 18,
+      "version": 1
+    }
+  ]
+}
