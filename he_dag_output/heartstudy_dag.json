@@ -1,0 +1,3301 @@
+{
+  "edges": [
+    {
+      "dst": "op8",
+      "kind": "data",
+      "reason": "plain_age",
+      "src": "op2",
+      "value": "plain_age@1"
+    },
+    {
+      "dst": "op9",
+      "kind": "data",
+      "reason": "plain_sbp",
+      "src": "op3",
+      "value": "plain_sbp@1"
+    },
+    {
+      "dst": "op10",
+      "kind": "data",
+      "reason": "plain_dbp",
+      "src": "op4",
+      "value": "plain_dbp@1"
+    },
+    {
+      "dst": "op11",
+      "kind": "data",
+      "reason": "plain_chl",
+      "src": "op5",
+      "value": "plain_chl@1"
+    },
+    {
+      "dst": "op12",
+      "kind": "data",
+      "reason": "plain_weight",
+      "src": "op6",
+      "value": "plain_weight@1"
+    },
+    {
+      "dst": "op13",
+      "kind": "data",
+      "reason": "plain_height",
+      "src": "op7",
+      "value": "plain_height@1"
+    },
+    {
+      "dst": "op14",
+      "kind": "data",
+      "reason": "cipher_age",
+      "src": "op8",
+      "value": "cipher_age@1"
+    },
+    {
+      "dst": "op14",
+      "kind": "anti",
+      "reason": "overwrite cipher_age",
+      "src": "op8",
+      "value": "cipher_age@2"
+    },
+    {
+      "dst": "op15",
+      "kind": "data",
+      "reason": "cipher_sbp",
+      "src": "op9",
+      "value": "cipher_sbp@1"
+    },
+    {
+      "dst": "op15",
+      "kind": "anti",
+      "reason": "overwrite cipher_sbp",
+      "src": "op9",
+      "value": "cipher_sbp@2"
+    },
+    {
+      "dst": "op16",
+      "kind": "data",
+      "reason": "cipher_dbp",
+      "src": "op10",
+      "value": "cipher_dbp@1"
+    },
+    {
+      "dst": "op16",
+      "kind": "anti",
+      "reason": "overwrite cipher_dbp",
+      "src": "op10",
+      "value": "cipher_dbp@2"
+    },
+    {
+      "dst": "op17",
+      "kind": "data",
+      "reason": "cipher_chl",
+      "src": "op11",
+      "value": "cipher_chl@1"
+    },
+    {
+      "dst": "op17",
+      "kind": "anti",
+      "reason": "overwrite cipher_chl",
+      "src": "op11",
+      "value": "cipher_chl@2"
+    },
+    {
+      "dst": "op18",
+      "kind": "data",
+      "reason": "cipher_weight",
+      "src": "op12",
+      "value": "cipher_weight@1"
+    },
+    {
+      "dst": "op18",
+      "kind": "anti",
+      "reason": "overwrite cipher_weight",
+      "src": "op12",
+      "value": "cipher_weight@2"
+    },
+    {
+      "dst": "op19",
+      "kind": "data",
+      "reason": "cipher_height",
+      "src": "op13",
+      "value": "cipher_height@1"
+    },
+    {
+      "dst": "op19",
+      "kind": "anti",
+      "reason": "overwrite cipher_height",
+      "src": "op13",
+      "value": "cipher_height@2"
+    },
+    {
+      "dst": "op20",
+      "kind": "data",
+      "reason": "cipher_age",
+      "src": "op14",
+      "value": "cipher_age@2"
+    },
+    {
+      "dst": "op20",
+      "kind": "data",
+      "reason": "cipher_sbp",
+      "src": "op15",
+      "value": "cipher_sbp@2"
+    },
+    {
+      "dst": "op21",
+      "kind": "data",
+      "reason": "cipher_x",
+      "src": "op20",
+      "value": "cipher_x@1"
+    },
+    {
+      "dst": "op21",
+      "kind": "data",
+      "reason": "cipher_dbp",
+      "src": "op16",
+      "value": "cipher_dbp@2"
+    },
+    {
+      "dst": "op21",
+      "kind": "anti",
+      "reason": "overwrite cipher_x",
+      "src": "op20",
+      "value": "cipher_x@2"
+    },
+    {
+      "dst": "op22",
+      "kind": "data",
+      "reason": "cipher_x",
+      "src": "op21",
+      "value": "cipher_x@2"
+    },
+    {
+      "dst": "op22",
+      "kind": "data",
+      "reason": "cipher_chl",
+      "src": "op17",
+      "value": "cipher_chl@2"
+    },
+    {
+      "dst": "op22",
+      "kind": "anti",
+      "reason": "overwrite cipher_x",
+      "src": "op21",
+      "value": "cipher_x@3"
+    },
+    {
+      "dst": "op23",
+      "kind": "data",
+      "reason": "cipher_x",
+      "src": "op22",
+      "value": "cipher_x@3"
+    },
+    {
+      "dst": "op23",
+      "kind": "data",
+      "reason": "cipher_weight",
+      "src": "op18",
+      "value": "cipher_weight@2"
+    },
+    {
+      "dst": "op23",
+      "kind": "anti",
+      "reason": "overwrite cipher_x",
+      "src": "op22",
+      "value": "cipher_x@4"
+    },
+    {
+      "dst": "op24",
+      "kind": "data",
+      "reason": "cipher_x",
+      "src": "op23",
+      "value": "cipher_x@4"
+    },
+    {
+      "dst": "op24",
+      "kind": "data",
+      "reason": "cipher_height",
+      "src": "op19",
+      "value": "cipher_height@2"
+    },
+    {
+      "dst": "op24",
+      "kind": "anti",
+      "reason": "overwrite cipher_x",
+      "src": "op23",
+      "value": "cipher_x@5"
+    },
+    {
+      "dst": "op25",
+      "kind": "data",
+      "reason": "cipher_x",
+      "src": "op24",
+      "value": "cipher_x@5"
+    },
+    {
+      "dst": "op25",
+      "kind": "anti",
+      "reason": "overwrite cipher_x",
+      "src": "op24",
+      "value": "cipher_x@6"
+    },
+    {
+      "dst": "op26",
+      "kind": "data",
+      "reason": "cipher_x",
+      "src": "op25",
+      "value": "cipher_x@6"
+    },
+    {
+      "dst": "op26",
+      "kind": "data",
+      "reason": "cipher_x",
+      "src": "op25",
+      "value": "cipher_x@6"
+    },
+    {
+      "dst": "op26",
+      "kind": "resource",
+      "reason": "relin_keys",
+      "src": "op1",
+      "value": "relin_keys@1"
+    },
+    {
+      "dst": "op27",
+      "kind": "data",
+      "reason": "cipher_x_square",
+      "src": "op26",
+      "value": "cipher_x_square@1"
+    },
+    {
+      "dst": "op27",
+      "kind": "anti",
+      "reason": "overwrite cipher_x_square",
+      "src": "op26",
+      "value": "cipher_x_square@2"
+    },
+    {
+      "dst": "op28",
+      "kind": "data",
+      "reason": "cipher_x_square",
+      "src": "op27",
+      "value": "cipher_x_square@2"
+    },
+    {
+      "dst": "op29",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op28",
+      "value": "cipher_result@1"
+    },
+    {
+      "dst": "op29",
+      "kind": "anti",
+      "reason": "overwrite cipher_result",
+      "src": "op28",
+      "value": "cipher_result@2"
+    },
+    {
+      "dst": "op30",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op29",
+      "value": "cipher_result@2"
+    },
+    {
+      "dst": "op30",
+      "kind": "anti",
+      "reason": "overwrite cipher_result",
+      "src": "op29",
+      "value": "cipher_result@3"
+    },
+    {
+      "dst": "op31",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op30",
+      "value": "cipher_result@3"
+    },
+    {
+      "dst": "op31",
+      "kind": "data",
+      "reason": "cipher_x_square",
+      "src": "op27",
+      "value": "cipher_x_square@2"
+    },
+    {
+      "dst": "op31",
+      "kind": "resource",
+      "reason": "relin_keys",
+      "src": "op1",
+      "value": "relin_keys@1"
+    },
+    {
+      "dst": "op31",
+      "kind": "anti",
+      "reason": "overwrite cipher_result",
+      "src": "op30",
+      "value": "cipher_result@4"
+    },
+    {
+      "dst": "op32",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op31",
+      "value": "cipher_result@4"
+    },
+    {
+      "dst": "op32",
+      "kind": "anti",
+      "reason": "overwrite cipher_result",
+      "src": "op31",
+      "value": "cipher_result@5"
+    },
+    {
+      "dst": "op33",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op32",
+      "value": "cipher_result@5"
+    },
+    {
+      "dst": "op33",
+      "kind": "anti",
+      "reason": "overwrite cipher_result",
+      "src": "op32",
+      "value": "cipher_result@6"
+    },
+    {
+      "dst": "op34",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op33",
+      "value": "cipher_result@6"
+    },
+    {
+      "dst": "op34",
+      "kind": "data",
+      "reason": "cipher_x_square",
+      "src": "op27",
+      "value": "cipher_x_square@2"
+    },
+    {
+      "dst": "op34",
+      "kind": "resource",
+      "reason": "relin_keys",
+      "src": "op1",
+      "value": "relin_keys@1"
+    },
+    {
+      "dst": "op34",
+      "kind": "anti",
+      "reason": "overwrite cipher_result",
+      "src": "op33",
+      "value": "cipher_result@7"
+    },
+    {
+      "dst": "op35",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op34",
+      "value": "cipher_result@7"
+    },
+    {
+      "dst": "op35",
+      "kind": "anti",
+      "reason": "overwrite cipher_result",
+      "src": "op34",
+      "value": "cipher_result@8"
+    },
+    {
+      "dst": "op36",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op35",
+      "value": "cipher_result@8"
+    },
+    {
+      "dst": "op36",
+      "kind": "anti",
+      "reason": "overwrite cipher_result",
+      "src": "op35",
+      "value": "cipher_result@9"
+    },
+    {
+      "dst": "op37",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op36",
+      "value": "cipher_result@9"
+    },
+    {
+      "dst": "op37",
+      "kind": "data",
+      "reason": "cipher_x_square",
+      "src": "op27",
+      "value": "cipher_x_square@2"
+    },
+    {
+      "dst": "op37",
+      "kind": "resource",
+      "reason": "relin_keys",
+      "src": "op1",
+      "value": "relin_keys@1"
+    },
+    {
+      "dst": "op37",
+      "kind": "anti",
+      "reason": "overwrite cipher_result",
+      "src": "op36",
+      "value": "cipher_result@10"
+    },
+    {
+      "dst": "op38",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op37",
+      "value": "cipher_result@10"
+    },
+    {
+      "dst": "op38",
+      "kind": "anti",
+      "reason": "overwrite cipher_result",
+      "src": "op37",
+      "value": "cipher_result@11"
+    },
+    {
+      "dst": "op39",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op38",
+      "value": "cipher_result@11"
+    },
+    {
+      "dst": "op39",
+      "kind": "data",
+      "reason": "cipher_x",
+      "src": "op25",
+      "value": "cipher_x@6"
+    },
+    {
+      "dst": "op39",
+      "kind": "resource",
+      "reason": "relin_keys",
+      "src": "op1",
+      "value": "relin_keys@1"
+    },
+    {
+      "dst": "op39",
+      "kind": "anti",
+      "reason": "overwrite cipher_result",
+      "src": "op38",
+      "value": "cipher_result@12"
+    },
+    {
+      "dst": "op40",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op39",
+      "value": "cipher_result@12"
+    },
+    {
+      "dst": "op40",
+      "kind": "anti",
+      "reason": "overwrite cipher_result",
+      "src": "op39",
+      "value": "cipher_result@13"
+    },
+    {
+      "dst": "op41",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op40",
+      "value": "cipher_result@13"
+    },
+    {
+      "dst": "op42",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op40",
+      "value": "cipher_result@13"
+    }
+  ],
+  "function": "main",
+  "metadata": {
+    "critical_path_cost": 75,
+    "ir_version": 1,
+    "layer_validation": [],
+    "max_parallel_width": 8,
+    "supported_methods": [
+      "add",
+      "add_const",
+      "add_plain",
+      "bootstrap",
+      "conjugate",
+      "create_galois_keys",
+      "create_public_key",
+      "create_relin_keys",
+      "decrypt",
+      "drop_modulus",
+      "drop_modulus_to_next",
+      "encode",
+      "encrypt",
+      "evaluate_poly_vector",
+      "multiply",
+      "multiply_const",
+      "multiply_plain",
+      "multiply_relin",
+      "multiply_relin_dynamic",
+      "ntt_fwd",
+      "ntt_inv",
+      "read",
+      "relinearize",
+      "rescale",
+      "rescale_dynamic",
+      "rotate",
+      "sub",
+      "sub_plain"
+    ],
+    "topological_order": [
+      "op0",
+      "op1",
+      "op2",
+      "op3",
+      "op4",
+      "op5",
+      "op6",
+      "op7",
+      "op8",
+      "op9",
+      "op10",
+      "op11",
+      "op12",
+      "op13",
+      "op14",
+      "op15",
+      "op16",
+      "op17",
+      "op18",
+      "op19",
+      "op20",
+      "op21",
+      "op22",
+      "op23",
+      "op24",
+      "op25",
+      "op26",
+      "op27",
+      "op28",
+      "op29",
+      "op30",
+      "op31",
+      "op32",
+      "op33",
+      "op34",
+      "op35",
+      "op36",
+      "op37",
+      "op38",
+      "op39",
+      "op40",
+      "op41",
+      "op42"
+    ],
+    "value_kinds": [
+      "ciphertext",
+      "decryptor",
+      "encoder",
+      "encryptor",
+      "evaluator",
+      "external",
+      "galois_keys",
+      "key_generator",
+      "literal",
+      "plaintext",
+      "public_key",
+      "relin_keys",
+      "secret_key"
+    ]
+  },
+  "ops": [
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [],
+        "writes": [
+          "public_key"
+        ]
+      },
+      "barrier": false,
+      "constants": [],
+      "cost": 2,
+      "critical": false,
+      "earliest_finish": 2,
+      "earliest_start": 0,
+      "id": "op0",
+      "inputs": [],
+      "kind": "create_public_key",
+      "latest_finish": 75,
+      "latest_start": 73,
+      "layer": 0,
+      "level": null,
+      "method": "create_public_key",
+      "outputs": [
+        "public_key@1"
+      ],
+      "receiver": "kgen",
+      "resources": [],
+      "scale": null,
+      "slack": 73,
+      "source_line": 88,
+      "source_text": "kgen.create_public_key(public_key)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [],
+        "writes": [
+          "relin_keys"
+        ]
+      },
+      "barrier": false,
+      "constants": [],
+      "cost": 2,
+      "critical": false,
+      "earliest_finish": 2,
+      "earliest_start": 0,
+      "id": "op1",
+      "inputs": [],
+      "kind": "create_relin_keys",
+      "latest_finish": 17,
+      "latest_start": 15,
+      "layer": 0,
+      "level": null,
+      "method": "create_relin_keys",
+      "outputs": [
+        "relin_keys@1"
+      ],
+      "receiver": "kgen",
+      "resources": [],
+      "scale": null,
+      "slack": 15,
+      "source_line": 89,
+      "source_text": "kgen.create_relin_keys(relin_keys)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [],
+        "writes": [
+          "plain_age"
+        ]
+      },
+      "barrier": false,
+      "constants": [
+        "message_age@0",
+        "ckks_param_literal.scale()@0"
+      ],
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "id": "op2",
+      "inputs": [],
+      "kind": "encode",
+      "latest_finish": 1,
+      "latest_start": 0,
+      "layer": 0,
+      "level": null,
+      "method": "encode",
+      "outputs": [
+        "plain_age@1"
+      ],
+      "receiver": "ckks_encoder",
+      "resources": [],
+      "scale": null,
+      "slack": 0,
+      "source_line": 94,
+      "source_text": "ckks_encoder.encode(message_age, ckks_param_literal.scale(), plain_age)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [],
+        "writes": [
+          "plain_sbp"
+        ]
+      },
+      "barrier": false,
+      "constants": [
+        "message_sbp@0",
+        "ckks_param_literal.scale()@0"
+      ],
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "id": "op3",
+      "inputs": [],
+      "kind": "encode",
+      "latest_finish": 1,
+      "latest_start": 0,
+      "layer": 0,
+      "level": null,
+      "method": "encode",
+      "outputs": [
+        "plain_sbp@1"
+      ],
+      "receiver": "ckks_encoder",
+      "resources": [],
+      "scale": null,
+      "slack": 0,
+      "source_line": 95,
+      "source_text": "ckks_encoder.encode(message_sbp, ckks_param_literal.scale(), plain_sbp)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [],
+        "writes": [
+          "plain_dbp"
+        ]
+      },
+      "barrier": false,
+      "constants": [
+        "message_dbp@0",
+        "ckks_param_literal.scale()@0"
+      ],
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "id": "op4",
+      "inputs": [],
+      "kind": "encode",
+      "latest_finish": 2,
+      "latest_start": 1,
+      "layer": 0,
+      "level": null,
+      "method": "encode",
+      "outputs": [
+        "plain_dbp@1"
+      ],
+      "receiver": "ckks_encoder",
+      "resources": [],
+      "scale": null,
+      "slack": 1,
+      "source_line": 96,
+      "source_text": "ckks_encoder.encode(message_dbp, ckks_param_literal.scale(), plain_dbp)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [],
+        "writes": [
+          "plain_chl"
+        ]
+      },
+      "barrier": false,
+      "constants": [
+        "message_chl@0",
+        "ckks_param_literal.scale()@0"
+      ],
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "id": "op5",
+      "inputs": [],
+      "kind": "encode",
+      "latest_finish": 3,
+      "latest_start": 2,
+      "layer": 0,
+      "level": null,
+      "method": "encode",
+      "outputs": [
+        "plain_chl@1"
+      ],
+      "receiver": "ckks_encoder",
+      "resources": [],
+      "scale": null,
+      "slack": 2,
+      "source_line": 97,
+      "source_text": "ckks_encoder.encode(message_chl, ckks_param_literal.scale(), plain_chl)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [],
+        "writes": [
+          "plain_weight"
+        ]
+      },
+      "barrier": false,
+      "constants": [
+        "message_weight@0",
+        "ckks_param_literal.scale()@0"
+      ],
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "id": "op6",
+      "inputs": [],
+      "kind": "encode",
+      "latest_finish": 4,
+      "latest_start": 3,
+      "layer": 0,
+      "level": null,
+      "method": "encode",
+      "outputs": [
+        "plain_weight@1"
+      ],
+      "receiver": "ckks_encoder",
+      "resources": [],
+      "scale": null,
+      "slack": 3,
+      "source_line": 98,
+      "source_text": "ckks_encoder.encode(message_weight, ckks_param_literal.scale(), plain_weight)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [],
+        "writes": [
+          "plain_height"
+        ]
+      },
+      "barrier": false,
+      "constants": [
+        "message_height@0",
+        "ckks_param_literal.scale()@0"
+      ],
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "id": "op7",
+      "inputs": [],
+      "kind": "encode",
+      "latest_finish": 5,
+      "latest_start": 4,
+      "layer": 0,
+      "level": null,
+      "method": "encode",
+      "outputs": [
+        "plain_height@1"
+      ],
+      "receiver": "ckks_encoder",
+      "resources": [],
+      "scale": null,
+      "slack": 4,
+      "source_line": 99,
+      "source_text": "ckks_encoder.encode(message_height, ckks_param_literal.scale(), plain_height)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "plain_age"
+        ],
+        "writes": [
+          "cipher_age"
+        ]
+      },
+      "barrier": false,
+      "constants": [],
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 5,
+      "earliest_start": 1,
+      "id": "op8",
+      "inputs": [
+        "plain_age@1"
+      ],
+      "kind": "encrypt",
+      "latest_finish": 5,
+      "latest_start": 1,
+      "layer": 1,
+      "level": null,
+      "method": "encrypt",
+      "outputs": [
+        "cipher_age@1"
+      ],
+      "receiver": "enc",
+      "resources": [],
+      "scale": null,
+      "slack": 0,
+      "source_line": 102,
+      "source_text": "enc.encrypt(plain_age, cipher_age)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "plain_sbp"
+        ],
+        "writes": [
+          "cipher_sbp"
+        ]
+      },
+      "barrier": false,
+      "constants": [],
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 5,
+      "earliest_start": 1,
+      "id": "op9",
+      "inputs": [
+        "plain_sbp@1"
+      ],
+      "kind": "encrypt",
+      "latest_finish": 5,
+      "latest_start": 1,
+      "layer": 1,
+      "level": null,
+      "method": "encrypt",
+      "outputs": [
+        "cipher_sbp@1"
+      ],
+      "receiver": "enc",
+      "resources": [],
+      "scale": null,
+      "slack": 0,
+      "source_line": 103,
+      "source_text": "enc.encrypt(plain_sbp, cipher_sbp)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "plain_dbp"
+        ],
+        "writes": [
+          "cipher_dbp"
+        ]
+      },
+      "barrier": false,
+      "constants": [],
+      "cost": 4,
+      "critical": false,
+      "earliest_finish": 5,
+      "earliest_start": 1,
+      "id": "op10",
+      "inputs": [
+        "plain_dbp@1"
+      ],
+      "kind": "encrypt",
+      "latest_finish": 6,
+      "latest_start": 2,
+      "layer": 1,
+      "level": null,
+      "method": "encrypt",
+      "outputs": [
+        "cipher_dbp@1"
+      ],
+      "receiver": "enc",
+      "resources": [],
+      "scale": null,
+      "slack": 1,
+      "source_line": 104,
+      "source_text": "enc.encrypt(plain_dbp, cipher_dbp)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "plain_chl"
+        ],
+        "writes": [
+          "cipher_chl"
+        ]
+      },
+      "barrier": false,
+      "constants": [],
+      "cost": 4,
+      "critical": false,
+      "earliest_finish": 5,
+      "earliest_start": 1,
+      "id": "op11",
+      "inputs": [
+        "plain_chl@1"
+      ],
+      "kind": "encrypt",
+      "latest_finish": 7,
+      "latest_start": 3,
+      "layer": 1,
+      "level": null,
+      "method": "encrypt",
+      "outputs": [
+        "cipher_chl@1"
+      ],
+      "receiver": "enc",
+      "resources": [],
+      "scale": null,
+      "slack": 2,
+      "source_line": 105,
+      "source_text": "enc.encrypt(plain_chl, cipher_chl)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "plain_weight"
+        ],
+        "writes": [
+          "cipher_weight"
+        ]
+      },
+      "barrier": false,
+      "constants": [],
+      "cost": 4,
+      "critical": false,
+      "earliest_finish": 5,
+      "earliest_start": 1,
+      "id": "op12",
+      "inputs": [
+        "plain_weight@1"
+      ],
+      "kind": "encrypt",
+      "latest_finish": 8,
+      "latest_start": 4,
+      "layer": 1,
+      "level": null,
+      "method": "encrypt",
+      "outputs": [
+        "cipher_weight@1"
+      ],
+      "receiver": "enc",
+      "resources": [],
+      "scale": null,
+      "slack": 3,
+      "source_line": 106,
+      "source_text": "enc.encrypt(plain_weight, cipher_weight)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "plain_height"
+        ],
+        "writes": [
+          "cipher_height"
+        ]
+      },
+      "barrier": false,
+      "constants": [],
+      "cost": 4,
+      "critical": false,
+      "earliest_finish": 5,
+      "earliest_start": 1,
+      "id": "op13",
+      "inputs": [
+        "plain_height@1"
+      ],
+      "kind": "encrypt",
+      "latest_finish": 9,
+      "latest_start": 5,
+      "layer": 1,
+      "level": null,
+      "method": "encrypt",
+      "outputs": [
+        "cipher_height@1"
+      ],
+      "receiver": "enc",
+      "resources": [],
+      "scale": null,
+      "slack": 4,
+      "source_line": 107,
+      "source_text": "enc.encrypt(plain_height, cipher_height)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_age"
+        ],
+        "writes": [
+          "cipher_age"
+        ]
+      },
+      "barrier": false,
+      "constants": [
+        "coef_age@0",
+        "scale@0"
+      ],
+      "cost": 3,
+      "critical": true,
+      "earliest_finish": 8,
+      "earliest_start": 5,
+      "id": "op14",
+      "inputs": [
+        "cipher_age@1"
+      ],
+      "kind": "multiply_const",
+      "latest_finish": 8,
+      "latest_start": 5,
+      "layer": 2,
+      "level": null,
+      "method": "multiply_const",
+      "outputs": [
+        "cipher_age@2"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [
+        "ckks_encoder@0"
+      ],
+      "scale": null,
+      "slack": 0,
+      "source_line": 114,
+      "source_text": "ckks_eva->multiply_const(cipher_age, coef_age, scale, cipher_age, ckks_encoder)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_sbp"
+        ],
+        "writes": [
+          "cipher_sbp"
+        ]
+      },
+      "barrier": false,
+      "constants": [
+        "coef_sbp@0",
+        "scale@0"
+      ],
+      "cost": 3,
+      "critical": true,
+      "earliest_finish": 8,
+      "earliest_start": 5,
+      "id": "op15",
+      "inputs": [
+        "cipher_sbp@1"
+      ],
+      "kind": "multiply_const",
+      "latest_finish": 8,
+      "latest_start": 5,
+      "layer": 2,
+      "level": null,
+      "method": "multiply_const",
+      "outputs": [
+        "cipher_sbp@2"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [
+        "ckks_encoder@0"
+      ],
+      "scale": null,
+      "slack": 0,
+      "source_line": 115,
+      "source_text": "ckks_eva->multiply_const(cipher_sbp, coef_sbp, scale, cipher_sbp, ckks_encoder)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_dbp"
+        ],
+        "writes": [
+          "cipher_dbp"
+        ]
+      },
+      "barrier": false,
+      "constants": [
+        "coef_dbp@0",
+        "scale@0"
+      ],
+      "cost": 3,
+      "critical": false,
+      "earliest_finish": 8,
+      "earliest_start": 5,
+      "id": "op16",
+      "inputs": [
+        "cipher_dbp@1"
+      ],
+      "kind": "multiply_const",
+      "latest_finish": 9,
+      "latest_start": 6,
+      "layer": 2,
+      "level": null,
+      "method": "multiply_const",
+      "outputs": [
+        "cipher_dbp@2"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [
+        "ckks_encoder@0"
+      ],
+      "scale": null,
+      "slack": 1,
+      "source_line": 116,
+      "source_text": "ckks_eva->multiply_const(cipher_dbp, coef_dbp, scale, cipher_dbp, ckks_encoder)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_chl"
+        ],
+        "writes": [
+          "cipher_chl"
+        ]
+      },
+      "barrier": false,
+      "constants": [
+        "coef_chl@0",
+        "scale@0"
+      ],
+      "cost": 3,
+      "critical": false,
+      "earliest_finish": 8,
+      "earliest_start": 5,
+      "id": "op17",
+      "inputs": [
+        "cipher_chl@1"
+      ],
+      "kind": "multiply_const",
+      "latest_finish": 10,
+      "latest_start": 7,
+      "layer": 2,
+      "level": null,
+      "method": "multiply_const",
+      "outputs": [
+        "cipher_chl@2"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [
+        "ckks_encoder@0"
+      ],
+      "scale": null,
+      "slack": 2,
+      "source_line": 117,
+      "source_text": "ckks_eva->multiply_const(cipher_chl, coef_chl, scale, cipher_chl, ckks_encoder)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_weight"
+        ],
+        "writes": [
+          "cipher_weight"
+        ]
+      },
+      "barrier": false,
+      "constants": [
+        "coef_weight@0",
+        "scale@0"
+      ],
+      "cost": 3,
+      "critical": false,
+      "earliest_finish": 8,
+      "earliest_start": 5,
+      "id": "op18",
+      "inputs": [
+        "cipher_weight@1"
+      ],
+      "kind": "multiply_const",
+      "latest_finish": 11,
+      "latest_start": 8,
+      "layer": 2,
+      "level": null,
+      "method": "multiply_const",
+      "outputs": [
+        "cipher_weight@2"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [
+        "ckks_encoder@0"
+      ],
+      "scale": null,
+      "slack": 3,
+      "source_line": 118,
+      "source_text": "ckks_eva->multiply_const(cipher_weight, coef_weight, scale, cipher_weight, ckks_encoder)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_height"
+        ],
+        "writes": [
+          "cipher_height"
+        ]
+      },
+      "barrier": false,
+      "constants": [
+        "coef_height@0",
+        "scale@0"
+      ],
+      "cost": 3,
+      "critical": false,
+      "earliest_finish": 8,
+      "earliest_start": 5,
+      "id": "op19",
+      "inputs": [
+        "cipher_height@1"
+      ],
+      "kind": "multiply_const",
+      "latest_finish": 12,
+      "latest_start": 9,
+      "layer": 2,
+      "level": null,
+      "method": "multiply_const",
+      "outputs": [
+        "cipher_height@2"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [
+        "ckks_encoder@0"
+      ],
+      "scale": null,
+      "slack": 4,
+      "source_line": 119,
+      "source_text": "ckks_eva->multiply_const(cipher_height, coef_height, scale, cipher_height, ckks_encoder)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_age",
+          "cipher_sbp"
+        ],
+        "writes": [
+          "cipher_x"
+        ]
+      },
+      "barrier": false,
+      "constants": [],
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 9,
+      "earliest_start": 8,
+      "id": "op20",
+      "inputs": [
+        "cipher_age@2",
+        "cipher_sbp@2"
+      ],
+      "kind": "add",
+      "latest_finish": 9,
+      "latest_start": 8,
+      "layer": 3,
+      "level": null,
+      "method": "add",
+      "outputs": [
+        "cipher_x@1"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [],
+      "scale": null,
+      "slack": 0,
+      "source_line": 121,
+      "source_text": "ckks_eva->add(cipher_age, cipher_sbp, cipher_x)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_x",
+          "cipher_dbp"
+        ],
+        "writes": [
+          "cipher_x"
+        ]
+      },
+      "barrier": false,
+      "constants": [],
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 10,
+      "earliest_start": 9,
+      "id": "op21",
+      "inputs": [
+        "cipher_x@1",
+        "cipher_dbp@2"
+      ],
+      "kind": "add",
+      "latest_finish": 10,
+      "latest_start": 9,
+      "layer": 4,
+      "level": null,
+      "method": "add",
+      "outputs": [
+        "cipher_x@2"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [],
+      "scale": null,
+      "slack": 0,
+      "source_line": 122,
+      "source_text": "ckks_eva->add(cipher_x, cipher_dbp, cipher_x)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_x",
+          "cipher_chl"
+        ],
+        "writes": [
+          "cipher_x"
+        ]
+      },
+      "barrier": false,
+      "constants": [],
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 11,
+      "earliest_start": 10,
+      "id": "op22",
+      "inputs": [
+        "cipher_x@2",
+        "cipher_chl@2"
+      ],
+      "kind": "add",
+      "latest_finish": 11,
+      "latest_start": 10,
+      "layer": 5,
+      "level": null,
+      "method": "add",
+      "outputs": [
+        "cipher_x@3"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [],
+      "scale": null,
+      "slack": 0,
+      "source_line": 123,
+      "source_text": "ckks_eva->add(cipher_x, cipher_chl, cipher_x)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_x",
+          "cipher_weight"
+        ],
+        "writes": [
+          "cipher_x"
+        ]
+      },
+      "barrier": false,
+      "constants": [],
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 12,
+      "earliest_start": 11,
+      "id": "op23",
+      "inputs": [
+        "cipher_x@3",
+        "cipher_weight@2"
+      ],
+      "kind": "add",
+      "latest_finish": 12,
+      "latest_start": 11,
+      "layer": 6,
+      "level": null,
+      "method": "add",
+      "outputs": [
+        "cipher_x@4"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [],
+      "scale": null,
+      "slack": 0,
+      "source_line": 124,
+      "source_text": "ckks_eva->add(cipher_x, cipher_weight, cipher_x)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_x",
+          "cipher_height"
+        ],
+        "writes": [
+          "cipher_x"
+        ]
+      },
+      "barrier": false,
+      "constants": [],
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 13,
+      "earliest_start": 12,
+      "id": "op24",
+      "inputs": [
+        "cipher_x@4",
+        "cipher_height@2"
+      ],
+      "kind": "add",
+      "latest_finish": 13,
+      "latest_start": 12,
+      "layer": 7,
+      "level": null,
+      "method": "add",
+      "outputs": [
+        "cipher_x@5"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [],
+      "scale": null,
+      "slack": 0,
+      "source_line": 125,
+      "source_text": "ckks_eva->add(cipher_x, cipher_height, cipher_x)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_x"
+        ],
+        "writes": [
+          "cipher_x"
+        ]
+      },
+      "barrier": true,
+      "constants": [
+        "scale@0"
+      ],
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 17,
+      "earliest_start": 13,
+      "id": "op25",
+      "inputs": [
+        "cipher_x@5"
+      ],
+      "kind": "rescale_dynamic",
+      "latest_finish": 17,
+      "latest_start": 13,
+      "layer": 8,
+      "level": null,
+      "method": "rescale_dynamic",
+      "outputs": [
+        "cipher_x@6"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [],
+      "scale": null,
+      "slack": 0,
+      "source_line": 126,
+      "source_text": "ckks_eva->rescale_dynamic(cipher_x, cipher_x, scale)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_x",
+          "cipher_x"
+        ],
+        "writes": [
+          "cipher_x_square"
+        ]
+      },
+      "barrier": true,
+      "constants": [],
+      "cost": 6,
+      "critical": true,
+      "earliest_finish": 23,
+      "earliest_start": 17,
+      "id": "op26",
+      "inputs": [
+        "cipher_x@6",
+        "cipher_x@6"
+      ],
+      "kind": "multiply_relin_dynamic",
+      "latest_finish": 23,
+      "latest_start": 17,
+      "layer": 9,
+      "level": null,
+      "method": "multiply_relin_dynamic",
+      "outputs": [
+        "cipher_x_square@1"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [
+        "relin_keys@1"
+      ],
+      "scale": null,
+      "slack": 0,
+      "source_line": 129,
+      "source_text": "ckks_eva->multiply_relin_dynamic(cipher_x, cipher_x, cipher_x_square, relin_keys)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_x_square"
+        ],
+        "writes": [
+          "cipher_x_square"
+        ]
+      },
+      "barrier": true,
+      "constants": [
+        "scale@0"
+      ],
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 27,
+      "earliest_start": 23,
+      "id": "op27",
+      "inputs": [
+        "cipher_x_square@1"
+      ],
+      "kind": "rescale_dynamic",
+      "latest_finish": 27,
+      "latest_start": 23,
+      "layer": 10,
+      "level": null,
+      "method": "rescale_dynamic",
+      "outputs": [
+        "cipher_x_square@2"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [],
+      "scale": null,
+      "slack": 0,
+      "source_line": 130,
+      "source_text": "ckks_eva->rescale_dynamic(cipher_x_square, cipher_x_square, scale)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_x_square"
+        ],
+        "writes": [
+          "cipher_result"
+        ]
+      },
+      "barrier": false,
+      "constants": [
+        "taylor_coef_9@0",
+        "scale@0"
+      ],
+      "cost": 3,
+      "critical": true,
+      "earliest_finish": 30,
+      "earliest_start": 27,
+      "id": "op28",
+      "inputs": [
+        "cipher_x_square@2"
+      ],
+      "kind": "multiply_const",
+      "latest_finish": 30,
+      "latest_start": 27,
+      "layer": 11,
+      "level": null,
+      "method": "multiply_const",
+      "outputs": [
+        "cipher_result@1"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [
+        "ckks_encoder@0"
+      ],
+      "scale": null,
+      "slack": 0,
+      "source_line": 132,
+      "source_text": "ckks_eva->multiply_const(cipher_x_square, taylor_coef_9, scale, cipher_result, ckks_encoder)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_result"
+        ],
+        "writes": [
+          "cipher_result"
+        ]
+      },
+      "barrier": false,
+      "constants": [
+        "taylor_coef_7@0"
+      ],
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 31,
+      "earliest_start": 30,
+      "id": "op29",
+      "inputs": [
+        "cipher_result@1"
+      ],
+      "kind": "add_const",
+      "latest_finish": 31,
+      "latest_start": 30,
+      "layer": 12,
+      "level": null,
+      "method": "add_const",
+      "outputs": [
+        "cipher_result@2"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [
+        "ckks_encoder@0"
+      ],
+      "scale": null,
+      "slack": 0,
+      "source_line": 133,
+      "source_text": "ckks_eva->add_const(cipher_result, taylor_coef_7, cipher_result, ckks_encoder)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_result"
+        ],
+        "writes": [
+          "cipher_result"
+        ]
+      },
+      "barrier": true,
+      "constants": [
+        "scale@0"
+      ],
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 35,
+      "earliest_start": 31,
+      "id": "op30",
+      "inputs": [
+        "cipher_result@2"
+      ],
+      "kind": "rescale_dynamic",
+      "latest_finish": 35,
+      "latest_start": 31,
+      "layer": 13,
+      "level": null,
+      "method": "rescale_dynamic",
+      "outputs": [
+        "cipher_result@3"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [],
+      "scale": null,
+      "slack": 0,
+      "source_line": 135,
+      "source_text": "ckks_eva->rescale_dynamic(cipher_result, cipher_result, scale)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_result",
+          "cipher_x_square"
+        ],
+        "writes": [
+          "cipher_result"
+        ]
+      },
+      "barrier": true,
+      "constants": [],
+      "cost": 6,
+      "critical": true,
+      "earliest_finish": 41,
+      "earliest_start": 35,
+      "id": "op31",
+      "inputs": [
+        "cipher_result@3",
+        "cipher_x_square@2"
+      ],
+      "kind": "multiply_relin_dynamic",
+      "latest_finish": 41,
+      "latest_start": 35,
+      "layer": 14,
+      "level": null,
+      "method": "multiply_relin_dynamic",
+      "outputs": [
+        "cipher_result@4"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [
+        "relin_keys@1"
+      ],
+      "scale": null,
+      "slack": 0,
+      "source_line": 136,
+      "source_text": "ckks_eva->multiply_relin_dynamic(cipher_result, cipher_x_square, cipher_result, relin_keys)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_result"
+        ],
+        "writes": [
+          "cipher_result"
+        ]
+      },
+      "barrier": false,
+      "constants": [
+        "taylor_coef_5@0"
+      ],
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 42,
+      "earliest_start": 41,
+      "id": "op32",
+      "inputs": [
+        "cipher_result@4"
+      ],
+      "kind": "add_const",
+      "latest_finish": 42,
+      "latest_start": 41,
+      "layer": 15,
+      "level": null,
+      "method": "add_const",
+      "outputs": [
+        "cipher_result@5"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [
+        "ckks_encoder@0"
+      ],
+      "scale": null,
+      "slack": 0,
+      "source_line": 137,
+      "source_text": "ckks_eva->add_const(cipher_result, taylor_coef_5, cipher_result, ckks_encoder)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_result"
+        ],
+        "writes": [
+          "cipher_result"
+        ]
+      },
+      "barrier": true,
+      "constants": [
+        "scale@0"
+      ],
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 46,
+      "earliest_start": 42,
+      "id": "op33",
+      "inputs": [
+        "cipher_result@5"
+      ],
+      "kind": "rescale_dynamic",
+      "latest_finish": 46,
+      "latest_start": 42,
+      "layer": 16,
+      "level": null,
+      "method": "rescale_dynamic",
+      "outputs": [
+        "cipher_result@6"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [],
+      "scale": null,
+      "slack": 0,
+      "source_line": 139,
+      "source_text": "ckks_eva->rescale_dynamic(cipher_result, cipher_result, scale)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_result",
+          "cipher_x_square"
+        ],
+        "writes": [
+          "cipher_result"
+        ]
+      },
+      "barrier": true,
+      "constants": [],
+      "cost": 6,
+      "critical": true,
+      "earliest_finish": 52,
+      "earliest_start": 46,
+      "id": "op34",
+      "inputs": [
+        "cipher_result@6",
+        "cipher_x_square@2"
+      ],
+      "kind": "multiply_relin_dynamic",
+      "latest_finish": 52,
+      "latest_start": 46,
+      "layer": 17,
+      "level": null,
+      "method": "multiply_relin_dynamic",
+      "outputs": [
+        "cipher_result@7"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [
+        "relin_keys@1"
+      ],
+      "scale": null,
+      "slack": 0,
+      "source_line": 140,
+      "source_text": "ckks_eva->multiply_relin_dynamic(cipher_result, cipher_x_square, cipher_result, relin_keys)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_result"
+        ],
+        "writes": [
+          "cipher_result"
+        ]
+      },
+      "barrier": false,
+      "constants": [
+        "taylor_coef_3@0"
+      ],
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 53,
+      "earliest_start": 52,
+      "id": "op35",
+      "inputs": [
+        "cipher_result@7"
+      ],
+      "kind": "add_const",
+      "latest_finish": 53,
+      "latest_start": 52,
+      "layer": 18,
+      "level": null,
+      "method": "add_const",
+      "outputs": [
+        "cipher_result@8"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [
+        "ckks_encoder@0"
+      ],
+      "scale": null,
+      "slack": 0,
+      "source_line": 141,
+      "source_text": "ckks_eva->add_const(cipher_result, taylor_coef_3, cipher_result, ckks_encoder)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_result"
+        ],
+        "writes": [
+          "cipher_result"
+        ]
+      },
+      "barrier": true,
+      "constants": [
+        "scale@0"
+      ],
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 57,
+      "earliest_start": 53,
+      "id": "op36",
+      "inputs": [
+        "cipher_result@8"
+      ],
+      "kind": "rescale_dynamic",
+      "latest_finish": 57,
+      "latest_start": 53,
+      "layer": 19,
+      "level": null,
+      "method": "rescale_dynamic",
+      "outputs": [
+        "cipher_result@9"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [],
+      "scale": null,
+      "slack": 0,
+      "source_line": 143,
+      "source_text": "ckks_eva->rescale_dynamic(cipher_result, cipher_result, scale)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_result",
+          "cipher_x_square"
+        ],
+        "writes": [
+          "cipher_result"
+        ]
+      },
+      "barrier": true,
+      "constants": [],
+      "cost": 6,
+      "critical": true,
+      "earliest_finish": 63,
+      "earliest_start": 57,
+      "id": "op37",
+      "inputs": [
+        "cipher_result@9",
+        "cipher_x_square@2"
+      ],
+      "kind": "multiply_relin_dynamic",
+      "latest_finish": 63,
+      "latest_start": 57,
+      "layer": 20,
+      "level": null,
+      "method": "multiply_relin_dynamic",
+      "outputs": [
+        "cipher_result@10"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [
+        "relin_keys@1"
+      ],
+      "scale": null,
+      "slack": 0,
+      "source_line": 144,
+      "source_text": "ckks_eva->multiply_relin_dynamic(cipher_result, cipher_x_square, cipher_result, relin_keys)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_result"
+        ],
+        "writes": [
+          "cipher_result"
+        ]
+      },
+      "barrier": false,
+      "constants": [
+        "taylor_coef_1@0"
+      ],
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 64,
+      "earliest_start": 63,
+      "id": "op38",
+      "inputs": [
+        "cipher_result@10"
+      ],
+      "kind": "add_const",
+      "latest_finish": 64,
+      "latest_start": 63,
+      "layer": 21,
+      "level": null,
+      "method": "add_const",
+      "outputs": [
+        "cipher_result@11"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [
+        "ckks_encoder@0"
+      ],
+      "scale": null,
+      "slack": 0,
+      "source_line": 145,
+      "source_text": "ckks_eva->add_const(cipher_result, taylor_coef_1, cipher_result, ckks_encoder)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_result",
+          "cipher_x"
+        ],
+        "writes": [
+          "cipher_result"
+        ]
+      },
+      "barrier": true,
+      "constants": [],
+      "cost": 6,
+      "critical": true,
+      "earliest_finish": 70,
+      "earliest_start": 64,
+      "id": "op39",
+      "inputs": [
+        "cipher_result@11",
+        "cipher_x@6"
+      ],
+      "kind": "multiply_relin_dynamic",
+      "latest_finish": 70,
+      "latest_start": 64,
+      "layer": 22,
+      "level": null,
+      "method": "multiply_relin_dynamic",
+      "outputs": [
+        "cipher_result@12"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [
+        "relin_keys@1"
+      ],
+      "scale": null,
+      "slack": 0,
+      "source_line": 147,
+      "source_text": "ckks_eva->multiply_relin_dynamic(cipher_result, cipher_x, cipher_result, relin_keys)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_result"
+        ],
+        "writes": [
+          "cipher_result"
+        ]
+      },
+      "barrier": false,
+      "constants": [
+        "taylor_coef_0@0"
+      ],
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 71,
+      "earliest_start": 70,
+      "id": "op40",
+      "inputs": [
+        "cipher_result@12"
+      ],
+      "kind": "add_const",
+      "latest_finish": 71,
+      "latest_start": 70,
+      "layer": 23,
+      "level": null,
+      "method": "add_const",
+      "outputs": [
+        "cipher_result@13"
+      ],
+      "receiver": "ckks_eva",
+      "resources": [
+        "ckks_encoder@0"
+      ],
+      "scale": null,
+      "slack": 0,
+      "source_line": 148,
+      "source_text": "ckks_eva->add_const(cipher_result, taylor_coef_0, cipher_result, ckks_encoder)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_result"
+        ],
+        "writes": []
+      },
+      "barrier": false,
+      "constants": [],
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 72,
+      "earliest_start": 71,
+      "id": "op41",
+      "inputs": [
+        "cipher_result@13"
+      ],
+      "kind": "read",
+      "latest_finish": 75,
+      "latest_start": 74,
+      "layer": 24,
+      "level": null,
+      "method": "read",
+      "outputs": [],
+      "receiver": "ckks_eva",
+      "resources": [],
+      "scale": null,
+      "slack": 3,
+      "source_line": 150,
+      "source_text": "ckks_eva->read(cipher_result)"
+    },
+    {
+      "annotations": {
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "reads": [
+          "cipher_result"
+        ],
+        "writes": [
+          "plain_result"
+        ]
+      },
+      "barrier": false,
+      "constants": [],
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 75,
+      "earliest_start": 71,
+      "id": "op42",
+      "inputs": [
+        "cipher_result@13"
+      ],
+      "kind": "decrypt",
+      "latest_finish": 75,
+      "latest_start": 71,
+      "layer": 24,
+      "level": null,
+      "method": "decrypt",
+      "outputs": [
+        "plain_result@1"
+      ],
+      "receiver": "dec",
+      "resources": [],
+      "scale": null,
+      "slack": 0,
+      "source_line": 156,
+      "source_text": "dec.decrypt(cipher_result, plain_result)"
+    }
+  ],
+  "parallel_groups": [
+    [
+      "op0",
+      "op1",
+      "op2",
+      "op3",
+      "op4",
+      "op5",
+      "op6",
+      "op7"
+    ],
+    [
+      "op8",
+      "op9",
+      "op10",
+      "op11",
+      "op12",
+      "op13"
+    ],
+    [
+      "op14",
+      "op15",
+      "op16",
+      "op17",
+      "op18",
+      "op19"
+    ],
+    [
+      "op20"
+    ],
+    [
+      "op21"
+    ],
+    [
+      "op22"
+    ],
+    [
+      "op23"
+    ],
+    [
+      "op24"
+    ],
+    [
+      "op25"
+    ],
+    [
+      "op26"
+    ],
+    [
+      "op27"
+    ],
+    [
+      "op28"
+    ],
+    [
+      "op29"
+    ],
+    [
+      "op30"
+    ],
+    [
+      "op31"
+    ],
+    [
+      "op32"
+    ],
+    [
+      "op33"
+    ],
+    [
+      "op34"
+    ],
+    [
+      "op35"
+    ],
+    [
+      "op36"
+    ],
+    [
+      "op37"
+    ],
+    [
+      "op38"
+    ],
+    [
+      "op39"
+    ],
+    [
+      "op40"
+    ],
+    [
+      "op41",
+      "op42"
+    ]
+  ],
+  "source_file": "examples/ckks/test_ckks_heartstudy.cpp",
+  "source_hash": "86cd6b9b72816fff4a10995a76b64da2d69a1309edbae10ac2f933c92c45bc49",
+  "unsupported": [],
+  "values": [
+    {
+      "annotations": {},
+      "id": "context@0",
+      "is_ephemeral": false,
+      "kind": "context",
+      "name": "context",
+      "producer": null,
+      "source_line": 23,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "ckks_eva@0",
+      "is_ephemeral": false,
+      "kind": "evaluator",
+      "name": "ckks_eva",
+      "producer": null,
+      "source_line": 24,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "plain_age@0",
+      "is_ephemeral": false,
+      "kind": "plaintext",
+      "name": "plain_age",
+      "producer": null,
+      "source_line": 79,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "plain_sbp@0",
+      "is_ephemeral": false,
+      "kind": "plaintext",
+      "name": "plain_sbp",
+      "producer": null,
+      "source_line": 79,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "plain_dbp@0",
+      "is_ephemeral": false,
+      "kind": "plaintext",
+      "name": "plain_dbp",
+      "producer": null,
+      "source_line": 79,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "plain_chl@0",
+      "is_ephemeral": false,
+      "kind": "plaintext",
+      "name": "plain_chl",
+      "producer": null,
+      "source_line": 79,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "plain_weight@0",
+      "is_ephemeral": false,
+      "kind": "plaintext",
+      "name": "plain_weight",
+      "producer": null,
+      "source_line": 79,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "plain_height@0",
+      "is_ephemeral": false,
+      "kind": "plaintext",
+      "name": "plain_height",
+      "producer": null,
+      "source_line": 79,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "plain_result@0",
+      "is_ephemeral": false,
+      "kind": "plaintext",
+      "name": "plain_result",
+      "producer": null,
+      "source_line": 79,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "cipher_age@0",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_age",
+      "producer": null,
+      "source_line": 80,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "cipher_sbp@0",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_sbp",
+      "producer": null,
+      "source_line": 80,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "cipher_dbp@0",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_dbp",
+      "producer": null,
+      "source_line": 80,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "cipher_chl@0",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_chl",
+      "producer": null,
+      "source_line": 80,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "cipher_weight@0",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_weight",
+      "producer": null,
+      "source_line": 80,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "cipher_height@0",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_height",
+      "producer": null,
+      "source_line": 80,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "cipher_x@0",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_x",
+      "producer": null,
+      "source_line": 80,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "cipher_x_square@0",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_x_square",
+      "producer": null,
+      "source_line": 80,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "cipher_result@0",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_result",
+      "producer": null,
+      "source_line": 80,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "public_key@0",
+      "is_ephemeral": false,
+      "kind": "public_key",
+      "name": "public_key",
+      "producer": null,
+      "source_line": 82,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "relin_keys@0",
+      "is_ephemeral": false,
+      "kind": "relin_keys",
+      "name": "relin_keys",
+      "producer": null,
+      "source_line": 83,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "ckks_encoder(context)@0",
+      "is_ephemeral": false,
+      "kind": "encoder",
+      "name": "ckks_encoder(context)",
+      "producer": null,
+      "source_line": 84,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "kgen(context)@0",
+      "is_ephemeral": false,
+      "kind": "key_generator",
+      "name": "kgen(context)",
+      "producer": null,
+      "source_line": 87,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "public_key@1",
+      "is_ephemeral": false,
+      "kind": "public_key",
+      "name": "public_key",
+      "producer": "op0",
+      "source_line": 88,
+      "version": 1
+    },
+    {
+      "annotations": {},
+      "id": "relin_keys@1",
+      "is_ephemeral": false,
+      "kind": "relin_keys",
+      "name": "relin_keys",
+      "producer": "op1",
+      "source_line": 89,
+      "version": 1
+    },
+    {
+      "annotations": {},
+      "id": "enc(context, public_key, kgen.secret_key())@0",
+      "is_ephemeral": false,
+      "kind": "encryptor",
+      "name": "enc(context, public_key, kgen.secret_key())",
+      "producer": null,
+      "source_line": 90,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "dec(context, kgen.secret_key())@0",
+      "is_ephemeral": false,
+      "kind": "decryptor",
+      "name": "dec(context, kgen.secret_key())",
+      "producer": null,
+      "source_line": 91,
+      "version": 0
+    },
+    {
+      "annotations": {
+        "expression": "message_age"
+      },
+      "id": "message_age@0",
+      "is_ephemeral": true,
+      "kind": "external",
+      "name": "message_age",
+      "producer": null,
+      "source_line": 94,
+      "version": 0
+    },
+    {
+      "annotations": {
+        "expression": "ckks_param_literal.scale()"
+      },
+      "id": "ckks_param_literal.scale()@0",
+      "is_ephemeral": true,
+      "kind": "external",
+      "name": "ckks_param_literal.scale()",
+      "producer": null,
+      "source_line": 94,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "plain_age@1",
+      "is_ephemeral": false,
+      "kind": "plaintext",
+      "name": "plain_age",
+      "producer": "op2",
+      "source_line": 94,
+      "version": 1
+    },
+    {
+      "annotations": {
+        "expression": "message_sbp"
+      },
+      "id": "message_sbp@0",
+      "is_ephemeral": true,
+      "kind": "external",
+      "name": "message_sbp",
+      "producer": null,
+      "source_line": 95,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "plain_sbp@1",
+      "is_ephemeral": false,
+      "kind": "plaintext",
+      "name": "plain_sbp",
+      "producer": "op3",
+      "source_line": 95,
+      "version": 1
+    },
+    {
+      "annotations": {
+        "expression": "message_dbp"
+      },
+      "id": "message_dbp@0",
+      "is_ephemeral": true,
+      "kind": "external",
+      "name": "message_dbp",
+      "producer": null,
+      "source_line": 96,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "plain_dbp@1",
+      "is_ephemeral": false,
+      "kind": "plaintext",
+      "name": "plain_dbp",
+      "producer": "op4",
+      "source_line": 96,
+      "version": 1
+    },
+    {
+      "annotations": {
+        "expression": "message_chl"
+      },
+      "id": "message_chl@0",
+      "is_ephemeral": true,
+      "kind": "external",
+      "name": "message_chl",
+      "producer": null,
+      "source_line": 97,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "plain_chl@1",
+      "is_ephemeral": false,
+      "kind": "plaintext",
+      "name": "plain_chl",
+      "producer": "op5",
+      "source_line": 97,
+      "version": 1
+    },
+    {
+      "annotations": {
+        "expression": "message_weight"
+      },
+      "id": "message_weight@0",
+      "is_ephemeral": true,
+      "kind": "external",
+      "name": "message_weight",
+      "producer": null,
+      "source_line": 98,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "plain_weight@1",
+      "is_ephemeral": false,
+      "kind": "plaintext",
+      "name": "plain_weight",
+      "producer": "op6",
+      "source_line": 98,
+      "version": 1
+    },
+    {
+      "annotations": {
+        "expression": "message_height"
+      },
+      "id": "message_height@0",
+      "is_ephemeral": true,
+      "kind": "external",
+      "name": "message_height",
+      "producer": null,
+      "source_line": 99,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "plain_height@1",
+      "is_ephemeral": false,
+      "kind": "plaintext",
+      "name": "plain_height",
+      "producer": "op7",
+      "source_line": 99,
+      "version": 1
+    },
+    {
+      "annotations": {},
+      "id": "cipher_age@1",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_age",
+      "producer": "op8",
+      "source_line": 102,
+      "version": 1
+    },
+    {
+      "annotations": {},
+      "id": "cipher_sbp@1",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_sbp",
+      "producer": "op9",
+      "source_line": 103,
+      "version": 1
+    },
+    {
+      "annotations": {},
+      "id": "cipher_dbp@1",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_dbp",
+      "producer": "op10",
+      "source_line": 104,
+      "version": 1
+    },
+    {
+      "annotations": {},
+      "id": "cipher_chl@1",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_chl",
+      "producer": "op11",
+      "source_line": 105,
+      "version": 1
+    },
+    {
+      "annotations": {},
+      "id": "cipher_weight@1",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_weight",
+      "producer": "op12",
+      "source_line": 106,
+      "version": 1
+    },
+    {
+      "annotations": {},
+      "id": "cipher_height@1",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_height",
+      "producer": "op13",
+      "source_line": 107,
+      "version": 1
+    },
+    {
+      "annotations": {
+        "expression": "coef_age"
+      },
+      "id": "coef_age@0",
+      "is_ephemeral": true,
+      "kind": "external",
+      "name": "coef_age",
+      "producer": null,
+      "source_line": 114,
+      "version": 0
+    },
+    {
+      "annotations": {
+        "expression": "scale"
+      },
+      "id": "scale@0",
+      "is_ephemeral": true,
+      "kind": "external",
+      "name": "scale",
+      "producer": null,
+      "source_line": 114,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "cipher_age@2",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_age",
+      "producer": "op14",
+      "source_line": 114,
+      "version": 2
+    },
+    {
+      "annotations": {
+        "expression": "ckks_encoder"
+      },
+      "id": "ckks_encoder@0",
+      "is_ephemeral": true,
+      "kind": "external",
+      "name": "ckks_encoder",
+      "producer": null,
+      "source_line": 114,
+      "version": 0
+    },
+    {
+      "annotations": {
+        "expression": "coef_sbp"
+      },
+      "id": "coef_sbp@0",
+      "is_ephemeral": true,
+      "kind": "external",
+      "name": "coef_sbp",
+      "producer": null,
+      "source_line": 115,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "cipher_sbp@2",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_sbp",
+      "producer": "op15",
+      "source_line": 115,
+      "version": 2
+    },
+    {
+      "annotations": {
+        "expression": "coef_dbp"
+      },
+      "id": "coef_dbp@0",
+      "is_ephemeral": true,
+      "kind": "external",
+      "name": "coef_dbp",
+      "producer": null,
+      "source_line": 116,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "cipher_dbp@2",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_dbp",
+      "producer": "op16",
+      "source_line": 116,
+      "version": 2
+    },
+    {
+      "annotations": {
+        "expression": "coef_chl"
+      },
+      "id": "coef_chl@0",
+      "is_ephemeral": true,
+      "kind": "external",
+      "name": "coef_chl",
+      "producer": null,
+      "source_line": 117,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "cipher_chl@2",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_chl",
+      "producer": "op17",
+      "source_line": 117,
+      "version": 2
+    },
+    {
+      "annotations": {
+        "expression": "coef_weight"
+      },
+      "id": "coef_weight@0",
+      "is_ephemeral": true,
+      "kind": "external",
+      "name": "coef_weight",
+      "producer": null,
+      "source_line": 118,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "cipher_weight@2",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_weight",
+      "producer": "op18",
+      "source_line": 118,
+      "version": 2
+    },
+    {
+      "annotations": {
+        "expression": "coef_height"
+      },
+      "id": "coef_height@0",
+      "is_ephemeral": true,
+      "kind": "external",
+      "name": "coef_height",
+      "producer": null,
+      "source_line": 119,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "cipher_height@2",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_height",
+      "producer": "op19",
+      "source_line": 119,
+      "version": 2
+    },
+    {
+      "annotations": {},
+      "id": "cipher_x@1",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_x",
+      "producer": "op20",
+      "source_line": 121,
+      "version": 1
+    },
+    {
+      "annotations": {},
+      "id": "cipher_x@2",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_x",
+      "producer": "op21",
+      "source_line": 122,
+      "version": 2
+    },
+    {
+      "annotations": {},
+      "id": "cipher_x@3",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_x",
+      "producer": "op22",
+      "source_line": 123,
+      "version": 3
+    },
+    {
+      "annotations": {},
+      "id": "cipher_x@4",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_x",
+      "producer": "op23",
+      "source_line": 124,
+      "version": 4
+    },
+    {
+      "annotations": {},
+      "id": "cipher_x@5",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_x",
+      "producer": "op24",
+      "source_line": 125,
+      "version": 5
+    },
+    {
+      "annotations": {},
+      "id": "cipher_x@6",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_x",
+      "producer": "op25",
+      "source_line": 126,
+      "version": 6
+    },
+    {
+      "annotations": {},
+      "id": "cipher_x_square@1",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_x_square",
+      "producer": "op26",
+      "source_line": 129,
+      "version": 1
+    },
+    {
+      "annotations": {},
+      "id": "cipher_x_square@2",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_x_square",
+      "producer": "op27",
+      "source_line": 130,
+      "version": 2
+    },
+    {
+      "annotations": {
+        "expression": "taylor_coef_9"
+      },
+      "id": "taylor_coef_9@0",
+      "is_ephemeral": true,
+      "kind": "external",
+      "name": "taylor_coef_9",
+      "producer": null,
+      "source_line": 132,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "cipher_result@1",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_result",
+      "producer": "op28",
+      "source_line": 132,
+      "version": 1
+    },
+    {
+      "annotations": {
+        "expression": "taylor_coef_7"
+      },
+      "id": "taylor_coef_7@0",
+      "is_ephemeral": true,
+      "kind": "external",
+      "name": "taylor_coef_7",
+      "producer": null,
+      "source_line": 133,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "cipher_result@2",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_result",
+      "producer": "op29",
+      "source_line": 133,
+      "version": 2
+    },
+    {
+      "annotations": {},
+      "id": "cipher_result@3",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_result",
+      "producer": "op30",
+      "source_line": 135,
+      "version": 3
+    },
+    {
+      "annotations": {},
+      "id": "cipher_result@4",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_result",
+      "producer": "op31",
+      "source_line": 136,
+      "version": 4
+    },
+    {
+      "annotations": {
+        "expression": "taylor_coef_5"
+      },
+      "id": "taylor_coef_5@0",
+      "is_ephemeral": true,
+      "kind": "external",
+      "name": "taylor_coef_5",
+      "producer": null,
+      "source_line": 137,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "cipher_result@5",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_result",
+      "producer": "op32",
+      "source_line": 137,
+      "version": 5
+    },
+    {
+      "annotations": {},
+      "id": "cipher_result@6",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_result",
+      "producer": "op33",
+      "source_line": 139,
+      "version": 6
+    },
+    {
+      "annotations": {},
+      "id": "cipher_result@7",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_result",
+      "producer": "op34",
+      "source_line": 140,
+      "version": 7
+    },
+    {
+      "annotations": {
+        "expression": "taylor_coef_3"
+      },
+      "id": "taylor_coef_3@0",
+      "is_ephemeral": true,
+      "kind": "external",
+      "name": "taylor_coef_3",
+      "producer": null,
+      "source_line": 141,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "cipher_result@8",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_result",
+      "producer": "op35",
+      "source_line": 141,
+      "version": 8
+    },
+    {
+      "annotations": {},
+      "id": "cipher_result@9",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_result",
+      "producer": "op36",
+      "source_line": 143,
+      "version": 9
+    },
+    {
+      "annotations": {},
+      "id": "cipher_result@10",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_result",
+      "producer": "op37",
+      "source_line": 144,
+      "version": 10
+    },
+    {
+      "annotations": {
+        "expression": "taylor_coef_1"
+      },
+      "id": "taylor_coef_1@0",
+      "is_ephemeral": true,
+      "kind": "external",
+      "name": "taylor_coef_1",
+      "producer": null,
+      "source_line": 145,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "cipher_result@11",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_result",
+      "producer": "op38",
+      "source_line": 145,
+      "version": 11
+    },
+    {
+      "annotations": {},
+      "id": "cipher_result@12",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_result",
+      "producer": "op39",
+      "source_line": 147,
+      "version": 12
+    },
+    {
+      "annotations": {
+        "expression": "taylor_coef_0"
+      },
+      "id": "taylor_coef_0@0",
+      "is_ephemeral": true,
+      "kind": "external",
+      "name": "taylor_coef_0",
+      "producer": null,
+      "source_line": 148,
+      "version": 0
+    },
+    {
+      "annotations": {},
+      "id": "cipher_result@13",
+      "is_ephemeral": false,
+      "kind": "ciphertext",
+      "name": "cipher_result",
+      "producer": "op40",
+      "source_line": 148,
+      "version": 13
+    },
+    {
+      "annotations": {},
+      "id": "plain_result@1",
+      "is_ephemeral": false,
+      "kind": "plaintext",
+      "name": "plain_result",
+      "producer": "op42",
+      "source_line": 156,
+      "version": 1
+    }
+  ]
+}

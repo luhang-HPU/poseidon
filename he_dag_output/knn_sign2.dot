@@ -1,0 +1,18 @@
+digraph he_dag {
+  rankdir=LR;
+  graph [fontname="Helvetica"];
+  node [shape=box, style="rounded,filled", fontname="Helvetica"];
+  edge [fontname="Helvetica"];
+  subgraph cluster_layer_0 {
+    label="layer 0";
+    color="#cccccc";
+    op0 [label="op0\nassign\nline 363\ncost 1\nout ciph_result@1\nin ciph@0", fillcolor="#17becf"];
+  }
+  subgraph cluster_layer_1 {
+    label="layer 1";
+    color="#cccccc";
+    op1 [label="op1\nevaluate_poly_vector\nline 364\ncost 8\nout ciph_result@2\nin ciph_result@1", fillcolor="#e377c2"];
+  }
+  op0 -> op1 [color="#222222", label="ciph_result"];
+  op0 -> op1 [color="#d62728", label="overwrite ciph_result"];
+}
