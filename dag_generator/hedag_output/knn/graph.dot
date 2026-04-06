@@ -1,0 +1,174 @@
+digraph hedag_v2 {
+  rankdir=LR;
+  node [shape=box, style="rounded,filled", fontname="Helvetica"];
+  edge [fontname="Helvetica"];
+  subgraph cluster_layer_0 {
+    label="layer 0";
+    color="#d1d5db";
+    op9 [label="op9\nencode\nline 426\nlayer 0\ncost 1\nout accumulate_top_n_block__main_15998__plain_zero@1\nin accumulate_top_n_block__main_15998__zero@0", fillcolor="#e5e7eb"];
+    op0 [label="op0\ncreate_public_key\nline 503\nlayer 0\ncost 2\nout public_key@1", fillcolor="#e5e7eb"];
+    op1 [label="op1\ncreate_relin_keys\nline 504\nlayer 0\ncost 2\nout relin_keys@1", fillcolor="#e5e7eb"];
+    op2 [label="op2\ncreate_galois_keys\nline 506\nlayer 0\ncost 2\nout rot_keys@1", fillcolor="#e5e7eb"];
+    op3 [label="op3\nsub_dynamic\nline 585\nlayer 0\ncost 1\nout ciph_result@1\nin ciph_distance_1@0, ciph_distance_2@0", fillcolor="#e5e7eb"];
+    op19 [label="op19\nassign\nline 601\nlayer 0\ncost 1\nout ran@1\nin result@0", fillcolor="#17becf"];
+    op20 [label="op20\nencode\nline 607\nlayer 0\ncost 1\nout pl_mask@1", fillcolor="#e5e7eb"];
+    op26 [label="op26\nreturn\nline 630\nlayer 0\ncost 1\nout __return__@1\nin 0@0", fillcolor="#64748b"];
+  }
+  subgraph cluster_layer_1 {
+    label="layer 1";
+    color="#d1d5db";
+    op10 [label="op10\nencrypt\nline 427\nlayer 1\ncost 4\nout accumulate_top_n_block__main_15998__ciph_sum@1\nin accumulate_top_n_block__main_15998__plain_zero@1", fillcolor="#e5e7eb"];
+    op4 [label="op4\nassign\nline 349\nlayer 1\ncost 1\nout sign_1__main_15899__ciph_result@1\nin ciph_result@1", fillcolor="#17becf"];
+  }
+  subgraph cluster_layer_2 {
+    label="layer 2";
+    color="#d1d5db";
+    op11 [label="op11\nadd\nline 448\nlayer 2\ncost 1\nout accumulate_top_n_block__main_15998__ciph_sum@2\nin accumulate_top_n_block__main_15998__ciph_sum@1, accumulate_top_n_block__main_15998__ciph_rotate_sum@0", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_3 {
+    label="layer 3";
+    color="#d1d5db";
+    op5 [label="op5\nevaluate_poly_vector\nline 350\nlayer 3\ncost 8\nout sign_1__main_15899__ciph_result@2\nin sign_1__main_15899__ciph_result@1", fillcolor="#e377c2"];
+  }
+  subgraph cluster_layer_4 {
+    label="layer 4";
+    color="#d1d5db";
+    op12 [label="op12\nassign\nline 588\nlayer 4\ncost 1\nout ciph_result@2\nin accumulate_top_n_block__main_15998__ciph_sum@2", fillcolor="#17becf"];
+  }
+  subgraph cluster_layer_5 {
+    label="layer 5";
+    color="#d1d5db";
+    op6 [label="op6\nevaluate_poly_vector\nline 351\nlayer 5\ncost 8\nout sign_1__main_15899__ciph_result@3\nin sign_1__main_15899__ciph_result@2", fillcolor="#e377c2"];
+  }
+  subgraph cluster_layer_6 {
+    label="layer 6";
+    color="#d1d5db";
+    op13 [label="op13\nsub_dynamic\nline 593\nlayer 6\ncost 1\nout ciph_result@3\nin ciph_top_k@0, ciph_result@2", fillcolor="#e5e7eb"];
+    op7 [label="op7\nadd_const\nline 352\nlayer 6\ncost 1\nout sign_1__main_15899__ciph_result@4\nin sign_1__main_15899__ciph_result@3", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_7 {
+    label="layer 7";
+    color="#d1d5db";
+    op14 [label="op14\nmultiply_const\nline 595\nlayer 7\ncost 3\nout ciph_result@4\nin ciph_result@3", fillcolor="#e5e7eb"];
+    op8 [label="op8\nassign\nline 587\nlayer 7\ncost 1\nout ciph_tmp@1\nin sign_1__main_15899__ciph_result@4", fillcolor="#17becf"];
+  }
+  subgraph cluster_layer_8 {
+    label="layer 8";
+    color="#d1d5db";
+    op15 [label="op15\nrescale_dynamic\nline 596\nlayer 8\ncost 4\nout ciph_result@5\nin ciph_result@4", fillcolor="#8c564b"];
+  }
+  subgraph cluster_layer_9 {
+    label="layer 9";
+    color="#d1d5db";
+    op16 [label="op16\nassign\nline 363\nlayer 9\ncost 1\nout sign_2__main_16453__ciph_result@1\nin ciph_result@5", fillcolor="#17becf"];
+  }
+  subgraph cluster_layer_10 {
+    label="layer 10";
+    color="#d1d5db";
+    op17 [label="op17\nevaluate_poly_vector\nline 364\nlayer 10\ncost 8\nout sign_2__main_16453__ciph_result@2\nin sign_2__main_16453__ciph_result@1", fillcolor="#e377c2"];
+  }
+  subgraph cluster_layer_11 {
+    label="layer 11";
+    color="#d1d5db";
+    op18 [label="op18\nassign\nline 598\nlayer 11\ncost 1\nout ciph_result@6\nin sign_2__main_16453__ciph_result@2", fillcolor="#17becf"];
+  }
+  subgraph cluster_layer_12 {
+    label="layer 12";
+    color="#d1d5db";
+    op21 [label="op21\nmultiply_plain\nline 608\nlayer 12\ncost 3\nout ciph_result@7\nin ciph_result@6, pl_mask@1", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_13 {
+    label="layer 13";
+    color="#d1d5db";
+    op22 [label="op22\nrescale_dynamic\nline 609\nlayer 13\ncost 4\nout ciph_result@8\nin ciph_result@7", fillcolor="#8c564b"];
+  }
+  subgraph cluster_layer_14 {
+    label="layer 14";
+    color="#d1d5db";
+    op23 [label="op23\ndecrypt\nline 176\nlayer 14\ncost 4\nout decrypt_and_decode__main_17089__plain@1\nin ciph_result@8", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_15 {
+    label="layer 15";
+    color="#d1d5db";
+    op24 [label="op24\ndecode\nline 178\nlayer 15\ncost 1\nout decrypt_and_decode__main_17089__message@1\nin decrypt_and_decode__main_17089__plain@1", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_16 {
+    label="layer 16";
+    color="#d1d5db";
+    op25 [label="op25\nassign\nline 613\nlayer 16\ncost 1\nout result_index@1\nin decrypt_and_decode__main_17089__message@1", fillcolor="#17becf"];
+  }
+  op3 -> op4 [color="#1f2937", label="ciph_result"];
+  op3 -> op4 [color="#2563eb", label="ciph_result"];
+  op4 -> op5 [color="#1f2937", label="sign_1__main_15899__ciph_result"];
+  op4 -> op5 [color="#2563eb", label="sign_1__main_15899__ciph_result"];
+  op1 -> op5 [color="#7c3aed", label="relin_keys"];
+  op4 -> op5 [color="#f97316", label="sign_1__main_15899__ciph_result"];
+  op4 -> op5 [color="#0f766e", label="main@15899"];
+  op5 -> op6 [color="#1f2937", label="sign_1__main_15899__ciph_result"];
+  op5 -> op6 [color="#2563eb", label="sign_1__main_15899__ciph_result"];
+  op1 -> op6 [color="#7c3aed", label="relin_keys"];
+  op5 -> op6 [color="#f97316", label="sign_1__main_15899__ciph_result"];
+  op5 -> op6 [color="#dc2626", label="sign_1__main_15899__ciph_result"];
+  op5 -> op6 [color="#0f766e", label="main@15899"];
+  op6 -> op7 [color="#1f2937", label="sign_1__main_15899__ciph_result"];
+  op6 -> op7 [color="#2563eb", label="sign_1__main_15899__ciph_result"];
+  op6 -> op7 [color="#f97316", label="sign_1__main_15899__ciph_result"];
+  op6 -> op7 [color="#dc2626", label="sign_1__main_15899__ciph_result"];
+  op6 -> op7 [color="#0f766e", label="main@15899"];
+  op7 -> op8 [color="#1f2937", label="sign_1__main_15899__ciph_result"];
+  op7 -> op8 [color="#2563eb", label="sign_1__main_15899__ciph_result"];
+  op7 -> op8 [color="#0f766e", label="main@15899"];
+  op9 -> op10 [color="#1f2937", label="accumulate_top_n_block__main_15998__plain_zero"];
+  op9 -> op10 [color="#2563eb", label="accumulate_top_n_block__main_15998__plain_zero"];
+  op9 -> op10 [color="#0f766e", label="main@15998"];
+  op10 -> op11 [color="#1f2937", label="accumulate_top_n_block__main_15998__ciph_sum"];
+  op10 -> op11 [color="#2563eb", label="accumulate_top_n_block__main_15998__ciph_sum"];
+  op10 -> op11 [color="#f97316", label="accumulate_top_n_block__main_15998__ciph_sum"];
+  op10 -> op11 [color="#0f766e", label="main@15998"];
+  op11 -> op12 [color="#1f2937", label="accumulate_top_n_block__main_15998__ciph_sum"];
+  op11 -> op12 [color="#2563eb", label="accumulate_top_n_block__main_15998__ciph_sum"];
+  op3 -> op12 [color="#f97316", label="ciph_result"];
+  op4 -> op12 [color="#dc2626", label="ciph_result"];
+  op11 -> op12 [color="#0f766e", label="main@15998"];
+  op12 -> op13 [color="#1f2937", label="ciph_result"];
+  op12 -> op13 [color="#2563eb", label="ciph_result"];
+  op12 -> op13 [color="#f97316", label="ciph_result"];
+  op13 -> op14 [color="#1f2937", label="ciph_result"];
+  op13 -> op14 [color="#2563eb", label="ciph_result"];
+  op13 -> op14 [color="#f97316", label="ciph_result"];
+  op13 -> op14 [color="#dc2626", label="ciph_result"];
+  op14 -> op15 [color="#1f2937", label="ciph_result"];
+  op14 -> op15 [color="#2563eb", label="ciph_result"];
+  op14 -> op15 [color="#f97316", label="ciph_result"];
+  op14 -> op15 [color="#dc2626", label="ciph_result"];
+  op15 -> op16 [color="#1f2937", label="ciph_result"];
+  op15 -> op16 [color="#2563eb", label="ciph_result"];
+  op16 -> op17 [color="#1f2937", label="sign_2__main_16453__ciph_result"];
+  op16 -> op17 [color="#2563eb", label="sign_2__main_16453__ciph_result"];
+  op1 -> op17 [color="#7c3aed", label="relin_keys"];
+  op16 -> op17 [color="#f97316", label="sign_2__main_16453__ciph_result"];
+  op16 -> op17 [color="#0f766e", label="main@16453"];
+  op17 -> op18 [color="#1f2937", label="sign_2__main_16453__ciph_result"];
+  op17 -> op18 [color="#2563eb", label="sign_2__main_16453__ciph_result"];
+  op15 -> op18 [color="#f97316", label="ciph_result"];
+  op15 -> op18 [color="#dc2626", label="ciph_result"];
+  op16 -> op18 [color="#dc2626", label="ciph_result"];
+  op17 -> op18 [color="#0f766e", label="main@16453"];
+  op18 -> op21 [color="#1f2937", label="ciph_result"];
+  op18 -> op21 [color="#2563eb", label="ciph_result"];
+  op20 -> op21 [color="#1f2937", label="pl_mask"];
+  op20 -> op21 [color="#2563eb", label="pl_mask"];
+  op18 -> op21 [color="#f97316", label="ciph_result"];
+  op21 -> op22 [color="#1f2937", label="ciph_result"];
+  op21 -> op22 [color="#2563eb", label="ciph_result"];
+  op21 -> op22 [color="#f97316", label="ciph_result"];
+  op21 -> op22 [color="#dc2626", label="ciph_result"];
+  op22 -> op23 [color="#1f2937", label="ciph_result"];
+  op22 -> op23 [color="#2563eb", label="ciph_result"];
+  op23 -> op24 [color="#1f2937", label="decrypt_and_decode__main_17089__plain"];
+  op23 -> op24 [color="#2563eb", label="decrypt_and_decode__main_17089__plain"];
+  op23 -> op24 [color="#0f766e", label="main@17089"];
+  op24 -> op25 [color="#1f2937", label="decrypt_and_decode__main_17089__message"];
+  op24 -> op25 [color="#2563eb", label="decrypt_and_decode__main_17089__message"];
+  op24 -> op25 [color="#0f766e", label="main@17089"];
+}

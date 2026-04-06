@@ -1,0 +1,125 @@
+{
+  "barriers": [],
+  "critical_path_cost": 12,
+  "entry_function": "knn_ckks_demo",
+  "layers": [
+    [
+      "op0",
+      "op1"
+    ],
+    [
+      "op2",
+      "op3"
+    ],
+    [
+      "op4"
+    ],
+    [
+      "op5"
+    ],
+    [
+      "op6"
+    ]
+  ],
+  "max_parallel_width": 2,
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "op_schedule": {
+    "op0": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "latest_finish": 1,
+      "latest_start": 0,
+      "layer": 0,
+      "slack": 0,
+      "source_line": 13
+    },
+    "op1": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "latest_finish": 5,
+      "latest_start": 4,
+      "layer": 0,
+      "slack": 4,
+      "source_line": 14
+    },
+    "op2": {
+      "barrier": false,
+      "cost": 5,
+      "critical": true,
+      "earliest_finish": 6,
+      "earliest_start": 1,
+      "latest_finish": 6,
+      "latest_start": 1,
+      "layer": 1,
+      "slack": 0,
+      "source_line": 15
+    },
+    "op3": {
+      "barrier": false,
+      "cost": 5,
+      "critical": false,
+      "earliest_finish": 6,
+      "earliest_start": 1,
+      "latest_finish": 10,
+      "latest_start": 5,
+      "layer": 1,
+      "slack": 4,
+      "source_line": 16
+    },
+    "op4": {
+      "barrier": false,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 10,
+      "earliest_start": 6,
+      "latest_finish": 10,
+      "latest_start": 6,
+      "layer": 2,
+      "slack": 0,
+      "source_line": 17
+    },
+    "op5": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 11,
+      "earliest_start": 10,
+      "latest_finish": 11,
+      "latest_start": 10,
+      "layer": 3,
+      "slack": 0,
+      "source_line": 18
+    },
+    "op6": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 12,
+      "earliest_start": 11,
+      "latest_finish": 12,
+      "latest_start": 11,
+      "layer": 4,
+      "slack": 0,
+      "source_line": 19
+    }
+  },
+  "schema_version": 2,
+  "source_file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+  "topological_order": [
+    "op0",
+    "op1",
+    "op2",
+    "op3",
+    "op4",
+    "op5",
+    "op6"
+  ]
+}

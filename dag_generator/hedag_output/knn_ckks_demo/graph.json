@@ -1,0 +1,961 @@
+{
+  "diagnostics": [],
+  "edges": [
+    {
+      "dst": "op2",
+      "kind": "data",
+      "reason": "diff0",
+      "src": "op0",
+      "value_id": "diff0@1"
+    },
+    {
+      "dst": "op2",
+      "kind": "read_after_write",
+      "reason": "diff0",
+      "src": "op0",
+      "value_id": "diff0@1"
+    },
+    {
+      "dst": "op3",
+      "kind": "data",
+      "reason": "diff1",
+      "src": "op1",
+      "value_id": "diff1@1"
+    },
+    {
+      "dst": "op3",
+      "kind": "read_after_write",
+      "reason": "diff1",
+      "src": "op1",
+      "value_id": "diff1@1"
+    },
+    {
+      "dst": "op4",
+      "kind": "data",
+      "reason": "sq0",
+      "src": "op2",
+      "value_id": "sq0@1"
+    },
+    {
+      "dst": "op4",
+      "kind": "read_after_write",
+      "reason": "sq0",
+      "src": "op2",
+      "value_id": "sq0@1"
+    },
+    {
+      "dst": "op5",
+      "kind": "data",
+      "reason": "rot0",
+      "src": "op4",
+      "value_id": "rot0@1"
+    },
+    {
+      "dst": "op5",
+      "kind": "read_after_write",
+      "reason": "rot0",
+      "src": "op4",
+      "value_id": "rot0@1"
+    },
+    {
+      "dst": "op5",
+      "kind": "data",
+      "reason": "sq1",
+      "src": "op3",
+      "value_id": "sq1@1"
+    },
+    {
+      "dst": "op5",
+      "kind": "read_after_write",
+      "reason": "sq1",
+      "src": "op3",
+      "value_id": "sq1@1"
+    },
+    {
+      "dst": "op6",
+      "kind": "data",
+      "reason": "total",
+      "src": "op5",
+      "value_id": "total@1"
+    },
+    {
+      "dst": "op6",
+      "kind": "read_after_write",
+      "reason": "total",
+      "src": "op5",
+      "value_id": "total@1"
+    }
+  ],
+  "entry_function": "knn_ckks_demo",
+  "frontend": "textual_fallback",
+  "metadata": {
+    "entry_span": {
+      "end": {
+        "column": 1,
+        "line": 20,
+        "offset": 580
+      },
+      "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+      "start": {
+        "column": 6,
+        "line": 7,
+        "offset": 36
+      }
+    },
+    "frontend_mode": "textual_fallback",
+    "source_hash": "b25a83729161f419d40dcfd77949864856a058ebfe449e12ff8f35660de95bfe"
+  },
+  "ops": [
+    {
+      "api_name": "sub",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.sub(query, train0, diff0)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "diff0"
+          }
+        }
+      ],
+      "inputs": [
+        "query@0",
+        "train0@0"
+      ],
+      "op_id": "op0",
+      "op_kind": "sub",
+      "origin_callstack": [],
+      "outputs": [
+        "diff0@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 39,
+          "line": 13,
+          "offset": 344
+        },
+        "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+        "start": {
+          "column": 5,
+          "line": 13,
+          "offset": 310
+        }
+      },
+      "stmt_id": "knn_ckks_demo@310"
+    },
+    {
+      "api_name": "sub",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.sub(query, train1, diff1)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "diff1"
+          }
+        }
+      ],
+      "inputs": [
+        "query@0",
+        "train1@0"
+      ],
+      "op_id": "op1",
+      "op_kind": "sub",
+      "origin_callstack": [],
+      "outputs": [
+        "diff1@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 39,
+          "line": 14,
+          "offset": 384
+        },
+        "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+        "start": {
+          "column": 5,
+          "line": 14,
+          "offset": 350
+        }
+      },
+      "stmt_id": "knn_ckks_demo@350"
+    },
+    {
+      "api_name": "multiply",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 5,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.multiply(diff0, diff0, sq0)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "sq0"
+          }
+        }
+      ],
+      "inputs": [
+        "diff0@1",
+        "diff0@1"
+      ],
+      "op_id": "op2",
+      "op_kind": "multiply",
+      "origin_callstack": [],
+      "outputs": [
+        "sq0@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 41,
+          "line": 15,
+          "offset": 426
+        },
+        "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+        "start": {
+          "column": 5,
+          "line": 15,
+          "offset": 390
+        }
+      },
+      "stmt_id": "knn_ckks_demo@390"
+    },
+    {
+      "api_name": "multiply",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 5,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.multiply(diff1, diff1, sq1)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "sq1"
+          }
+        }
+      ],
+      "inputs": [
+        "diff1@1",
+        "diff1@1"
+      ],
+      "op_id": "op3",
+      "op_kind": "multiply",
+      "origin_callstack": [],
+      "outputs": [
+        "sq1@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 41,
+          "line": 16,
+          "offset": 468
+        },
+        "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+        "start": {
+          "column": 5,
+          "line": 16,
+          "offset": 432
+        }
+      },
+      "stmt_id": "knn_ckks_demo@432"
+    },
+    {
+      "api_name": "rotate",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "1"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.rotate(sq0, rot0, 1, galois_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "rot0"
+          }
+        }
+      ],
+      "inputs": [
+        "sq0@1"
+      ],
+      "op_id": "op4",
+      "op_kind": "rotate",
+      "origin_callstack": [],
+      "outputs": [
+        "rot0@1"
+      ],
+      "resources": [
+        "galois_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 47,
+          "line": 17,
+          "offset": 516
+        },
+        "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+        "start": {
+          "column": 5,
+          "line": 17,
+          "offset": 474
+        }
+      },
+      "stmt_id": "knn_ckks_demo@474"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.add(rot0, sq1, total)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "total"
+          }
+        }
+      ],
+      "inputs": [
+        "rot0@1",
+        "sq1@1"
+      ],
+      "op_id": "op5",
+      "op_kind": "add",
+      "origin_callstack": [],
+      "outputs": [
+        "total@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 35,
+          "line": 18,
+          "offset": 552
+        },
+        "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+        "start": {
+          "column": 5,
+          "line": 18,
+          "offset": 522
+        }
+      },
+      "stmt_id": "knn_ckks_demo@522"
+    },
+    {
+      "api_name": "assign",
+      "attrs": {
+        "barrier": false,
+        "cost": 1,
+        "source_text": "distance_sum = total"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "distance_sum"
+          }
+        }
+      ],
+      "inputs": [
+        "total@1"
+      ],
+      "op_id": "op6",
+      "op_kind": "assign",
+      "origin_callstack": [],
+      "outputs": [
+        "distance_sum@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 25,
+          "line": 19,
+          "offset": 578
+        },
+        "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+        "start": {
+          "column": 5,
+          "line": 19,
+          "offset": 558
+        }
+      },
+      "stmt_id": "knn_ckks_demo@558"
+    }
+  ],
+  "schema_version": 2,
+  "source_file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+  "values": [
+    {
+      "annotations": {},
+      "origin_scope": "knn_ckks_demo",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 33,
+          "line": 7,
+          "offset": 63
+        },
+        "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+        "start": {
+          "column": 6,
+          "line": 7,
+          "offset": 36
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ckks_eva"
+      },
+      "value_id": "ckks_eva@0",
+      "value_kind": "evaluator"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "knn_ckks_demo",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 58,
+          "line": 7,
+          "offset": 88
+        },
+        "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+        "start": {
+          "column": 35,
+          "line": 7,
+          "offset": 65
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "query"
+      },
+      "value_id": "query@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "knn_ckks_demo",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 84,
+          "line": 7,
+          "offset": 114
+        },
+        "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+        "start": {
+          "column": 60,
+          "line": 7,
+          "offset": 90
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "train0"
+      },
+      "value_id": "train0@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "knn_ckks_demo",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 30,
+          "line": 8,
+          "offset": 159
+        },
+        "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+        "start": {
+          "column": 6,
+          "line": 8,
+          "offset": 135
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "train1"
+      },
+      "value_id": "train1@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "knn_ckks_demo",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 61,
+          "line": 8,
+          "offset": 190
+        },
+        "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+        "start": {
+          "column": 32,
+          "line": 8,
+          "offset": 161
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "galois_keys"
+      },
+      "value_id": "galois_keys@0",
+      "value_kind": "galois_keys"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "knn_ckks_demo",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 30,
+          "line": 9,
+          "offset": 235
+        },
+        "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+        "start": {
+          "column": 6,
+          "line": 9,
+          "offset": 211
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "distance_sum"
+      },
+      "value_id": "distance_sum@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "knn_ckks_demo",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 51,
+          "line": 11,
+          "offset": 303
+        },
+        "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+        "start": {
+          "column": 5,
+          "line": 11,
+          "offset": 257
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff0"
+      },
+      "value_id": "diff0@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "knn_ckks_demo",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 51,
+          "line": 11,
+          "offset": 303
+        },
+        "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+        "start": {
+          "column": 5,
+          "line": 11,
+          "offset": 257
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff1"
+      },
+      "value_id": "diff1@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "knn_ckks_demo",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 51,
+          "line": 11,
+          "offset": 303
+        },
+        "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+        "start": {
+          "column": 5,
+          "line": 11,
+          "offset": 257
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "sq0"
+      },
+      "value_id": "sq0@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "knn_ckks_demo",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 51,
+          "line": 11,
+          "offset": 303
+        },
+        "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+        "start": {
+          "column": 5,
+          "line": 11,
+          "offset": 257
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "sq1"
+      },
+      "value_id": "sq1@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "knn_ckks_demo",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 51,
+          "line": 11,
+          "offset": 303
+        },
+        "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+        "start": {
+          "column": 5,
+          "line": 11,
+          "offset": 257
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "rot0"
+      },
+      "value_id": "rot0@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "knn_ckks_demo",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 51,
+          "line": 11,
+          "offset": 303
+        },
+        "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+        "start": {
+          "column": 5,
+          "line": 11,
+          "offset": 257
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "total"
+      },
+      "value_id": "total@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "knn_ckks_demo",
+      "producer_op_id": "op0",
+      "source_span": {
+        "end": {
+          "column": 39,
+          "line": 13,
+          "offset": 344
+        },
+        "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+        "start": {
+          "column": 5,
+          "line": 13,
+          "offset": 310
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff0"
+      },
+      "value_id": "diff0@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "knn_ckks_demo",
+      "producer_op_id": "op1",
+      "source_span": {
+        "end": {
+          "column": 39,
+          "line": 14,
+          "offset": 384
+        },
+        "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+        "start": {
+          "column": 5,
+          "line": 14,
+          "offset": 350
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff1"
+      },
+      "value_id": "diff1@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "knn_ckks_demo",
+      "producer_op_id": "op2",
+      "source_span": {
+        "end": {
+          "column": 41,
+          "line": 15,
+          "offset": 426
+        },
+        "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+        "start": {
+          "column": 5,
+          "line": 15,
+          "offset": 390
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "sq0"
+      },
+      "value_id": "sq0@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "knn_ckks_demo",
+      "producer_op_id": "op3",
+      "source_span": {
+        "end": {
+          "column": 41,
+          "line": 16,
+          "offset": 468
+        },
+        "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+        "start": {
+          "column": 5,
+          "line": 16,
+          "offset": 432
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "sq1"
+      },
+      "value_id": "sq1@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "knn_ckks_demo",
+      "producer_op_id": "op4",
+      "source_span": {
+        "end": {
+          "column": 47,
+          "line": 17,
+          "offset": 516
+        },
+        "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+        "start": {
+          "column": 5,
+          "line": 17,
+          "offset": 474
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "rot0"
+      },
+      "value_id": "rot0@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "knn_ckks_demo",
+      "producer_op_id": "op5",
+      "source_span": {
+        "end": {
+          "column": 35,
+          "line": 18,
+          "offset": 552
+        },
+        "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+        "start": {
+          "column": 5,
+          "line": 18,
+          "offset": 522
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "total"
+      },
+      "value_id": "total@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "knn_ckks_demo",
+      "producer_op_id": "op6",
+      "source_span": {
+        "end": {
+          "column": 25,
+          "line": 19,
+          "offset": 578
+        },
+        "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+        "start": {
+          "column": 5,
+          "line": 19,
+          "offset": 558
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "distance_sum"
+      },
+      "value_id": "distance_sum@1",
+      "value_kind": "ciphertext"
+    }
+  ]
+}
