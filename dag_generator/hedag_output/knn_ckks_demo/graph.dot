@@ -1,0 +1,44 @@
+digraph hedag_v2 {
+  rankdir=LR;
+  node [shape=box, style="rounded,filled", fontname="Helvetica"];
+  edge [fontname="Helvetica"];
+  subgraph cluster_layer_0 {
+    label="layer 0";
+    color="#d1d5db";
+    op0 [label="op0\nsub\nline 13\nlayer 0\ncost 1\nout diff0@1\nin query@0, train0@0", fillcolor="#e5e7eb"];
+    op1 [label="op1\nsub\nline 14\nlayer 0\ncost 1\nout diff1@1\nin query@0, train1@0", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_1 {
+    label="layer 1";
+    color="#d1d5db";
+    op2 [label="op2\nmultiply\nline 15\nlayer 1\ncost 5\nout sq0@1\nin diff0@1, diff0@1", fillcolor="#e5e7eb"];
+    op3 [label="op3\nmultiply\nline 16\nlayer 1\ncost 5\nout sq1@1\nin diff1@1, diff1@1", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_2 {
+    label="layer 2";
+    color="#d1d5db";
+    op4 [label="op4\nrotate\nline 17\nlayer 2\ncost 4\nout rot0@1\nin sq0@1", fillcolor="#9467bd"];
+  }
+  subgraph cluster_layer_3 {
+    label="layer 3";
+    color="#d1d5db";
+    op5 [label="op5\nadd\nline 18\nlayer 3\ncost 1\nout total@1\nin rot0@1, sq1@1", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_4 {
+    label="layer 4";
+    color="#d1d5db";
+    op6 [label="op6\nassign\nline 19\nlayer 4\ncost 1\nout distance_sum@1\nin total@1", fillcolor="#17becf"];
+  }
+  op0 -> op2 [color="#1f2937", label="diff0"];
+  op0 -> op2 [color="#2563eb", label="diff0"];
+  op1 -> op3 [color="#1f2937", label="diff1"];
+  op1 -> op3 [color="#2563eb", label="diff1"];
+  op2 -> op4 [color="#1f2937", label="sq0"];
+  op2 -> op4 [color="#2563eb", label="sq0"];
+  op4 -> op5 [color="#1f2937", label="rot0"];
+  op4 -> op5 [color="#2563eb", label="rot0"];
+  op3 -> op5 [color="#1f2937", label="sq1"];
+  op3 -> op5 [color="#2563eb", label="sq1"];
+  op5 -> op6 [color="#1f2937", label="total"];
+  op5 -> op6 [color="#2563eb", label="total"];
+}

@@ -1,0 +1,20 @@
+{
+  "critical_path_cost": 12,
+  "diagnostics": [],
+  "edges": 12,
+  "entry_function": "knn_ckks_demo",
+  "frontend": "textual_fallback",
+  "layers": [
+    "layer 0: op0, op1",
+    "layer 1: op2, op3",
+    "layer 2: op4",
+    "layer 3: op5",
+    "layer 4: op6"
+  ],
+  "max_parallel_width": 2,
+  "ops": 7,
+  "rewrite_status": "ready",
+  "schema_version": 2,
+  "source_file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+  "values": 19
+}

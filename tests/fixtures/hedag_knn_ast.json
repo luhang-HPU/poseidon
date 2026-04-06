@@ -1,0 +1,70 @@
+{
+  "kind": "TranslationUnitDecl",
+  "inner": [
+    {
+      "kind": "FunctionDecl",
+      "name": "knn_ckks_demo",
+      "range": {
+        "begin": {
+          "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+          "offset": 148,
+          "line": 7,
+          "col": 1,
+          "tokLen": 4
+        },
+        "end": {
+          "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+          "offset": 679,
+          "line": 20,
+          "col": 1,
+          "tokLen": 1
+        }
+      },
+      "inner": [
+        {
+          "kind": "ParmVarDecl",
+          "name": "ckks_eva"
+        },
+        {
+          "kind": "ParmVarDecl",
+          "name": "query"
+        },
+        {
+          "kind": "ParmVarDecl",
+          "name": "train0"
+        },
+        {
+          "kind": "ParmVarDecl",
+          "name": "train1"
+        },
+        {
+          "kind": "ParmVarDecl",
+          "name": "galois_keys"
+        },
+        {
+          "kind": "ParmVarDecl",
+          "name": "distance_sum"
+        },
+        {
+          "kind": "CompoundStmt",
+          "range": {
+            "begin": {
+              "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+              "offset": 412,
+              "line": 10,
+              "col": 1,
+              "tokLen": 1
+            },
+            "end": {
+              "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+              "offset": 679,
+              "line": 20,
+              "col": 1,
+              "tokLen": 1
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

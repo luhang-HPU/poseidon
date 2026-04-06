@@ -1,0 +1,237 @@
+{
+  "barriers": [],
+  "blocking_diagnostics": [],
+  "entry_function": "knn_ckks_demo",
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "operation_order": [
+    "op0",
+    "op1",
+    "op2",
+    "op3",
+    "op4",
+    "op5",
+    "op6"
+  ],
+  "parallel_blocks": [
+    {
+      "anchor_stmt_ids": [
+        "knn_ckks_demo@310",
+        "knn_ckks_demo@350"
+      ],
+      "op_ids": [
+        "op0",
+        "op1"
+      ],
+      "region_id": "region0"
+    },
+    {
+      "anchor_stmt_ids": [
+        "knn_ckks_demo@390",
+        "knn_ckks_demo@432"
+      ],
+      "op_ids": [
+        "op2",
+        "op3"
+      ],
+      "region_id": "region1"
+    }
+  ],
+  "regions": [
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op0",
+        "op1"
+      ],
+      "region_id": "region0",
+      "source_spans": [
+        {
+          "end": {
+            "column": 39,
+            "line": 13,
+            "offset": 344
+          },
+          "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+          "start": {
+            "column": 5,
+            "line": 13,
+            "offset": 310
+          }
+        },
+        {
+          "end": {
+            "column": 39,
+            "line": 14,
+            "offset": 384
+          },
+          "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+          "start": {
+            "column": 5,
+            "line": 14,
+            "offset": 350
+          }
+        }
+      ],
+      "stmt_ids": [
+        "knn_ckks_demo@310",
+        "knn_ckks_demo@350"
+      ]
+    },
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op2",
+        "op3"
+      ],
+      "region_id": "region1",
+      "source_spans": [
+        {
+          "end": {
+            "column": 41,
+            "line": 15,
+            "offset": 426
+          },
+          "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+          "start": {
+            "column": 5,
+            "line": 15,
+            "offset": 390
+          }
+        },
+        {
+          "end": {
+            "column": 41,
+            "line": 16,
+            "offset": 468
+          },
+          "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+          "start": {
+            "column": 5,
+            "line": 16,
+            "offset": 432
+          }
+        }
+      ],
+      "stmt_ids": [
+        "knn_ckks_demo@390",
+        "knn_ckks_demo@432"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op4"
+      ],
+      "region_id": "region2",
+      "source_spans": [
+        {
+          "end": {
+            "column": 47,
+            "line": 17,
+            "offset": 516
+          },
+          "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+          "start": {
+            "column": 5,
+            "line": 17,
+            "offset": 474
+          }
+        }
+      ],
+      "stmt_ids": [
+        "knn_ckks_demo@474"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op5"
+      ],
+      "region_id": "region3",
+      "source_spans": [
+        {
+          "end": {
+            "column": 35,
+            "line": 18,
+            "offset": 552
+          },
+          "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+          "start": {
+            "column": 5,
+            "line": 18,
+            "offset": 522
+          }
+        }
+      ],
+      "stmt_ids": [
+        "knn_ckks_demo@522"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op6"
+      ],
+      "region_id": "region4",
+      "source_spans": [
+        {
+          "end": {
+            "column": 25,
+            "line": 19,
+            "offset": 578
+          },
+          "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+          "start": {
+            "column": 5,
+            "line": 19,
+            "offset": 558
+          }
+        }
+      ],
+      "stmt_ids": [
+        "knn_ckks_demo@558"
+      ]
+    }
+  ],
+  "required_temporaries": [
+    {
+      "symbol": "diff0"
+    },
+    {
+      "symbol": "diff1"
+    },
+    {
+      "symbol": "distance_sum"
+    },
+    {
+      "symbol": "rot0"
+    },
+    {
+      "symbol": "sq0"
+    },
+    {
+      "symbol": "sq1"
+    },
+    {
+      "symbol": "total"
+    }
+  ],
+  "schema_version": 2,
+  "source_edits_anchor": {
+    "end": {
+      "column": 1,
+      "line": 20,
+      "offset": 580
+    },
+    "file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+    "start": {
+      "column": 6,
+      "line": 7,
+      "offset": 36
+    }
+  },
+  "source_file": "dag_generator/hedag/samples/knn_ckks_demo.cpp",
+  "status": "ready"
+}
