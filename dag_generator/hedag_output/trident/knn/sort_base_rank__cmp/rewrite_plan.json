@@ -1,0 +1,220 @@
+{
+  "barriers": [
+    "op1",
+    "op2"
+  ],
+  "blocking_diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "for (int i = 0; i < slot_size; i++)\n    {\n        idxF[i] = i;\n    }"
+      },
+      "reason": "unsupported dynamic loop boundary",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 201,
+          "offset": 4769
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+        "start": {
+          "column": 5,
+          "line": 198,
+          "offset": 4702
+        }
+      },
+      "stmt_id": "sign@4702",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "entry_function": "cmp",
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "operation_order": [
+    "op1",
+    "op0",
+    "op2",
+    "op3",
+    "op4",
+    "op5"
+  ],
+  "parallel_blocks": [],
+  "regions": [
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op0"
+      ],
+      "region_id": "region0",
+      "source_spans": [
+        {
+          "end": {
+            "column": 63,
+            "line": 241,
+            "offset": 6414
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 241,
+            "offset": 6356
+          }
+        }
+      ],
+      "stmt_ids": [
+        "cmp@6356"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op1"
+      ],
+      "region_id": "region1",
+      "source_spans": [
+        {
+          "end": {
+            "column": 113,
+            "line": 223,
+            "offset": 5771
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 223,
+            "offset": 5663
+          }
+        }
+      ],
+      "stmt_ids": [
+        "cmp@6420::sign@5663"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op2"
+      ],
+      "region_id": "region2",
+      "source_spans": [
+        {
+          "end": {
+            "column": 113,
+            "line": 224,
+            "offset": 5885
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 224,
+            "offset": 5777
+          }
+        }
+      ],
+      "stmt_ids": [
+        "cmp@6420::sign@5777"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op3"
+      ],
+      "region_id": "region3",
+      "source_spans": [
+        {
+          "end": {
+            "column": 65,
+            "line": 227,
+            "offset": 5957
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 227,
+            "offset": 5897
+          }
+        }
+      ],
+      "stmt_ids": [
+        "cmp@6420::sign@5897"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op4"
+      ],
+      "region_id": "region4",
+      "source_spans": [
+        {
+          "end": {
+            "column": 96,
+            "line": 242,
+            "offset": 6511
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 242,
+            "offset": 6420
+          }
+        }
+      ],
+      "stmt_ids": [
+        "cmp@6420::return"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op5"
+      ],
+      "region_id": "region5",
+      "source_spans": [
+        {
+          "end": {
+            "column": 23,
+            "line": 243,
+            "offset": 6535
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 243,
+            "offset": 6517
+          }
+        }
+      ],
+      "stmt_ids": [
+        "cmp@6517"
+      ]
+    }
+  ],
+  "required_temporaries": [
+    {
+      "symbol": "ciph_result"
+    },
+    {
+      "symbol": "sign__cmp_6420__ciph_result"
+    }
+  ],
+  "schema_version": 2,
+  "source_edits_anchor": {
+    "end": {
+      "column": 1,
+      "line": 244,
+      "offset": 6537
+    },
+    "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+    "start": {
+      "column": 12,
+      "line": 231,
+      "offset": 5997
+    }
+  },
+  "source_file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+  "status": "blocked"
+}

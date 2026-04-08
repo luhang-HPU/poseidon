@@ -1,0 +1,38 @@
+{
+  "critical_path_cost": 0,
+  "diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "for (int w = 0; w < num_threads; ++w)\n    {\n        int start = w * work_load;\n        int end = std::min<int>(start + work_load, ciph_query.size());\n\n        if (end > start)\n        {\n\n                    for (size_t i = s; i < e; ++i)\n                    {\n                        ckks_eva->sub(ciph_data[i], ciph_query[i], ciph_data[i]);\n                        ckks_eva->sub(ciph_data[i + 10], ciph_query[i], ciph_data[i + 10]);\n\n                        ckks_eva->multiply_relin(ciph_data[i], ciph_data[i], ciph_data[i], relin_keys);\n                        ckks_eva->rescale_dynamic(ciph_data[i], ciph_data[i], scale);\n\n                        ckks_eva->multiply_relin(ciph_data[i + 10], ciph_data[i + 10], ciph_data[i + 10], relin_keys);\n                        ckks_eva->rescale_dynamic(ciph_data[i + 10], ciph_data[i + 10], scale);\n                    }\n                \n        }\n    }"
+      },
+      "reason": "unsupported dynamic loop boundary",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 60,
+          "line": 263,
+          "offset": 7953
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 5,
+          "line": 244,
+          "offset": 7059
+        }
+      },
+      "stmt_id": "sub_and_square@7059",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "edges": 0,
+  "entry_function": "sub_and_square",
+  "frontend": "textual_fallback",
+  "layers": [],
+  "max_parallel_width": 0,
+  "ops": 0,
+  "rewrite_status": "blocked",
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+  "values": 5
+}

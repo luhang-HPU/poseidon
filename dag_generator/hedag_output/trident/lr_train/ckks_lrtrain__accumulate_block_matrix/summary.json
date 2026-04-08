@@ -1,0 +1,17 @@
+{
+  "critical_path_cost": 5,
+  "diagnostics": [],
+  "edges": 2,
+  "entry_function": "accumulate_block_matrix",
+  "frontend": "textual_fallback",
+  "layers": [
+    "layer 0: op0",
+    "layer 1: op1"
+  ],
+  "max_parallel_width": 1,
+  "ops": 2,
+  "rewrite_status": "ready",
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+  "values": 7
+}

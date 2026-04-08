@@ -1,0 +1,33 @@
+digraph hedag_v2 {
+  rankdir=LR;
+  node [shape=box, style="rounded,filled", fontname="Helvetica"];
+  edge [fontname="Helvetica"];
+  subgraph cluster_layer_0 {
+    label="layer 0";
+    color="#d1d5db";
+    op0 [label="op0\nmultiply_plain\nline 484\nlayer 0\ncost 3\nout ct@1\nin pt@0", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_1 {
+    label="layer 1";
+    color="#d1d5db";
+    op1 [label="op1\nntt_inv\nline 486\nlayer 1\ncost 3\nout tmp@1\nin ct@1", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_2 {
+    label="layer 2";
+    color="#d1d5db";
+    op2 [label="op2\nassign\nline 487\nlayer 2\ncost 1\nout ct@2\nin tmp@1", fillcolor="#17becf"];
+  }
+  subgraph cluster_layer_3 {
+    label="layer 3";
+    color="#d1d5db";
+    op3 [label="op3\nreturn\nline 488\nlayer 3\ncost 1\nout __return__@1\nin ct@2", fillcolor="#64748b"];
+  }
+  op0 -> op1 [color="#1f2937", label="ct"];
+  op0 -> op1 [color="#2563eb", label="ct"];
+  op1 -> op2 [color="#1f2937", label="tmp"];
+  op1 -> op2 [color="#2563eb", label="tmp"];
+  op0 -> op2 [color="#f97316", label="ct"];
+  op1 -> op2 [color="#dc2626", label="ct"];
+  op2 -> op3 [color="#1f2937", label="ct"];
+  op2 -> op3 [color="#2563eb", label="ct"];
+}

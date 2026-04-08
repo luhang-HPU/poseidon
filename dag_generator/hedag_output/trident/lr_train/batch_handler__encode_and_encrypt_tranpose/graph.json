@@ -1,0 +1,136 @@
+{
+  "diagnostics": [],
+  "edges": [],
+  "entry_function": "encode_and_encrypt_tranpose",
+  "frontend": "textual_fallback",
+  "metadata": {
+    "entry_span": {
+      "end": {
+        "column": 1,
+        "line": 125,
+        "offset": 4046
+      },
+      "file": "/home/guoshuai/github/poseidon/Trident/lr_train/batch_handler.cpp",
+      "start": {
+        "column": 39,
+        "line": 103,
+        "offset": 3122
+      }
+    },
+    "frontend_mode": "textual_fallback",
+    "source_hash": "8a077c8a60140d11e9deed90eb0ca7f75cf90e3477569c6258ff28519c492499"
+  },
+  "ops": [],
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/lr_train/batch_handler.cpp",
+  "values": [
+    {
+      "annotations": {},
+      "origin_scope": "encode_and_encrypt_tranpose",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 65,
+          "line": 103,
+          "offset": 3148
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/lr_train/batch_handler.cpp",
+        "start": {
+          "column": 39,
+          "line": 103,
+          "offset": 3122
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "encoder"
+      },
+      "value_id": "encoder@0",
+      "value_kind": "encoder"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "encode_and_encrypt_tranpose",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 52,
+          "line": 104,
+          "offset": 3229
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/lr_train/batch_handler.cpp",
+        "start": {
+          "column": 26,
+          "line": 104,
+          "offset": 3203
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "encryptor"
+      },
+      "value_id": "encryptor@0",
+      "value_kind": "encryptor"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "encode_and_encrypt_tranpose",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 81,
+          "line": 105,
+          "offset": 3339
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/lr_train/batch_handler.cpp",
+        "start": {
+          "column": 26,
+          "line": 105,
+          "offset": 3284
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "message"
+      },
+      "value_id": "message@0",
+      "value_kind": "complex_vector"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "encode_and_encrypt_tranpose",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 45,
+          "line": 108,
+          "offset": 3482
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/lr_train/batch_handler.cpp",
+        "start": {
+          "column": 5,
+          "line": 108,
+          "offset": 3442
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ciph_x_transpose"
+      },
+      "value_id": "ciph_x_transpose@0",
+      "value_kind": "ciphertext_vector"
+    }
+  ]
+}

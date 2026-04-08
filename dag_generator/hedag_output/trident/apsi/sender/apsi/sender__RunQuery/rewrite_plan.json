@@ -1,0 +1,98 @@
+{
+  "barriers": [],
+  "blocking_diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (!query)\n    {\n        APSI_LOG_ERROR(\"Failed to process query request: query is invalid\");\n        throw invalid_argument(\"query is invalid\");\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 116,
+          "offset": 2786
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/sender/apsi/sender.cpp",
+        "start": {
+          "column": 5,
+          "line": 112,
+          "offset": 2635
+        }
+      },
+      "stmt_id": "RunQuery@2635",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "for (size_t i = 0; i < powers_size; i++)\n        {\n            powers.emplace_back(pool);\n        }"
+      },
+      "reason": "unsupported dynamic loop boundary",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 178,
+          "offset": 4417
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/sender/apsi/sender.cpp",
+        "start": {
+          "column": 9,
+          "line": 175,
+          "offset": 4319
+        }
+      },
+      "stmt_id": "RunQuery@4319",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "for (size_t bundle_idx = 0; bundle_idx < bundle_idx_count; bundle_idx++)\n    {\n        auto bundle_caches = sender_db->get_cache_at(static_cast<uint32_t>(bundle_idx));\n        for (auto &cache : bundle_caches)\n        {\n\n                    ProcessBinBundleCache(sender_db, crypto_context, cache, all_powers, chl,\n                                          send_rp_fun, static_cast<uint32_t>(bundle_idx),\n                                          query.compr_mode(), pool);\n                \n        }\n    }"
+      },
+      "reason": "unsupported dynamic loop boundary",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 76,
+          "line": 217,
+          "offset": 5819
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/sender/apsi/sender.cpp",
+        "start": {
+          "column": 5,
+          "line": 208,
+          "offset": 5315
+        }
+      },
+      "stmt_id": "RunQuery@5315",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "entry_function": "RunQuery",
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "operation_order": [],
+  "parallel_blocks": [],
+  "regions": [],
+  "required_temporaries": [],
+  "schema_version": 2,
+  "source_edits_anchor": {
+    "end": {
+      "column": 1,
+      "line": 229,
+      "offset": 6059
+    },
+    "file": "/home/guoshuai/github/poseidon/Trident/apsi/sender/apsi/sender.cpp",
+    "start": {
+      "column": 14,
+      "line": 108,
+      "offset": 2445
+    }
+  },
+  "source_file": "/home/guoshuai/github/poseidon/Trident/apsi/sender/apsi/sender.cpp",
+  "status": "blocked"
+}

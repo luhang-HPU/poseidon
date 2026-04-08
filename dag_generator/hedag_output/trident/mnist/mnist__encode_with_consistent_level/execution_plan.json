@@ -1,0 +1,49 @@
+{
+  "barriers": [],
+  "critical_path_cost": 2,
+  "entry_function": "encode_with_consistent_level",
+  "layers": [
+    [
+      "op0"
+    ],
+    [
+      "op1"
+    ]
+  ],
+  "max_parallel_width": 1,
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "op_schedule": {
+    "op0": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "latest_finish": 1,
+      "latest_start": 0,
+      "layer": 0,
+      "slack": 0,
+      "source_line": 137
+    },
+    "op1": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 2,
+      "earliest_start": 1,
+      "latest_finish": 2,
+      "latest_start": 1,
+      "layer": 1,
+      "slack": 0,
+      "source_line": 138
+    }
+  },
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/mnist/mnist.cpp",
+  "topological_order": [
+    "op0",
+    "op1"
+  ]
+}

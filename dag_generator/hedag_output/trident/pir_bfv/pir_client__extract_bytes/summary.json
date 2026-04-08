@@ -1,0 +1,16 @@
+{
+  "critical_path_cost": 1,
+  "diagnostics": [],
+  "edges": 0,
+  "entry_function": "extract_bytes",
+  "frontend": "textual_fallback",
+  "layers": [
+    "layer 0: op0"
+  ],
+  "max_parallel_width": 1,
+  "ops": 1,
+  "rewrite_status": "ready",
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+  "values": 3
+}

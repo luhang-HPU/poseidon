@@ -1,0 +1,18 @@
+digraph hedag_v2 {
+  rankdir=LR;
+  node [shape=box, style="rounded,filled", fontname="Helvetica"];
+  edge [fontname="Helvetica"];
+  subgraph cluster_layer_0 {
+    label="layer 0";
+    color="#d1d5db";
+    op0 [label="op0\ndecrypt\nline 589\nlayer 0\ncost 4\nout plain_weight@1\nin ciph_weight@0", fillcolor="#e5e7eb"];
+    op2 [label="op2\nreturn\nline 592\nlayer 0\ncost 1\nout __return__@1\nin accuracy_of_plain(message, x, y)@0", fillcolor="#64748b"];
+  }
+  subgraph cluster_layer_1 {
+    label="layer 1";
+    color="#d1d5db";
+    op1 [label="op1\ndecode\nline 591\nlayer 1\ncost 1\nout message@1\nin plain_weight@1", fillcolor="#e5e7eb"];
+  }
+  op0 -> op1 [color="#1f2937", label="plain_weight"];
+  op0 -> op1 [color="#2563eb", label="plain_weight"];
+}

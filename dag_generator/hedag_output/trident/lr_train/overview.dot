@@ -1,0 +1,232 @@
+digraph hedag_trident_overview {
+  rankdir=LR;
+  compound=true;
+  graph [fontname="Helvetica", pad="0.3"];
+  node [shape=box, style="rounded,filled", fontname="Helvetica"];
+  edge [fontname="Helvetica"];
+  overview_root [shape=folder, fillcolor="#bfdbfe", color="#2563eb", label="lr_train Overview"];
+  subgraph cluster_Trident_lr_train_ckks_lrtrain_cpp__main {
+    label="Trident/lr_train/ckks_lrtrain.cpp";
+    color="#93c5fd";
+    style="rounded";
+    Trident_lr_train_ckks_lrtrain_cpp__main__entry [shape=component, fillcolor="#dbeafe", color="#475569", label="main\\nckks_lrtrain.cpp\\nops 4\\ndiag 5\\nblocked"];
+    subgraph cluster_Trident_lr_train_ckks_lrtrain_cpp__main_layer_0 {
+      label="layer 0";
+      color="#e5e7eb";
+      Trident_lr_train_ckks_lrtrain_cpp__main__op0 [fillcolor="#e5e7eb", label="create_public_key\\nline 244\\nL0"];
+      Trident_lr_train_ckks_lrtrain_cpp__main__op1 [fillcolor="#e5e7eb", label="create_relin_keys\\nline 245\\nL0"];
+      Trident_lr_train_ckks_lrtrain_cpp__main__op2 [fillcolor="#e5e7eb", label="create_galois_keys\\nline 246\\nL0"];
+      Trident_lr_train_ckks_lrtrain_cpp__main__op3 [fillcolor="#64748b", label="return\\nline 546\\nL0"];
+    }
+    Trident_lr_train_ckks_lrtrain_cpp__main__entry -> Trident_lr_train_ckks_lrtrain_cpp__main__op0 [style="dotted", color="#94a3b8", arrowhead="none"];
+    Trident_lr_train_ckks_lrtrain_cpp__main__entry -> Trident_lr_train_ckks_lrtrain_cpp__main__op1 [style="dotted", color="#94a3b8", arrowhead="none"];
+    Trident_lr_train_ckks_lrtrain_cpp__main__entry -> Trident_lr_train_ckks_lrtrain_cpp__main__op2 [style="dotted", color="#94a3b8", arrowhead="none"];
+    Trident_lr_train_ckks_lrtrain_cpp__main__entry -> Trident_lr_train_ckks_lrtrain_cpp__main__op3 [style="dotted", color="#94a3b8", arrowhead="none"];
+  }
+  overview_root -> Trident_lr_train_ckks_lrtrain_cpp__main__entry [color="#94a3b8", style="dashed"];
+  subgraph cluster_Trident_lr_train_batch_handler_cpp__encode_and_encrypt {
+    label="Trident/lr_train/batch_handler.cpp";
+    color="#d1d5db";
+    style="rounded";
+    Trident_lr_train_batch_handler_cpp__encode_and_encrypt__entry [shape=component, fillcolor="#f8fafc", color="#475569", label="encode_and_encrypt\\nbatch_handler.cpp\\nops 3\\ndiag 0\\nready"];
+    subgraph cluster_Trident_lr_train_batch_handler_cpp__encode_and_encrypt_layer_0 {
+      label="layer 0";
+      color="#e5e7eb";
+      Trident_lr_train_batch_handler_cpp__encode_and_encrypt__op0 [fillcolor="#e5e7eb", label="encode\\nline 33\\nL0"];
+    }
+    subgraph cluster_Trident_lr_train_batch_handler_cpp__encode_and_encrypt_layer_1 {
+      label="layer 1";
+      color="#e5e7eb";
+      Trident_lr_train_batch_handler_cpp__encode_and_encrypt__op1 [fillcolor="#e5e7eb", label="encrypt\\nline 34\\nL1"];
+    }
+    subgraph cluster_Trident_lr_train_batch_handler_cpp__encode_and_encrypt_layer_2 {
+      label="layer 2";
+      color="#e5e7eb";
+      Trident_lr_train_batch_handler_cpp__encode_and_encrypt__op2 [fillcolor="#64748b", label="return\\nline 35\\nL2"];
+    }
+    Trident_lr_train_batch_handler_cpp__encode_and_encrypt__entry -> Trident_lr_train_batch_handler_cpp__encode_and_encrypt__op0 [style="dotted", color="#94a3b8", arrowhead="none"];
+  }
+  Trident_lr_train_batch_handler_cpp__encode_and_encrypt__op0 -> Trident_lr_train_batch_handler_cpp__encode_and_encrypt__op1 [color="#1f2937", penwidth="1.2"];
+  Trident_lr_train_batch_handler_cpp__encode_and_encrypt__op0 -> Trident_lr_train_batch_handler_cpp__encode_and_encrypt__op1 [color="#2563eb", penwidth="1.2"];
+  Trident_lr_train_batch_handler_cpp__encode_and_encrypt__op1 -> Trident_lr_train_batch_handler_cpp__encode_and_encrypt__op2 [color="#1f2937", penwidth="1.2"];
+  Trident_lr_train_batch_handler_cpp__encode_and_encrypt__op1 -> Trident_lr_train_batch_handler_cpp__encode_and_encrypt__op2 [color="#2563eb", penwidth="1.2"];
+  overview_root -> Trident_lr_train_batch_handler_cpp__encode_and_encrypt__entry [color="#94a3b8", style="dashed"];
+  subgraph cluster_Trident_lr_train_batch_handler_cpp__encode_and_encrypt_block {
+    label="Trident/lr_train/batch_handler.cpp";
+    color="#d1d5db";
+    style="rounded";
+    Trident_lr_train_batch_handler_cpp__encode_and_encrypt_block__entry [shape=component, fillcolor="#f8fafc", color="#475569", label="encode_and_encrypt_block\\nbatch_handler.cpp\\nops 0\\ndiag 0\\nready"];
+    Trident_lr_train_batch_handler_cpp__encode_and_encrypt_block__empty [fillcolor="#f1f5f9", label="no tracked ops"];
+    Trident_lr_train_batch_handler_cpp__encode_and_encrypt_block__entry -> Trident_lr_train_batch_handler_cpp__encode_and_encrypt_block__empty [style="dotted", color="#94a3b8", arrowhead="none"];
+  }
+  overview_root -> Trident_lr_train_batch_handler_cpp__encode_and_encrypt_block__entry [color="#94a3b8", style="dashed"];
+  subgraph cluster_Trident_lr_train_batch_handler_cpp__encode_and_encrypt_weight {
+    label="Trident/lr_train/batch_handler.cpp";
+    color="#d1d5db";
+    style="rounded";
+    Trident_lr_train_batch_handler_cpp__encode_and_encrypt_weight__entry [shape=component, fillcolor="#f8fafc", color="#475569", label="encode_and_encrypt_weight\\nbatch_handler.cpp\\nops 0\\ndiag 2\\nblocked"];
+    Trident_lr_train_batch_handler_cpp__encode_and_encrypt_weight__empty [fillcolor="#f1f5f9", label="no tracked ops"];
+    Trident_lr_train_batch_handler_cpp__encode_and_encrypt_weight__entry -> Trident_lr_train_batch_handler_cpp__encode_and_encrypt_weight__empty [style="dotted", color="#94a3b8", arrowhead="none"];
+  }
+  overview_root -> Trident_lr_train_batch_handler_cpp__encode_and_encrypt_weight__entry [color="#94a3b8", style="dashed"];
+  subgraph cluster_Trident_lr_train_batch_handler_cpp__encode_and_encrypt_tranpose {
+    label="Trident/lr_train/batch_handler.cpp";
+    color="#d1d5db";
+    style="rounded";
+    Trident_lr_train_batch_handler_cpp__encode_and_encrypt_tranpose__entry [shape=component, fillcolor="#f8fafc", color="#475569", label="encode_and_encrypt_tranpose\\nbatch_handler.cpp\\nops 0\\ndiag 0\\nready"];
+    Trident_lr_train_batch_handler_cpp__encode_and_encrypt_tranpose__empty [fillcolor="#f1f5f9", label="no tracked ops"];
+    Trident_lr_train_batch_handler_cpp__encode_and_encrypt_tranpose__entry -> Trident_lr_train_batch_handler_cpp__encode_and_encrypt_tranpose__empty [style="dotted", color="#94a3b8", arrowhead="none"];
+  }
+  overview_root -> Trident_lr_train_batch_handler_cpp__encode_and_encrypt_tranpose__entry [color="#94a3b8", style="dashed"];
+  subgraph cluster_Trident_lr_train_batch_handler_cpp__decrypt_and_decode {
+    label="Trident/lr_train/batch_handler.cpp";
+    color="#d1d5db";
+    style="rounded";
+    Trident_lr_train_batch_handler_cpp__decrypt_and_decode__entry [shape=component, fillcolor="#f8fafc", color="#475569", label="decrypt_and_decode\\nbatch_handler.cpp\\nops 3\\ndiag 0\\nready"];
+    subgraph cluster_Trident_lr_train_batch_handler_cpp__decrypt_and_decode_layer_0 {
+      label="layer 0";
+      color="#e5e7eb";
+      Trident_lr_train_batch_handler_cpp__decrypt_and_decode__op0 [fillcolor="#e5e7eb", label="decrypt\\nline 131\\nL0"];
+    }
+    subgraph cluster_Trident_lr_train_batch_handler_cpp__decrypt_and_decode_layer_1 {
+      label="layer 1";
+      color="#e5e7eb";
+      Trident_lr_train_batch_handler_cpp__decrypt_and_decode__op1 [fillcolor="#e5e7eb", label="decode\\nline 133\\nL1"];
+    }
+    subgraph cluster_Trident_lr_train_batch_handler_cpp__decrypt_and_decode_layer_2 {
+      label="layer 2";
+      color="#e5e7eb";
+      Trident_lr_train_batch_handler_cpp__decrypt_and_decode__op2 [fillcolor="#64748b", label="return\\nline 134\\nL2"];
+    }
+    Trident_lr_train_batch_handler_cpp__decrypt_and_decode__entry -> Trident_lr_train_batch_handler_cpp__decrypt_and_decode__op0 [style="dotted", color="#94a3b8", arrowhead="none"];
+  }
+  Trident_lr_train_batch_handler_cpp__decrypt_and_decode__op0 -> Trident_lr_train_batch_handler_cpp__decrypt_and_decode__op1 [color="#1f2937", penwidth="1.2"];
+  Trident_lr_train_batch_handler_cpp__decrypt_and_decode__op0 -> Trident_lr_train_batch_handler_cpp__decrypt_and_decode__op1 [color="#2563eb", penwidth="1.2"];
+  Trident_lr_train_batch_handler_cpp__decrypt_and_decode__op1 -> Trident_lr_train_batch_handler_cpp__decrypt_and_decode__op2 [color="#1f2937", penwidth="1.2"];
+  Trident_lr_train_batch_handler_cpp__decrypt_and_decode__op1 -> Trident_lr_train_batch_handler_cpp__decrypt_and_decode__op2 [color="#2563eb", penwidth="1.2"];
+  overview_root -> Trident_lr_train_batch_handler_cpp__decrypt_and_decode__entry [color="#94a3b8", style="dashed"];
+  subgraph cluster_Trident_lr_train_ckks_lrtrain_cpp__sigmoid_approx {
+    label="Trident/lr_train/ckks_lrtrain.cpp";
+    color="#d1d5db";
+    style="rounded";
+    Trident_lr_train_ckks_lrtrain_cpp__sigmoid_approx__entry [shape=component, fillcolor="#f8fafc", color="#475569", label="sigmoid_approx\\nckks_lrtrain.cpp\\nops 2\\ndiag 0\\nready"];
+    subgraph cluster_Trident_lr_train_ckks_lrtrain_cpp__sigmoid_approx_layer_0 {
+      label="layer 0";
+      color="#e5e7eb";
+      Trident_lr_train_ckks_lrtrain_cpp__sigmoid_approx__op0 [fillcolor="#e377c2", label="evaluate_poly_vector\\nline 559\\nL0"];
+    }
+    subgraph cluster_Trident_lr_train_ckks_lrtrain_cpp__sigmoid_approx_layer_1 {
+      label="layer 1";
+      color="#e5e7eb";
+      Trident_lr_train_ckks_lrtrain_cpp__sigmoid_approx__op1 [fillcolor="#64748b", label="return\\nline 560\\nL1"];
+    }
+    Trident_lr_train_ckks_lrtrain_cpp__sigmoid_approx__entry -> Trident_lr_train_ckks_lrtrain_cpp__sigmoid_approx__op0 [style="dotted", color="#94a3b8", arrowhead="none"];
+  }
+  Trident_lr_train_ckks_lrtrain_cpp__sigmoid_approx__op0 -> Trident_lr_train_ckks_lrtrain_cpp__sigmoid_approx__op1 [color="#1f2937", penwidth="1.2"];
+  Trident_lr_train_ckks_lrtrain_cpp__sigmoid_approx__op0 -> Trident_lr_train_ckks_lrtrain_cpp__sigmoid_approx__op1 [color="#2563eb", penwidth="1.2"];
+  overview_root -> Trident_lr_train_ckks_lrtrain_cpp__sigmoid_approx__entry [color="#94a3b8", style="dashed"];
+  subgraph cluster_Trident_lr_train_ckks_lrtrain_cpp__accuracy_of_ciph {
+    label="Trident/lr_train/ckks_lrtrain.cpp";
+    color="#d1d5db";
+    style="rounded";
+    Trident_lr_train_ckks_lrtrain_cpp__accuracy_of_ciph__entry [shape=component, fillcolor="#f8fafc", color="#475569", label="accuracy_of_ciph\\nckks_lrtrain.cpp\\nops 3\\ndiag 0\\nready"];
+    subgraph cluster_Trident_lr_train_ckks_lrtrain_cpp__accuracy_of_ciph_layer_0 {
+      label="layer 0";
+      color="#e5e7eb";
+      Trident_lr_train_ckks_lrtrain_cpp__accuracy_of_ciph__op0 [fillcolor="#e5e7eb", label="decrypt\\nline 589\\nL0"];
+      Trident_lr_train_ckks_lrtrain_cpp__accuracy_of_ciph__op2 [fillcolor="#64748b", label="return\\nline 592\\nL0"];
+    }
+    subgraph cluster_Trident_lr_train_ckks_lrtrain_cpp__accuracy_of_ciph_layer_1 {
+      label="layer 1";
+      color="#e5e7eb";
+      Trident_lr_train_ckks_lrtrain_cpp__accuracy_of_ciph__op1 [fillcolor="#e5e7eb", label="decode\\nline 591\\nL1"];
+    }
+    Trident_lr_train_ckks_lrtrain_cpp__accuracy_of_ciph__entry -> Trident_lr_train_ckks_lrtrain_cpp__accuracy_of_ciph__op0 [style="dotted", color="#94a3b8", arrowhead="none"];
+    Trident_lr_train_ckks_lrtrain_cpp__accuracy_of_ciph__entry -> Trident_lr_train_ckks_lrtrain_cpp__accuracy_of_ciph__op2 [style="dotted", color="#94a3b8", arrowhead="none"];
+  }
+  Trident_lr_train_ckks_lrtrain_cpp__accuracy_of_ciph__op0 -> Trident_lr_train_ckks_lrtrain_cpp__accuracy_of_ciph__op1 [color="#1f2937", penwidth="1.2"];
+  Trident_lr_train_ckks_lrtrain_cpp__accuracy_of_ciph__op0 -> Trident_lr_train_ckks_lrtrain_cpp__accuracy_of_ciph__op1 [color="#2563eb", penwidth="1.2"];
+  overview_root -> Trident_lr_train_ckks_lrtrain_cpp__accuracy_of_ciph__entry [color="#94a3b8", style="dashed"];
+  subgraph cluster_Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n {
+    label="Trident/lr_train/ckks_lrtrain.cpp";
+    color="#d1d5db";
+    style="rounded";
+    Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n__entry [shape=component, fillcolor="#f8fafc", color="#475569", label="accumulate_top_n\\nckks_lrtrain.cpp\\nops 4\\ndiag 2\\nblocked"];
+    subgraph cluster_Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n_layer_0 {
+      label="layer 0";
+      color="#e5e7eb";
+      Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n__op0 [fillcolor="#e5e7eb", label="encode\\nline 688\\nL0"];
+    }
+    subgraph cluster_Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n_layer_1 {
+      label="layer 1";
+      color="#e5e7eb";
+      Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n__op1 [fillcolor="#e5e7eb", label="encrypt\\nline 689\\nL1"];
+    }
+    subgraph cluster_Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n_layer_2 {
+      label="layer 2";
+      color="#e5e7eb";
+      Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n__op2 [fillcolor="#e5e7eb", label="add\\nline 711\\nL2"];
+    }
+    subgraph cluster_Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n_layer_3 {
+      label="layer 3";
+      color="#e5e7eb";
+      Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n__op3 [fillcolor="#64748b", label="return\\nline 712\\nL3"];
+    }
+    Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n__entry -> Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n__op0 [style="dotted", color="#94a3b8", arrowhead="none"];
+  }
+  Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n__op0 -> Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n__op1 [color="#1f2937", penwidth="1.2"];
+  Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n__op0 -> Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n__op1 [color="#2563eb", penwidth="1.2"];
+  Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n__op1 -> Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n__op2 [color="#1f2937", penwidth="1.2"];
+  Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n__op1 -> Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n__op2 [color="#2563eb", penwidth="1.2"];
+  Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n__op1 -> Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n__op2 [color="#f97316", penwidth="1.2"];
+  Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n__op2 -> Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n__op3 [color="#1f2937", penwidth="1.2"];
+  Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n__op2 -> Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n__op3 [color="#2563eb", penwidth="1.2"];
+  overview_root -> Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n__entry [color="#94a3b8", style="dashed"];
+  subgraph cluster_Trident_lr_train_ckks_lrtrain_cpp__accumulate_block_matrix {
+    label="Trident/lr_train/ckks_lrtrain.cpp";
+    color="#d1d5db";
+    style="rounded";
+    Trident_lr_train_ckks_lrtrain_cpp__accumulate_block_matrix__entry [shape=component, fillcolor="#f8fafc", color="#475569", label="accumulate_block_matrix\\nckks_lrtrain.cpp\\nops 2\\ndiag 0\\nready"];
+    subgraph cluster_Trident_lr_train_ckks_lrtrain_cpp__accumulate_block_matrix_layer_0 {
+      label="layer 0";
+      color="#e5e7eb";
+      Trident_lr_train_ckks_lrtrain_cpp__accumulate_block_matrix__op0 [fillcolor="#9467bd", label="rotate\\nline 735\\nL0"];
+    }
+    subgraph cluster_Trident_lr_train_ckks_lrtrain_cpp__accumulate_block_matrix_layer_1 {
+      label="layer 1";
+      color="#e5e7eb";
+      Trident_lr_train_ckks_lrtrain_cpp__accumulate_block_matrix__op1 [fillcolor="#e5e7eb", label="add\\nline 736\\nL1"];
+    }
+    Trident_lr_train_ckks_lrtrain_cpp__accumulate_block_matrix__entry -> Trident_lr_train_ckks_lrtrain_cpp__accumulate_block_matrix__op0 [style="dotted", color="#94a3b8", arrowhead="none"];
+  }
+  Trident_lr_train_ckks_lrtrain_cpp__accumulate_block_matrix__op0 -> Trident_lr_train_ckks_lrtrain_cpp__accumulate_block_matrix__op1 [color="#1f2937", penwidth="1.2"];
+  Trident_lr_train_ckks_lrtrain_cpp__accumulate_block_matrix__op0 -> Trident_lr_train_ckks_lrtrain_cpp__accumulate_block_matrix__op1 [color="#2563eb", penwidth="1.2"];
+  overview_root -> Trident_lr_train_ckks_lrtrain_cpp__accumulate_block_matrix__entry [color="#94a3b8", style="dashed"];
+  subgraph cluster_Trident_lr_train_ckks_lrtrain_cpp__accumulate_slot_matrix {
+    label="Trident/lr_train/ckks_lrtrain.cpp";
+    color="#d1d5db";
+    style="rounded";
+    Trident_lr_train_ckks_lrtrain_cpp__accumulate_slot_matrix__entry [shape=component, fillcolor="#f8fafc", color="#475569", label="accumulate_slot_matrix\\nckks_lrtrain.cpp\\nops 2\\ndiag 0\\nready"];
+    subgraph cluster_Trident_lr_train_ckks_lrtrain_cpp__accumulate_slot_matrix_layer_0 {
+      label="layer 0";
+      color="#e5e7eb";
+      Trident_lr_train_ckks_lrtrain_cpp__accumulate_slot_matrix__op0 [fillcolor="#9467bd", label="rotate\\nline 747\\nL0"];
+    }
+    subgraph cluster_Trident_lr_train_ckks_lrtrain_cpp__accumulate_slot_matrix_layer_1 {
+      label="layer 1";
+      color="#e5e7eb";
+      Trident_lr_train_ckks_lrtrain_cpp__accumulate_slot_matrix__op1 [fillcolor="#e5e7eb", label="add\\nline 748\\nL1"];
+    }
+    Trident_lr_train_ckks_lrtrain_cpp__accumulate_slot_matrix__entry -> Trident_lr_train_ckks_lrtrain_cpp__accumulate_slot_matrix__op0 [style="dotted", color="#94a3b8", arrowhead="none"];
+  }
+  Trident_lr_train_ckks_lrtrain_cpp__accumulate_slot_matrix__op0 -> Trident_lr_train_ckks_lrtrain_cpp__accumulate_slot_matrix__op1 [color="#1f2937", penwidth="1.2"];
+  Trident_lr_train_ckks_lrtrain_cpp__accumulate_slot_matrix__op0 -> Trident_lr_train_ckks_lrtrain_cpp__accumulate_slot_matrix__op1 [color="#2563eb", penwidth="1.2"];
+  overview_root -> Trident_lr_train_ckks_lrtrain_cpp__accumulate_slot_matrix__entry [color="#94a3b8", style="dashed"];
+  Trident_lr_train_ckks_lrtrain_cpp__main__entry -> Trident_lr_train_batch_handler_cpp__encode_and_encrypt__entry [color="#0f766e", penwidth="2", style="dashed", label="encode_and_encrypt"];
+  Trident_lr_train_ckks_lrtrain_cpp__main__entry -> Trident_lr_train_batch_handler_cpp__decrypt_and_decode__entry [color="#0f766e", penwidth="2", style="dashed", label="decrypt_and_decode"];
+  Trident_lr_train_ckks_lrtrain_cpp__main__entry -> Trident_lr_train_ckks_lrtrain_cpp__sigmoid_approx__entry [color="#0f766e", penwidth="2", style="dashed", label="sigmoid_approx"];
+  Trident_lr_train_ckks_lrtrain_cpp__main__entry -> Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n__entry [color="#0f766e", penwidth="2", style="dashed", label="accumulate_top_n"];
+  Trident_lr_train_ckks_lrtrain_cpp__main__entry -> Trident_lr_train_ckks_lrtrain_cpp__accumulate_block_matrix__entry [color="#0f766e", penwidth="2", style="dashed", label="accumulate_block_matrix"];
+  Trident_lr_train_ckks_lrtrain_cpp__main__entry -> Trident_lr_train_ckks_lrtrain_cpp__accumulate_slot_matrix__entry [color="#0f766e", penwidth="2", style="dashed", label="accumulate_slot_matrix"];
+  Trident_lr_train_ckks_lrtrain_cpp__accumulate_slot_matrix__entry -> Trident_lr_train_ckks_lrtrain_cpp__accumulate_top_n__entry [color="#0f766e", penwidth="2", style="dashed", label="accumulate_top_n"];
+}

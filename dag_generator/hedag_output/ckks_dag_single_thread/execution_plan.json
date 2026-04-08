@@ -1,0 +1,654 @@
+{
+  "barriers": [
+    "op23",
+    "op24",
+    "op15",
+    "op26",
+    "op16",
+    "op27",
+    "op6",
+    "op7",
+    "op37",
+    "op38"
+  ],
+  "critical_path_cost": 57,
+  "entry_function": "ckks_single_thread_workload",
+  "layers": [
+    [
+      "op0",
+      "op11",
+      "op22"
+    ],
+    [
+      "op1",
+      "op12"
+    ],
+    [
+      "op23"
+    ],
+    [
+      "op2",
+      "op13"
+    ],
+    [
+      "op24"
+    ],
+    [
+      "op3",
+      "op14",
+      "op25"
+    ],
+    [
+      "op4"
+    ],
+    [
+      "op15"
+    ],
+    [
+      "op26"
+    ],
+    [
+      "op5"
+    ],
+    [
+      "op16"
+    ],
+    [
+      "op27"
+    ],
+    [
+      "op17",
+      "op28"
+    ],
+    [
+      "op6"
+    ],
+    [
+      "op18",
+      "op29"
+    ],
+    [
+      "op7"
+    ],
+    [
+      "op8",
+      "op19",
+      "op30"
+    ],
+    [
+      "op9",
+      "op20",
+      "op31"
+    ],
+    [
+      "op10",
+      "op21",
+      "op32"
+    ],
+    [
+      "op34",
+      "op33"
+    ],
+    [
+      "op35"
+    ],
+    [
+      "op36"
+    ],
+    [
+      "op37"
+    ],
+    [
+      "op38"
+    ],
+    [
+      "op39"
+    ],
+    [
+      "op40"
+    ]
+  ],
+  "max_parallel_width": 3,
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "op_schedule": {
+    "op0": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "latest_finish": 8,
+      "latest_start": 7,
+      "layer": 0,
+      "slack": 7,
+      "source_line": 144
+    },
+    "op1": {
+      "barrier": false,
+      "cost": 4,
+      "critical": false,
+      "earliest_finish": 5,
+      "earliest_start": 1,
+      "latest_finish": 12,
+      "latest_start": 8,
+      "layer": 1,
+      "slack": 7,
+      "source_line": 145
+    },
+    "op10": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 30,
+      "earliest_start": 29,
+      "latest_finish": 37,
+      "latest_start": 36,
+      "layer": 18,
+      "slack": 7,
+      "source_line": 218
+    },
+    "op11": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "latest_finish": 8,
+      "latest_start": 7,
+      "layer": 0,
+      "slack": 7,
+      "source_line": 170
+    },
+    "op12": {
+      "barrier": false,
+      "cost": 4,
+      "critical": false,
+      "earliest_finish": 5,
+      "earliest_start": 1,
+      "latest_finish": 12,
+      "latest_start": 8,
+      "layer": 1,
+      "slack": 7,
+      "source_line": 171
+    },
+    "op13": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 6,
+      "earliest_start": 5,
+      "latest_finish": 13,
+      "latest_start": 12,
+      "layer": 3,
+      "slack": 7,
+      "source_line": 172
+    },
+    "op14": {
+      "barrier": false,
+      "cost": 5,
+      "critical": false,
+      "earliest_finish": 11,
+      "earliest_start": 6,
+      "latest_finish": 18,
+      "latest_start": 13,
+      "layer": 5,
+      "slack": 7,
+      "source_line": 173
+    },
+    "op15": {
+      "barrier": true,
+      "cost": 4,
+      "critical": false,
+      "earliest_finish": 15,
+      "earliest_start": 11,
+      "latest_finish": 22,
+      "latest_start": 18,
+      "layer": 7,
+      "slack": 7,
+      "source_line": 174
+    },
+    "op16": {
+      "barrier": true,
+      "cost": 4,
+      "critical": false,
+      "earliest_finish": 19,
+      "earliest_start": 15,
+      "latest_finish": 26,
+      "latest_start": 22,
+      "layer": 10,
+      "slack": 7,
+      "source_line": 175
+    },
+    "op17": {
+      "barrier": false,
+      "cost": 4,
+      "critical": false,
+      "earliest_finish": 23,
+      "earliest_start": 19,
+      "latest_finish": 30,
+      "latest_start": 26,
+      "layer": 12,
+      "slack": 7,
+      "source_line": 176
+    },
+    "op18": {
+      "barrier": false,
+      "cost": 4,
+      "critical": false,
+      "earliest_finish": 27,
+      "earliest_start": 23,
+      "latest_finish": 34,
+      "latest_start": 30,
+      "layer": 14,
+      "slack": 7,
+      "source_line": 177
+    },
+    "op19": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 28,
+      "earliest_start": 27,
+      "latest_finish": 35,
+      "latest_start": 34,
+      "layer": 16,
+      "slack": 7,
+      "source_line": 178
+    },
+    "op2": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 6,
+      "earliest_start": 5,
+      "latest_finish": 13,
+      "latest_start": 12,
+      "layer": 3,
+      "slack": 7,
+      "source_line": 146
+    },
+    "op20": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 29,
+      "earliest_start": 28,
+      "latest_finish": 36,
+      "latest_start": 35,
+      "layer": 17,
+      "slack": 7,
+      "source_line": 179
+    },
+    "op21": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 30,
+      "earliest_start": 29,
+      "latest_finish": 37,
+      "latest_start": 36,
+      "layer": 18,
+      "slack": 7,
+      "source_line": 219
+    },
+    "op22": {
+      "barrier": false,
+      "cost": 5,
+      "critical": true,
+      "earliest_finish": 5,
+      "earliest_start": 0,
+      "latest_finish": 5,
+      "latest_start": 0,
+      "layer": 0,
+      "slack": 0,
+      "source_line": 198
+    },
+    "op23": {
+      "barrier": true,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 9,
+      "earliest_start": 5,
+      "latest_finish": 9,
+      "latest_start": 5,
+      "layer": 2,
+      "slack": 0,
+      "source_line": 199
+    },
+    "op24": {
+      "barrier": true,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 13,
+      "earliest_start": 9,
+      "latest_finish": 13,
+      "latest_start": 9,
+      "layer": 4,
+      "slack": 0,
+      "source_line": 200
+    },
+    "op25": {
+      "barrier": false,
+      "cost": 5,
+      "critical": true,
+      "earliest_finish": 18,
+      "earliest_start": 13,
+      "latest_finish": 18,
+      "latest_start": 13,
+      "layer": 5,
+      "slack": 0,
+      "source_line": 201
+    },
+    "op26": {
+      "barrier": true,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 22,
+      "earliest_start": 18,
+      "latest_finish": 22,
+      "latest_start": 18,
+      "layer": 8,
+      "slack": 0,
+      "source_line": 202
+    },
+    "op27": {
+      "barrier": true,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 26,
+      "earliest_start": 22,
+      "latest_finish": 26,
+      "latest_start": 22,
+      "layer": 11,
+      "slack": 0,
+      "source_line": 203
+    },
+    "op28": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 27,
+      "earliest_start": 26,
+      "latest_finish": 27,
+      "latest_start": 26,
+      "layer": 12,
+      "slack": 0,
+      "source_line": 204
+    },
+    "op29": {
+      "barrier": false,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 31,
+      "earliest_start": 27,
+      "latest_finish": 31,
+      "latest_start": 27,
+      "layer": 14,
+      "slack": 0,
+      "source_line": 205
+    },
+    "op3": {
+      "barrier": false,
+      "cost": 4,
+      "critical": false,
+      "earliest_finish": 10,
+      "earliest_start": 6,
+      "latest_finish": 17,
+      "latest_start": 13,
+      "layer": 5,
+      "slack": 7,
+      "source_line": 147
+    },
+    "op30": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 32,
+      "earliest_start": 31,
+      "latest_finish": 32,
+      "latest_start": 31,
+      "layer": 16,
+      "slack": 0,
+      "source_line": 206
+    },
+    "op31": {
+      "barrier": false,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 36,
+      "earliest_start": 32,
+      "latest_finish": 36,
+      "latest_start": 32,
+      "layer": 17,
+      "slack": 0,
+      "source_line": 207
+    },
+    "op32": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 37,
+      "earliest_start": 36,
+      "latest_finish": 37,
+      "latest_start": 36,
+      "layer": 18,
+      "slack": 0,
+      "source_line": 208
+    },
+    "op33": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 38,
+      "earliest_start": 37,
+      "latest_finish": 38,
+      "latest_start": 37,
+      "layer": 19,
+      "slack": 0,
+      "source_line": 220
+    },
+    "op34": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 31,
+      "earliest_start": 30,
+      "latest_finish": 38,
+      "latest_start": 37,
+      "layer": 19,
+      "slack": 7,
+      "source_line": 230
+    },
+    "op35": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 39,
+      "earliest_start": 38,
+      "latest_finish": 39,
+      "latest_start": 38,
+      "layer": 20,
+      "slack": 0,
+      "source_line": 231
+    },
+    "op36": {
+      "barrier": false,
+      "cost": 5,
+      "critical": true,
+      "earliest_finish": 44,
+      "earliest_start": 39,
+      "latest_finish": 44,
+      "latest_start": 39,
+      "layer": 21,
+      "slack": 0,
+      "source_line": 232
+    },
+    "op37": {
+      "barrier": true,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 48,
+      "earliest_start": 44,
+      "latest_finish": 48,
+      "latest_start": 44,
+      "layer": 22,
+      "slack": 0,
+      "source_line": 233
+    },
+    "op38": {
+      "barrier": true,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 52,
+      "earliest_start": 48,
+      "latest_finish": 52,
+      "latest_start": 48,
+      "layer": 23,
+      "slack": 0,
+      "source_line": 234
+    },
+    "op39": {
+      "barrier": false,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 56,
+      "earliest_start": 52,
+      "latest_finish": 56,
+      "latest_start": 52,
+      "layer": 24,
+      "slack": 0,
+      "source_line": 235
+    },
+    "op4": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 11,
+      "earliest_start": 10,
+      "latest_finish": 18,
+      "latest_start": 17,
+      "layer": 6,
+      "slack": 7,
+      "source_line": 148
+    },
+    "op40": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 57,
+      "earliest_start": 56,
+      "latest_finish": 57,
+      "latest_start": 56,
+      "layer": 25,
+      "slack": 0,
+      "source_line": 236
+    },
+    "op5": {
+      "barrier": false,
+      "cost": 5,
+      "critical": false,
+      "earliest_finish": 16,
+      "earliest_start": 11,
+      "latest_finish": 23,
+      "latest_start": 18,
+      "layer": 9,
+      "slack": 7,
+      "source_line": 149
+    },
+    "op6": {
+      "barrier": true,
+      "cost": 4,
+      "critical": false,
+      "earliest_finish": 20,
+      "earliest_start": 16,
+      "latest_finish": 27,
+      "latest_start": 23,
+      "layer": 13,
+      "slack": 7,
+      "source_line": 150
+    },
+    "op7": {
+      "barrier": true,
+      "cost": 4,
+      "critical": false,
+      "earliest_finish": 24,
+      "earliest_start": 20,
+      "latest_finish": 31,
+      "latest_start": 27,
+      "layer": 15,
+      "slack": 7,
+      "source_line": 151
+    },
+    "op8": {
+      "barrier": false,
+      "cost": 4,
+      "critical": false,
+      "earliest_finish": 28,
+      "earliest_start": 24,
+      "latest_finish": 35,
+      "latest_start": 31,
+      "layer": 16,
+      "slack": 7,
+      "source_line": 152
+    },
+    "op9": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 29,
+      "earliest_start": 28,
+      "latest_finish": 36,
+      "latest_start": 35,
+      "layer": 17,
+      "slack": 7,
+      "source_line": 153
+    }
+  },
+  "schema_version": 2,
+  "source_file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+  "topological_order": [
+    "op0",
+    "op11",
+    "op22",
+    "op1",
+    "op12",
+    "op23",
+    "op2",
+    "op13",
+    "op24",
+    "op3",
+    "op14",
+    "op25",
+    "op4",
+    "op15",
+    "op26",
+    "op5",
+    "op16",
+    "op27",
+    "op6",
+    "op17",
+    "op28",
+    "op7",
+    "op18",
+    "op29",
+    "op8",
+    "op19",
+    "op30",
+    "op9",
+    "op20",
+    "op31",
+    "op10",
+    "op21",
+    "op32",
+    "op34",
+    "op33",
+    "op35",
+    "op36",
+    "op37",
+    "op38",
+    "op39",
+    "op40"
+  ]
+}

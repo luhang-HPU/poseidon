@@ -1,0 +1,51 @@
+{
+  "diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (!crypto_context.encryptor()) {\n                throw invalid_argument(\"encryptor is not set in crypto_context\");\n            }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 13,
+          "line": 29,
+          "offset": 671
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/receiver/apsi/plaintext_powers.cpp",
+        "start": {
+          "column": 13,
+          "line": 27,
+          "offset": 542
+        }
+      },
+      "stmt_id": "encrypt@542",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "edges": [],
+  "entry_function": "encrypt",
+  "frontend": "textual_fallback",
+  "metadata": {
+    "entry_span": {
+      "end": {
+        "column": 9,
+        "line": 40,
+        "offset": 1052
+      },
+      "file": "/home/guoshuai/github/poseidon/Trident/apsi/receiver/apsi/plaintext_powers.cpp",
+      "start": {
+        "column": 78,
+        "line": 24,
+        "offset": 462
+      }
+    },
+    "frontend_mode": "textual_fallback",
+    "source_hash": "a7607e86b562a5affa67391df0eea8783b16fcda55fba28a9607c04cc37ea28e"
+  },
+  "ops": [],
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/apsi/receiver/apsi/plaintext_powers.cpp",
+  "values": []
+}

@@ -1,0 +1,32 @@
+digraph hedag_v2 {
+  rankdir=LR;
+  node [shape=box, style="rounded,filled", fontname="Helvetica"];
+  edge [fontname="Helvetica"];
+  subgraph cluster_layer_0 {
+    label="layer 0";
+    color="#d1d5db";
+    op0 [label="op0\nencode\nline 396\nlayer 0\ncost 1\nout plain_zero@1\nin zero@0", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_1 {
+    label="layer 1";
+    color="#d1d5db";
+    op1 [label="op1\nencrypt\nline 397\nlayer 1\ncost 4\nout ciph_sum@1\nin plain_zero@1", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_2 {
+    label="layer 2";
+    color="#d1d5db";
+    op2 [label="op2\nadd\nline 418\nlayer 2\ncost 1\nout ciph_sum@2\nin ciph_sum@1, ciph_rotate_sum@0", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_3 {
+    label="layer 3";
+    color="#d1d5db";
+    op3 [label="op3\nreturn\nline 419\nlayer 3\ncost 1\nout __return__@1\nin ciph_sum@2", fillcolor="#64748b"];
+  }
+  op0 -> op1 [color="#1f2937", label="plain_zero"];
+  op0 -> op1 [color="#2563eb", label="plain_zero"];
+  op1 -> op2 [color="#1f2937", label="ciph_sum"];
+  op1 -> op2 [color="#2563eb", label="ciph_sum"];
+  op1 -> op2 [color="#f97316", label="ciph_sum"];
+  op2 -> op3 [color="#1f2937", label="ciph_sum"];
+  op2 -> op3 [color="#2563eb", label="ciph_sum"];
+}

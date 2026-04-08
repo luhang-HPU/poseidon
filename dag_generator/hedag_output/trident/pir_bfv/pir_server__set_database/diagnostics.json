@@ -1,0 +1,27 @@
+{
+  "diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (!db)\n    {\n        POSEIDON_THROW(invalid_argument_error, \"db cannot be null\");\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 63,
+          "offset": 1290
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_server.cpp",
+        "start": {
+          "column": 5,
+          "line": 60,
+          "offset": 1202
+        }
+      },
+      "stmt_id": "set_database@1202",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ]
+}

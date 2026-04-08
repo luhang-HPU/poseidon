@@ -1,0 +1,179 @@
+{
+  "barriers": [],
+  "critical_path_cost": 10,
+  "entry_function": "expand_query",
+  "layers": [
+    [
+      "op0",
+      "op2",
+      "op4",
+      "op7",
+      "op9",
+      "op10"
+    ],
+    [
+      "op1",
+      "op8"
+    ],
+    [
+      "op3",
+      "op5"
+    ],
+    [
+      "op6"
+    ]
+  ],
+  "max_parallel_width": 6,
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "op_schedule": {
+    "op0": {
+      "barrier": false,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 4,
+      "earliest_start": 0,
+      "latest_finish": 4,
+      "latest_start": 0,
+      "layer": 0,
+      "slack": 0,
+      "source_line": 461
+    },
+    "op1": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 5,
+      "earliest_start": 4,
+      "latest_finish": 5,
+      "latest_start": 4,
+      "layer": 1,
+      "slack": 0,
+      "source_line": 464
+    },
+    "op10": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "latest_finish": 10,
+      "latest_start": 9,
+      "layer": 0,
+      "slack": 9,
+      "source_line": 531
+    },
+    "op2": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "latest_finish": 9,
+      "latest_start": 8,
+      "layer": 0,
+      "slack": 8,
+      "source_line": 470
+    },
+    "op3": {
+      "barrier": false,
+      "cost": 3,
+      "critical": false,
+      "earliest_finish": 8,
+      "earliest_start": 5,
+      "latest_finish": 9,
+      "latest_start": 6,
+      "layer": 2,
+      "slack": 1,
+      "source_line": 494
+    },
+    "op4": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "latest_finish": 10,
+      "latest_start": 9,
+      "layer": 0,
+      "slack": 9,
+      "source_line": 500
+    },
+    "op5": {
+      "barrier": false,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 9,
+      "earliest_start": 5,
+      "latest_finish": 9,
+      "latest_start": 5,
+      "layer": 2,
+      "slack": 0,
+      "source_line": 503
+    },
+    "op6": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 10,
+      "earliest_start": 9,
+      "latest_finish": 10,
+      "latest_start": 9,
+      "layer": 3,
+      "slack": 0,
+      "source_line": 507
+    },
+    "op7": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "latest_finish": 10,
+      "latest_start": 9,
+      "layer": 0,
+      "slack": 9,
+      "source_line": 508
+    },
+    "op8": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 2,
+      "earliest_start": 1,
+      "latest_finish": 10,
+      "latest_start": 9,
+      "layer": 1,
+      "slack": 8,
+      "source_line": 513
+    },
+    "op9": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "latest_finish": 10,
+      "latest_start": 9,
+      "layer": 0,
+      "slack": 9,
+      "source_line": 514
+    }
+  },
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_server.cpp",
+  "topological_order": [
+    "op0",
+    "op2",
+    "op4",
+    "op7",
+    "op9",
+    "op10",
+    "op1",
+    "op8",
+    "op3",
+    "op5",
+    "op6"
+  ]
+}

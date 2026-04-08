@@ -1,0 +1,131 @@
+{
+  "diagnostics": [],
+  "edges": [],
+  "entry_function": "serialize_reply",
+  "frontend": "textual_fallback",
+  "metadata": {
+    "entry_span": {
+      "end": {
+        "column": 1,
+        "line": 194,
+        "offset": 5107
+      },
+      "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+      "start": {
+        "column": 16,
+        "line": 184,
+        "offset": 4795
+      }
+    },
+    "frontend_mode": "textual_fallback",
+    "source_hash": "353b665b0e00ae24116f88c462365fce2f8f06cc2330f7598552c0a3afe2ad3a"
+  },
+  "ops": [
+    {
+      "api_name": "drop_modulus",
+      "attrs": {
+        "barrier": true,
+        "constants": [
+          "reply[i]",
+          "context_->crt_context()->last_parms_id()"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "{ evaluator_",
+        "source_text": "i++) { evaluator_->drop_modulus(reply[i], reply[i], context_->crt_context()->last_parms_id())"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": "reply",
+            "index": "i",
+            "kind": "indexed",
+            "text": "reply[i]"
+          }
+        }
+      ],
+      "inputs": [],
+      "op_id": "op0",
+      "op_kind": "drop_modulus",
+      "origin_callstack": [],
+      "outputs": [
+        "reply[i]@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 95,
+          "line": 189,
+          "offset": 5020
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 39,
+          "line": 187,
+          "offset": 4915
+        }
+      },
+      "stmt_id": "serialize_reply@4915"
+    }
+  ],
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+  "values": [
+    {
+      "annotations": {},
+      "origin_scope": "serialize_reply",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 95,
+          "line": 189,
+          "offset": 5020
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 39,
+          "line": 187,
+          "offset": 4915
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": "reply",
+        "index": "i",
+        "kind": "indexed",
+        "text": "reply[i]"
+      },
+      "value_id": "reply[i]@0",
+      "value_kind": "external"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "serialize_reply",
+      "producer_op_id": "op0",
+      "source_span": {
+        "end": {
+          "column": 95,
+          "line": 189,
+          "offset": 5020
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 39,
+          "line": 187,
+          "offset": 4915
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": "reply",
+        "index": "i",
+        "kind": "indexed",
+        "text": "reply[i]"
+      },
+      "value_id": "reply[i]@1",
+      "value_kind": "external"
+    }
+  ]
+}

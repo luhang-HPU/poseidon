@@ -16,6 +16,7 @@ PREFIXES = (
     "test_bgv_",
     "test_",
 )
+GENERIC_CASE_STEMS = {"main"}
 
 
 def normalize_case_stem(stem: str) -> str:
@@ -32,8 +33,13 @@ def normalize_case_stem(stem: str) -> str:
 
 
 def default_case_name(input_path: str, function_name: str) -> str:
-    stem = Path(input_path).stem
+    path = Path(input_path)
+    stem = path.stem
     normalized = normalize_case_stem(stem)
+    if normalized in GENERIC_CASE_STEMS:
+        parent = normalize_case_stem(path.parent.name)
+        if parent and parent not in GENERIC_CASE_STEMS:
+            normalized = parent
     if function_name in {"main", stem, normalized}:
         return normalized
     return f"{normalized}_{function_name}"

@@ -1,0 +1,3196 @@
+{
+  "barriers": [
+    "op7",
+    "op8",
+    "op17",
+    "op19"
+  ],
+  "blocking_diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "for (int w = 0; w < num_threads; ++w)\n    {\n        int start = w * work_load;\n        int end = std::min<int>(start + work_load, message.size());\n\n        if (end > start)\n        {\n\n                    for (size_t i = s; i < e; ++i)\n                    {\n                        encode_and_encrypt(encoder, encryptor, message[i], scale, vec_ciph[i]);\n                    }\n                \n        }\n    }"
+      },
+      "reason": "unsupported dynamic loop boundary",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 60,
+          "line": 202,
+          "offset": 5764
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 5,
+          "line": 190,
+          "offset": 5358
+        }
+      },
+      "stmt_id": "encode_and_encrypt_mt@5358",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "for (int w = 0; w < num_threads; ++w)\n    {\n        int start = w * work_load;\n        int end = std::min<int>(start + work_load, message.size());\n\n        if (end > start)\n        {\n\n                    for (size_t i = s; i < e; ++i)\n                    {\n                        encode_and_encrypt(encoder, encryptor, message[i], scale, vec_ciph[i]);\n                    }\n                \n        }\n    }"
+      },
+      "reason": "unsupported dynamic loop boundary",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 60,
+          "line": 202,
+          "offset": 5764
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 5,
+          "line": 190,
+          "offset": 5358
+        }
+      },
+      "stmt_id": "encode_and_encrypt_mt@5358",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "for (size_t i = 0; i < data_nums; i++)\n    {\n        cmp_top_k[i].real(11.5);\n    }"
+      },
+      "reason": "unsupported dynamic loop boundary",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 535,
+          "offset": 16753
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 5,
+          "line": 532,
+          "offset": 16671
+        }
+      },
+      "stmt_id": "main@16671",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "for (int w = 0; w < num_threads; ++w)\n    {\n        int start = w * work_load;\n        int end = std::min<int>(start + work_load, ciph_query.size());\n\n        if (end > start)\n        {\n\n                    for (size_t i = s; i < e; ++i)\n                    {\n                        ckks_eva->sub(ciph_data[i], ciph_query[i], ciph_data[i]);\n                        ckks_eva->sub(ciph_data[i + 10], ciph_query[i], ciph_data[i + 10]);\n\n                        ckks_eva->multiply_relin(ciph_data[i], ciph_data[i], ciph_data[i], relin_keys);\n                        ckks_eva->rescale_dynamic(ciph_data[i], ciph_data[i], scale);\n\n                        ckks_eva->multiply_relin(ciph_data[i + 10], ciph_data[i + 10], ciph_data[i + 10], relin_keys);\n                        ckks_eva->rescale_dynamic(ciph_data[i + 10], ciph_data[i + 10], scale);\n                    }\n                \n        }\n    }"
+      },
+      "reason": "unsupported dynamic loop boundary",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 60,
+          "line": 263,
+          "offset": 7953
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 5,
+          "line": 244,
+          "offset": 7059
+        }
+      },
+      "stmt_id": "sub_and_square@7059",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "for (size_t i = 1; i < dimension; i++)\n    {\n        ckks_eva->add(ciph_distance_1, ciph_data[i], ciph_distance_1);\n        ckks_eva->add(ciph_distance_2, ciph_data[i + dimension], ciph_distance_2);\n    }"
+      },
+      "reason": "unsupported dynamic loop boundary",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 545,
+          "offset": 17222
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 5,
+          "line": 541,
+          "offset": 17019
+        }
+      },
+      "stmt_id": "main@17019",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (n <= 0)\n    {\n        POSEIDON_THROW(invalid_argument_error, \"n cannot be negative\");\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 389,
+          "offset": 11559
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 5,
+          "line": 386,
+          "offset": 11465
+        }
+      },
+      "stmt_id": "accumulate_top_n_block@11465",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "while (n > 1)\n    {\n        Ciphertext ciph_tmp;\n        if (n & 1 && n != 1)\n        {\n            ckks_eva->add(ciph_sum, ciph_rotate_sum, ciph_sum);\n            ckks_eva->rotate(ciph_rotate_sum, ciph_rotate_sum, 100, rot_keys);\n            n--;\n        }\n        n = n >> 1;\n        if (n)\n        {\n            ckks_eva->rotate(ciph_rotate_sum, ciph_tmp, n * 100, rot_keys);\n            ckks_eva->add(ciph_rotate_sum, ciph_tmp, ciph_rotate_sum);\n        }\n    }"
+      },
+      "reason": "unsupported control flow: while",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 417,
+          "offset": 12357
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 5,
+          "line": 402,
+          "offset": 11893
+        }
+      },
+      "stmt_id": "accumulate_top_n_block@11893",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (ciph1.level() > ciph2.level())\n    {\n        eva->drop_modulus(ciph1, ciph1, ciph2.parms_id());\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 277,
+          "offset": 8307
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 5,
+          "line": 274,
+          "offset": 8203
+        }
+      },
+      "stmt_id": "match_param_id@8203",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (!util::are_approximate(ciph1.scale(), ciph2.scale()))\n    {\n        ciph1.scale() = ciph2.scale();\n        std::vector<std::complex<double>> vec_tmp(NUM, {1.0, 0.0});\n        Plaintext plt_tmp;\n\n        \n        {\n            encoder.encode(vec_tmp, ciph2.parms_id(), scale * scale / ciph2.scale(), plt_tmp);\n            eva->multiply_plain(ciph2, plt_tmp, ciph2);\n            eva->rescale(ciph2, ciph2);\n        }\n\n        \n        {\n            encoder.encode(vec_tmp, ciph1.parms_id(), scale * scale / ciph1.scale(), plt_tmp);\n            eva->multiply_plain(ciph1, plt_tmp, ciph1);\n            eva->rescale(ciph1, ciph1);\n        }\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 308,
+          "offset": 9265
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 5,
+          "line": 289,
+          "offset": 8621
+        }
+      },
+      "stmt_id": "match_scale@8621",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[0].real()) == 1)\n        {\n            result.push_back(0 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_0",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[1].real()) == 1)\n        {\n            result.push_back(1 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_1",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[2].real()) == 1)\n        {\n            result.push_back(2 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_2",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[3].real()) == 1)\n        {\n            result.push_back(3 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_3",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[4].real()) == 1)\n        {\n            result.push_back(4 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_4",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[5].real()) == 1)\n        {\n            result.push_back(5 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_5",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[6].real()) == 1)\n        {\n            result.push_back(6 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_6",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[7].real()) == 1)\n        {\n            result.push_back(7 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_7",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[8].real()) == 1)\n        {\n            result.push_back(8 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_8",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[9].real()) == 1)\n        {\n            result.push_back(9 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_9",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[10].real()) == 1)\n        {\n            result.push_back(10 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_10",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[11].real()) == 1)\n        {\n            result.push_back(11 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_11",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[12].real()) == 1)\n        {\n            result.push_back(12 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_12",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[13].real()) == 1)\n        {\n            result.push_back(13 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_13",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[14].real()) == 1)\n        {\n            result.push_back(14 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_14",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[15].real()) == 1)\n        {\n            result.push_back(15 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_15",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[16].real()) == 1)\n        {\n            result.push_back(16 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_16",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[17].real()) == 1)\n        {\n            result.push_back(17 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_17",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[18].real()) == 1)\n        {\n            result.push_back(18 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_18",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[19].real()) == 1)\n        {\n            result.push_back(19 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_19",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[20].real()) == 1)\n        {\n            result.push_back(20 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_20",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[21].real()) == 1)\n        {\n            result.push_back(21 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_21",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[22].real()) == 1)\n        {\n            result.push_back(22 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_22",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[23].real()) == 1)\n        {\n            result.push_back(23 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_23",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[24].real()) == 1)\n        {\n            result.push_back(24 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_24",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[25].real()) == 1)\n        {\n            result.push_back(25 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_25",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[26].real()) == 1)\n        {\n            result.push_back(26 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_26",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[27].real()) == 1)\n        {\n            result.push_back(27 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_27",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[28].real()) == 1)\n        {\n            result.push_back(28 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_28",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[29].real()) == 1)\n        {\n            result.push_back(29 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_29",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[30].real()) == 1)\n        {\n            result.push_back(30 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_30",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[31].real()) == 1)\n        {\n            result.push_back(31 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_31",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[32].real()) == 1)\n        {\n            result.push_back(32 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_32",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[33].real()) == 1)\n        {\n            result.push_back(33 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_33",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[34].real()) == 1)\n        {\n            result.push_back(34 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_34",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[35].real()) == 1)\n        {\n            result.push_back(35 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_35",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[36].real()) == 1)\n        {\n            result.push_back(36 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_36",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[37].real()) == 1)\n        {\n            result.push_back(37 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_37",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[38].real()) == 1)\n        {\n            result.push_back(38 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_38",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[39].real()) == 1)\n        {\n            result.push_back(39 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_39",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[40].real()) == 1)\n        {\n            result.push_back(40 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_40",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[41].real()) == 1)\n        {\n            result.push_back(41 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_41",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[42].real()) == 1)\n        {\n            result.push_back(42 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_42",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[43].real()) == 1)\n        {\n            result.push_back(43 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_43",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[44].real()) == 1)\n        {\n            result.push_back(44 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_44",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[45].real()) == 1)\n        {\n            result.push_back(45 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_45",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[46].real()) == 1)\n        {\n            result.push_back(46 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_46",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[47].real()) == 1)\n        {\n            result.push_back(47 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_47",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[48].real()) == 1)\n        {\n            result.push_back(48 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_48",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[49].real()) == 1)\n        {\n            result.push_back(49 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_49",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[50].real()) == 1)\n        {\n            result.push_back(50 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_50",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[51].real()) == 1)\n        {\n            result.push_back(51 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_51",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[52].real()) == 1)\n        {\n            result.push_back(52 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_52",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[53].real()) == 1)\n        {\n            result.push_back(53 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_53",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[54].real()) == 1)\n        {\n            result.push_back(54 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_54",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[55].real()) == 1)\n        {\n            result.push_back(55 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_55",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[56].real()) == 1)\n        {\n            result.push_back(56 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_56",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[57].real()) == 1)\n        {\n            result.push_back(57 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_57",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[58].real()) == 1)\n        {\n            result.push_back(58 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_58",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[59].real()) == 1)\n        {\n            result.push_back(59 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_59",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[60].real()) == 1)\n        {\n            result.push_back(60 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_60",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[61].real()) == 1)\n        {\n            result.push_back(61 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_61",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[62].real()) == 1)\n        {\n            result.push_back(62 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_62",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[63].real()) == 1)\n        {\n            result.push_back(63 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_63",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[64].real()) == 1)\n        {\n            result.push_back(64 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_64",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[65].real()) == 1)\n        {\n            result.push_back(65 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_65",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[66].real()) == 1)\n        {\n            result.push_back(66 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_66",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[67].real()) == 1)\n        {\n            result.push_back(67 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_67",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[68].real()) == 1)\n        {\n            result.push_back(68 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_68",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[69].real()) == 1)\n        {\n            result.push_back(69 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_69",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[70].real()) == 1)\n        {\n            result.push_back(70 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_70",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[71].real()) == 1)\n        {\n            result.push_back(71 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_71",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[72].real()) == 1)\n        {\n            result.push_back(72 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_72",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[73].real()) == 1)\n        {\n            result.push_back(73 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_73",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[74].real()) == 1)\n        {\n            result.push_back(74 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_74",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[75].real()) == 1)\n        {\n            result.push_back(75 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_75",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[76].real()) == 1)\n        {\n            result.push_back(76 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_76",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[77].real()) == 1)\n        {\n            result.push_back(77 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_77",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[78].real()) == 1)\n        {\n            result.push_back(78 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_78",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[79].real()) == 1)\n        {\n            result.push_back(79 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_79",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[80].real()) == 1)\n        {\n            result.push_back(80 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_80",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[81].real()) == 1)\n        {\n            result.push_back(81 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_81",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[82].real()) == 1)\n        {\n            result.push_back(82 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_82",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[83].real()) == 1)\n        {\n            result.push_back(83 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_83",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[84].real()) == 1)\n        {\n            result.push_back(84 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_84",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[85].real()) == 1)\n        {\n            result.push_back(85 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_85",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[86].real()) == 1)\n        {\n            result.push_back(86 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_86",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[87].real()) == 1)\n        {\n            result.push_back(87 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_87",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[88].real()) == 1)\n        {\n            result.push_back(88 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_88",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[89].real()) == 1)\n        {\n            result.push_back(89 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_89",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[90].real()) == 1)\n        {\n            result.push_back(90 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_90",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[91].real()) == 1)\n        {\n            result.push_back(91 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_91",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[92].real()) == 1)\n        {\n            result.push_back(92 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_92",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[93].real()) == 1)\n        {\n            result.push_back(93 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_93",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[94].real()) == 1)\n        {\n            result.push_back(94 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_94",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[95].real()) == 1)\n        {\n            result.push_back(95 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_95",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[96].real()) == 1)\n        {\n            result.push_back(96 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_96",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[97].real()) == 1)\n        {\n            result.push_back(97 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_97",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[98].real()) == 1)\n        {\n            result.push_back(98 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_98",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (std::round(result_index[99].real()) == 1)\n        {\n            result.push_back(99 + 1);\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 572,
+          "offset": 18287
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 9,
+          "line": 569,
+          "offset": 18187
+        }
+      },
+      "stmt_id": "main@18187@i_99",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "entry_function": "main",
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "operation_order": [
+    "op11",
+    "op0",
+    "op1",
+    "op2",
+    "op3",
+    "op4",
+    "op5",
+    "op24",
+    "op12",
+    "op6",
+    "op13",
+    "op7",
+    "op14",
+    "op8",
+    "op15",
+    "op9",
+    "op16",
+    "op10",
+    "op17",
+    "op18",
+    "op19",
+    "op20",
+    "op21",
+    "op22",
+    "op23"
+  ],
+  "parallel_blocks": [
+    {
+      "anchor_stmt_ids": [
+        "main@17445::accumulate_top_n_block@11716",
+        "main@13861",
+        "main@13901",
+        "main@14004",
+        "main@16316::return",
+        "main@16408::return",
+        "main@17257",
+        "main@18651"
+      ],
+      "op_ids": [
+        "op11",
+        "op0",
+        "op1",
+        "op2",
+        "op3",
+        "op4",
+        "op5",
+        "op24"
+      ],
+      "region_id": "region0"
+    },
+    {
+      "anchor_stmt_ids": [
+        "main@17445::accumulate_top_n_block@11785",
+        "main@17346::sign_1@9572"
+      ],
+      "op_ids": [
+        "op12",
+        "op6"
+      ],
+      "region_id": "region1"
+    },
+    {
+      "anchor_stmt_ids": [
+        "main@17671",
+        "main@17346::sign_1@9817"
+      ],
+      "op_ids": [
+        "op15",
+        "op9"
+      ],
+      "region_id": "region6"
+    },
+    {
+      "anchor_stmt_ids": [
+        "main@17751",
+        "main@17346::return"
+      ],
+      "op_ids": [
+        "op16",
+        "op10"
+      ],
+      "region_id": "region7"
+    }
+  ],
+  "regions": [
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op11",
+        "op0",
+        "op1",
+        "op2",
+        "op3",
+        "op4",
+        "op5",
+        "op24"
+      ],
+      "region_id": "region0",
+      "source_spans": [
+        {
+          "end": {
+            "column": 68,
+            "line": 396,
+            "offset": 11779
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 396,
+            "offset": 11716
+          }
+        },
+        {
+          "end": {
+            "column": 39,
+            "line": 470,
+            "offset": 13895
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 470,
+            "offset": 13861
+          }
+        },
+        {
+          "end": {
+            "column": 39,
+            "line": 471,
+            "offset": 13935
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 471,
+            "offset": 13901
+          }
+        },
+        {
+          "end": {
+            "column": 44,
+            "line": 473,
+            "offset": 14043
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 473,
+            "offset": 14004
+          }
+        },
+        {
+          "end": {
+            "column": 91,
+            "line": 525,
+            "offset": 16402
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 525,
+            "offset": 16316
+          }
+        },
+        {
+          "end": {
+            "column": 89,
+            "line": 526,
+            "offset": 16492
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 526,
+            "offset": 16408
+          }
+        },
+        {
+          "end": {
+            "column": 87,
+            "line": 548,
+            "offset": 17339
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 548,
+            "offset": 17257
+          }
+        },
+        {
+          "end": {
+            "column": 13,
+            "line": 586,
+            "offset": 18659
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 586,
+            "offset": 18651
+          }
+        }
+      ],
+      "stmt_ids": [
+        "main@17445::accumulate_top_n_block@11716",
+        "main@13861",
+        "main@13901",
+        "main@14004",
+        "main@16316::return",
+        "main@16408::return",
+        "main@17257",
+        "main@18651"
+      ]
+    },
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op12",
+        "op6"
+      ],
+      "region_id": "region1",
+      "source_spans": [
+        {
+          "end": {
+            "column": 38,
+            "line": 397,
+            "offset": 11818
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 397,
+            "offset": 11785
+          }
+        },
+        {
+          "end": {
+            "column": 28,
+            "line": 319,
+            "offset": 9595
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 319,
+            "offset": 9572
+          }
+        }
+      ],
+      "stmt_ids": [
+        "main@17445::accumulate_top_n_block@11785",
+        "main@17346::sign_1@9572"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op13"
+      ],
+      "region_id": "region2",
+      "source_spans": [
+        {
+          "end": {
+            "column": 55,
+            "line": 418,
+            "offset": 12413
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 418,
+            "offset": 12363
+          }
+        }
+      ],
+      "stmt_ids": [
+        "main@17445::accumulate_top_n_block@12363"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op7"
+      ],
+      "region_id": "region3",
+      "source_spans": [
+        {
+          "end": {
+            "column": 107,
+            "line": 320,
+            "offset": 9703
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 320,
+            "offset": 9601
+          }
+        }
+      ],
+      "stmt_ids": [
+        "main@17346::sign_1@9601"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op14"
+      ],
+      "region_id": "region4",
+      "source_spans": [
+        {
+          "end": {
+            "column": 95,
+            "line": 551,
+            "offset": 17535
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 551,
+            "offset": 17445
+          }
+        }
+      ],
+      "stmt_ids": [
+        "main@17445::return"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op8"
+      ],
+      "region_id": "region5",
+      "source_spans": [
+        {
+          "end": {
+            "column": 107,
+            "line": 321,
+            "offset": 9811
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 321,
+            "offset": 9709
+          }
+        }
+      ],
+      "stmt_ids": [
+        "main@17346::sign_1@9709"
+      ]
+    },
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op15",
+        "op9"
+      ],
+      "region_id": "region6",
+      "source_spans": [
+        {
+          "end": {
+            "column": 78,
+            "line": 556,
+            "offset": 17744
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 556,
+            "offset": 17671
+          }
+        },
+        {
+          "end": {
+            "column": 59,
+            "line": 322,
+            "offset": 9871
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 322,
+            "offset": 9817
+          }
+        }
+      ],
+      "stmt_ids": [
+        "main@17671",
+        "main@17346::sign_1@9817"
+      ]
+    },
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op16",
+        "op10"
+      ],
+      "region_id": "region7",
+      "source_spans": [
+        {
+          "end": {
+            "column": 83,
+            "line": 558,
+            "offset": 17829
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 558,
+            "offset": 17751
+          }
+        },
+        {
+          "end": {
+            "column": 98,
+            "line": 550,
+            "offset": 17439
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 550,
+            "offset": 17346
+          }
+        }
+      ],
+      "stmt_ids": [
+        "main@17751",
+        "main@17346::return"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op17"
+      ],
+      "region_id": "region8",
+      "source_spans": [
+        {
+          "end": {
+            "column": 63,
+            "line": 559,
+            "offset": 17893
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 559,
+            "offset": 17835
+          }
+        }
+      ],
+      "stmt_ids": [
+        "main@17835"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op18"
+      ],
+      "region_id": "region9",
+      "source_spans": [
+        {
+          "end": {
+            "column": 28,
+            "line": 333,
+            "offset": 10172
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 333,
+            "offset": 10149
+          }
+        }
+      ],
+      "stmt_ids": [
+        "main@17900::sign_2@10149"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op19"
+      ],
+      "region_id": "region10",
+      "source_spans": [
+        {
+          "end": {
+            "column": 105,
+            "line": 334,
+            "offset": 10278
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 334,
+            "offset": 10178
+          }
+        }
+      ],
+      "stmt_ids": [
+        "main@17900::sign_2@10178"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op20"
+      ],
+      "region_id": "region11",
+      "source_spans": [
+        {
+          "end": {
+            "column": 83,
+            "line": 561,
+            "offset": 17978
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 561,
+            "offset": 17900
+          }
+        }
+      ],
+      "stmt_ids": [
+        "main@17900::return"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op21"
+      ],
+      "region_id": "region12",
+      "source_spans": [
+        {
+          "end": {
+            "column": 35,
+            "line": 168,
+            "offset": 4502
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 168,
+            "offset": 4472
+          }
+        }
+      ],
+      "stmt_ids": [
+        "main@18035::decrypt_and_decode@4472"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op22"
+      ],
+      "region_id": "region13",
+      "source_spans": [
+        {
+          "end": {
+            "column": 35,
+            "line": 170,
+            "offset": 4585
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 170,
+            "offset": 4555
+          }
+        }
+      ],
+      "stmt_ids": [
+        "main@18035::decrypt_and_decode@4555"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op23"
+      ],
+      "region_id": "region14",
+      "source_spans": [
+        {
+          "end": {
+            "column": 75,
+            "line": 565,
+            "offset": 18105
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 565,
+            "offset": 18035
+          }
+        }
+      ],
+      "stmt_ids": [
+        "main@18035::return"
+      ]
+    }
+  ],
+  "required_temporaries": [
+    {
+      "symbol": "accumulate_top_n_block__main_17445__ciph_sum"
+    },
+    {
+      "symbol": "accumulate_top_n_block__main_17445__plain_zero"
+    },
+    {
+      "symbol": "ciph_data"
+    },
+    {
+      "symbol": "ciph_query"
+    },
+    {
+      "symbol": "ciph_result"
+    },
+    {
+      "symbol": "ciph_sum"
+    },
+    {
+      "symbol": "ciph_tmp"
+    },
+    {
+      "symbol": "decrypt_and_decode__main_18035__message"
+    },
+    {
+      "symbol": "decrypt_and_decode__main_18035__plain"
+    },
+    {
+      "symbol": "public_key"
+    },
+    {
+      "symbol": "relin_keys"
+    },
+    {
+      "symbol": "result_index"
+    },
+    {
+      "symbol": "rot_keys"
+    },
+    {
+      "symbol": "sign_1__main_17346__ciph_result"
+    },
+    {
+      "symbol": "sign_2__main_17900__ciph_result"
+    }
+  ],
+  "schema_version": 2,
+  "source_edits_anchor": {
+    "end": {
+      "column": 1,
+      "line": 587,
+      "offset": 18661
+    },
+    "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+    "start": {
+      "column": 5,
+      "line": 438,
+      "offset": 12801
+    }
+  },
+  "source_file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+  "status": "blocked"
+}

@@ -1,0 +1,154 @@
+{
+  "diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (pir_params_.enable_symmetric)\n    {\n        encryptor_->encrypt_symmetric(pt, ct);\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 320,
+          "offset": 9474
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_client.cpp",
+        "start": {
+          "column": 5,
+          "line": 317,
+          "offset": 9383
+        }
+      },
+      "stmt_id": "get_one@9383",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "edges": [],
+  "entry_function": "get_one",
+  "frontend": "textual_fallback",
+  "metadata": {
+    "entry_span": {
+      "end": {
+        "column": 1,
+        "line": 326,
+        "offset": 9549
+      },
+      "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_client.cpp",
+      "start": {
+        "column": 23,
+        "line": 313,
+        "offset": 9325
+      }
+    },
+    "frontend_mode": "textual_fallback",
+    "source_hash": "ea2ab29a95d29c8815289a5529c90dc269538bcdcc639b8ef22dfaf7774489c5"
+  },
+  "ops": [
+    {
+      "api_name": "encrypt",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "pt"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "else { encryptor_",
+        "source_text": "else { encryptor_->encrypt(pt, ct)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "ct"
+          }
+        }
+      ],
+      "inputs": [],
+      "op_id": "op0",
+      "op_kind": "encrypt",
+      "origin_callstack": [],
+      "outputs": [
+        "ct@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 36,
+          "line": 323,
+          "offset": 9526
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_client.cpp",
+        "start": {
+          "column": 5,
+          "line": 321,
+          "offset": 9480
+        }
+      },
+      "stmt_id": "get_one@9480"
+    }
+  ],
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_client.cpp",
+  "values": [
+    {
+      "annotations": {},
+      "origin_scope": "get_one",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 18,
+          "line": 316,
+          "offset": 9377
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_client.cpp",
+        "start": {
+          "column": 5,
+          "line": 316,
+          "offset": 9364
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ct"
+      },
+      "value_id": "ct@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "get_one",
+      "producer_op_id": "op0",
+      "source_span": {
+        "end": {
+          "column": 36,
+          "line": 323,
+          "offset": 9526
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_client.cpp",
+        "start": {
+          "column": 5,
+          "line": 321,
+          "offset": 9480
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ct"
+      },
+      "value_id": "ct@1",
+      "value_kind": "ciphertext"
+    }
+  ]
+}

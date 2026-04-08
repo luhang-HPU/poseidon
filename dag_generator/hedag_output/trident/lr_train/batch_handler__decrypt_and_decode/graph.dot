@@ -1,0 +1,24 @@
+digraph hedag_v2 {
+  rankdir=LR;
+  node [shape=box, style="rounded,filled", fontname="Helvetica"];
+  edge [fontname="Helvetica"];
+  subgraph cluster_layer_0 {
+    label="layer 0";
+    color="#d1d5db";
+    op0 [label="op0\ndecrypt\nline 131\nlayer 0\ncost 4\nout plain@1\nin ciph@0", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_1 {
+    label="layer 1";
+    color="#d1d5db";
+    op1 [label="op1\ndecode\nline 133\nlayer 1\ncost 1\nout message@1\nin plain@1", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_2 {
+    label="layer 2";
+    color="#d1d5db";
+    op2 [label="op2\nreturn\nline 134\nlayer 2\ncost 1\nout __return__@1\nin message@1", fillcolor="#64748b"];
+  }
+  op0 -> op1 [color="#1f2937", label="plain"];
+  op0 -> op1 [color="#2563eb", label="plain"];
+  op1 -> op2 [color="#1f2937", label="message"];
+  op1 -> op2 [color="#2563eb", label="message"];
+}

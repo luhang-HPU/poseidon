@@ -1,0 +1,28 @@
+digraph hedag_v2 {
+  rankdir=LR;
+  node [shape=box, style="rounded,filled", fontname="Helvetica"];
+  edge [fontname="Helvetica"];
+  subgraph cluster_layer_0 {
+    label="layer 0";
+    color="#d1d5db";
+    op0 [label="op0\nassign\nline 99\nlayer 0\ncost 1\nout ciph_tmp@1\nin ct@0", fillcolor="#17becf"];
+  }
+  subgraph cluster_layer_1 {
+    label="layer 1";
+    color="#d1d5db";
+    op1 [label="op1\nrotate\nline 104\nlayer 1\ncost 4\nout ciph_tmp_rotate@1\nin ciph_tmp@1", fillcolor="#9467bd"];
+  }
+  subgraph cluster_layer_2 {
+    label="layer 2";
+    color="#d1d5db";
+    op2 [label="op2\nadd\nline 105\nlayer 2\ncost 1\nout ciph_tmp@2\nin ciph_tmp@1, ciph_tmp_rotate@1", fillcolor="#e5e7eb"];
+  }
+  op0 -> op1 [color="#1f2937", label="ciph_tmp"];
+  op0 -> op1 [color="#2563eb", label="ciph_tmp"];
+  op0 -> op2 [color="#1f2937", label="ciph_tmp"];
+  op0 -> op2 [color="#2563eb", label="ciph_tmp"];
+  op1 -> op2 [color="#1f2937", label="ciph_tmp_rotate"];
+  op1 -> op2 [color="#2563eb", label="ciph_tmp_rotate"];
+  op0 -> op2 [color="#f97316", label="ciph_tmp"];
+  op1 -> op2 [color="#dc2626", label="ciph_tmp"];
+}

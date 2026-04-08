@@ -1,0 +1,80 @@
+{
+  "barriers": [],
+  "blocking_diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (argc == 2) {\n        testing::FLAGS_gtest_filter = argv[1];\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 14,
+          "offset": 246
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/tests/integration/src/integration_tests_runner.cpp",
+        "start": {
+          "column": 5,
+          "line": 12,
+          "offset": 178
+        }
+      },
+      "stmt_id": "main@178",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "entry_function": "main",
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "operation_order": [
+    "op0"
+  ],
+  "parallel_blocks": [],
+  "regions": [
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op0"
+      ],
+      "region_id": "region0",
+      "source_spans": [
+        {
+          "end": {
+            "column": 27,
+            "line": 15,
+            "offset": 274
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/apsi/tests/integration/src/integration_tests_runner.cpp",
+          "start": {
+            "column": 5,
+            "line": 15,
+            "offset": 252
+          }
+        }
+      ],
+      "stmt_ids": [
+        "main@252"
+      ]
+    }
+  ],
+  "required_temporaries": [],
+  "schema_version": 2,
+  "source_edits_anchor": {
+    "end": {
+      "column": 1,
+      "line": 16,
+      "offset": 276
+    },
+    "file": "/home/guoshuai/github/poseidon/Trident/apsi/tests/integration/src/integration_tests_runner.cpp",
+    "start": {
+      "column": 5,
+      "line": 8,
+      "offset": 11
+    }
+  },
+  "source_file": "/home/guoshuai/github/poseidon/Trident/apsi/tests/integration/src/integration_tests_runner.cpp",
+  "status": "blocked"
+}

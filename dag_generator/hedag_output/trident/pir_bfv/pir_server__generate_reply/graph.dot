@@ -1,0 +1,87 @@
+digraph hedag_v2 {
+  rankdir=LR;
+  node [shape=box, style="rounded,filled", fontname="Helvetica"];
+  edge [fontname="Helvetica"];
+  subgraph cluster_layer_0 {
+    label="layer 0";
+    color="#d1d5db";
+    op11 [label="op11\nmultiply_plain\nline 349\nlayer 0\ncost 3\nout intermediateCtxts[k]@1\nin expanded_query[0]@0", fillcolor="#e5e7eb"];
+    op12 [label="op12\nmultiply_plain\nline 353\nlayer 0\ncost 3\nout temp@1\nin expanded_query[j]@0", fillcolor="#e5e7eb"];
+    op14 [label="op14\nntt_inv\nline 364\nlayer 0\ncost 3\nout tmp@1", fillcolor="#e5e7eb"];
+    op15 [label="op15\nreturn\nline 412\nlayer 0\ncost 1\nout __return__@1\nin fail@0", fillcolor="#64748b"];
+    op0 [label="op0\napply_galois\nline 461\nlayer 0\ncost 4\nout expand_query__generate_reply_6331__tempctxt_rotated@1", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_1 {
+    label="layer 1";
+    color="#d1d5db";
+    op13 [label="op13\nadd\nline 355\nlayer 1\ncost 1\nout intermediateCtxts[k]@2\nin temp@1", fillcolor="#e5e7eb"];
+    op1 [label="op1\nadd\nline 464\nlayer 1\ncost 1\nout expand_query__generate_reply_6331__newtemp[a]@1\nin expand_query__generate_reply_6331__tempctxt_rotated@1", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_2 {
+    label="layer 2";
+    color="#d1d5db";
+    op2 [label="op2\nadd\nline 470\nlayer 2\ncost 1\nout expand_query__generate_reply_6331__newtemp[a + temp.size()]@1\nin expand_query__generate_reply_6331__tempctxt_shifted@0, expand_query__generate_reply_6331__tempctxt_rotatedshifted@0", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_3 {
+    label="layer 3";
+    color="#d1d5db";
+    op3 [label="op3\nmultiply_plain\nline 494\nlayer 3\ncost 3\nout expand_query__generate_reply_6331__newtemp[a]@2", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_4 {
+    label="layer 4";
+    color="#d1d5db";
+    op4 [label="op4\nread\nline 500\nlayer 4\ncost 1", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_5 {
+    label="layer 5";
+    color="#d1d5db";
+    op5 [label="op5\napply_galois\nline 503\nlayer 5\ncost 4\nout expand_query__generate_reply_6331__tempctxt_rotated@2", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_6 {
+    label="layer 6";
+    color="#d1d5db";
+    op6 [label="op6\nadd\nline 507\nlayer 6\ncost 1\nout expand_query__generate_reply_6331__newtemp[a]@3\nin expand_query__generate_reply_6331__tempctxt_rotated@2", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_7 {
+    label="layer 7";
+    color="#d1d5db";
+    op7 [label="op7\nread\nline 508\nlayer 7\ncost 1", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_8 {
+    label="layer 8";
+    color="#d1d5db";
+    op8 [label="op8\nadd\nline 513\nlayer 8\ncost 1\nout expand_query__generate_reply_6331__newtemp[a + temp.size()]@2\nin expand_query__generate_reply_6331__tempctxt_shifted@0, expand_query__generate_reply_6331__tempctxt_rotatedshifted@0", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_9 {
+    label="layer 9";
+    color="#d1d5db";
+    op9 [label="op9\nread\nline 514\nlayer 9\ncost 1", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_10 {
+    label="layer 10";
+    color="#d1d5db";
+    op10 [label="op10\nassign\nline 261\nlayer 10\ncost 1\nout expanded_query_part@1\nin newVec@0", fillcolor="#17becf"];
+  }
+  op0 -> op1 [color="#1f2937", label="expand_query__generate_reply_6331__tempctxt_rotated"];
+  op0 -> op1 [color="#2563eb", label="expand_query__generate_reply_6331__tempctxt_rotated"];
+  op0 -> op1 [color="#0f766e", label="generate_reply@6331"];
+  op1 -> op2 [color="#0f766e", label="generate_reply@6331"];
+  op1 -> op3 [color="#f97316", label="expand_query__generate_reply_6331__newtemp[a]"];
+  op2 -> op3 [color="#0f766e", label="generate_reply@6331"];
+  op3 -> op4 [color="#0f766e", label="generate_reply@6331"];
+  op0 -> op5 [color="#f97316", label="expand_query__generate_reply_6331__tempctxt_rotated"];
+  op1 -> op5 [color="#dc2626", label="expand_query__generate_reply_6331__tempctxt_rotated"];
+  op4 -> op5 [color="#0f766e", label="generate_reply@6331"];
+  op5 -> op6 [color="#1f2937", label="expand_query__generate_reply_6331__tempctxt_rotated"];
+  op5 -> op6 [color="#2563eb", label="expand_query__generate_reply_6331__tempctxt_rotated"];
+  op3 -> op6 [color="#f97316", label="expand_query__generate_reply_6331__newtemp[a]"];
+  op5 -> op6 [color="#0f766e", label="generate_reply@6331"];
+  op6 -> op7 [color="#0f766e", label="generate_reply@6331"];
+  op2 -> op8 [color="#f97316", label="expand_query__generate_reply_6331__newtemp[a + temp.size()]"];
+  op7 -> op8 [color="#0f766e", label="generate_reply@6331"];
+  op8 -> op9 [color="#0f766e", label="generate_reply@6331"];
+  op9 -> op10 [color="#0f766e", label="generate_reply@6331"];
+  op12 -> op13 [color="#1f2937", label="temp"];
+  op12 -> op13 [color="#2563eb", label="temp"];
+  op11 -> op13 [color="#f97316", label="intermediateCtxts[k]"];
+}

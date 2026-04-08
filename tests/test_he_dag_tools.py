@@ -7,8 +7,9 @@ import subprocess
 import tempfile
 import unittest
 
-from dag_generator.hedag.frontend import extract_program
+from dag_generator.hedag.frontend import discover_tracked_functions, extract_program
 from dag_generator.hedag.pipeline import default_case_name, default_output_dir, run_pipeline
+from dag_generator.hedag.trident_pipeline import run_trident_pipeline
 from dag_generator.hedag.passes import build_execution_plan, build_graph, build_rewrite_plan
 from dag_generator.hedag.render import render_summary
 
@@ -20,6 +21,7 @@ HELPER_SAMPLE = REPO_ROOT / "tests" / "fixtures" / "hedag_helper.cpp"
 INPLACE_SAMPLE = REPO_ROOT / "tests" / "fixtures" / "hedag_inplace.cpp"
 INDEXED_SAMPLE = REPO_ROOT / "tests" / "fixtures" / "hedag_indexed.cpp"
 CONTROL_FLOW_SAMPLE = REPO_ROOT / "tests" / "fixtures" / "hedag_control_flow.cpp"
+HELPER_FILTER_SAMPLE = REPO_ROOT / "tests" / "fixtures" / "hedag_helper_filter.cpp"
 KNN_AST_FIXTURE = REPO_ROOT / "tests" / "fixtures" / "hedag_knn_ast.json"
 
 
@@ -30,6 +32,10 @@ class HEDagToolingTests(unittest.TestCase):
 
         self.assertEqual(case_name, "knn_ckks_demo")
         self.assertEqual(output_dir, REPO_ROOT / "dag_generator" / "hedag_output" / "knn_ckks_demo")
+
+    def test_default_case_name_uses_parent_for_main_cpp(self) -> None:
+        self.assertEqual(default_case_name("Trident/pir_bfv/main.cpp", "main"), "pir_bfv")
+        self.assertEqual(default_case_name("Trident/pir_bgv/main.cpp", "main"), "pir_bgv")
 
     def test_extracts_sample_knn_graph_v2(self) -> None:
         program = extract_program(str(SAMPLE), "knn_ckks_demo")
@@ -74,6 +80,18 @@ class HEDagToolingTests(unittest.TestCase):
         self.assertEqual([op.op_kind for op in graph.ops], ["sub", "multiply_relin", "assign"])
         self.assertTrue(graph.ops[0].origin_callstack)
         self.assertIn("helper_demo", graph.ops[0].origin_callstack[0]["function"])
+
+    def test_skips_non_he_helpers_when_inlining(self) -> None:
+        program = extract_program(str(HELPER_FILTER_SAMPLE), "top")
+        graph = build_graph(program)
+
+        self.assertEqual(program.diagnostics, [])
+        self.assertEqual([op.op_kind for op in graph.ops], ["rotate", "assign", "return"])
+
+    def test_discover_tracked_functions_follows_helper_calls(self) -> None:
+        tracked = discover_tracked_functions(str(HELPER_FILTER_SAMPLE))
+
+        self.assertEqual(tracked, ["he_helper", "top"])
 
     def test_models_in_place_hazards(self) -> None:
         graph = build_graph(extract_program(str(INPLACE_SAMPLE), "inplace_demo"))
@@ -232,6 +250,51 @@ class HEDagToolingTests(unittest.TestCase):
 
         self.assertEqual(summary["critical_path_cost"], 12)
         self.assertEqual(summary["rewrite_status"], "ready")
+
+    def test_trident_batch_pipeline_writes_index(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            output_root = Path(tmpdir)
+            payload = run_trident_pipeline(
+                repo_root=REPO_ROOT,
+                trident_root="Trident",
+                output_root=output_root,
+                sources=[
+                    "Trident/heartstudy/heartstudy.cpp",
+                    "Trident/pir_bfv/main.cpp",
+                    "Trident/pir_bgv/main.cpp",
+                ],
+                render_images=False,
+            )
+
+            index_path = output_root / "index.json"
+            self.assertTrue(index_path.exists())
+            self.assertEqual(json.loads(index_path.read_text(encoding="utf-8")), payload)
+            output_dirs = [item["output_dir"] for item in payload["cases"] if "output_dir" in item]
+            self.assertEqual(len(output_dirs), len(set(output_dirs)))
+            self.assertTrue(any(item["source_file"] == "Trident/heartstudy/heartstudy.cpp" for item in payload["cases"]))
+            self.assertTrue((output_root / "pir_bfv" / "main__main" / "graph.json").exists())
+            self.assertTrue((output_root / "pir_bgv" / "main__main" / "graph.json").exists())
+            self.assertTrue((output_root / "pir_bfv" / "overview.dot").exists())
+            self.assertTrue((output_root / "pir_bgv" / "overview.dot").exists())
+
+    def test_trident_batch_pipeline_writes_component_overview(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            output_root = Path(tmpdir)
+            payload = run_trident_pipeline(
+                repo_root=REPO_ROOT,
+                trident_root="Trident",
+                output_root=output_root,
+                sources=[
+                    "Trident/lr_train/ckks_lrtrain.cpp",
+                    "Trident/lr_train/batch_handler.cpp",
+                ],
+                render_images=False,
+            )
+
+            overview_dir = output_root / "lr_train"
+            self.assertTrue((overview_dir / "overview.json").exists())
+            self.assertTrue((overview_dir / "overview.dot").exists())
+            self.assertTrue(any(item["component"] == "lr_train" for item in payload["overviews"]))
 
 
 if __name__ == "__main__":

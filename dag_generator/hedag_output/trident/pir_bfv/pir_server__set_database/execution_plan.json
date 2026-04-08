@@ -1,0 +1,14 @@
+{
+  "barriers": [],
+  "critical_path_cost": 0,
+  "entry_function": "set_database",
+  "layers": [],
+  "max_parallel_width": 0,
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "op_schedule": {},
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_server.cpp",
+  "topological_order": []
+}

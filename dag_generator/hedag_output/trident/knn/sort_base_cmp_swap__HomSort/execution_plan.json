@@ -1,0 +1,180 @@
+{
+  "barriers": [
+    "op2",
+    "op6"
+  ],
+  "critical_path_cost": 23,
+  "entry_function": "HomSort",
+  "layers": [
+    [
+      "op0"
+    ],
+    [
+      "op1"
+    ],
+    [
+      "op2"
+    ],
+    [
+      "op3"
+    ],
+    [
+      "op4"
+    ],
+    [
+      "op5"
+    ],
+    [
+      "op6"
+    ],
+    [
+      "op7"
+    ],
+    [
+      "op8"
+    ],
+    [
+      "op9"
+    ]
+  ],
+  "max_parallel_width": 1,
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "op_schedule": {
+    "op0": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "latest_finish": 1,
+      "latest_start": 0,
+      "layer": 0,
+      "slack": 0,
+      "source_line": 189
+    },
+    "op1": {
+      "barrier": false,
+      "cost": 3,
+      "critical": true,
+      "earliest_finish": 4,
+      "earliest_start": 1,
+      "latest_finish": 4,
+      "latest_start": 1,
+      "layer": 1,
+      "slack": 0,
+      "source_line": 191
+    },
+    "op2": {
+      "barrier": true,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 8,
+      "earliest_start": 4,
+      "latest_finish": 8,
+      "latest_start": 4,
+      "layer": 2,
+      "slack": 0,
+      "source_line": 192
+    },
+    "op3": {
+      "barrier": false,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 12,
+      "earliest_start": 8,
+      "latest_finish": 12,
+      "latest_start": 8,
+      "layer": 3,
+      "slack": 0,
+      "source_line": 195
+    },
+    "op4": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 13,
+      "earliest_start": 12,
+      "latest_finish": 13,
+      "latest_start": 12,
+      "layer": 4,
+      "slack": 0,
+      "source_line": 196
+    },
+    "op5": {
+      "barrier": false,
+      "cost": 3,
+      "critical": true,
+      "earliest_finish": 16,
+      "earliest_start": 13,
+      "latest_finish": 16,
+      "latest_start": 13,
+      "layer": 5,
+      "slack": 0,
+      "source_line": 197
+    },
+    "op6": {
+      "barrier": true,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 20,
+      "earliest_start": 16,
+      "latest_finish": 20,
+      "latest_start": 16,
+      "layer": 6,
+      "slack": 0,
+      "source_line": 198
+    },
+    "op7": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 21,
+      "earliest_start": 20,
+      "latest_finish": 21,
+      "latest_start": 20,
+      "layer": 7,
+      "slack": 0,
+      "source_line": 200
+    },
+    "op8": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 22,
+      "earliest_start": 21,
+      "latest_finish": 22,
+      "latest_start": 21,
+      "layer": 8,
+      "slack": 0,
+      "source_line": 412
+    },
+    "op9": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 23,
+      "earliest_start": 22,
+      "latest_finish": 23,
+      "latest_start": 22,
+      "layer": 9,
+      "slack": 0,
+      "source_line": 437
+    }
+  },
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+  "topological_order": [
+    "op0",
+    "op1",
+    "op2",
+    "op3",
+    "op4",
+    "op5",
+    "op6",
+    "op7",
+    "op8",
+    "op9"
+  ]
+}

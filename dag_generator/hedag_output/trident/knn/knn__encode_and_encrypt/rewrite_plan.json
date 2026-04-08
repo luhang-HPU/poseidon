@@ -1,0 +1,115 @@
+{
+  "barriers": [],
+  "blocking_diagnostics": [],
+  "entry_function": "encode_and_encrypt",
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "operation_order": [
+    "op0",
+    "op1",
+    "op2"
+  ],
+  "parallel_blocks": [],
+  "regions": [
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op0"
+      ],
+      "region_id": "region0",
+      "source_spans": [
+        {
+          "end": {
+            "column": 42,
+            "line": 143,
+            "offset": 3656
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 143,
+            "offset": 3619
+          }
+        }
+      ],
+      "stmt_ids": [
+        "encode_and_encrypt@3619"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op1"
+      ],
+      "region_id": "region1",
+      "source_spans": [
+        {
+          "end": {
+            "column": 35,
+            "line": 144,
+            "offset": 3692
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 144,
+            "offset": 3662
+          }
+        }
+      ],
+      "stmt_ids": [
+        "encode_and_encrypt@3662"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op2"
+      ],
+      "region_id": "region2",
+      "source_spans": [
+        {
+          "end": {
+            "column": 16,
+            "line": 145,
+            "offset": 3709
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+          "start": {
+            "column": 5,
+            "line": 145,
+            "offset": 3698
+          }
+        }
+      ],
+      "stmt_ids": [
+        "encode_and_encrypt@3698"
+      ]
+    }
+  ],
+  "required_temporaries": [
+    {
+      "symbol": "ciph"
+    },
+    {
+      "symbol": "plain"
+    }
+  ],
+  "schema_version": 2,
+  "source_edits_anchor": {
+    "end": {
+      "column": 1,
+      "line": 146,
+      "offset": 3711
+    },
+    "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+    "start": {
+      "column": 12,
+      "line": 138,
+      "offset": 3408
+    }
+  },
+  "source_file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+  "status": "ready"
+}

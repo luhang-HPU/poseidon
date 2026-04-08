@@ -1,0 +1,50 @@
+{
+  "diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (!(sender_db = try_load_sender_db(cmd, oprf_key)) &&\n        !(sender_db = try_load_csv_db(cmd, oprf_key))) {\n        APSI_LOG_ERROR(\"Failed to create SenderDB: terminating\");\n        return -1;\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 155,
+          "offset": 3626
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/cli/sender/sender.cpp",
+        "start": {
+          "column": 5,
+          "line": 151,
+          "offset": 3424
+        }
+      },
+      "stmt_id": "start_sender@3424",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (!cmd.sdb_out_file().empty() && !try_save_sender_db(cmd, sender_db, oprf_key)) {\n        return -1;\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 176,
+          "offset": 4478
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/cli/sender/sender.cpp",
+        "start": {
+          "column": 5,
+          "line": 174,
+          "offset": 4371
+        }
+      },
+      "stmt_id": "start_sender@4371",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ]
+}

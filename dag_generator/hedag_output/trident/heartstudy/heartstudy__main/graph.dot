@@ -1,0 +1,288 @@
+digraph hedag_v2 {
+  rankdir=LR;
+  node [shape=box, style="rounded,filled", fontname="Helvetica"];
+  edge [fontname="Helvetica"];
+  subgraph cluster_layer_0 {
+    label="layer 0";
+    color="#d1d5db";
+    op0 [label="op0\ncreate_public_key\nline 108\nlayer 0\ncost 2\nout public_key@1", fillcolor="#e5e7eb"];
+    op1 [label="op1\ncreate_relin_keys\nline 109\nlayer 0\ncost 2\nout relinKeys@1", fillcolor="#e5e7eb"];
+    op2 [label="op2\nencode\nline 116\nlayer 0\ncost 1\nout plain_age@1\nin message_age@0", fillcolor="#e5e7eb"];
+    op3 [label="op3\nencode\nline 117\nlayer 0\ncost 1\nout plain_sbp@1\nin message_sbp@0", fillcolor="#e5e7eb"];
+    op4 [label="op4\nencode\nline 118\nlayer 0\ncost 1\nout plain_dbp@1\nin message_dbp@0", fillcolor="#e5e7eb"];
+    op5 [label="op5\nencode\nline 119\nlayer 0\ncost 1\nout plain_chl@1\nin message_chl@0", fillcolor="#e5e7eb"];
+    op6 [label="op6\nencode\nline 120\nlayer 0\ncost 1\nout plain_height@1\nin message_height@0", fillcolor="#e5e7eb"];
+    op7 [label="op7\nencode\nline 121\nlayer 0\ncost 1\nout plain_weight@1\nin message_weight@0", fillcolor="#e5e7eb"];
+    op44 [label="op44\nreturn\nline 207\nlayer 0\ncost 1\nout __return__@1\nin 0@0", fillcolor="#64748b"];
+  }
+  subgraph cluster_layer_1 {
+    label="layer 1";
+    color="#d1d5db";
+    op8 [label="op8\nencrypt\nline 124\nlayer 1\ncost 4\nout cipher_age@1\nin plain_age@1", fillcolor="#e5e7eb"];
+    op9 [label="op9\nencrypt\nline 125\nlayer 1\ncost 4\nout cipher_sbp@1\nin plain_sbp@1", fillcolor="#e5e7eb"];
+    op10 [label="op10\nencrypt\nline 126\nlayer 1\ncost 4\nout cipher_dbp@1\nin plain_dbp@1", fillcolor="#e5e7eb"];
+    op11 [label="op11\nencrypt\nline 127\nlayer 1\ncost 4\nout cipher_chl@1\nin plain_chl@1", fillcolor="#e5e7eb"];
+    op12 [label="op12\nencrypt\nline 128\nlayer 1\ncost 4\nout cipher_height@1\nin plain_height@1", fillcolor="#e5e7eb"];
+    op13 [label="op13\nencrypt\nline 129\nlayer 1\ncost 4\nout cipher_weight@1\nin plain_weight@1", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_2 {
+    label="layer 2";
+    color="#d1d5db";
+    op14 [label="op14\nmultiply_const\nline 140\nlayer 2\ncost 3\nout cipher_age@2\nin cipher_age@1", fillcolor="#e5e7eb"];
+    op15 [label="op15\nmultiply_const\nline 141\nlayer 2\ncost 3\nout cipher_sbp@2\nin cipher_sbp@1", fillcolor="#e5e7eb"];
+    op16 [label="op16\nmultiply_const\nline 142\nlayer 2\ncost 3\nout cipher_dbp@2\nin cipher_dbp@1", fillcolor="#e5e7eb"];
+    op17 [label="op17\nmultiply_const\nline 143\nlayer 2\ncost 3\nout cipher_chl@2\nin cipher_chl@1", fillcolor="#e5e7eb"];
+    op18 [label="op18\nmultiply_const\nline 144\nlayer 2\ncost 3\nout cipher_height@2\nin cipher_height@1", fillcolor="#e5e7eb"];
+    op19 [label="op19\nmultiply_const\nline 145\nlayer 2\ncost 3\nout cipher_weight@2\nin cipher_weight@1", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_3 {
+    label="layer 3";
+    color="#d1d5db";
+    op20 [label="op20\nadd\nline 147\nlayer 3\ncost 1\nout cipher_x@1\nin cipher_age@2, cipher_sbp@2", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_4 {
+    label="layer 4";
+    color="#d1d5db";
+    op21 [label="op21\nadd\nline 148\nlayer 4\ncost 1\nout cipher_x@2\nin cipher_x@1, cipher_dbp@2", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_5 {
+    label="layer 5";
+    color="#d1d5db";
+    op22 [label="op22\nadd\nline 149\nlayer 5\ncost 1\nout cipher_x@3\nin cipher_x@2, cipher_chl@2", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_6 {
+    label="layer 6";
+    color="#d1d5db";
+    op23 [label="op23\nadd\nline 150\nlayer 6\ncost 1\nout cipher_x@4\nin cipher_x@3, cipher_height@2", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_7 {
+    label="layer 7";
+    color="#d1d5db";
+    op24 [label="op24\nadd\nline 151\nlayer 7\ncost 1\nout cipher_x@5\nin cipher_x@4, cipher_weight@2", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_8 {
+    label="layer 8";
+    color="#d1d5db";
+    op25 [label="op25\nrescale_dynamic\nline 152\nlayer 8\ncost 4\nout cipher_x@6\nin cipher_x@5", fillcolor="#8c564b"];
+  }
+  subgraph cluster_layer_9 {
+    label="layer 9";
+    color="#d1d5db";
+    op26 [label="op26\nmultiply_relin_dynamic\nline 156\nlayer 9\ncost 6\nout cipher_x_square@1\nin cipher_x@6, cipher_x@6", fillcolor="#d62728"];
+  }
+  subgraph cluster_layer_10 {
+    label="layer 10";
+    color="#d1d5db";
+    op27 [label="op27\nrescale_dynamic\nline 160\nlayer 10\ncost 4\nout cipher_x_square@2\nin cipher_x_square@1", fillcolor="#8c564b"];
+  }
+  subgraph cluster_layer_11 {
+    label="layer 11";
+    color="#d1d5db";
+    op28 [label="op28\nmultiply_const\nline 163\nlayer 11\ncost 3\nout cipher_result@1\nin cipher_x_square@2", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_12 {
+    label="layer 12";
+    color="#d1d5db";
+    op29 [label="op29\nadd_const\nline 165\nlayer 12\ncost 1\nout cipher_result@2\nin cipher_result@1", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_13 {
+    label="layer 13";
+    color="#d1d5db";
+    op30 [label="op30\nrescale_dynamic\nline 169\nlayer 13\ncost 4\nout cipher_result@3\nin cipher_result@2", fillcolor="#8c564b"];
+  }
+  subgraph cluster_layer_14 {
+    label="layer 14";
+    color="#d1d5db";
+    op31 [label="op31\nmultiply_relin_dynamic\nline 170\nlayer 14\ncost 6\nout cipher_result@4\nin cipher_result@3, cipher_x_square@2", fillcolor="#d62728"];
+  }
+  subgraph cluster_layer_15 {
+    label="layer 15";
+    color="#d1d5db";
+    op32 [label="op32\nadd_const\nline 171\nlayer 15\ncost 1\nout cipher_result@5\nin cipher_result@4", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_16 {
+    label="layer 16";
+    color="#d1d5db";
+    op33 [label="op33\nrescale_dynamic\nline 174\nlayer 16\ncost 4\nout cipher_result@6\nin cipher_result@5", fillcolor="#8c564b"];
+  }
+  subgraph cluster_layer_17 {
+    label="layer 17";
+    color="#d1d5db";
+    op34 [label="op34\nmultiply_relin_dynamic\nline 175\nlayer 17\ncost 6\nout cipher_result@7\nin cipher_result@6, cipher_x_square@2", fillcolor="#d62728"];
+  }
+  subgraph cluster_layer_18 {
+    label="layer 18";
+    color="#d1d5db";
+    op35 [label="op35\nadd_const\nline 176\nlayer 18\ncost 1\nout cipher_result@8\nin cipher_result@7", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_19 {
+    label="layer 19";
+    color="#d1d5db";
+    op36 [label="op36\nrescale_dynamic\nline 179\nlayer 19\ncost 4\nout cipher_result@9\nin cipher_result@8", fillcolor="#8c564b"];
+  }
+  subgraph cluster_layer_20 {
+    label="layer 20";
+    color="#d1d5db";
+    op37 [label="op37\nmultiply_relin_dynamic\nline 180\nlayer 20\ncost 6\nout cipher_result@10\nin cipher_result@9, cipher_x_square@2", fillcolor="#d62728"];
+  }
+  subgraph cluster_layer_21 {
+    label="layer 21";
+    color="#d1d5db";
+    op38 [label="op38\nadd_const\nline 181\nlayer 21\ncost 1\nout cipher_result@11\nin cipher_result@10", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_22 {
+    label="layer 22";
+    color="#d1d5db";
+    op39 [label="op39\nmultiply_relin_dynamic\nline 184\nlayer 22\ncost 6\nout cipher_result@12\nin cipher_result@11, cipher_x@6", fillcolor="#d62728"];
+  }
+  subgraph cluster_layer_23 {
+    label="layer 23";
+    color="#d1d5db";
+    op40 [label="op40\nadd_const\nline 185\nlayer 23\ncost 1\nout cipher_result@13\nin cipher_result@12", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_24 {
+    label="layer 24";
+    color="#d1d5db";
+    op41 [label="op41\nread\nline 187\nlayer 24\ncost 1\nin cipher_result@13", fillcolor="#e5e7eb"];
+    op42 [label="op42\ndecrypt\nline 193\nlayer 24\ncost 4\nout plain_result@1\nin cipher_result@13", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_25 {
+    label="layer 25";
+    color="#d1d5db";
+    op43 [label="op43\ndecode\nline 194\nlayer 25\ncost 1\nout vec_result@1\nin plain_result@1", fillcolor="#e5e7eb"];
+  }
+  op2 -> op8 [color="#1f2937", label="plain_age"];
+  op2 -> op8 [color="#2563eb", label="plain_age"];
+  op3 -> op9 [color="#1f2937", label="plain_sbp"];
+  op3 -> op9 [color="#2563eb", label="plain_sbp"];
+  op4 -> op10 [color="#1f2937", label="plain_dbp"];
+  op4 -> op10 [color="#2563eb", label="plain_dbp"];
+  op5 -> op11 [color="#1f2937", label="plain_chl"];
+  op5 -> op11 [color="#2563eb", label="plain_chl"];
+  op6 -> op12 [color="#1f2937", label="plain_height"];
+  op6 -> op12 [color="#2563eb", label="plain_height"];
+  op7 -> op13 [color="#1f2937", label="plain_weight"];
+  op7 -> op13 [color="#2563eb", label="plain_weight"];
+  op8 -> op14 [color="#1f2937", label="cipher_age"];
+  op8 -> op14 [color="#2563eb", label="cipher_age"];
+  op8 -> op14 [color="#f97316", label="cipher_age"];
+  op9 -> op15 [color="#1f2937", label="cipher_sbp"];
+  op9 -> op15 [color="#2563eb", label="cipher_sbp"];
+  op9 -> op15 [color="#f97316", label="cipher_sbp"];
+  op10 -> op16 [color="#1f2937", label="cipher_dbp"];
+  op10 -> op16 [color="#2563eb", label="cipher_dbp"];
+  op10 -> op16 [color="#f97316", label="cipher_dbp"];
+  op11 -> op17 [color="#1f2937", label="cipher_chl"];
+  op11 -> op17 [color="#2563eb", label="cipher_chl"];
+  op11 -> op17 [color="#f97316", label="cipher_chl"];
+  op12 -> op18 [color="#1f2937", label="cipher_height"];
+  op12 -> op18 [color="#2563eb", label="cipher_height"];
+  op12 -> op18 [color="#f97316", label="cipher_height"];
+  op13 -> op19 [color="#1f2937", label="cipher_weight"];
+  op13 -> op19 [color="#2563eb", label="cipher_weight"];
+  op13 -> op19 [color="#f97316", label="cipher_weight"];
+  op14 -> op20 [color="#1f2937", label="cipher_age"];
+  op14 -> op20 [color="#2563eb", label="cipher_age"];
+  op15 -> op20 [color="#1f2937", label="cipher_sbp"];
+  op15 -> op20 [color="#2563eb", label="cipher_sbp"];
+  op20 -> op21 [color="#1f2937", label="cipher_x"];
+  op20 -> op21 [color="#2563eb", label="cipher_x"];
+  op16 -> op21 [color="#1f2937", label="cipher_dbp"];
+  op16 -> op21 [color="#2563eb", label="cipher_dbp"];
+  op20 -> op21 [color="#f97316", label="cipher_x"];
+  op21 -> op22 [color="#1f2937", label="cipher_x"];
+  op21 -> op22 [color="#2563eb", label="cipher_x"];
+  op17 -> op22 [color="#1f2937", label="cipher_chl"];
+  op17 -> op22 [color="#2563eb", label="cipher_chl"];
+  op21 -> op22 [color="#f97316", label="cipher_x"];
+  op21 -> op22 [color="#dc2626", label="cipher_x"];
+  op22 -> op23 [color="#1f2937", label="cipher_x"];
+  op22 -> op23 [color="#2563eb", label="cipher_x"];
+  op18 -> op23 [color="#1f2937", label="cipher_height"];
+  op18 -> op23 [color="#2563eb", label="cipher_height"];
+  op22 -> op23 [color="#f97316", label="cipher_x"];
+  op22 -> op23 [color="#dc2626", label="cipher_x"];
+  op23 -> op24 [color="#1f2937", label="cipher_x"];
+  op23 -> op24 [color="#2563eb", label="cipher_x"];
+  op19 -> op24 [color="#1f2937", label="cipher_weight"];
+  op19 -> op24 [color="#2563eb", label="cipher_weight"];
+  op23 -> op24 [color="#f97316", label="cipher_x"];
+  op23 -> op24 [color="#dc2626", label="cipher_x"];
+  op24 -> op25 [color="#1f2937", label="cipher_x"];
+  op24 -> op25 [color="#2563eb", label="cipher_x"];
+  op24 -> op25 [color="#f97316", label="cipher_x"];
+  op24 -> op25 [color="#dc2626", label="cipher_x"];
+  op25 -> op26 [color="#1f2937", label="cipher_x"];
+  op25 -> op26 [color="#2563eb", label="cipher_x"];
+  op1 -> op26 [color="#7c3aed", label="relinKeys"];
+  op26 -> op27 [color="#1f2937", label="cipher_x_square"];
+  op26 -> op27 [color="#2563eb", label="cipher_x_square"];
+  op26 -> op27 [color="#f97316", label="cipher_x_square"];
+  op27 -> op28 [color="#1f2937", label="cipher_x_square"];
+  op27 -> op28 [color="#2563eb", label="cipher_x_square"];
+  op28 -> op29 [color="#1f2937", label="cipher_result"];
+  op28 -> op29 [color="#2563eb", label="cipher_result"];
+  op28 -> op29 [color="#f97316", label="cipher_result"];
+  op29 -> op30 [color="#1f2937", label="cipher_result"];
+  op29 -> op30 [color="#2563eb", label="cipher_result"];
+  op29 -> op30 [color="#f97316", label="cipher_result"];
+  op29 -> op30 [color="#dc2626", label="cipher_result"];
+  op30 -> op31 [color="#1f2937", label="cipher_result"];
+  op30 -> op31 [color="#2563eb", label="cipher_result"];
+  op27 -> op31 [color="#1f2937", label="cipher_x_square"];
+  op27 -> op31 [color="#2563eb", label="cipher_x_square"];
+  op1 -> op31 [color="#7c3aed", label="relinKeys"];
+  op30 -> op31 [color="#f97316", label="cipher_result"];
+  op30 -> op31 [color="#dc2626", label="cipher_result"];
+  op31 -> op32 [color="#1f2937", label="cipher_result"];
+  op31 -> op32 [color="#2563eb", label="cipher_result"];
+  op31 -> op32 [color="#f97316", label="cipher_result"];
+  op31 -> op32 [color="#dc2626", label="cipher_result"];
+  op32 -> op33 [color="#1f2937", label="cipher_result"];
+  op32 -> op33 [color="#2563eb", label="cipher_result"];
+  op32 -> op33 [color="#f97316", label="cipher_result"];
+  op32 -> op33 [color="#dc2626", label="cipher_result"];
+  op33 -> op34 [color="#1f2937", label="cipher_result"];
+  op33 -> op34 [color="#2563eb", label="cipher_result"];
+  op27 -> op34 [color="#1f2937", label="cipher_x_square"];
+  op27 -> op34 [color="#2563eb", label="cipher_x_square"];
+  op1 -> op34 [color="#7c3aed", label="relinKeys"];
+  op33 -> op34 [color="#f97316", label="cipher_result"];
+  op33 -> op34 [color="#dc2626", label="cipher_result"];
+  op34 -> op35 [color="#1f2937", label="cipher_result"];
+  op34 -> op35 [color="#2563eb", label="cipher_result"];
+  op34 -> op35 [color="#f97316", label="cipher_result"];
+  op34 -> op35 [color="#dc2626", label="cipher_result"];
+  op35 -> op36 [color="#1f2937", label="cipher_result"];
+  op35 -> op36 [color="#2563eb", label="cipher_result"];
+  op35 -> op36 [color="#f97316", label="cipher_result"];
+  op35 -> op36 [color="#dc2626", label="cipher_result"];
+  op36 -> op37 [color="#1f2937", label="cipher_result"];
+  op36 -> op37 [color="#2563eb", label="cipher_result"];
+  op27 -> op37 [color="#1f2937", label="cipher_x_square"];
+  op27 -> op37 [color="#2563eb", label="cipher_x_square"];
+  op1 -> op37 [color="#7c3aed", label="relinKeys"];
+  op36 -> op37 [color="#f97316", label="cipher_result"];
+  op36 -> op37 [color="#dc2626", label="cipher_result"];
+  op37 -> op38 [color="#1f2937", label="cipher_result"];
+  op37 -> op38 [color="#2563eb", label="cipher_result"];
+  op37 -> op38 [color="#f97316", label="cipher_result"];
+  op37 -> op38 [color="#dc2626", label="cipher_result"];
+  op38 -> op39 [color="#1f2937", label="cipher_result"];
+  op38 -> op39 [color="#2563eb", label="cipher_result"];
+  op25 -> op39 [color="#1f2937", label="cipher_x"];
+  op25 -> op39 [color="#2563eb", label="cipher_x"];
+  op1 -> op39 [color="#7c3aed", label="relinKeys"];
+  op38 -> op39 [color="#f97316", label="cipher_result"];
+  op38 -> op39 [color="#dc2626", label="cipher_result"];
+  op39 -> op40 [color="#1f2937", label="cipher_result"];
+  op39 -> op40 [color="#2563eb", label="cipher_result"];
+  op39 -> op40 [color="#f97316", label="cipher_result"];
+  op39 -> op40 [color="#dc2626", label="cipher_result"];
+  op40 -> op41 [color="#1f2937", label="cipher_result"];
+  op40 -> op41 [color="#2563eb", label="cipher_result"];
+  op40 -> op42 [color="#1f2937", label="cipher_result"];
+  op40 -> op42 [color="#2563eb", label="cipher_result"];
+  op42 -> op43 [color="#1f2937", label="plain_result"];
+  op42 -> op43 [color="#2563eb", label="plain_result"];
+}

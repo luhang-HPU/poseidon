@@ -1,0 +1,84 @@
+{
+  "barriers": [],
+  "blocking_diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (pir_params_.enable_symmetric)\n    {\n        encryptor_->encrypt_symmetric(pt, ct);\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 310,
+          "offset": 9202
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+        "start": {
+          "column": 5,
+          "line": 307,
+          "offset": 9111
+        }
+      },
+      "stmt_id": "get_one@9111",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "entry_function": "get_one",
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "operation_order": [
+    "op0"
+  ],
+  "parallel_blocks": [],
+  "regions": [
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op0"
+      ],
+      "region_id": "region0",
+      "source_spans": [
+        {
+          "end": {
+            "column": 36,
+            "line": 313,
+            "offset": 9254
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+          "start": {
+            "column": 5,
+            "line": 311,
+            "offset": 9208
+          }
+        }
+      ],
+      "stmt_ids": [
+        "get_one@9208"
+      ]
+    }
+  ],
+  "required_temporaries": [
+    {
+      "symbol": "ct"
+    }
+  ],
+  "schema_version": 2,
+  "source_edits_anchor": {
+    "end": {
+      "column": 1,
+      "line": 316,
+      "offset": 9277
+    },
+    "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+    "start": {
+      "column": 23,
+      "line": 303,
+      "offset": 9053
+    }
+  },
+  "source_file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+  "status": "blocked"
+}

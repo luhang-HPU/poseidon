@@ -1,0 +1,93 @@
+digraph hedag_v2 {
+  rankdir=LR;
+  node [shape=box, style="rounded,filled", fontname="Helvetica"];
+  edge [fontname="Helvetica"];
+  subgraph cluster_layer_0 {
+    label="layer 0";
+    color="#d1d5db";
+    op0 [label="op0\napply_galois\nline 380\nlayer 0\ncost 4\nout tempctxt_rotated@1", fillcolor="#e5e7eb"];
+    op15 [label="op15\nreturn\nline 417\nlayer 0\ncost 1\nout __return__@1\nin newVec@0", fillcolor="#64748b"];
+    op2 [label="op2\nassign\nline 439\nlayer 0\ncost 1\nout tempctxt_shifted@1\nin temp[a]@0", fillcolor="#17becf"];
+  }
+  subgraph cluster_layer_1 {
+    label="layer 1";
+    color="#d1d5db";
+    op1 [label="op1\nadd\nline 383\nlayer 1\ncost 1\nout newtemp[a]@1\nin tempctxt_rotated@1", fillcolor="#e5e7eb"];
+    op4 [label="op4\nassign\nline 439\nlayer 1\ncost 1\nout tempctxt_rotatedshifted@1\nin tempctxt_rotated@1", fillcolor="#17becf"];
+    op3 [label="op3\nntt_fwd\nline 460\nlayer 1\ncost 3\nout tempctxt_shifted@2\nin tempctxt_shifted@1", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_2 {
+    label="layer 2";
+    color="#d1d5db";
+    op7 [label="op7\nmultiply_plain\nline 396\nlayer 2\ncost 3\nout newtemp[a]@2\nin temp[a]@0", fillcolor="#e5e7eb"];
+    op5 [label="op5\nntt_fwd\nline 460\nlayer 2\ncost 3\nout tempctxt_rotatedshifted@2\nin tempctxt_rotatedshifted@1", fillcolor="#e5e7eb"];
+    op8 [label="op8\napply_galois\nline 402\nlayer 2\ncost 4\nout tempctxt_rotated@2\nin temp[a]@0", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_3 {
+    label="layer 3";
+    color="#d1d5db";
+    op6 [label="op6\nadd\nline 387\nlayer 3\ncost 1\nout newtemp[a + temp.size()]@1\nin tempctxt_shifted@2, tempctxt_rotatedshifted@2", fillcolor="#e5e7eb"];
+    op9 [label="op9\nadd\nline 406\nlayer 3\ncost 1\nout newtemp[a]@3\nin temp[a]@0, tempctxt_rotated@2", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_4 {
+    label="layer 4";
+    color="#d1d5db";
+    op10 [label="op10\nassign\nline 439\nlayer 4\ncost 1\nout tempctxt_shifted@3\nin temp[a]@0", fillcolor="#17becf"];
+    op12 [label="op12\nassign\nline 439\nlayer 4\ncost 1\nout tempctxt_rotatedshifted@3\nin tempctxt_rotated@2", fillcolor="#17becf"];
+  }
+  subgraph cluster_layer_5 {
+    label="layer 5";
+    color="#d1d5db";
+    op11 [label="op11\nntt_fwd\nline 460\nlayer 5\ncost 3\nout tempctxt_shifted@4\nin tempctxt_shifted@3", fillcolor="#e5e7eb"];
+    op13 [label="op13\nntt_fwd\nline 460\nlayer 5\ncost 3\nout tempctxt_rotatedshifted@4\nin tempctxt_rotatedshifted@3", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_6 {
+    label="layer 6";
+    color="#d1d5db";
+    op14 [label="op14\nadd\nline 409\nlayer 6\ncost 1\nout newtemp[a + temp.size()]@2\nin tempctxt_shifted@4, tempctxt_rotatedshifted@4", fillcolor="#e5e7eb"];
+  }
+  op0 -> op1 [color="#1f2937", label="tempctxt_rotated"];
+  op0 -> op1 [color="#2563eb", label="tempctxt_rotated"];
+  op2 -> op3 [color="#1f2937", label="tempctxt_shifted"];
+  op2 -> op3 [color="#2563eb", label="tempctxt_shifted"];
+  op2 -> op3 [color="#f97316", label="tempctxt_shifted"];
+  op2 -> op3 [color="#0f766e", label="expand_query@11206"];
+  op0 -> op4 [color="#1f2937", label="tempctxt_rotated"];
+  op0 -> op4 [color="#2563eb", label="tempctxt_rotated"];
+  op4 -> op5 [color="#1f2937", label="tempctxt_rotatedshifted"];
+  op4 -> op5 [color="#2563eb", label="tempctxt_rotatedshifted"];
+  op4 -> op5 [color="#f97316", label="tempctxt_rotatedshifted"];
+  op4 -> op5 [color="#0f766e", label="expand_query@11277"];
+  op3 -> op6 [color="#1f2937", label="tempctxt_shifted"];
+  op3 -> op6 [color="#2563eb", label="tempctxt_shifted"];
+  op5 -> op6 [color="#1f2937", label="tempctxt_rotatedshifted"];
+  op5 -> op6 [color="#2563eb", label="tempctxt_rotatedshifted"];
+  op1 -> op7 [color="#f97316", label="newtemp[a]"];
+  op0 -> op8 [color="#f97316", label="tempctxt_rotated"];
+  op1 -> op8 [color="#dc2626", label="tempctxt_rotated"];
+  op4 -> op8 [color="#dc2626", label="tempctxt_rotated"];
+  op8 -> op9 [color="#1f2937", label="tempctxt_rotated"];
+  op8 -> op9 [color="#2563eb", label="tempctxt_rotated"];
+  op7 -> op9 [color="#f97316", label="newtemp[a]"];
+  op3 -> op10 [color="#f97316", label="tempctxt_shifted"];
+  op3 -> op10 [color="#dc2626", label="tempctxt_shifted"];
+  op6 -> op10 [color="#dc2626", label="tempctxt_shifted"];
+  op10 -> op11 [color="#1f2937", label="tempctxt_shifted"];
+  op10 -> op11 [color="#2563eb", label="tempctxt_shifted"];
+  op10 -> op11 [color="#f97316", label="tempctxt_shifted"];
+  op10 -> op11 [color="#0f766e", label="expand_query@12092"];
+  op8 -> op12 [color="#1f2937", label="tempctxt_rotated"];
+  op8 -> op12 [color="#2563eb", label="tempctxt_rotated"];
+  op5 -> op12 [color="#f97316", label="tempctxt_rotatedshifted"];
+  op5 -> op12 [color="#dc2626", label="tempctxt_rotatedshifted"];
+  op6 -> op12 [color="#dc2626", label="tempctxt_rotatedshifted"];
+  op12 -> op13 [color="#1f2937", label="tempctxt_rotatedshifted"];
+  op12 -> op13 [color="#2563eb", label="tempctxt_rotatedshifted"];
+  op12 -> op13 [color="#f97316", label="tempctxt_rotatedshifted"];
+  op12 -> op13 [color="#0f766e", label="expand_query@12163"];
+  op11 -> op14 [color="#1f2937", label="tempctxt_shifted"];
+  op11 -> op14 [color="#2563eb", label="tempctxt_shifted"];
+  op13 -> op14 [color="#1f2937", label="tempctxt_rotatedshifted"];
+  op13 -> op14 [color="#2563eb", label="tempctxt_rotatedshifted"];
+  op6 -> op14 [color="#f97316", label="newtemp[a + temp.size()]"];
+}

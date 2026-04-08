@@ -1,0 +1,17 @@
+digraph hedag_v2 {
+  rankdir=LR;
+  node [shape=box, style="rounded,filled", fontname="Helvetica"];
+  edge [fontname="Helvetica"];
+  subgraph cluster_layer_0 {
+    label="layer 0";
+    color="#d1d5db";
+    op0 [label="op0\nevaluate_poly_vector\nline 559\nlayer 0\ncost 8\nout ciph_result@1\nin ciph@0", fillcolor="#e377c2"];
+  }
+  subgraph cluster_layer_1 {
+    label="layer 1";
+    color="#d1d5db";
+    op1 [label="op1\nreturn\nline 560\nlayer 1\ncost 1\nout __return__@1\nin ciph_result@1", fillcolor="#64748b"];
+  }
+  op0 -> op1 [color="#1f2937", label="ciph_result"];
+  op0 -> op1 [color="#2563eb", label="ciph_result"];
+}

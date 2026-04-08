@@ -1,0 +1,115 @@
+{
+  "barriers": [],
+  "blocking_diagnostics": [],
+  "entry_function": "decrypt_and_decode",
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "operation_order": [
+    "op0",
+    "op1",
+    "op2"
+  ],
+  "parallel_blocks": [],
+  "regions": [
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op0"
+      ],
+      "region_id": "region0",
+      "source_spans": [
+        {
+          "end": {
+            "column": 35,
+            "line": 41,
+            "offset": 636
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 41,
+            "offset": 606
+          }
+        }
+      ],
+      "stmt_ids": [
+        "decrypt_and_decode@606"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op1"
+      ],
+      "region_id": "region1",
+      "source_spans": [
+        {
+          "end": {
+            "column": 35,
+            "line": 43,
+            "offset": 719
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 43,
+            "offset": 689
+          }
+        }
+      ],
+      "stmt_ids": [
+        "decrypt_and_decode@689"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op2"
+      ],
+      "region_id": "region2",
+      "source_spans": [
+        {
+          "end": {
+            "column": 19,
+            "line": 44,
+            "offset": 739
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 44,
+            "offset": 725
+          }
+        }
+      ],
+      "stmt_ids": [
+        "decrypt_and_decode@725"
+      ]
+    }
+  ],
+  "required_temporaries": [
+    {
+      "symbol": "message"
+    },
+    {
+      "symbol": "plain"
+    }
+  ],
+  "schema_version": 2,
+  "source_edits_anchor": {
+    "end": {
+      "column": 1,
+      "line": 45,
+      "offset": 741
+    },
+    "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+    "start": {
+      "column": 35,
+      "line": 37,
+      "offset": 433
+    }
+  },
+  "source_file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+  "status": "ready"
+}

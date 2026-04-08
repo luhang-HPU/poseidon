@@ -1,0 +1,115 @@
+{
+  "barriers": [],
+  "blocking_diagnostics": [],
+  "entry_function": "decrypt_and_decode",
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "operation_order": [
+    "op0",
+    "op1",
+    "op2"
+  ],
+  "parallel_blocks": [],
+  "regions": [
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op0"
+      ],
+      "region_id": "region0",
+      "source_spans": [
+        {
+          "end": {
+            "column": 35,
+            "line": 518,
+            "offset": 18537
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+          "start": {
+            "column": 5,
+            "line": 518,
+            "offset": 18507
+          }
+        }
+      ],
+      "stmt_ids": [
+        "decrypt_and_decode@18507"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op1"
+      ],
+      "region_id": "region1",
+      "source_spans": [
+        {
+          "end": {
+            "column": 35,
+            "line": 520,
+            "offset": 18620
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+          "start": {
+            "column": 5,
+            "line": 520,
+            "offset": 18590
+          }
+        }
+      ],
+      "stmt_ids": [
+        "decrypt_and_decode@18590"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op2"
+      ],
+      "region_id": "region2",
+      "source_spans": [
+        {
+          "end": {
+            "column": 19,
+            "line": 521,
+            "offset": 18640
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+          "start": {
+            "column": 5,
+            "line": 521,
+            "offset": 18626
+          }
+        }
+      ],
+      "stmt_ids": [
+        "decrypt_and_decode@18626"
+      ]
+    }
+  ],
+  "required_temporaries": [
+    {
+      "symbol": "message"
+    },
+    {
+      "symbol": "plain"
+    }
+  ],
+  "schema_version": 2,
+  "source_edits_anchor": {
+    "end": {
+      "column": 1,
+      "line": 522,
+      "offset": 18642
+    },
+    "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+    "start": {
+      "column": 35,
+      "line": 514,
+      "offset": 18334
+    }
+  },
+  "source_file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+  "status": "ready"
+}

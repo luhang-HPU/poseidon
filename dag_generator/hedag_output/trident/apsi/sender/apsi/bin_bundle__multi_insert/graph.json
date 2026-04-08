@@ -1,0 +1,166 @@
+{
+  "diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (stripped_)\n    {\n        APSI_LOG_ERROR(\"Cannot insert data to a stripped BinBundle\");\n        throw logic_error(\"failed to insert data\");\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 472,
+          "offset": 12163
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/sender/apsi/bin_bundle.cpp",
+        "start": {
+          "column": 5,
+          "line": 468,
+          "offset": 12016
+        }
+      },
+      "stmt_id": "multi_insert@12016",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (items.empty())\n    {\n        APSI_LOG_ERROR(\"No item data to insert\");\n        return -1;\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 477,
+          "offset": 12267
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/sender/apsi/bin_bundle.cpp",
+        "start": {
+          "column": 5,
+          "line": 473,
+          "offset": 12169
+        }
+      },
+      "stmt_id": "multi_insert@12169",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (get_label_size())\n    {\n        APSI_LOG_ERROR(\"Attempted to insert unlabeled data in a labeled BinBundle\");\n        throw logic_error(\"failed to insert data\");\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 485,
+          "offset": 12453
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/sender/apsi/bin_bundle.cpp",
+        "start": {
+          "column": 5,
+          "line": 481,
+          "offset": 12284
+        }
+      },
+      "stmt_id": "multi_insert@12284",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (start_bin_idx >= get_num_bins() || items.size() > get_num_bins() - start_bin_idx)\n    {\n        return -1;\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 491,
+          "offset": 12580
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/sender/apsi/bin_bundle.cpp",
+        "start": {
+          "column": 5,
+          "line": 488,
+          "offset": 12465
+        }
+      },
+      "stmt_id": "multi_insert@12465",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (max_bin_size < curr_bin.size() + 1)\n        {\n            max_bin_size = curr_bin.size() + 1;\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 504,
+          "offset": 12884
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/sender/apsi/bin_bundle.cpp",
+        "start": {
+          "column": 9,
+          "line": 501,
+          "offset": 12778
+        }
+      },
+      "stmt_id": "multi_insert@12778",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (!dry_run)\n        {\n            \n            CuckooFilter &curr_filter = filters_[curr_bin_idx];\n            curr_bin.push_back(curr_item);\n            curr_filter.add(curr_item);\n\n            \n            cache_invalid_ = true;\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 516,
+          "offset": 13145
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/sender/apsi/bin_bundle.cpp",
+        "start": {
+          "column": 9,
+          "line": 507,
+          "offset": 12904
+        }
+      },
+      "stmt_id": "multi_insert@12904",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "edges": [],
+  "entry_function": "multi_insert",
+  "frontend": "textual_fallback",
+  "metadata": {
+    "entry_span": {
+      "end": {
+        "column": 1,
+        "line": 522,
+        "offset": 13224
+      },
+      "file": "/home/guoshuai/github/poseidon/Trident/apsi/sender/apsi/bin_bundle.cpp",
+      "start": {
+        "column": 20,
+        "line": 466,
+        "offset": 11932
+      }
+    },
+    "frontend_mode": "textual_fallback",
+    "source_hash": "7ddbe2b1409370579100f91a06c42a8bce764a98496ed174f796d691e7886397"
+  },
+  "ops": [],
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/apsi/sender/apsi/bin_bundle.cpp",
+  "values": []
+}

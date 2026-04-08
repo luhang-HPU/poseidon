@@ -1,0 +1,403 @@
+{
+  "barriers": [
+    "op14",
+    "op15",
+    "op16",
+    "op2",
+    "op5",
+    "op9",
+    "op22"
+  ],
+  "critical_path_cost": 43,
+  "entry_function": "HomOrdGen",
+  "layers": [
+    [
+      "op3",
+      "op0",
+      "op20"
+    ],
+    [
+      "op14"
+    ],
+    [
+      "op1"
+    ],
+    [
+      "op15"
+    ],
+    [
+      "op16"
+    ],
+    [
+      "op2"
+    ],
+    [
+      "op17",
+      "op4"
+    ],
+    [
+      "op18"
+    ],
+    [
+      "op5"
+    ],
+    [
+      "op6"
+    ],
+    [
+      "op7"
+    ],
+    [
+      "op8"
+    ],
+    [
+      "op9"
+    ],
+    [
+      "op10"
+    ],
+    [
+      "op11"
+    ],
+    [
+      "op12"
+    ],
+    [
+      "op13"
+    ],
+    [
+      "op19"
+    ],
+    [
+      "op21"
+    ],
+    [
+      "op22"
+    ],
+    [
+      "op23"
+    ]
+  ],
+  "max_parallel_width": 3,
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "op_schedule": {
+    "op0": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "latest_finish": 1,
+      "latest_start": 0,
+      "layer": 0,
+      "slack": 0,
+      "source_line": 295
+    },
+    "op1": {
+      "barrier": false,
+      "cost": 3,
+      "critical": true,
+      "earliest_finish": 4,
+      "earliest_start": 1,
+      "latest_finish": 4,
+      "latest_start": 1,
+      "layer": 2,
+      "slack": 0,
+      "source_line": 298
+    },
+    "op10": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 28,
+      "earliest_start": 27,
+      "latest_finish": 28,
+      "latest_start": 27,
+      "layer": 13,
+      "slack": 0,
+      "source_line": 200
+    },
+    "op11": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 29,
+      "earliest_start": 28,
+      "latest_finish": 29,
+      "latest_start": 28,
+      "layer": 14,
+      "slack": 0,
+      "source_line": 301
+    },
+    "op12": {
+      "barrier": false,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 33,
+      "earliest_start": 29,
+      "latest_finish": 33,
+      "latest_start": 29,
+      "layer": 15,
+      "slack": 0,
+      "source_line": 302
+    },
+    "op13": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 34,
+      "earliest_start": 33,
+      "latest_finish": 34,
+      "latest_start": 33,
+      "layer": 16,
+      "slack": 0,
+      "source_line": 154
+    },
+    "op14": {
+      "barrier": true,
+      "cost": 8,
+      "critical": false,
+      "earliest_finish": 8,
+      "earliest_start": 0,
+      "latest_finish": 16,
+      "latest_start": 8,
+      "layer": 1,
+      "slack": 8,
+      "source_line": 109
+    },
+    "op15": {
+      "barrier": true,
+      "cost": 8,
+      "critical": false,
+      "earliest_finish": 16,
+      "earliest_start": 8,
+      "latest_finish": 24,
+      "latest_start": 16,
+      "layer": 3,
+      "slack": 8,
+      "source_line": 110
+    },
+    "op16": {
+      "barrier": true,
+      "cost": 8,
+      "critical": false,
+      "earliest_finish": 24,
+      "earliest_start": 16,
+      "latest_finish": 32,
+      "latest_start": 24,
+      "layer": 4,
+      "slack": 8,
+      "source_line": 111
+    },
+    "op17": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 25,
+      "earliest_start": 24,
+      "latest_finish": 33,
+      "latest_start": 32,
+      "layer": 6,
+      "slack": 8,
+      "source_line": 114
+    },
+    "op18": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 26,
+      "earliest_start": 25,
+      "latest_finish": 34,
+      "latest_start": 33,
+      "layer": 7,
+      "slack": 8,
+      "source_line": 156
+    },
+    "op19": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 35,
+      "earliest_start": 34,
+      "latest_finish": 35,
+      "latest_start": 34,
+      "layer": 17,
+      "slack": 0,
+      "source_line": 304
+    },
+    "op2": {
+      "barrier": true,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 8,
+      "earliest_start": 4,
+      "latest_finish": 8,
+      "latest_start": 4,
+      "layer": 5,
+      "slack": 0,
+      "source_line": 299
+    },
+    "op20": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "latest_finish": 35,
+      "latest_start": 34,
+      "layer": 0,
+      "slack": 34,
+      "source_line": 307
+    },
+    "op21": {
+      "barrier": false,
+      "cost": 3,
+      "critical": true,
+      "earliest_finish": 38,
+      "earliest_start": 35,
+      "latest_finish": 38,
+      "latest_start": 35,
+      "layer": 18,
+      "slack": 0,
+      "source_line": 308
+    },
+    "op22": {
+      "barrier": true,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 42,
+      "earliest_start": 38,
+      "latest_finish": 42,
+      "latest_start": 38,
+      "layer": 19,
+      "slack": 0,
+      "source_line": 309
+    },
+    "op23": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 43,
+      "earliest_start": 42,
+      "latest_finish": 43,
+      "latest_start": 42,
+      "layer": 20,
+      "slack": 0,
+      "source_line": 311
+    },
+    "op3": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "latest_finish": 8,
+      "latest_start": 7,
+      "layer": 0,
+      "slack": 7,
+      "source_line": 189
+    },
+    "op4": {
+      "barrier": false,
+      "cost": 3,
+      "critical": true,
+      "earliest_finish": 11,
+      "earliest_start": 8,
+      "latest_finish": 11,
+      "latest_start": 8,
+      "layer": 6,
+      "slack": 0,
+      "source_line": 191
+    },
+    "op5": {
+      "barrier": true,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 15,
+      "earliest_start": 11,
+      "latest_finish": 15,
+      "latest_start": 11,
+      "layer": 8,
+      "slack": 0,
+      "source_line": 192
+    },
+    "op6": {
+      "barrier": false,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 19,
+      "earliest_start": 15,
+      "latest_finish": 19,
+      "latest_start": 15,
+      "layer": 9,
+      "slack": 0,
+      "source_line": 195
+    },
+    "op7": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 20,
+      "earliest_start": 19,
+      "latest_finish": 20,
+      "latest_start": 19,
+      "layer": 10,
+      "slack": 0,
+      "source_line": 196
+    },
+    "op8": {
+      "barrier": false,
+      "cost": 3,
+      "critical": true,
+      "earliest_finish": 23,
+      "earliest_start": 20,
+      "latest_finish": 23,
+      "latest_start": 20,
+      "layer": 11,
+      "slack": 0,
+      "source_line": 197
+    },
+    "op9": {
+      "barrier": true,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 27,
+      "earliest_start": 23,
+      "latest_finish": 27,
+      "latest_start": 23,
+      "layer": 12,
+      "slack": 0,
+      "source_line": 198
+    }
+  },
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+  "topological_order": [
+    "op14",
+    "op3",
+    "op0",
+    "op20",
+    "op15",
+    "op1",
+    "op16",
+    "op2",
+    "op17",
+    "op4",
+    "op18",
+    "op5",
+    "op6",
+    "op7",
+    "op8",
+    "op9",
+    "op10",
+    "op11",
+    "op12",
+    "op13",
+    "op19",
+    "op21",
+    "op22",
+    "op23"
+  ]
+}

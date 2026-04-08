@@ -1,0 +1,216 @@
+{
+  "barriers": [],
+  "blocking_diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (pir_params_.enable_mswitching)\n    {\n        parms = context_->crt_context()->last_context_data()->parms();\n        parms_id = context_->crt_context()->last_parms_id();\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 218,
+          "offset": 6726
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+        "start": {
+          "column": 5,
+          "line": 214,
+          "offset": 6549
+        }
+      },
+      "stmt_id": "decode_reply@6549",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if ((j + 1) % (exp_ratio * ciphertext_size) == 0 && j > 0)\n            {\n                \n                Ciphertext combined(*context_, parms_id);\n                compose_to_ciphertext(parms, tempplain, combined);\n                newtemp.push_back(combined);\n                tempplain.clear();\n                \n                \n            }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 13,
+          "line": 254,
+          "offset": 7923
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+        "start": {
+          "column": 13,
+          "line": 245,
+          "offset": 7582
+        }
+      },
+      "stmt_id": "decode_reply@7582",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (i == recursion_level - 1)\n        {\n            assert(temp.size() == 1);\n            return tempplain[0];\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 262,
+          "offset": 8145
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+        "start": {
+          "column": 9,
+          "line": 258,
+          "offset": 8026
+        }
+      },
+      "stmt_id": "decode_reply@8026",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "entry_function": "decode_reply",
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "operation_order": [
+    "op3",
+    "op0",
+    "op1",
+    "op2"
+  ],
+  "parallel_blocks": [
+    {
+      "anchor_stmt_ids": [
+        "decode_reply@5123",
+        "decode_reply@5079::decode_reply@7494"
+      ],
+      "op_ids": [
+        "op3",
+        "op0"
+      ],
+      "region_id": "region0"
+    }
+  ],
+  "regions": [
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op3",
+        "op0"
+      ],
+      "region_id": "region0",
+      "source_spans": [
+        {
+          "end": {
+            "column": 41,
+            "line": 172,
+            "offset": 5159
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+          "start": {
+            "column": 5,
+            "line": 172,
+            "offset": 5123
+          }
+        },
+        {
+          "end": {
+            "column": 47,
+            "line": 242,
+            "offset": 7528
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+          "start": {
+            "column": 13,
+            "line": 242,
+            "offset": 7494
+          }
+        }
+      ],
+      "stmt_ids": [
+        "decode_reply@5123",
+        "decode_reply@5079::decode_reply@7494"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op1"
+      ],
+      "region_id": "region1",
+      "source_spans": [
+        {
+          "end": {
+            "column": 27,
+            "line": 266,
+            "offset": 8227
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+          "start": {
+            "column": 13,
+            "line": 266,
+            "offset": 8213
+          }
+        }
+      ],
+      "stmt_ids": [
+        "decode_reply@5079::decode_reply@8213"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op2"
+      ],
+      "region_id": "region2",
+      "source_spans": [
+        {
+          "end": {
+            "column": 43,
+            "line": 171,
+            "offset": 5117
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+          "start": {
+            "column": 5,
+            "line": 171,
+            "offset": 5079
+          }
+        }
+      ],
+      "stmt_ids": [
+        "decode_reply@5079::return"
+      ]
+    }
+  ],
+  "required_temporaries": [
+    {
+      "symbol": "decode_reply__decode_reply_5079__ptxt"
+    },
+    {
+      "symbol": "decode_reply__decode_reply_5079__temp"
+    },
+    {
+      "symbol": "result"
+    }
+  ],
+  "schema_version": 2,
+  "source_edits_anchor": {
+    "end": {
+      "column": 1,
+      "line": 173,
+      "offset": 5161
+    },
+    "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+    "start": {
+      "column": 28,
+      "line": 169,
+      "offset": 5026
+    }
+  },
+  "source_file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+  "status": "blocked"
+}

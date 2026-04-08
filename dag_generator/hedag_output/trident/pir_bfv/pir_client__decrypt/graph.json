@@ -1,0 +1,232 @@
+{
+  "diagnostics": [],
+  "edges": [
+    {
+      "dst": "op1",
+      "kind": "data",
+      "reason": "pt",
+      "src": "op0",
+      "value_id": "pt@1"
+    },
+    {
+      "dst": "op1",
+      "kind": "read_after_write",
+      "reason": "pt",
+      "src": "op0",
+      "value_id": "pt@1"
+    }
+  ],
+  "entry_function": "decrypt",
+  "frontend": "textual_fallback",
+  "metadata": {
+    "entry_span": {
+      "end": {
+        "column": 1,
+        "line": 167,
+        "offset": 4996
+      },
+      "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+      "start": {
+        "column": 22,
+        "line": 162,
+        "offset": 4905
+      }
+    },
+    "frontend_mode": "textual_fallback",
+    "source_hash": "d93968b59cd3aea77b65b46581ae3b0bd23bbb91e289f5ff474ed9526e6b0258"
+  },
+  "ops": [
+    {
+      "api_name": "decrypt",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "decryptor_",
+        "source_text": "decryptor_->decrypt(ct, pt)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "pt"
+          }
+        }
+      ],
+      "inputs": [
+        "ct@0"
+      ],
+      "op_id": "op0",
+      "op_kind": "decrypt",
+      "origin_callstack": [],
+      "outputs": [
+        "pt@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 32,
+          "line": 165,
+          "offset": 4979
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+        "start": {
+          "column": 5,
+          "line": 165,
+          "offset": 4952
+        }
+      },
+      "stmt_id": "decrypt@4952"
+    },
+    {
+      "api_name": "return",
+      "attrs": {
+        "barrier": false,
+        "cost": 1,
+        "source_text": "return pt"
+      },
+      "effects": [],
+      "inputs": [
+        "pt@1"
+      ],
+      "op_id": "op1",
+      "op_kind": "return",
+      "origin_callstack": [],
+      "outputs": [
+        "__return__@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 14,
+          "line": 166,
+          "offset": 4994
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+        "start": {
+          "column": 5,
+          "line": 166,
+          "offset": 4985
+        }
+      },
+      "stmt_id": "decrypt@4985"
+    }
+  ],
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+  "values": [
+    {
+      "annotations": {},
+      "origin_scope": "decrypt",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 35,
+          "line": 162,
+          "offset": 4918
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+        "start": {
+          "column": 22,
+          "line": 162,
+          "offset": 4905
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ct"
+      },
+      "value_id": "ct@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "decrypt",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 17,
+          "line": 164,
+          "offset": 4946
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+        "start": {
+          "column": 5,
+          "line": 164,
+          "offset": 4934
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "pt"
+      },
+      "value_id": "pt@0",
+      "value_kind": "plaintext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "decrypt",
+      "producer_op_id": "op0",
+      "source_span": {
+        "end": {
+          "column": 32,
+          "line": 165,
+          "offset": 4979
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+        "start": {
+          "column": 5,
+          "line": 165,
+          "offset": 4952
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "pt"
+      },
+      "value_id": "pt@1",
+      "value_kind": "plaintext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "decrypt",
+      "producer_op_id": "op1",
+      "source_span": {
+        "end": {
+          "column": 14,
+          "line": 166,
+          "offset": 4994
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+        "start": {
+          "column": 5,
+          "line": 166,
+          "offset": 4985
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "__return__"
+      },
+      "value_id": "__return__@1",
+      "value_kind": "external"
+    }
+  ]
+}

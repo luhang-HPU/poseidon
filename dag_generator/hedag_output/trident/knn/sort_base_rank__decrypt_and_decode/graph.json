@@ -1,0 +1,401 @@
+{
+  "diagnostics": [],
+  "edges": [
+    {
+      "dst": "op1",
+      "kind": "data",
+      "reason": "plain",
+      "src": "op0",
+      "value_id": "plain@1"
+    },
+    {
+      "dst": "op1",
+      "kind": "read_after_write",
+      "reason": "plain",
+      "src": "op0",
+      "value_id": "plain@1"
+    },
+    {
+      "dst": "op2",
+      "kind": "data",
+      "reason": "message",
+      "src": "op1",
+      "value_id": "message@1"
+    },
+    {
+      "dst": "op2",
+      "kind": "read_after_write",
+      "reason": "message",
+      "src": "op1",
+      "value_id": "message@1"
+    }
+  ],
+  "entry_function": "decrypt_and_decode",
+  "frontend": "textual_fallback",
+  "metadata": {
+    "entry_span": {
+      "end": {
+        "column": 1,
+        "line": 45,
+        "offset": 741
+      },
+      "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+      "start": {
+        "column": 35,
+        "line": 37,
+        "offset": 433
+      }
+    },
+    "frontend_mode": "textual_fallback",
+    "source_hash": "e86d8b0a7ca380772f7095b50301fbbdb13552a49a281fe103504e891fc0ae23"
+  },
+  "ops": [
+    {
+      "api_name": "decrypt",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "decryptor",
+        "source_text": "decryptor.decrypt(ciph, plain)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "plain"
+          }
+        }
+      ],
+      "inputs": [
+        "ciph@0"
+      ],
+      "op_id": "op0",
+      "op_kind": "decrypt",
+      "origin_callstack": [],
+      "outputs": [
+        "plain@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 35,
+          "line": 41,
+          "offset": 636
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+        "start": {
+          "column": 5,
+          "line": 41,
+          "offset": 606
+        }
+      },
+      "stmt_id": "decrypt_and_decode@606"
+    },
+    {
+      "api_name": "decode",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "encoder",
+        "source_text": "encoder.decode(plain, message)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "message"
+          }
+        }
+      ],
+      "inputs": [
+        "plain@1"
+      ],
+      "op_id": "op1",
+      "op_kind": "decode",
+      "origin_callstack": [],
+      "outputs": [
+        "message@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 35,
+          "line": 43,
+          "offset": 719
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+        "start": {
+          "column": 5,
+          "line": 43,
+          "offset": 689
+        }
+      },
+      "stmt_id": "decrypt_and_decode@689"
+    },
+    {
+      "api_name": "return",
+      "attrs": {
+        "barrier": false,
+        "cost": 1,
+        "source_text": "return message"
+      },
+      "effects": [],
+      "inputs": [
+        "message@1"
+      ],
+      "op_id": "op2",
+      "op_kind": "return",
+      "origin_callstack": [],
+      "outputs": [
+        "__return__@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 19,
+          "line": 44,
+          "offset": 739
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+        "start": {
+          "column": 5,
+          "line": 44,
+          "offset": 725
+        }
+      },
+      "stmt_id": "decrypt_and_decode@725"
+    }
+  ],
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+  "values": [
+    {
+      "annotations": {},
+      "origin_scope": "decrypt_and_decode",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 61,
+          "line": 37,
+          "offset": 459
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+        "start": {
+          "column": 35,
+          "line": 37,
+          "offset": 433
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "encoder"
+      },
+      "value_id": "encoder@0",
+      "value_kind": "encoder"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "decrypt_and_decode",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 55,
+          "line": 38,
+          "offset": 534
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+        "start": {
+          "column": 35,
+          "line": 38,
+          "offset": 514
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "decryptor"
+      },
+      "value_id": "decryptor@0",
+      "value_kind": "decryptor"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "decrypt_and_decode",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 79,
+          "line": 38,
+          "offset": 558
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+        "start": {
+          "column": 57,
+          "line": 38,
+          "offset": 536
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ciph"
+      },
+      "value_id": "ciph@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "decrypt_and_decode",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 20,
+          "line": 40,
+          "offset": 600
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+        "start": {
+          "column": 5,
+          "line": 40,
+          "offset": 585
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "plain"
+      },
+      "value_id": "plain@0",
+      "value_kind": "plaintext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "decrypt_and_decode",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 46,
+          "line": 42,
+          "offset": 683
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+        "start": {
+          "column": 5,
+          "line": 42,
+          "offset": 642
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "message"
+      },
+      "value_id": "message@0",
+      "value_kind": "complex_vector"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "decrypt_and_decode",
+      "producer_op_id": "op0",
+      "source_span": {
+        "end": {
+          "column": 35,
+          "line": 41,
+          "offset": 636
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+        "start": {
+          "column": 5,
+          "line": 41,
+          "offset": 606
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "plain"
+      },
+      "value_id": "plain@1",
+      "value_kind": "plaintext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "decrypt_and_decode",
+      "producer_op_id": "op1",
+      "source_span": {
+        "end": {
+          "column": 35,
+          "line": 43,
+          "offset": 719
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+        "start": {
+          "column": 5,
+          "line": 43,
+          "offset": 689
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "message"
+      },
+      "value_id": "message@1",
+      "value_kind": "complex_vector"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "decrypt_and_decode",
+      "producer_op_id": "op2",
+      "source_span": {
+        "end": {
+          "column": 19,
+          "line": 44,
+          "offset": 739
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+        "start": {
+          "column": 5,
+          "line": 44,
+          "offset": 725
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "__return__"
+      },
+      "value_id": "__return__@1",
+      "value_kind": "external"
+    }
+  ]
+}

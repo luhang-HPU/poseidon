@@ -1,0 +1,80 @@
+{
+  "barriers": [],
+  "blocking_diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (!crypto_context.decryptor()) {\n                throw runtime_error(\"decryptor is not configured in CryptoContext\");\n            }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 13,
+          "line": 168,
+          "offset": 6021
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/common/apsi/network/result_package.cpp",
+        "start": {
+          "column": 13,
+          "line": 166,
+          "offset": 5889
+        }
+      },
+      "stmt_id": "extract@5889",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "entry_function": "extract",
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "operation_order": [
+    "op0"
+  ],
+  "parallel_blocks": [],
+  "regions": [
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op0"
+      ],
+      "region_id": "region0",
+      "source_spans": [
+        {
+          "end": {
+            "column": 28,
+            "line": 201,
+            "offset": 7555
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/apsi/common/apsi/network/result_package.cpp",
+          "start": {
+            "column": 13,
+            "line": 201,
+            "offset": 7540
+          }
+        }
+      ],
+      "stmt_ids": [
+        "extract@7540"
+      ]
+    }
+  ],
+  "required_temporaries": [],
+  "schema_version": 2,
+  "source_edits_anchor": {
+    "end": {
+      "column": 9,
+      "line": 202,
+      "offset": 7565
+    },
+    "file": "/home/guoshuai/github/poseidon/Trident/apsi/common/apsi/network/result_package.cpp",
+    "start": {
+      "column": 43,
+      "line": 164,
+      "offset": 5822
+    }
+  },
+  "source_file": "/home/guoshuai/github/poseidon/Trident/apsi/common/apsi/network/result_package.cpp",
+  "status": "blocked"
+}

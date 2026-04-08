@@ -1,0 +1,46 @@
+{
+  "critical_path_cost": 27,
+  "diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "for (int i = 0; i < slot_size; i++)\n    {\n        idxF[i] = i;\n    }"
+      },
+      "reason": "unsupported dynamic loop boundary",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 87,
+          "offset": 2396
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 84,
+          "offset": 2329
+        }
+      },
+      "stmt_id": "sign@2329",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "edges": 20,
+  "entry_function": "compare_two_ciph",
+  "frontend": "textual_fallback",
+  "layers": [
+    "layer 0: op0",
+    "layer 1: op1",
+    "layer 2: op2",
+    "layer 3: op3",
+    "layer 4: op4",
+    "layer 5: op5",
+    "layer 6: op6"
+  ],
+  "max_parallel_width": 1,
+  "ops": 7,
+  "rewrite_status": "blocked",
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+  "values": 27
+}

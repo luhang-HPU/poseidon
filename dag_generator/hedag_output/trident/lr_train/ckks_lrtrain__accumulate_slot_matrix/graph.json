@@ -1,0 +1,332 @@
+{
+  "diagnostics": [],
+  "edges": [
+    {
+      "dst": "op1",
+      "kind": "data",
+      "reason": "ciph_rotate",
+      "src": "op0",
+      "value_id": "ciph_rotate@1"
+    },
+    {
+      "dst": "op1",
+      "kind": "read_after_write",
+      "reason": "ciph_rotate",
+      "src": "op0",
+      "value_id": "ciph_rotate@1"
+    }
+  ],
+  "entry_function": "accumulate_slot_matrix",
+  "frontend": "textual_fallback",
+  "metadata": {
+    "entry_span": {
+      "end": {
+        "column": 1,
+        "line": 751,
+        "offset": 24576
+      },
+      "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+      "start": {
+        "column": 12,
+        "line": 741,
+        "offset": 24134
+      }
+    },
+    "frontend_mode": "textual_fallback",
+    "source_hash": "0124f721d1964a7506647aeb27c3a8de715fd195cb5cb875bd263faa25c85f39"
+  },
+  "ops": [
+    {
+      "api_name": "rotate",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "i * block_size * block_size"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "eva",
+        "source_text": "eva->rotate(ciph_rotate, ciph_rotate, i * block_size * block_size, rot_key)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "ciph_rotate"
+          }
+        }
+      ],
+      "inputs": [
+        "ciph_rotate@0"
+      ],
+      "op_id": "op0",
+      "op_kind": "rotate",
+      "origin_callstack": [],
+      "outputs": [
+        "ciph_rotate@1"
+      ],
+      "resources": [
+        "rot_key@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 84,
+          "line": 747,
+          "offset": 24496
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+        "start": {
+          "column": 9,
+          "line": 747,
+          "offset": 24421
+        }
+      },
+      "stmt_id": "accumulate_slot_matrix@24421"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "eva",
+        "source_text": "eva->add(ciph_sum, ciph_rotate, ciph_sum)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "ciph_sum"
+          }
+        }
+      ],
+      "inputs": [
+        "ciph_sum@0",
+        "ciph_rotate@1"
+      ],
+      "op_id": "op1",
+      "op_kind": "add",
+      "origin_callstack": [],
+      "outputs": [
+        "ciph_sum@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 50,
+          "line": 748,
+          "offset": 24547
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+        "start": {
+          "column": 9,
+          "line": 748,
+          "offset": 24506
+        }
+      },
+      "stmt_id": "accumulate_slot_matrix@24506"
+    }
+  ],
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+  "values": [
+    {
+      "annotations": {},
+      "origin_scope": "accumulate_slot_matrix",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 56,
+          "line": 741,
+          "offset": 24178
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+        "start": {
+          "column": 12,
+          "line": 741,
+          "offset": 24134
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "eva"
+      },
+      "value_id": "eva@0",
+      "value_kind": "evaluator"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "accumulate_slot_matrix",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 83,
+          "line": 741,
+          "offset": 24205
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+        "start": {
+          "column": 58,
+          "line": 741,
+          "offset": 24180
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "rot_key"
+      },
+      "value_id": "rot_key@0",
+      "value_kind": "galois_keys"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "accumulate_slot_matrix",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 107,
+          "line": 741,
+          "offset": 24229
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+        "start": {
+          "column": 85,
+          "line": 741,
+          "offset": 24207
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ciph"
+      },
+      "value_id": "ciph@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "accumulate_slot_matrix",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 31,
+          "line": 743,
+          "offset": 24317
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+        "start": {
+          "column": 5,
+          "line": 743,
+          "offset": 24291
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ciph_sum"
+      },
+      "value_id": "ciph_sum@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "accumulate_slot_matrix",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 42,
+          "line": 746,
+          "offset": 24411
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+        "start": {
+          "column": 37,
+          "line": 744,
+          "offset": 24355
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ciph_rotate"
+      },
+      "value_id": "ciph_rotate@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "accumulate_slot_matrix",
+      "producer_op_id": "op0",
+      "source_span": {
+        "end": {
+          "column": 84,
+          "line": 747,
+          "offset": 24496
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+        "start": {
+          "column": 9,
+          "line": 747,
+          "offset": 24421
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ciph_rotate"
+      },
+      "value_id": "ciph_rotate@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "accumulate_slot_matrix",
+      "producer_op_id": "op1",
+      "source_span": {
+        "end": {
+          "column": 50,
+          "line": 748,
+          "offset": 24547
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+        "start": {
+          "column": 9,
+          "line": 748,
+          "offset": 24506
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ciph_sum"
+      },
+      "value_id": "ciph_sum@1",
+      "value_kind": "ciphertext"
+    }
+  ]
+}

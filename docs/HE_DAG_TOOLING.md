@@ -57,6 +57,8 @@ If you want the whole pipeline in one command, use the root script:
 - `./hedag_pipeline input.cpp --function knn_ckks_demo`
 - `./hedag_pipeline input.cpp --function knn_ckks_demo --case-name my_case`
 - `./hedag_pipeline input.cpp --function knn_ckks_demo --frontend clang --clang-ast-json /tmp/ast.json`
+- `./hedag_trident`
+- `./hedag_trident Trident/heartstudy/heartstudy.cpp`
 
 By default, `hedag_pipeline` writes into:
 
@@ -64,7 +66,19 @@ By default, `hedag_pipeline` writes into:
 
 The default case name is derived from the input file stem, with common example prefixes such as
 `test_ckks_` stripped. If the function is not `main`, the function name is appended to avoid
-collisions. You can still override the location entirely with `--out-dir`.
+collisions. Generic stems such as `main.cpp` fall back to the parent directory name so sibling
+targets such as `Trident/pir_bfv/main.cpp` and `Trident/pir_bgv/main.cpp` no longer overwrite each
+other. You can still override the location entirely with `--out-dir`.
+
+For bulk Trident generation, `hedag_trident` scans `Trident/**/*.cpp`, discovers same-file
+functions that directly contain tracked HE API calls or call helpers that do, and writes artifacts
+into:
+
+- `dag_generator/hedag_output/trident/<relative-source-dir>/<file-stem>__<function>/`
+
+The batch command also writes an index file to:
+
+- `dag_generator/hedag_output/trident/index.json`
 
 ## Web UI
 

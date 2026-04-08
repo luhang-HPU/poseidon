@@ -1,0 +1,121 @@
+digraph hedag_v2 {
+  rankdir=LR;
+  node [shape=box, style="rounded,filled", fontname="Helvetica"];
+  edge [fontname="Helvetica"];
+  subgraph cluster_layer_0 {
+    label="layer 0";
+    color="#d1d5db";
+    op4 [label="op4\nencode\nline 189\nlayer 0\ncost 1\nout copy_ciph__MEncode_7860__plain@1", fillcolor="#e5e7eb"];
+    op0 [label="op0\nmultiply_const\nline 235\nlayer 0\ncost 3\nout ciph_tmp@1\nin ciph@0", fillcolor="#e5e7eb"];
+    op2 [label="op2\nencode\nline 242\nlayer 0\ncost 1\nout eli_plain@1", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_1 {
+    label="layer 1";
+    color="#d1d5db";
+    op1 [label="op1\nrescale_dynamic\nline 239\nlayer 1\ncost 4\nout ciph_tmp@2\nin ciph_tmp@1", fillcolor="#8c564b"];
+  }
+  subgraph cluster_layer_2 {
+    label="layer 2";
+    color="#d1d5db";
+    op3 [label="op3\nadd_plain\nline 243\nlayer 2\ncost 1\nout ciph_sub_mask@1\nin ciph_tmp@2, eli_plain@1", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_3 {
+    label="layer 3";
+    color="#d1d5db";
+    op5 [label="op5\nmultiply_plain\nline 191\nlayer 3\ncost 3\nout copy_ciph__MEncode_7860__ciph_ct_mask1@1\nin ciph_sub_mask@1, copy_ciph__MEncode_7860__plain@1", fillcolor="#e5e7eb"];
+    op14 [label="op14\nrotate\nline 248\nlayer 3\ncost 4\nout ciph_tmp@3\nin ciph@0", fillcolor="#9467bd"];
+  }
+  subgraph cluster_layer_4 {
+    label="layer 4";
+    color="#d1d5db";
+    op15 [label="op15\nadd\nline 249\nlayer 4\ncost 1\nout ciph_diag_mask@1\nin ciph@0, ciph_tmp@3", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_5 {
+    label="layer 5";
+    color="#d1d5db";
+    op6 [label="op6\nrescale_dynamic\nline 192\nlayer 5\ncost 4\nout copy_ciph__MEncode_7860__ciph_ct_mask1@2\nin copy_ciph__MEncode_7860__ciph_ct_mask1@1", fillcolor="#8c564b"];
+  }
+  subgraph cluster_layer_6 {
+    label="layer 6";
+    color="#d1d5db";
+    op7 [label="op7\nrotate\nline 195\nlayer 6\ncost 4\nout copy_ciph__MEncode_7860__ciph_ct_mask2@1\nin ciph_sub_mask@1", fillcolor="#9467bd"];
+  }
+  subgraph cluster_layer_7 {
+    label="layer 7";
+    color="#d1d5db";
+    op8 [label="op8\nencode\nline 196\nlayer 7\ncost 1\nout copy_ciph__MEncode_7860__plain@2", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_8 {
+    label="layer 8";
+    color="#d1d5db";
+    op9 [label="op9\nmultiply_plain\nline 197\nlayer 8\ncost 3\nout copy_ciph__MEncode_7860__ciph_ct_mask2@2\nin copy_ciph__MEncode_7860__ciph_ct_mask2@1, copy_ciph__MEncode_7860__plain@2", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_9 {
+    label="layer 9";
+    color="#d1d5db";
+    op10 [label="op10\nrescale_dynamic\nline 198\nlayer 9\ncost 4\nout copy_ciph__MEncode_7860__ciph_ct_mask2@3\nin copy_ciph__MEncode_7860__ciph_ct_mask2@2", fillcolor="#8c564b"];
+  }
+  subgraph cluster_layer_10 {
+    label="layer 10";
+    color="#d1d5db";
+    op11 [label="op11\nadd\nline 200\nlayer 10\ncost 1\nout copy_ciph__MEncode_7860__ciph_result@1\nin copy_ciph__MEncode_7860__ciph_ct_mask1@2, copy_ciph__MEncode_7860__ciph_ct_mask2@3", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_11 {
+    label="layer 11";
+    color="#d1d5db";
+    op12 [label="op12\nassign\nline 246\nlayer 11\ncost 1\nout ciph_copy@1\nin copy_ciph__MEncode_7860__ciph_result@1", fillcolor="#17becf"];
+  }
+  subgraph cluster_layer_12 {
+    label="layer 12";
+    color="#d1d5db";
+    op13 [label="op13\nrotate\nline 247\nlayer 12\ncost 4\nout ciph_sup_mask@1\nin ciph_copy@1", fillcolor="#9467bd"];
+  }
+  op0 -> op1 [color="#1f2937", label="ciph_tmp"];
+  op0 -> op1 [color="#2563eb", label="ciph_tmp"];
+  op0 -> op1 [color="#f97316", label="ciph_tmp"];
+  op1 -> op3 [color="#1f2937", label="ciph_tmp"];
+  op1 -> op3 [color="#2563eb", label="ciph_tmp"];
+  op2 -> op3 [color="#1f2937", label="eli_plain"];
+  op2 -> op3 [color="#2563eb", label="eli_plain"];
+  op3 -> op5 [color="#1f2937", label="ciph_sub_mask"];
+  op3 -> op5 [color="#2563eb", label="ciph_sub_mask"];
+  op4 -> op5 [color="#1f2937", label="copy_ciph__MEncode_7860__plain"];
+  op4 -> op5 [color="#2563eb", label="copy_ciph__MEncode_7860__plain"];
+  op4 -> op5 [color="#0f766e", label="MEncode@7860"];
+  op5 -> op6 [color="#1f2937", label="copy_ciph__MEncode_7860__ciph_ct_mask1"];
+  op5 -> op6 [color="#2563eb", label="copy_ciph__MEncode_7860__ciph_ct_mask1"];
+  op5 -> op6 [color="#f97316", label="copy_ciph__MEncode_7860__ciph_ct_mask1"];
+  op5 -> op6 [color="#0f766e", label="MEncode@7860"];
+  op3 -> op7 [color="#1f2937", label="ciph_sub_mask"];
+  op3 -> op7 [color="#2563eb", label="ciph_sub_mask"];
+  op6 -> op7 [color="#0f766e", label="MEncode@7860"];
+  op4 -> op8 [color="#f97316", label="copy_ciph__MEncode_7860__plain"];
+  op5 -> op8 [color="#dc2626", label="copy_ciph__MEncode_7860__plain"];
+  op7 -> op8 [color="#0f766e", label="MEncode@7860"];
+  op7 -> op9 [color="#1f2937", label="copy_ciph__MEncode_7860__ciph_ct_mask2"];
+  op7 -> op9 [color="#2563eb", label="copy_ciph__MEncode_7860__ciph_ct_mask2"];
+  op8 -> op9 [color="#1f2937", label="copy_ciph__MEncode_7860__plain"];
+  op8 -> op9 [color="#2563eb", label="copy_ciph__MEncode_7860__plain"];
+  op7 -> op9 [color="#f97316", label="copy_ciph__MEncode_7860__ciph_ct_mask2"];
+  op8 -> op9 [color="#0f766e", label="MEncode@7860"];
+  op9 -> op10 [color="#1f2937", label="copy_ciph__MEncode_7860__ciph_ct_mask2"];
+  op9 -> op10 [color="#2563eb", label="copy_ciph__MEncode_7860__ciph_ct_mask2"];
+  op9 -> op10 [color="#f97316", label="copy_ciph__MEncode_7860__ciph_ct_mask2"];
+  op9 -> op10 [color="#dc2626", label="copy_ciph__MEncode_7860__ciph_ct_mask2"];
+  op9 -> op10 [color="#0f766e", label="MEncode@7860"];
+  op6 -> op11 [color="#1f2937", label="copy_ciph__MEncode_7860__ciph_ct_mask1"];
+  op6 -> op11 [color="#2563eb", label="copy_ciph__MEncode_7860__ciph_ct_mask1"];
+  op10 -> op11 [color="#1f2937", label="copy_ciph__MEncode_7860__ciph_ct_mask2"];
+  op10 -> op11 [color="#2563eb", label="copy_ciph__MEncode_7860__ciph_ct_mask2"];
+  op10 -> op11 [color="#0f766e", label="MEncode@7860"];
+  op11 -> op12 [color="#1f2937", label="copy_ciph__MEncode_7860__ciph_result"];
+  op11 -> op12 [color="#2563eb", label="copy_ciph__MEncode_7860__ciph_result"];
+  op11 -> op12 [color="#0f766e", label="MEncode@7860"];
+  op12 -> op13 [color="#1f2937", label="ciph_copy"];
+  op12 -> op13 [color="#2563eb", label="ciph_copy"];
+  op1 -> op14 [color="#f97316", label="ciph_tmp"];
+  op1 -> op14 [color="#dc2626", label="ciph_tmp"];
+  op3 -> op14 [color="#dc2626", label="ciph_tmp"];
+  op14 -> op15 [color="#1f2937", label="ciph_tmp"];
+  op14 -> op15 [color="#2563eb", label="ciph_tmp"];
+}

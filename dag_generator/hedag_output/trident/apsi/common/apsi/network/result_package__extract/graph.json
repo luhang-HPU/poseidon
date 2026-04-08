@@ -1,0 +1,248 @@
+{
+  "diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (!crypto_context.decryptor()) {\n                throw runtime_error(\"decryptor is not configured in CryptoContext\");\n            }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 13,
+          "line": 168,
+          "offset": 6021
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/common/apsi/network/result_package.cpp",
+        "start": {
+          "column": 13,
+          "line": 166,
+          "offset": 5889
+        }
+      },
+      "stmt_id": "extract@5889",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "edges": [],
+  "entry_function": "extract",
+  "frontend": "textual_fallback",
+  "metadata": {
+    "entry_span": {
+      "end": {
+        "column": 9,
+        "line": 202,
+        "offset": 7565
+      },
+      "file": "/home/guoshuai/github/poseidon/Trident/apsi/common/apsi/network/result_package.cpp",
+      "start": {
+        "column": 43,
+        "line": 164,
+        "offset": 5822
+      }
+    },
+    "frontend_mode": "textual_fallback",
+    "source_hash": "c9f94af5ca671e15fbbb5a83edf828d1cbf37852a8dd08ff05db6fd76f486975"
+  },
+  "ops": [
+    {
+      "api_name": "return",
+      "attrs": {
+        "barrier": false,
+        "cost": 1,
+        "source_text": "return plain_rp"
+      },
+      "effects": [],
+      "inputs": [
+        "plain_rp@0"
+      ],
+      "op_id": "op0",
+      "op_kind": "return",
+      "origin_callstack": [],
+      "outputs": [
+        "__return__@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 28,
+          "line": 201,
+          "offset": 7555
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/common/apsi/network/result_package.cpp",
+        "start": {
+          "column": 13,
+          "line": 201,
+          "offset": 7540
+        }
+      },
+      "stmt_id": "extract@7540"
+    }
+  ],
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/apsi/common/apsi/network/result_package.cpp",
+  "values": [
+    {
+      "annotations": {},
+      "origin_scope": "extract",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 93,
+          "line": 170,
+          "offset": 6116
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/common/apsi/network/result_package.cpp",
+        "start": {
+          "column": 13,
+          "line": 170,
+          "offset": 6036
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "psi_result_ct"
+      },
+      "value_id": "psi_result_ct@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "extract",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 36,
+          "line": 171,
+          "offset": 6153
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/common/apsi/network/result_package.cpp",
+        "start": {
+          "column": 13,
+          "line": 171,
+          "offset": 6130
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "psi_result_pt"
+      },
+      "value_id": "psi_result_pt@0",
+      "value_kind": "plaintext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "extract",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 91,
+          "line": 185,
+          "offset": 6880
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/common/apsi/network/result_package.cpp",
+        "start": {
+          "column": 13,
+          "line": 184,
+          "offset": 6758
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "label_result_ct"
+      },
+      "value_id": "label_result_ct@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "extract",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 42,
+          "line": 186,
+          "offset": 6923
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/common/apsi/network/result_package.cpp",
+        "start": {
+          "column": 17,
+          "line": 186,
+          "offset": 6898
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "label_result_pt"
+      },
+      "value_id": "label_result_pt@0",
+      "value_kind": "plaintext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "extract",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 28,
+          "line": 201,
+          "offset": 7555
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/common/apsi/network/result_package.cpp",
+        "start": {
+          "column": 13,
+          "line": 201,
+          "offset": 7540
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "plain_rp"
+      },
+      "value_id": "plain_rp@0",
+      "value_kind": "external"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "extract",
+      "producer_op_id": "op0",
+      "source_span": {
+        "end": {
+          "column": 28,
+          "line": 201,
+          "offset": 7555
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/common/apsi/network/result_package.cpp",
+        "start": {
+          "column": 13,
+          "line": 201,
+          "offset": 7540
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "__return__"
+      },
+      "value_id": "__return__@1",
+      "value_kind": "external"
+    }
+  ]
+}

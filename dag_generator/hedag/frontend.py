@@ -77,6 +77,7 @@ API_SPECS = {
     "multiply_const": ApiSpec("multiply_const", [3], resource_positions=[4], constant_positions=[1, 2], cost=3),
     "add_const": ApiSpec("add_const", [2], resource_positions=[3], constant_positions=[1], cost=1),
     "rotate": ApiSpec("rotate", [1], resource_positions=[3], constant_positions=[2], cost=4),
+    "apply_galois": ApiSpec("apply_galois", [1], resource_positions=[3], constant_positions=[2], cost=4),
     "conjugate": ApiSpec("conjugate", [2], resource_positions=[1], cost=4),
     "rescale": ApiSpec("rescale", [-1], cost=4, barrier=True),
     "rescale_dynamic": ApiSpec("rescale_dynamic", [1], constant_positions=[2], cost=4, barrier=True),
@@ -86,12 +87,19 @@ API_SPECS = {
     "ntt_fwd": ApiSpec("ntt_fwd", [-1], cost=3),
     "ntt_inv": ApiSpec("ntt_inv", [-1], cost=3),
     "evaluate_poly_vector": ApiSpec("evaluate_poly_vector", [1], resource_positions=[2, 4, 5], constant_positions=[3], cost=8, barrier=True),
+    "multiply_by_diag_matrix_bsgs": ApiSpec("multiply_by_diag_matrix_bsgs", [2], resource_positions=[1, 3], cost=8),
     "bootstrap": ApiSpec("bootstrap", [1], resource_positions=[2, 3, 4, 5], cost=10, barrier=True),
     "read": ApiSpec("read", [], cost=1),
     "create_public_key": ApiSpec("create_public_key", [-1], cost=2),
     "create_relin_keys": ApiSpec("create_relin_keys", [-1], cost=2),
     "create_galois_keys": ApiSpec("create_galois_keys", [-1], cost=2),
 }
+
+TRACKED_MEMBER_CALL_RE = re.compile(
+    rf"(?:->|\.)\s*(?:{'|'.join(sorted(re.escape(name) for name in API_SPECS))})\s*\("
+)
+CONTROL_FLOW_KEYWORDS = {"if", "for", "while", "switch", "catch"}
+FUNCTION_TRAILING_QUALIFIERS = {"const", "noexcept", "override", "final"}
 
 
 DECL_RE = re.compile(
@@ -257,6 +265,19 @@ def _find_matching_paren(text: str, open_index: int) -> int:
     raise ValueError("unbalanced parentheses")
 
 
+def _find_matching_paren_reverse(text: str, close_index: int) -> int:
+    depth = 0
+    for index in range(close_index, -1, -1):
+        char = text[index]
+        if char == ")":
+            depth += 1
+        elif char == "(":
+            depth -= 1
+            if depth == 0:
+                return index
+    raise ValueError("unbalanced parentheses")
+
+
 def _normalize_text(text: str) -> str:
     return " ".join(text.strip().split())
 
@@ -397,6 +418,128 @@ def _extract_function_definitions(source: str, path: str, function_name: str) ->
     return definitions
 
 
+def _discover_function_definitions(source: str, path: str) -> list[FunctionDefinition]:
+    definitions: list[FunctionDefinition] = []
+    index = 0
+    while index < len(source):
+        open_index = source.find("{", index)
+        if open_index == -1:
+            break
+        try:
+            close_index = _find_matching_brace(source, open_index)
+        except ValueError:
+            break
+
+        cursor = open_index - 1
+        while cursor >= 0 and source[cursor].isspace():
+            cursor -= 1
+
+        while cursor >= 0:
+            token_end = cursor
+            if source[cursor].isalpha() or source[cursor] == "_":
+                while cursor >= 0 and (source[cursor].isalnum() or source[cursor] == "_"):
+                    cursor -= 1
+                token = source[cursor + 1 : token_end + 1]
+                if token in FUNCTION_TRAILING_QUALIFIERS:
+                    while cursor >= 0 and source[cursor].isspace():
+                        cursor -= 1
+                    continue
+            break
+
+        if cursor < 0 or source[cursor] != ")":
+            index = open_index + 1
+            continue
+
+        while cursor >= 0 and source[cursor] == ")":
+            close_paren = cursor
+            try:
+                open_paren = _find_matching_paren_reverse(source, close_paren)
+            except ValueError:
+                break
+
+            name_end = open_paren - 1
+            while name_end >= 0 and source[name_end].isspace():
+                name_end -= 1
+            if name_end < 0:
+                break
+
+            name_start = name_end
+            while name_start >= 0 and (source[name_start].isalnum() or source[name_start] in "_:~"):
+                name_start -= 1
+
+            qualified_name = source[name_start + 1 : name_end + 1]
+            name = qualified_name.split("::")[-1]
+
+            before_name = name_start
+            while before_name >= 0 and source[before_name].isspace():
+                before_name -= 1
+
+            if (
+                qualified_name
+                and re.fullmatch(r"[A-Za-z_]\w*", name)
+                and name not in CONTROL_FLOW_KEYWORDS
+                and (before_name < 0 or source[before_name] not in {":", ","})
+            ):
+                body_start = open_index + 1
+                definitions.append(
+                    FunctionDefinition(
+                        name=name,
+                        params_text=source[open_paren + 1 : close_paren],
+                        body=source[body_start:close_index],
+                        body_start_line=_line_col(source, body_start)[0],
+                        body_start_offset=body_start,
+                        full_span=_make_span(source, path, name_start + 1, close_index),
+                    )
+                )
+                index = close_index + 1
+                break
+
+            cursor = open_paren - 1
+            while cursor >= 0 and source[cursor].isspace():
+                cursor -= 1
+        else:
+            index = open_index + 1
+            continue
+
+        if index <= open_index:
+            index = open_index + 1
+    return definitions
+
+
+def _contains_tracked_member_call(body: str) -> bool:
+    return TRACKED_MEMBER_CALL_RE.search(body) is not None
+
+
+def _discover_tracked_function_names(source: str, path: str) -> list[str]:
+    definitions = _discover_function_definitions(source, path)
+    ordered_names: list[str] = []
+    tracked_names: set[str] = set()
+
+    for definition in definitions:
+        if _contains_tracked_member_call(definition.body) and definition.name not in tracked_names:
+            tracked_names.add(definition.name)
+            ordered_names.append(definition.name)
+
+    changed = True
+    while changed:
+        changed = False
+        for definition in definitions:
+            if definition.name in tracked_names:
+                continue
+            if any(re.search(rf"\b{re.escape(name)}\s*\(", definition.body) for name in ordered_names):
+                tracked_names.add(definition.name)
+                ordered_names.append(definition.name)
+                changed = True
+
+    return [name for name in ordered_names if _extract_function_definitions(source, path, name)]
+
+
+def discover_tracked_functions(source_path: str) -> list[str]:
+    path = str(Path(source_path))
+    source = _strip_comments_and_directives(Path(path).read_text(encoding="utf-8"))
+    return _discover_tracked_function_names(source, path)
+
+
 def _choose_definition(definitions: list[FunctionDefinition], arg_count: int | None = None) -> FunctionDefinition | None:
     if not definitions:
         return None
@@ -444,17 +587,17 @@ def _parse_parameters(params_text: str, source: str, path: str, function_name: s
     return params
 
 
-def _inline_lambda_enqueues(body: str) -> str:
+def _inline_parallel_lambdas(body: str) -> str:
     index = 0
     parts: list[str] = []
     while True:
-        match = re.search(r"\benqueue\s*\(", body[index:])
+        match = re.search(r"\b(?:enqueue|go)\s*\(", body[index:])
         if not match:
             parts.append(body[index:])
             break
-        enqueue_start = index + match.start()
-        stmt_start = body.rfind("\n", 0, enqueue_start) + 1
-        open_paren = body.find("(", enqueue_start)
+        call_start = index + match.start()
+        stmt_start = body.rfind("\n", 0, call_start) + 1
+        open_paren = body.find("(", call_start)
         lambda_open = body.find("{", open_paren)
         if lambda_open == -1:
             parts.append(body[index:])
@@ -482,7 +625,7 @@ def _extract_statements(
     body_start_offset: int,
     const_env: dict[str, int],
 ) -> list[ExtractedStatement]:
-    body = _inline_lambda_enqueues(body)
+    body = _inline_parallel_lambdas(body)
     statements: list[ExtractedStatement] = []
     index = 0
     while index < len(body):
@@ -788,7 +931,8 @@ def _extract_with_clang_ast(source_path: str, function_name: str, clang_ast_json
     if not definition:
         raise RuntimeError(f"failed to match clang AST function '{function_name}' back to source definition")
 
-    program = _extract_with_text_fallback_inner(source, source_path, definition, [])
+    tracked_helper_names = set(_discover_tracked_function_names(source, source_path))
+    program = _extract_with_text_fallback_inner(source, source_path, definition, [], tracked_helper_names)
     program.frontend = "clang_ast_json"
     program.metadata["frontend_mode"] = "clang_ast_json"
     program.metadata["clang_ast"] = ast_metadata
@@ -818,7 +962,8 @@ def _extract_with_text_fallback(source_path: str, function_name: str) -> Normali
     definition = _choose_definition(definitions)
     if not definition:
         raise ValueError(f"function '{function_name}' not found in {source_path}")
-    return _extract_with_text_fallback_inner(source, source_path, definition, [])
+    tracked_helper_names = set(_discover_tracked_function_names(source, source_path))
+    return _extract_with_text_fallback_inner(source, source_path, definition, [], tracked_helper_names)
 
 
 def _extract_with_text_fallback_inner(
@@ -826,8 +971,11 @@ def _extract_with_text_fallback_inner(
     source_path: str,
     definition: FunctionDefinition,
     stack: list[str],
+    tracked_helper_names: set[str] | None = None,
 ) -> NormalizedProgram:
     function_name = definition.name
+    if tracked_helper_names is None:
+        tracked_helper_names = set(_discover_tracked_function_names(source, source_path))
 
     diagnostics: list[Diagnostic] = []
     declared_symbols: dict[str, DeclaredSymbol] = {}
@@ -871,12 +1019,14 @@ def _extract_with_text_fallback_inner(
         if callee_name in stack:
             diagnostics.append(_build_diagnostic("recursive helper extraction is not supported", call_stmt_id, call_span))
             return True
+        if callee_name not in tracked_helper_names:
+            return False
         candidates = _extract_function_definitions(source, source_path, callee_name)
         callee_definition = _choose_definition(candidates, arg_count=len(args))
         if not callee_definition:
             return False
         stack.append(callee_name)
-        helper = _extract_with_text_fallback_inner(source, source_path, callee_definition, stack)
+        helper = _extract_with_text_fallback_inner(source, source_path, callee_definition, stack, tracked_helper_names)
         stack.pop()
         diagnostics.extend(helper.diagnostics)
 

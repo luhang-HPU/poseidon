@@ -1,0 +1,99 @@
+{
+  "barriers": [
+    "op1",
+    "op3",
+    "op4"
+  ],
+  "critical_path_cost": 11,
+  "entry_function": "ComputePowers",
+  "layers": [
+    [
+      "op0",
+      "op2"
+    ],
+    [
+      "op1"
+    ],
+    [
+      "op3"
+    ],
+    [
+      "op4"
+    ]
+  ],
+  "max_parallel_width": 2,
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "op_schedule": {
+    "op0": {
+      "barrier": false,
+      "cost": 5,
+      "critical": false,
+      "earliest_finish": 5,
+      "earliest_start": 0,
+      "latest_finish": 7,
+      "latest_start": 2,
+      "layer": 0,
+      "slack": 2,
+      "source_line": 262
+    },
+    "op1": {
+      "barrier": true,
+      "cost": 4,
+      "critical": false,
+      "earliest_finish": 9,
+      "earliest_start": 5,
+      "latest_finish": 11,
+      "latest_start": 7,
+      "layer": 1,
+      "slack": 2,
+      "source_line": 266
+    },
+    "op2": {
+      "barrier": false,
+      "cost": 3,
+      "critical": true,
+      "earliest_finish": 3,
+      "earliest_start": 0,
+      "latest_finish": 3,
+      "latest_start": 0,
+      "layer": 0,
+      "slack": 0,
+      "source_line": 305
+    },
+    "op3": {
+      "barrier": true,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 7,
+      "earliest_start": 3,
+      "latest_finish": 7,
+      "latest_start": 3,
+      "layer": 2,
+      "slack": 0,
+      "source_line": 307
+    },
+    "op4": {
+      "barrier": true,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 11,
+      "earliest_start": 7,
+      "latest_finish": 11,
+      "latest_start": 7,
+      "layer": 3,
+      "slack": 0,
+      "source_line": 320
+    }
+  },
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/apsi/sender/apsi/sender.cpp",
+  "topological_order": [
+    "op0",
+    "op2",
+    "op1",
+    "op3",
+    "op4"
+  ]
+}

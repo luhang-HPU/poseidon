@@ -1,0 +1,88 @@
+{
+  "critical_path_cost": 6,
+  "diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (pir_params_.enable_mswitching)\n    {\n        parms = context_->crt_context()->last_context_data()->parms();\n        parms_id = context_->crt_context()->last_parms_id();\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 218,
+          "offset": 6726
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+        "start": {
+          "column": 5,
+          "line": 214,
+          "offset": 6549
+        }
+      },
+      "stmt_id": "decode_reply@6549",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if ((j + 1) % (exp_ratio * ciphertext_size) == 0 && j > 0)\n            {\n                \n                Ciphertext combined(*context_, parms_id);\n                compose_to_ciphertext(parms, tempplain, combined);\n                newtemp.push_back(combined);\n                tempplain.clear();\n                \n                \n            }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 13,
+          "line": 254,
+          "offset": 7923
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+        "start": {
+          "column": 13,
+          "line": 245,
+          "offset": 7582
+        }
+      },
+      "stmt_id": "decode_reply@7582",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (i == recursion_level - 1)\n        {\n            assert(temp.size() == 1);\n            return tempplain[0];\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 262,
+          "offset": 8145
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+        "start": {
+          "column": 9,
+          "line": 258,
+          "offset": 8026
+        }
+      },
+      "stmt_id": "decode_reply@8026",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "edges": 2,
+  "entry_function": "decode_reply",
+  "frontend": "textual_fallback",
+  "layers": [
+    "layer 0: op3, op0",
+    "layer 1: op1",
+    "layer 2: op2"
+  ],
+  "max_parallel_width": 2,
+  "ops": 4,
+  "rewrite_status": "blocked",
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+  "values": 12
+}
