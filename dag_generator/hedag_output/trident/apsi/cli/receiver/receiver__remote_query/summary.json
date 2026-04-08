@@ -1,0 +1,67 @@
+{
+  "critical_path_cost": 5,
+  "diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (channel.is_connected()) {\n        APSI_LOG_INFO(\"Successfully connected to \" << conn_addr);\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 88,
+          "offset": 1647
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/cli/receiver/receiver.cpp",
+        "start": {
+          "column": 5,
+          "line": 86,
+          "offset": 1547
+        }
+      },
+      "stmt_id": "remote_query@1547",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (!query_data || !holds_alternative<CSVReader::UnlabeledData>(*query_data)) {\n        \n        APSI_LOG_ERROR(\"Failed to read query file: terminating\");\n        return -1;\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 113,
+          "offset": 2521
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/cli/receiver/receiver.cpp",
+        "start": {
+          "column": 5,
+          "line": 109,
+          "offset": 2343
+        }
+      },
+      "stmt_id": "remote_query@2343",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "edges": 5,
+  "entry_function": "remote_query",
+  "frontend": "textual_fallback",
+  "layers": [
+    "layer 0: op0, op2",
+    "layer 1: op1, op3",
+    "layer 2: op4",
+    "layer 3: op5",
+    "layer 4: op6"
+  ],
+  "max_parallel_width": 2,
+  "ops": 7,
+  "rewrite_status": "blocked",
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/apsi/cli/receiver/receiver.cpp",
+  "values": 10
+}

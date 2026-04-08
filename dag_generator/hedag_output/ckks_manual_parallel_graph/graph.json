@@ -1,0 +1,5465 @@
+{
+  "diagnostics": [],
+  "edges": [
+    {
+      "dst": "op1",
+      "kind": "data",
+      "reason": "smooth_square_branch__ckks_manual_parallel_workload_9433__sum_ab",
+      "src": "op0",
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__sum_ab@1"
+    },
+    {
+      "dst": "op1",
+      "kind": "read_after_write",
+      "reason": "smooth_square_branch__ckks_manual_parallel_workload_9433__sum_ab",
+      "src": "op0",
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__sum_ab@1"
+    },
+    {
+      "dst": "op1",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9433",
+      "src": "op0",
+      "value_id": null
+    },
+    {
+      "dst": "op2",
+      "kind": "data",
+      "reason": "smooth_square_branch__ckks_manual_parallel_workload_9433__sum_ab",
+      "src": "op0",
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__sum_ab@1"
+    },
+    {
+      "dst": "op2",
+      "kind": "read_after_write",
+      "reason": "smooth_square_branch__ckks_manual_parallel_workload_9433__sum_ab",
+      "src": "op0",
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__sum_ab@1"
+    },
+    {
+      "dst": "op2",
+      "kind": "data",
+      "reason": "smooth_square_branch__ckks_manual_parallel_workload_9433__rot_ab_1",
+      "src": "op1",
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__rot_ab_1@1"
+    },
+    {
+      "dst": "op2",
+      "kind": "read_after_write",
+      "reason": "smooth_square_branch__ckks_manual_parallel_workload_9433__rot_ab_1",
+      "src": "op1",
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__rot_ab_1@1"
+    },
+    {
+      "dst": "op2",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9433",
+      "src": "op1",
+      "value_id": null
+    },
+    {
+      "dst": "op3",
+      "kind": "data",
+      "reason": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_ab",
+      "src": "op2",
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_ab@1"
+    },
+    {
+      "dst": "op3",
+      "kind": "read_after_write",
+      "reason": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_ab",
+      "src": "op2",
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_ab@1"
+    },
+    {
+      "dst": "op3",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9433",
+      "src": "op2",
+      "value_id": null
+    },
+    {
+      "dst": "op4",
+      "kind": "data",
+      "reason": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq",
+      "src": "op3",
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq@1"
+    },
+    {
+      "dst": "op4",
+      "kind": "read_after_write",
+      "reason": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq",
+      "src": "op3",
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq@1"
+    },
+    {
+      "dst": "op4",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9433",
+      "src": "op3",
+      "value_id": null
+    },
+    {
+      "dst": "op5",
+      "kind": "data",
+      "reason": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_relin",
+      "src": "op4",
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_relin@1"
+    },
+    {
+      "dst": "op5",
+      "kind": "read_after_write",
+      "reason": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_relin",
+      "src": "op4",
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_relin@1"
+    },
+    {
+      "dst": "op5",
+      "kind": "write_after_write",
+      "reason": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_relin",
+      "src": "op4",
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_relin@2"
+    },
+    {
+      "dst": "op5",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9433",
+      "src": "op4",
+      "value_id": null
+    },
+    {
+      "dst": "op6",
+      "kind": "data",
+      "reason": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_relin",
+      "src": "op5",
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_relin@2"
+    },
+    {
+      "dst": "op6",
+      "kind": "read_after_write",
+      "reason": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_relin",
+      "src": "op5",
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_relin@2"
+    },
+    {
+      "dst": "op6",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9433",
+      "src": "op5",
+      "value_id": null
+    },
+    {
+      "dst": "op7",
+      "kind": "data",
+      "reason": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_relin",
+      "src": "op5",
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_relin@2"
+    },
+    {
+      "dst": "op7",
+      "kind": "read_after_write",
+      "reason": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_relin",
+      "src": "op5",
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_relin@2"
+    },
+    {
+      "dst": "op7",
+      "kind": "data",
+      "reason": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_rot4",
+      "src": "op6",
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_rot4@1"
+    },
+    {
+      "dst": "op7",
+      "kind": "read_after_write",
+      "reason": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_rot4",
+      "src": "op6",
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_rot4@1"
+    },
+    {
+      "dst": "op7",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9433",
+      "src": "op6",
+      "value_id": null
+    },
+    {
+      "dst": "op8",
+      "kind": "data",
+      "reason": "smooth_square_branch__ckks_manual_parallel_workload_9433__branch_add",
+      "src": "op7",
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__branch_add@1"
+    },
+    {
+      "dst": "op8",
+      "kind": "read_after_write",
+      "reason": "smooth_square_branch__ckks_manual_parallel_workload_9433__branch_add",
+      "src": "op7",
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__branch_add@1"
+    },
+    {
+      "dst": "op8",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9433",
+      "src": "op7",
+      "value_id": null
+    },
+    {
+      "dst": "op10",
+      "kind": "data",
+      "reason": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_cd",
+      "src": "op9",
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_cd@1"
+    },
+    {
+      "dst": "op10",
+      "kind": "read_after_write",
+      "reason": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_cd",
+      "src": "op9",
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_cd@1"
+    },
+    {
+      "dst": "op10",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9524",
+      "src": "op9",
+      "value_id": null
+    },
+    {
+      "dst": "op11",
+      "kind": "data",
+      "reason": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_cd",
+      "src": "op9",
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_cd@1"
+    },
+    {
+      "dst": "op11",
+      "kind": "read_after_write",
+      "reason": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_cd",
+      "src": "op9",
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_cd@1"
+    },
+    {
+      "dst": "op11",
+      "kind": "data",
+      "reason": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_rot2",
+      "src": "op10",
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_rot2@1"
+    },
+    {
+      "dst": "op11",
+      "kind": "read_after_write",
+      "reason": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_rot2",
+      "src": "op10",
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_rot2@1"
+    },
+    {
+      "dst": "op11",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9524",
+      "src": "op10",
+      "value_id": null
+    },
+    {
+      "dst": "op12",
+      "kind": "data",
+      "reason": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_mix",
+      "src": "op11",
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_mix@1"
+    },
+    {
+      "dst": "op12",
+      "kind": "read_after_write",
+      "reason": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_mix",
+      "src": "op11",
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_mix@1"
+    },
+    {
+      "dst": "op12",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9524",
+      "src": "op11",
+      "value_id": null
+    },
+    {
+      "dst": "op13",
+      "kind": "data",
+      "reason": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq",
+      "src": "op12",
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq@1"
+    },
+    {
+      "dst": "op13",
+      "kind": "read_after_write",
+      "reason": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq",
+      "src": "op12",
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq@1"
+    },
+    {
+      "dst": "op13",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9524",
+      "src": "op12",
+      "value_id": null
+    },
+    {
+      "dst": "op14",
+      "kind": "data",
+      "reason": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_relin",
+      "src": "op13",
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_relin@1"
+    },
+    {
+      "dst": "op14",
+      "kind": "read_after_write",
+      "reason": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_relin",
+      "src": "op13",
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_relin@1"
+    },
+    {
+      "dst": "op14",
+      "kind": "write_after_write",
+      "reason": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_relin",
+      "src": "op13",
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_relin@2"
+    },
+    {
+      "dst": "op14",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9524",
+      "src": "op13",
+      "value_id": null
+    },
+    {
+      "dst": "op15",
+      "kind": "data",
+      "reason": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_relin",
+      "src": "op14",
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_relin@2"
+    },
+    {
+      "dst": "op15",
+      "kind": "read_after_write",
+      "reason": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_relin",
+      "src": "op14",
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_relin@2"
+    },
+    {
+      "dst": "op15",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9524",
+      "src": "op14",
+      "value_id": null
+    },
+    {
+      "dst": "op16",
+      "kind": "data",
+      "reason": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_relin",
+      "src": "op14",
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_relin@2"
+    },
+    {
+      "dst": "op16",
+      "kind": "read_after_write",
+      "reason": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_relin",
+      "src": "op14",
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_relin@2"
+    },
+    {
+      "dst": "op16",
+      "kind": "data",
+      "reason": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_rot8",
+      "src": "op15",
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_rot8@1"
+    },
+    {
+      "dst": "op16",
+      "kind": "read_after_write",
+      "reason": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_rot8",
+      "src": "op15",
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_rot8@1"
+    },
+    {
+      "dst": "op16",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9524",
+      "src": "op15",
+      "value_id": null
+    },
+    {
+      "dst": "op17",
+      "kind": "data",
+      "reason": "diff_energy_branch__ckks_manual_parallel_workload_9524__branch_quad",
+      "src": "op16",
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__branch_quad@1"
+    },
+    {
+      "dst": "op17",
+      "kind": "read_after_write",
+      "reason": "diff_energy_branch__ckks_manual_parallel_workload_9524__branch_quad",
+      "src": "op16",
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__branch_quad@1"
+    },
+    {
+      "dst": "op17",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9524",
+      "src": "op16",
+      "value_id": null
+    },
+    {
+      "dst": "op19",
+      "kind": "data",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac",
+      "src": "op18",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac@1"
+    },
+    {
+      "dst": "op19",
+      "kind": "read_after_write",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac",
+      "src": "op18",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac@1"
+    },
+    {
+      "dst": "op19",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9634",
+      "src": "op18",
+      "value_id": null
+    },
+    {
+      "dst": "op20",
+      "kind": "data",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac_relin",
+      "src": "op19",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac_relin@1"
+    },
+    {
+      "dst": "op20",
+      "kind": "read_after_write",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac_relin",
+      "src": "op19",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac_relin@1"
+    },
+    {
+      "dst": "op20",
+      "kind": "write_after_write",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac_relin",
+      "src": "op19",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac_relin@2"
+    },
+    {
+      "dst": "op20",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9634",
+      "src": "op19",
+      "value_id": null
+    },
+    {
+      "dst": "op21",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9634",
+      "src": "op20",
+      "value_id": null
+    },
+    {
+      "dst": "op22",
+      "kind": "data",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd",
+      "src": "op21",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd@1"
+    },
+    {
+      "dst": "op22",
+      "kind": "read_after_write",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd",
+      "src": "op21",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd@1"
+    },
+    {
+      "dst": "op22",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9634",
+      "src": "op21",
+      "value_id": null
+    },
+    {
+      "dst": "op23",
+      "kind": "data",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd_relin",
+      "src": "op22",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd_relin@1"
+    },
+    {
+      "dst": "op23",
+      "kind": "read_after_write",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd_relin",
+      "src": "op22",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd_relin@1"
+    },
+    {
+      "dst": "op23",
+      "kind": "write_after_write",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd_relin",
+      "src": "op22",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd_relin@2"
+    },
+    {
+      "dst": "op23",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9634",
+      "src": "op22",
+      "value_id": null
+    },
+    {
+      "dst": "op24",
+      "kind": "data",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac_relin",
+      "src": "op20",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac_relin@2"
+    },
+    {
+      "dst": "op24",
+      "kind": "read_after_write",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac_relin",
+      "src": "op20",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac_relin@2"
+    },
+    {
+      "dst": "op24",
+      "kind": "data",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd_relin",
+      "src": "op23",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd_relin@2"
+    },
+    {
+      "dst": "op24",
+      "kind": "read_after_write",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd_relin",
+      "src": "op23",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd_relin@2"
+    },
+    {
+      "dst": "op24",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9634",
+      "src": "op23",
+      "value_id": null
+    },
+    {
+      "dst": "op25",
+      "kind": "data",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_sum",
+      "src": "op24",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_sum@1"
+    },
+    {
+      "dst": "op25",
+      "kind": "read_after_write",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_sum",
+      "src": "op24",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_sum@1"
+    },
+    {
+      "dst": "op25",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9634",
+      "src": "op24",
+      "value_id": null
+    },
+    {
+      "dst": "op26",
+      "kind": "data",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_sum",
+      "src": "op24",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_sum@1"
+    },
+    {
+      "dst": "op26",
+      "kind": "read_after_write",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_sum",
+      "src": "op24",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_sum@1"
+    },
+    {
+      "dst": "op26",
+      "kind": "data",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_rot8",
+      "src": "op25",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_rot8@1"
+    },
+    {
+      "dst": "op26",
+      "kind": "read_after_write",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_rot8",
+      "src": "op25",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_rot8@1"
+    },
+    {
+      "dst": "op26",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9634",
+      "src": "op25",
+      "value_id": null
+    },
+    {
+      "dst": "op27",
+      "kind": "data",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_mix",
+      "src": "op26",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_mix@1"
+    },
+    {
+      "dst": "op27",
+      "kind": "read_after_write",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_mix",
+      "src": "op26",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_mix@1"
+    },
+    {
+      "dst": "op27",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9634",
+      "src": "op26",
+      "value_id": null
+    },
+    {
+      "dst": "op28",
+      "kind": "data",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_mix",
+      "src": "op26",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_mix@1"
+    },
+    {
+      "dst": "op28",
+      "kind": "read_after_write",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_mix",
+      "src": "op26",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_mix@1"
+    },
+    {
+      "dst": "op28",
+      "kind": "data",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_rot16",
+      "src": "op27",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_rot16@1"
+    },
+    {
+      "dst": "op28",
+      "kind": "read_after_write",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_rot16",
+      "src": "op27",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_rot16@1"
+    },
+    {
+      "dst": "op28",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9634",
+      "src": "op27",
+      "value_id": null
+    },
+    {
+      "dst": "op29",
+      "kind": "data",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__branch_cross",
+      "src": "op28",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__branch_cross@1"
+    },
+    {
+      "dst": "op29",
+      "kind": "read_after_write",
+      "reason": "cross_mix_branch__ckks_manual_parallel_workload_9634__branch_cross",
+      "src": "op28",
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__branch_cross@1"
+    },
+    {
+      "dst": "op29",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9634",
+      "src": "op28",
+      "value_id": null
+    },
+    {
+      "dst": "op30",
+      "kind": "data",
+      "reason": "branch_add",
+      "src": "op8",
+      "value_id": "branch_add@1"
+    },
+    {
+      "dst": "op30",
+      "kind": "read_after_write",
+      "reason": "branch_add",
+      "src": "op8",
+      "value_id": "branch_add@1"
+    },
+    {
+      "dst": "op31",
+      "kind": "data",
+      "reason": "final_reduce__ckks_manual_parallel_workload_9801__merged_left",
+      "src": "op30",
+      "value_id": "final_reduce__ckks_manual_parallel_workload_9801__merged_left@1"
+    },
+    {
+      "dst": "op31",
+      "kind": "read_after_write",
+      "reason": "final_reduce__ckks_manual_parallel_workload_9801__merged_left",
+      "src": "op30",
+      "value_id": "final_reduce__ckks_manual_parallel_workload_9801__merged_left@1"
+    },
+    {
+      "dst": "op31",
+      "kind": "data",
+      "reason": "branch_quad",
+      "src": "op17",
+      "value_id": "branch_quad@1"
+    },
+    {
+      "dst": "op31",
+      "kind": "read_after_write",
+      "reason": "branch_quad",
+      "src": "op17",
+      "value_id": "branch_quad@1"
+    },
+    {
+      "dst": "op31",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9801",
+      "src": "op30",
+      "value_id": null
+    },
+    {
+      "dst": "op32",
+      "kind": "data",
+      "reason": "final_reduce__ckks_manual_parallel_workload_9801__merged_all",
+      "src": "op31",
+      "value_id": "final_reduce__ckks_manual_parallel_workload_9801__merged_all@1"
+    },
+    {
+      "dst": "op32",
+      "kind": "read_after_write",
+      "reason": "final_reduce__ckks_manual_parallel_workload_9801__merged_all",
+      "src": "op31",
+      "value_id": "final_reduce__ckks_manual_parallel_workload_9801__merged_all@1"
+    },
+    {
+      "dst": "op32",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9801",
+      "src": "op31",
+      "value_id": null
+    },
+    {
+      "dst": "op33",
+      "kind": "data",
+      "reason": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod",
+      "src": "op32",
+      "value_id": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod@1"
+    },
+    {
+      "dst": "op33",
+      "kind": "read_after_write",
+      "reason": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod",
+      "src": "op32",
+      "value_id": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod@1"
+    },
+    {
+      "dst": "op33",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9801",
+      "src": "op32",
+      "value_id": null
+    },
+    {
+      "dst": "op34",
+      "kind": "data",
+      "reason": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod_relin",
+      "src": "op33",
+      "value_id": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod_relin@1"
+    },
+    {
+      "dst": "op34",
+      "kind": "read_after_write",
+      "reason": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod_relin",
+      "src": "op33",
+      "value_id": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod_relin@1"
+    },
+    {
+      "dst": "op34",
+      "kind": "write_after_write",
+      "reason": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod_relin",
+      "src": "op33",
+      "value_id": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod_relin@2"
+    },
+    {
+      "dst": "op34",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9801",
+      "src": "op33",
+      "value_id": null
+    },
+    {
+      "dst": "op35",
+      "kind": "data",
+      "reason": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod_relin",
+      "src": "op34",
+      "value_id": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod_relin@2"
+    },
+    {
+      "dst": "op35",
+      "kind": "read_after_write",
+      "reason": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod_relin",
+      "src": "op34",
+      "value_id": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod_relin@2"
+    },
+    {
+      "dst": "op35",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9801",
+      "src": "op34",
+      "value_id": null
+    },
+    {
+      "dst": "op36",
+      "kind": "data",
+      "reason": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod_relin",
+      "src": "op34",
+      "value_id": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod_relin@2"
+    },
+    {
+      "dst": "op36",
+      "kind": "read_after_write",
+      "reason": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod_relin",
+      "src": "op34",
+      "value_id": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod_relin@2"
+    },
+    {
+      "dst": "op36",
+      "kind": "data",
+      "reason": "final_reduce__ckks_manual_parallel_workload_9801__tail_rot32",
+      "src": "op35",
+      "value_id": "final_reduce__ckks_manual_parallel_workload_9801__tail_rot32@1"
+    },
+    {
+      "dst": "op36",
+      "kind": "read_after_write",
+      "reason": "final_reduce__ckks_manual_parallel_workload_9801__tail_rot32",
+      "src": "op35",
+      "value_id": "final_reduce__ckks_manual_parallel_workload_9801__tail_rot32@1"
+    },
+    {
+      "dst": "op36",
+      "kind": "write_after_write",
+      "reason": "branch_cross",
+      "src": "op29",
+      "value_id": "branch_cross@2"
+    },
+    {
+      "dst": "op36",
+      "kind": "call_order",
+      "reason": "ckks_manual_parallel_workload@9801",
+      "src": "op35",
+      "value_id": null
+    }
+  ],
+  "entry_function": "ckks_manual_parallel_workload",
+  "frontend": "textual_fallback",
+  "metadata": {
+    "entry_span": {
+      "end": {
+        "column": 1,
+        "line": 265,
+        "offset": 10033
+      },
+      "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+      "start": {
+        "column": 6,
+        "line": 240,
+        "offset": 8855
+      }
+    },
+    "frontend_mode": "textual_fallback",
+    "source_hash": "a6ea57aec6eb4ce70e0a6335d348f23dc4855a29434adbf2a5bea0c174daa7b9"
+  },
+  "ops": [
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.add(ct_a, ct_b, sum_ab)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "sum_ab"
+          }
+        }
+      ],
+      "inputs": [
+        "scale@0",
+        "ct_a@0"
+      ],
+      "op_id": "op0",
+      "op_kind": "add",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 72,
+              "line": 253,
+              "offset": 9520
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 2,
+              "line": 252,
+              "offset": 9433
+            }
+          },
+          "source_text": "branch_add = smooth_square_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b)",
+          "stmt_id": "ckks_manual_parallel_workload@9433"
+        }
+      ],
+      "outputs": [
+        "smooth_square_branch__ckks_manual_parallel_workload_9433__sum_ab@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 37,
+          "line": 144,
+          "offset": 4577
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 144,
+          "offset": 4545
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9433::smooth_square_branch@4545"
+    },
+    {
+      "api_name": "rotate",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "1"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.rotate(sum_ab, rot_ab_1, 1, galois_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "rot_ab_1"
+          }
+        }
+      ],
+      "inputs": [
+        "smooth_square_branch__ckks_manual_parallel_workload_9433__sum_ab@1"
+      ],
+      "op_id": "op1",
+      "op_kind": "rotate",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 72,
+              "line": 253,
+              "offset": 9520
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 2,
+              "line": 252,
+              "offset": 9433
+            }
+          },
+          "source_text": "branch_add = smooth_square_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b)",
+          "stmt_id": "ckks_manual_parallel_workload@9433"
+        }
+      ],
+      "outputs": [
+        "smooth_square_branch__ckks_manual_parallel_workload_9433__rot_ab_1@1"
+      ],
+      "resources": [
+        "galois_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 54,
+          "line": 145,
+          "offset": 4632
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 145,
+          "offset": 4583
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9433::smooth_square_branch@4583"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.add(sum_ab, rot_ab_1, smooth_ab)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "smooth_ab"
+          }
+        }
+      ],
+      "inputs": [
+        "smooth_square_branch__ckks_manual_parallel_workload_9433__sum_ab@1",
+        "smooth_square_branch__ckks_manual_parallel_workload_9433__rot_ab_1@1"
+      ],
+      "op_id": "op2",
+      "op_kind": "add",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 72,
+              "line": 253,
+              "offset": 9520
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 2,
+              "line": 252,
+              "offset": 9433
+            }
+          },
+          "source_text": "branch_add = smooth_square_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b)",
+          "stmt_id": "ckks_manual_parallel_workload@9433"
+        }
+      ],
+      "outputs": [
+        "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_ab@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 46,
+          "line": 146,
+          "offset": 4679
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 146,
+          "offset": 4638
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9433::smooth_square_branch@4638"
+    },
+    {
+      "api_name": "multiply",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 5,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.multiply(smooth_ab, smooth_ab, smooth_sq)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "smooth_sq"
+          }
+        }
+      ],
+      "inputs": [
+        "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_ab@1",
+        "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_ab@1"
+      ],
+      "op_id": "op3",
+      "op_kind": "multiply",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 72,
+              "line": 253,
+              "offset": 9520
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 2,
+              "line": 252,
+              "offset": 9433
+            }
+          },
+          "source_text": "branch_add = smooth_square_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b)",
+          "stmt_id": "ckks_manual_parallel_workload@9433"
+        }
+      ],
+      "outputs": [
+        "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 55,
+          "line": 147,
+          "offset": 4735
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 147,
+          "offset": 4685
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9433::smooth_square_branch@4685"
+    },
+    {
+      "api_name": "relinearize",
+      "attrs": {
+        "barrier": true,
+        "constants": [],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.relinearize(smooth_sq, smooth_sq_relin, relin_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "smooth_sq_relin"
+          }
+        }
+      ],
+      "inputs": [
+        "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq@1"
+      ],
+      "op_id": "op4",
+      "op_kind": "relinearize",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 72,
+              "line": 253,
+              "offset": 9520
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 2,
+              "line": 252,
+              "offset": 9433
+            }
+          },
+          "source_text": "branch_add = smooth_square_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b)",
+          "stmt_id": "ckks_manual_parallel_workload@9433"
+        }
+      ],
+      "outputs": [
+        "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_relin@1"
+      ],
+      "resources": [
+        "relin_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 65,
+          "line": 148,
+          "offset": 4801
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 148,
+          "offset": 4741
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9433::smooth_square_branch@4741"
+    },
+    {
+      "api_name": "rescale_dynamic",
+      "attrs": {
+        "barrier": true,
+        "constants": [
+          "scale"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.rescale_dynamic(smooth_sq_relin, smooth_sq_relin, scale)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "smooth_sq_relin"
+          }
+        }
+      ],
+      "inputs": [
+        "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_relin@1"
+      ],
+      "op_id": "op5",
+      "op_kind": "rescale_dynamic",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 72,
+              "line": 253,
+              "offset": 9520
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 2,
+              "line": 252,
+              "offset": 9433
+            }
+          },
+          "source_text": "branch_add = smooth_square_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b)",
+          "stmt_id": "ckks_manual_parallel_workload@9433"
+        }
+      ],
+      "outputs": [
+        "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_relin@2"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 70,
+          "line": 149,
+          "offset": 4872
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 149,
+          "offset": 4807
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9433::smooth_square_branch@4807"
+    },
+    {
+      "api_name": "rotate",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "4"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.rotate(smooth_sq_relin, smooth_sq_rot4, 4, galois_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "smooth_sq_rot4"
+          }
+        }
+      ],
+      "inputs": [
+        "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_relin@2"
+      ],
+      "op_id": "op6",
+      "op_kind": "rotate",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 72,
+              "line": 253,
+              "offset": 9520
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 2,
+              "line": 252,
+              "offset": 9433
+            }
+          },
+          "source_text": "branch_add = smooth_square_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b)",
+          "stmt_id": "ckks_manual_parallel_workload@9433"
+        }
+      ],
+      "outputs": [
+        "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_rot4@1"
+      ],
+      "resources": [
+        "galois_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 69,
+          "line": 150,
+          "offset": 4942
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 150,
+          "offset": 4878
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9433::smooth_square_branch@4878"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.add(smooth_sq_relin, smooth_sq_rot4, branch_add)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "branch_add"
+          }
+        }
+      ],
+      "inputs": [
+        "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_relin@2",
+        "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_rot4@1"
+      ],
+      "op_id": "op7",
+      "op_kind": "add",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 72,
+              "line": 253,
+              "offset": 9520
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 2,
+              "line": 252,
+              "offset": 9433
+            }
+          },
+          "source_text": "branch_add = smooth_square_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b)",
+          "stmt_id": "ckks_manual_parallel_workload@9433"
+        }
+      ],
+      "outputs": [
+        "smooth_square_branch__ckks_manual_parallel_workload_9433__branch_add@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 62,
+          "line": 151,
+          "offset": 5005
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 151,
+          "offset": 4948
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9433::smooth_square_branch@4948"
+    },
+    {
+      "api_name": "assign",
+      "attrs": {
+        "barrier": false,
+        "cost": 1,
+        "source_text": "branch_add = smooth_square_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "branch_add"
+          }
+        }
+      ],
+      "inputs": [
+        "smooth_square_branch__ckks_manual_parallel_workload_9433__branch_add@1"
+      ],
+      "op_id": "op8",
+      "op_kind": "assign",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 72,
+              "line": 253,
+              "offset": 9520
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 2,
+              "line": 252,
+              "offset": 9433
+            }
+          },
+          "source_text": "branch_add = smooth_square_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b)",
+          "stmt_id": "ckks_manual_parallel_workload@9433"
+        }
+      ],
+      "outputs": [
+        "branch_add@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 72,
+          "line": 253,
+          "offset": 9520
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 2,
+          "line": 252,
+          "offset": 9433
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9433::return"
+    },
+    {
+      "api_name": "sub",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.sub(ct_c, ct_d, diff_cd)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "diff_cd"
+          }
+        }
+      ],
+      "inputs": [
+        "scale@0",
+        "ct_c@0"
+      ],
+      "op_id": "op9",
+      "op_kind": "sub",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 36,
+              "line": 255,
+              "offset": 9610
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 76,
+              "line": 253,
+              "offset": 9524
+            }
+          },
+          "source_text": "branch_quad = diff_energy_branch(ckks_eva, relin_keys, galois_keys, scale, ct_c, ct_d)",
+          "stmt_id": "ckks_manual_parallel_workload@9524"
+        }
+      ],
+      "outputs": [
+        "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_cd@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 38,
+          "line": 167,
+          "offset": 5500
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 167,
+          "offset": 5467
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9524::diff_energy_branch@5467"
+    },
+    {
+      "api_name": "rotate",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "2"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.rotate(diff_cd, diff_rot2, 2, galois_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "diff_rot2"
+          }
+        }
+      ],
+      "inputs": [
+        "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_cd@1"
+      ],
+      "op_id": "op10",
+      "op_kind": "rotate",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 36,
+              "line": 255,
+              "offset": 9610
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 76,
+              "line": 253,
+              "offset": 9524
+            }
+          },
+          "source_text": "branch_quad = diff_energy_branch(ckks_eva, relin_keys, galois_keys, scale, ct_c, ct_d)",
+          "stmt_id": "ckks_manual_parallel_workload@9524"
+        }
+      ],
+      "outputs": [
+        "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_rot2@1"
+      ],
+      "resources": [
+        "galois_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 56,
+          "line": 168,
+          "offset": 5557
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 168,
+          "offset": 5506
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9524::diff_energy_branch@5506"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.add(diff_cd, diff_rot2, diff_mix)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "diff_mix"
+          }
+        }
+      ],
+      "inputs": [
+        "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_cd@1",
+        "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_rot2@1"
+      ],
+      "op_id": "op11",
+      "op_kind": "add",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 36,
+              "line": 255,
+              "offset": 9610
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 76,
+              "line": 253,
+              "offset": 9524
+            }
+          },
+          "source_text": "branch_quad = diff_energy_branch(ckks_eva, relin_keys, galois_keys, scale, ct_c, ct_d)",
+          "stmt_id": "ckks_manual_parallel_workload@9524"
+        }
+      ],
+      "outputs": [
+        "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_mix@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 47,
+          "line": 169,
+          "offset": 5605
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 169,
+          "offset": 5563
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9524::diff_energy_branch@5563"
+    },
+    {
+      "api_name": "multiply",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 5,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.multiply(diff_mix, diff_mix, diff_sq)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "diff_sq"
+          }
+        }
+      ],
+      "inputs": [
+        "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_mix@1",
+        "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_mix@1"
+      ],
+      "op_id": "op12",
+      "op_kind": "multiply",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 36,
+              "line": 255,
+              "offset": 9610
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 76,
+              "line": 253,
+              "offset": 9524
+            }
+          },
+          "source_text": "branch_quad = diff_energy_branch(ckks_eva, relin_keys, galois_keys, scale, ct_c, ct_d)",
+          "stmt_id": "ckks_manual_parallel_workload@9524"
+        }
+      ],
+      "outputs": [
+        "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 51,
+          "line": 170,
+          "offset": 5657
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 170,
+          "offset": 5611
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9524::diff_energy_branch@5611"
+    },
+    {
+      "api_name": "relinearize",
+      "attrs": {
+        "barrier": true,
+        "constants": [],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.relinearize(diff_sq, diff_sq_relin, relin_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "diff_sq_relin"
+          }
+        }
+      ],
+      "inputs": [
+        "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq@1"
+      ],
+      "op_id": "op13",
+      "op_kind": "relinearize",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 36,
+              "line": 255,
+              "offset": 9610
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 76,
+              "line": 253,
+              "offset": 9524
+            }
+          },
+          "source_text": "branch_quad = diff_energy_branch(ckks_eva, relin_keys, galois_keys, scale, ct_c, ct_d)",
+          "stmt_id": "ckks_manual_parallel_workload@9524"
+        }
+      ],
+      "outputs": [
+        "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_relin@1"
+      ],
+      "resources": [
+        "relin_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 61,
+          "line": 171,
+          "offset": 5719
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 171,
+          "offset": 5663
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9524::diff_energy_branch@5663"
+    },
+    {
+      "api_name": "rescale_dynamic",
+      "attrs": {
+        "barrier": true,
+        "constants": [
+          "scale"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.rescale_dynamic(diff_sq_relin, diff_sq_relin, scale)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "diff_sq_relin"
+          }
+        }
+      ],
+      "inputs": [
+        "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_relin@1"
+      ],
+      "op_id": "op14",
+      "op_kind": "rescale_dynamic",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 36,
+              "line": 255,
+              "offset": 9610
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 76,
+              "line": 253,
+              "offset": 9524
+            }
+          },
+          "source_text": "branch_quad = diff_energy_branch(ckks_eva, relin_keys, galois_keys, scale, ct_c, ct_d)",
+          "stmt_id": "ckks_manual_parallel_workload@9524"
+        }
+      ],
+      "outputs": [
+        "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_relin@2"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 66,
+          "line": 172,
+          "offset": 5786
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 172,
+          "offset": 5725
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9524::diff_energy_branch@5725"
+    },
+    {
+      "api_name": "rotate",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "8"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.rotate(diff_sq_relin, diff_sq_rot8, 8, galois_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "diff_sq_rot8"
+          }
+        }
+      ],
+      "inputs": [
+        "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_relin@2"
+      ],
+      "op_id": "op15",
+      "op_kind": "rotate",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 36,
+              "line": 255,
+              "offset": 9610
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 76,
+              "line": 253,
+              "offset": 9524
+            }
+          },
+          "source_text": "branch_quad = diff_energy_branch(ckks_eva, relin_keys, galois_keys, scale, ct_c, ct_d)",
+          "stmt_id": "ckks_manual_parallel_workload@9524"
+        }
+      ],
+      "outputs": [
+        "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_rot8@1"
+      ],
+      "resources": [
+        "galois_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 65,
+          "line": 173,
+          "offset": 5852
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 173,
+          "offset": 5792
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9524::diff_energy_branch@5792"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.add(diff_sq_relin, diff_sq_rot8, branch_quad)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "branch_quad"
+          }
+        }
+      ],
+      "inputs": [
+        "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_relin@2",
+        "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_rot8@1"
+      ],
+      "op_id": "op16",
+      "op_kind": "add",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 36,
+              "line": 255,
+              "offset": 9610
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 76,
+              "line": 253,
+              "offset": 9524
+            }
+          },
+          "source_text": "branch_quad = diff_energy_branch(ckks_eva, relin_keys, galois_keys, scale, ct_c, ct_d)",
+          "stmt_id": "ckks_manual_parallel_workload@9524"
+        }
+      ],
+      "outputs": [
+        "diff_energy_branch__ckks_manual_parallel_workload_9524__branch_quad@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 59,
+          "line": 174,
+          "offset": 5912
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 174,
+          "offset": 5858
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9524::diff_energy_branch@5858"
+    },
+    {
+      "api_name": "assign",
+      "attrs": {
+        "barrier": false,
+        "cost": 1,
+        "source_text": "branch_quad = diff_energy_branch(ckks_eva, relin_keys, galois_keys, scale, ct_c, ct_d)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "branch_quad"
+          }
+        }
+      ],
+      "inputs": [
+        "diff_energy_branch__ckks_manual_parallel_workload_9524__branch_quad@1"
+      ],
+      "op_id": "op17",
+      "op_kind": "assign",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 36,
+              "line": 255,
+              "offset": 9610
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 76,
+              "line": 253,
+              "offset": 9524
+            }
+          },
+          "source_text": "branch_quad = diff_energy_branch(ckks_eva, relin_keys, galois_keys, scale, ct_c, ct_d)",
+          "stmt_id": "ckks_manual_parallel_workload@9524"
+        }
+      ],
+      "outputs": [
+        "branch_quad@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 36,
+          "line": 255,
+          "offset": 9610
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 76,
+          "line": 253,
+          "offset": 9524
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9524::return"
+    },
+    {
+      "api_name": "multiply",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 5,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.multiply(ct_a, ct_c, prod_ac)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "prod_ac"
+          }
+        }
+      ],
+      "inputs": [
+        "scale@0",
+        "ct_b@0"
+      ],
+      "op_id": "op18",
+      "op_kind": "multiply",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 34,
+              "line": 258,
+              "offset": 9756
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 60,
+              "line": 255,
+              "offset": 9634
+            }
+          },
+          "source_text": "branch_cross = cross_mix_branch(\n                        ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d)",
+          "stmt_id": "ckks_manual_parallel_workload@9634"
+        }
+      ],
+      "outputs": [
+        "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 43,
+          "line": 193,
+          "offset": 6541
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 193,
+          "offset": 6503
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9634::cross_mix_branch@6503"
+    },
+    {
+      "api_name": "relinearize",
+      "attrs": {
+        "barrier": true,
+        "constants": [],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.relinearize(prod_ac, prod_ac_relin, relin_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "prod_ac_relin"
+          }
+        }
+      ],
+      "inputs": [
+        "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac@1"
+      ],
+      "op_id": "op19",
+      "op_kind": "relinearize",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 34,
+              "line": 258,
+              "offset": 9756
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 60,
+              "line": 255,
+              "offset": 9634
+            }
+          },
+          "source_text": "branch_cross = cross_mix_branch(\n                        ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d)",
+          "stmt_id": "ckks_manual_parallel_workload@9634"
+        }
+      ],
+      "outputs": [
+        "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac_relin@1"
+      ],
+      "resources": [
+        "relin_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 61,
+          "line": 194,
+          "offset": 6603
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 194,
+          "offset": 6547
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9634::cross_mix_branch@6547"
+    },
+    {
+      "api_name": "rescale_dynamic",
+      "attrs": {
+        "barrier": true,
+        "constants": [
+          "scale"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.rescale_dynamic(prod_ac_relin, prod_ac_relin, scale)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "prod_ac_relin"
+          }
+        }
+      ],
+      "inputs": [
+        "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac_relin@1"
+      ],
+      "op_id": "op20",
+      "op_kind": "rescale_dynamic",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 34,
+              "line": 258,
+              "offset": 9756
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 60,
+              "line": 255,
+              "offset": 9634
+            }
+          },
+          "source_text": "branch_cross = cross_mix_branch(\n                        ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d)",
+          "stmt_id": "ckks_manual_parallel_workload@9634"
+        }
+      ],
+      "outputs": [
+        "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac_relin@2"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 66,
+          "line": 195,
+          "offset": 6670
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 195,
+          "offset": 6609
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9634::cross_mix_branch@6609"
+    },
+    {
+      "api_name": "multiply",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 5,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.multiply(ct_b, ct_d, prod_bd)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "prod_bd"
+          }
+        }
+      ],
+      "inputs": [
+        "ct_a@0",
+        "ct_c@0"
+      ],
+      "op_id": "op21",
+      "op_kind": "multiply",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 34,
+              "line": 258,
+              "offset": 9756
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 60,
+              "line": 255,
+              "offset": 9634
+            }
+          },
+          "source_text": "branch_cross = cross_mix_branch(\n                        ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d)",
+          "stmt_id": "ckks_manual_parallel_workload@9634"
+        }
+      ],
+      "outputs": [
+        "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 43,
+          "line": 196,
+          "offset": 6714
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 196,
+          "offset": 6676
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9634::cross_mix_branch@6676"
+    },
+    {
+      "api_name": "relinearize",
+      "attrs": {
+        "barrier": true,
+        "constants": [],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.relinearize(prod_bd, prod_bd_relin, relin_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "prod_bd_relin"
+          }
+        }
+      ],
+      "inputs": [
+        "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd@1"
+      ],
+      "op_id": "op22",
+      "op_kind": "relinearize",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 34,
+              "line": 258,
+              "offset": 9756
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 60,
+              "line": 255,
+              "offset": 9634
+            }
+          },
+          "source_text": "branch_cross = cross_mix_branch(\n                        ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d)",
+          "stmt_id": "ckks_manual_parallel_workload@9634"
+        }
+      ],
+      "outputs": [
+        "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd_relin@1"
+      ],
+      "resources": [
+        "relin_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 61,
+          "line": 197,
+          "offset": 6776
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 197,
+          "offset": 6720
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9634::cross_mix_branch@6720"
+    },
+    {
+      "api_name": "rescale_dynamic",
+      "attrs": {
+        "barrier": true,
+        "constants": [
+          "scale"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.rescale_dynamic(prod_bd_relin, prod_bd_relin, scale)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "prod_bd_relin"
+          }
+        }
+      ],
+      "inputs": [
+        "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd_relin@1"
+      ],
+      "op_id": "op23",
+      "op_kind": "rescale_dynamic",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 34,
+              "line": 258,
+              "offset": 9756
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 60,
+              "line": 255,
+              "offset": 9634
+            }
+          },
+          "source_text": "branch_cross = cross_mix_branch(\n                        ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d)",
+          "stmt_id": "ckks_manual_parallel_workload@9634"
+        }
+      ],
+      "outputs": [
+        "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd_relin@2"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 66,
+          "line": 198,
+          "offset": 6843
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 198,
+          "offset": 6782
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9634::cross_mix_branch@6782"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.add(prod_ac_relin, prod_bd_relin, cross_sum)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cross_sum"
+          }
+        }
+      ],
+      "inputs": [
+        "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac_relin@2",
+        "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd_relin@2"
+      ],
+      "op_id": "op24",
+      "op_kind": "add",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 34,
+              "line": 258,
+              "offset": 9756
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 60,
+              "line": 255,
+              "offset": 9634
+            }
+          },
+          "source_text": "branch_cross = cross_mix_branch(\n                        ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d)",
+          "stmt_id": "ckks_manual_parallel_workload@9634"
+        }
+      ],
+      "outputs": [
+        "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_sum@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 58,
+          "line": 199,
+          "offset": 6902
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 199,
+          "offset": 6849
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9634::cross_mix_branch@6849"
+    },
+    {
+      "api_name": "rotate",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "8"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.rotate(cross_sum, cross_rot8, 8, galois_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cross_rot8"
+          }
+        }
+      ],
+      "inputs": [
+        "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_sum@1"
+      ],
+      "op_id": "op25",
+      "op_kind": "rotate",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 34,
+              "line": 258,
+              "offset": 9756
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 60,
+              "line": 255,
+              "offset": 9634
+            }
+          },
+          "source_text": "branch_cross = cross_mix_branch(\n                        ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d)",
+          "stmt_id": "ckks_manual_parallel_workload@9634"
+        }
+      ],
+      "outputs": [
+        "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_rot8@1"
+      ],
+      "resources": [
+        "galois_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 59,
+          "line": 200,
+          "offset": 6962
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 200,
+          "offset": 6908
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9634::cross_mix_branch@6908"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.add(cross_sum, cross_rot8, cross_mix)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cross_mix"
+          }
+        }
+      ],
+      "inputs": [
+        "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_sum@1",
+        "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_rot8@1"
+      ],
+      "op_id": "op26",
+      "op_kind": "add",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 34,
+              "line": 258,
+              "offset": 9756
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 60,
+              "line": 255,
+              "offset": 9634
+            }
+          },
+          "source_text": "branch_cross = cross_mix_branch(\n                        ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d)",
+          "stmt_id": "ckks_manual_parallel_workload@9634"
+        }
+      ],
+      "outputs": [
+        "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_mix@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 51,
+          "line": 201,
+          "offset": 7014
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 201,
+          "offset": 6968
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9634::cross_mix_branch@6968"
+    },
+    {
+      "api_name": "rotate",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "16"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.rotate(cross_mix, cross_rot16, 16, galois_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cross_rot16"
+          }
+        }
+      ],
+      "inputs": [
+        "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_mix@1"
+      ],
+      "op_id": "op27",
+      "op_kind": "rotate",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 34,
+              "line": 258,
+              "offset": 9756
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 60,
+              "line": 255,
+              "offset": 9634
+            }
+          },
+          "source_text": "branch_cross = cross_mix_branch(\n                        ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d)",
+          "stmt_id": "ckks_manual_parallel_workload@9634"
+        }
+      ],
+      "outputs": [
+        "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_rot16@1"
+      ],
+      "resources": [
+        "galois_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 61,
+          "line": 202,
+          "offset": 7076
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 202,
+          "offset": 7020
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9634::cross_mix_branch@7020"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.add(cross_mix, cross_rot16, branch_cross)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "branch_cross"
+          }
+        }
+      ],
+      "inputs": [
+        "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_mix@1",
+        "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_rot16@1"
+      ],
+      "op_id": "op28",
+      "op_kind": "add",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 34,
+              "line": 258,
+              "offset": 9756
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 60,
+              "line": 255,
+              "offset": 9634
+            }
+          },
+          "source_text": "branch_cross = cross_mix_branch(\n                        ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d)",
+          "stmt_id": "ckks_manual_parallel_workload@9634"
+        }
+      ],
+      "outputs": [
+        "cross_mix_branch__ckks_manual_parallel_workload_9634__branch_cross@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 55,
+          "line": 203,
+          "offset": 7132
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 203,
+          "offset": 7082
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9634::cross_mix_branch@7082"
+    },
+    {
+      "api_name": "assign",
+      "attrs": {
+        "barrier": false,
+        "cost": 1,
+        "source_text": "branch_cross = cross_mix_branch(\n                        ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "branch_cross"
+          }
+        }
+      ],
+      "inputs": [
+        "cross_mix_branch__ckks_manual_parallel_workload_9634__branch_cross@1"
+      ],
+      "op_id": "op29",
+      "op_kind": "assign",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 34,
+              "line": 258,
+              "offset": 9756
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 60,
+              "line": 255,
+              "offset": 9634
+            }
+          },
+          "source_text": "branch_cross = cross_mix_branch(\n                        ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d)",
+          "stmt_id": "ckks_manual_parallel_workload@9634"
+        }
+      ],
+      "outputs": [
+        "branch_cross@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 34,
+          "line": 258,
+          "offset": 9756
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 60,
+          "line": 255,
+          "offset": 9634
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9634::return"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.add(branch_add, branch_quad, merged_left)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "merged_left"
+          }
+        }
+      ],
+      "inputs": [
+        "scale@0",
+        "branch_add@1"
+      ],
+      "op_id": "op30",
+      "op_kind": "add",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 11,
+              "line": 263,
+              "offset": 9919
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 26,
+              "line": 259,
+              "offset": 9801
+            }
+          },
+          "source_text": "final_reduce(ckks_eva, relin_keys, galois_keys, scale, branch_add, branch_quad, branch_cross,\n                 result)",
+          "stmt_id": "ckks_manual_parallel_workload@9801"
+        }
+      ],
+      "outputs": [
+        "final_reduce__ckks_manual_parallel_workload_9801__merged_left@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 55,
+          "line": 217,
+          "offset": 7629
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 217,
+          "offset": 7579
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9801::final_reduce@7579"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.add(merged_left, branch_cross, merged_all)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "merged_all"
+          }
+        }
+      ],
+      "inputs": [
+        "final_reduce__ckks_manual_parallel_workload_9801__merged_left@1",
+        "branch_quad@1"
+      ],
+      "op_id": "op31",
+      "op_kind": "add",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 11,
+              "line": 263,
+              "offset": 9919
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 26,
+              "line": 259,
+              "offset": 9801
+            }
+          },
+          "source_text": "final_reduce(ckks_eva, relin_keys, galois_keys, scale, branch_add, branch_quad, branch_cross,\n                 result)",
+          "stmt_id": "ckks_manual_parallel_workload@9801"
+        }
+      ],
+      "outputs": [
+        "final_reduce__ckks_manual_parallel_workload_9801__merged_all@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 56,
+          "line": 218,
+          "offset": 7686
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 218,
+          "offset": 7635
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9801::final_reduce@7635"
+    },
+    {
+      "api_name": "multiply",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 5,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.multiply(merged_all, branch_add, tail_prod)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "tail_prod"
+          }
+        }
+      ],
+      "inputs": [
+        "final_reduce__ckks_manual_parallel_workload_9801__merged_all@1",
+        "scale@0"
+      ],
+      "op_id": "op32",
+      "op_kind": "multiply",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 11,
+              "line": 263,
+              "offset": 9919
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 26,
+              "line": 259,
+              "offset": 9801
+            }
+          },
+          "source_text": "final_reduce(ckks_eva, relin_keys, galois_keys, scale, branch_add, branch_quad, branch_cross,\n                 result)",
+          "stmt_id": "ckks_manual_parallel_workload@9801"
+        }
+      ],
+      "outputs": [
+        "final_reduce__ckks_manual_parallel_workload_9801__tail_prod@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 57,
+          "line": 219,
+          "offset": 7744
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 219,
+          "offset": 7692
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9801::final_reduce@7692"
+    },
+    {
+      "api_name": "relinearize",
+      "attrs": {
+        "barrier": true,
+        "constants": [],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.relinearize(tail_prod, tail_prod_relin, relin_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "tail_prod_relin"
+          }
+        }
+      ],
+      "inputs": [
+        "final_reduce__ckks_manual_parallel_workload_9801__tail_prod@1"
+      ],
+      "op_id": "op33",
+      "op_kind": "relinearize",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 11,
+              "line": 263,
+              "offset": 9919
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 26,
+              "line": 259,
+              "offset": 9801
+            }
+          },
+          "source_text": "final_reduce(ckks_eva, relin_keys, galois_keys, scale, branch_add, branch_quad, branch_cross,\n                 result)",
+          "stmt_id": "ckks_manual_parallel_workload@9801"
+        }
+      ],
+      "outputs": [
+        "final_reduce__ckks_manual_parallel_workload_9801__tail_prod_relin@1"
+      ],
+      "resources": [
+        "relin_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 65,
+          "line": 220,
+          "offset": 7810
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 220,
+          "offset": 7750
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9801::final_reduce@7750"
+    },
+    {
+      "api_name": "rescale_dynamic",
+      "attrs": {
+        "barrier": true,
+        "constants": [
+          "scale"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.rescale_dynamic(tail_prod_relin, tail_prod_relin, scale)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "tail_prod_relin"
+          }
+        }
+      ],
+      "inputs": [
+        "final_reduce__ckks_manual_parallel_workload_9801__tail_prod_relin@1"
+      ],
+      "op_id": "op34",
+      "op_kind": "rescale_dynamic",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 11,
+              "line": 263,
+              "offset": 9919
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 26,
+              "line": 259,
+              "offset": 9801
+            }
+          },
+          "source_text": "final_reduce(ckks_eva, relin_keys, galois_keys, scale, branch_add, branch_quad, branch_cross,\n                 result)",
+          "stmt_id": "ckks_manual_parallel_workload@9801"
+        }
+      ],
+      "outputs": [
+        "final_reduce__ckks_manual_parallel_workload_9801__tail_prod_relin@2"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 70,
+          "line": 221,
+          "offset": 7881
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 221,
+          "offset": 7816
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9801::final_reduce@7816"
+    },
+    {
+      "api_name": "rotate",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "32"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.rotate(tail_prod_relin, tail_rot32, 32, galois_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "tail_rot32"
+          }
+        }
+      ],
+      "inputs": [
+        "final_reduce__ckks_manual_parallel_workload_9801__tail_prod_relin@2"
+      ],
+      "op_id": "op35",
+      "op_kind": "rotate",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 11,
+              "line": 263,
+              "offset": 9919
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 26,
+              "line": 259,
+              "offset": 9801
+            }
+          },
+          "source_text": "final_reduce(ckks_eva, relin_keys, galois_keys, scale, branch_add, branch_quad, branch_cross,\n                 result)",
+          "stmt_id": "ckks_manual_parallel_workload@9801"
+        }
+      ],
+      "outputs": [
+        "final_reduce__ckks_manual_parallel_workload_9801__tail_rot32@1"
+      ],
+      "resources": [
+        "galois_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 66,
+          "line": 222,
+          "offset": 7948
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 222,
+          "offset": 7887
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9801::final_reduce@7887"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.add(tail_prod_relin, tail_rot32, result)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "result"
+          }
+        }
+      ],
+      "inputs": [
+        "final_reduce__ckks_manual_parallel_workload_9801__tail_prod_relin@2",
+        "final_reduce__ckks_manual_parallel_workload_9801__tail_rot32@1"
+      ],
+      "op_id": "op36",
+      "op_kind": "add",
+      "origin_callstack": [
+        {
+          "function": "ckks_manual_parallel_workload",
+          "source_span": {
+            "end": {
+              "column": 11,
+              "line": 263,
+              "offset": 9919
+            },
+            "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+            "start": {
+              "column": 26,
+              "line": 259,
+              "offset": 9801
+            }
+          },
+          "source_text": "final_reduce(ckks_eva, relin_keys, galois_keys, scale, branch_add, branch_quad, branch_cross,\n                 result)",
+          "stmt_id": "ckks_manual_parallel_workload@9801"
+        }
+      ],
+      "outputs": [
+        "branch_cross@2"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 54,
+          "line": 223,
+          "offset": 8003
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 223,
+          "offset": 7954
+        }
+      },
+      "stmt_id": "ckks_manual_parallel_workload@9801::final_reduce@7954"
+    }
+  ],
+  "schema_version": 2,
+  "source_file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+  "values": [
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 33,
+          "line": 240,
+          "offset": 8882
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 6,
+          "line": 240,
+          "offset": 8855
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ckks_eva"
+      },
+      "value_id": "ckks_eva@0",
+      "value_kind": "evaluator"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 33,
+          "line": 241,
+          "offset": 8971
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 6,
+          "line": 241,
+          "offset": 8944
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "relin_keys"
+      },
+      "value_id": "relin_keys@0",
+      "value_kind": "relin_keys"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 35,
+          "line": 242,
+          "offset": 9037
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 6,
+          "line": 242,
+          "offset": 9008
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "galois_keys"
+      },
+      "value_id": "galois_keys@0",
+      "value_kind": "galois_keys"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 28,
+          "line": 243,
+          "offset": 9110
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 6,
+          "line": 243,
+          "offset": 9088
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ct_a"
+      },
+      "value_id": "ct_a@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 52,
+          "line": 243,
+          "offset": 9134
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 30,
+          "line": 243,
+          "offset": 9112
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ct_b"
+      },
+      "value_id": "ct_b@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 28,
+          "line": 244,
+          "offset": 9193
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 6,
+          "line": 244,
+          "offset": 9171
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ct_c"
+      },
+      "value_id": "ct_c@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 52,
+          "line": 244,
+          "offset": 9217
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 30,
+          "line": 244,
+          "offset": 9195
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ct_d"
+      },
+      "value_id": "ct_d@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 24,
+          "line": 245,
+          "offset": 9272
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 6,
+          "line": 245,
+          "offset": 9254
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "result"
+      },
+      "value_id": "result@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 26,
+          "line": 247,
+          "offset": 9331
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 247,
+          "offset": 9310
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "branch_add"
+      },
+      "value_id": "branch_add@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 27,
+          "line": 248,
+          "offset": 9359
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 248,
+          "offset": 9337
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "branch_quad"
+      },
+      "value_id": "branch_quad@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 28,
+          "line": 249,
+          "offset": 9388
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 249,
+          "offset": 9365
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "branch_cross"
+      },
+      "value_id": "branch_cross@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 72,
+          "line": 253,
+          "offset": 9520
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 2,
+          "line": 252,
+          "offset": 9433
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "scale"
+      },
+      "value_id": "scale@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::smooth_square_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 22,
+          "line": 136,
+          "offset": 4371
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 136,
+          "offset": 4354
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_manual_parallel_workload_9433__sum_ab"
+      },
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__sum_ab@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::smooth_square_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 24,
+          "line": 137,
+          "offset": 4396
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 137,
+          "offset": 4377
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_manual_parallel_workload_9433__rot_ab_1"
+      },
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__rot_ab_1@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::smooth_square_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 25,
+          "line": 138,
+          "offset": 4422
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 138,
+          "offset": 4402
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_ab"
+      },
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_ab@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::smooth_square_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 25,
+          "line": 139,
+          "offset": 4448
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 139,
+          "offset": 4428
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq"
+      },
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::smooth_square_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 31,
+          "line": 140,
+          "offset": 4480
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 140,
+          "offset": 4454
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_relin"
+      },
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_relin@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::smooth_square_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 30,
+          "line": 141,
+          "offset": 4511
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 141,
+          "offset": 4486
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_rot4"
+      },
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_rot4@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::smooth_square_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 26,
+          "line": 142,
+          "offset": 4538
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 142,
+          "offset": 4517
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_manual_parallel_workload_9433__branch_add"
+      },
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__branch_add@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::diff_energy_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 23,
+          "line": 159,
+          "offset": 5298
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 159,
+          "offset": 5280
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_cd"
+      },
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_cd@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::diff_energy_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 25,
+          "line": 160,
+          "offset": 5324
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 160,
+          "offset": 5304
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_rot2"
+      },
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_rot2@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::diff_energy_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 24,
+          "line": 161,
+          "offset": 5349
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 161,
+          "offset": 5330
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_mix"
+      },
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_mix@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::diff_energy_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 23,
+          "line": 162,
+          "offset": 5373
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 162,
+          "offset": 5355
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq"
+      },
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::diff_energy_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 29,
+          "line": 163,
+          "offset": 5403
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 163,
+          "offset": 5379
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_relin"
+      },
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_relin@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::diff_energy_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 28,
+          "line": 164,
+          "offset": 5432
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 164,
+          "offset": 5409
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_rot8"
+      },
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_rot8@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::diff_energy_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 27,
+          "line": 165,
+          "offset": 5460
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 165,
+          "offset": 5438
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_manual_parallel_workload_9524__branch_quad"
+      },
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__branch_quad@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::cross_mix_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 23,
+          "line": 183,
+          "offset": 6276
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 183,
+          "offset": 6258
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac"
+      },
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::cross_mix_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 29,
+          "line": 184,
+          "offset": 6306
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 184,
+          "offset": 6282
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac_relin"
+      },
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac_relin@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::cross_mix_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 23,
+          "line": 185,
+          "offset": 6330
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 185,
+          "offset": 6312
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd"
+      },
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::cross_mix_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 29,
+          "line": 186,
+          "offset": 6360
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 186,
+          "offset": 6336
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd_relin"
+      },
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd_relin@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::cross_mix_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 25,
+          "line": 187,
+          "offset": 6386
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 187,
+          "offset": 6366
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_sum"
+      },
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_sum@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::cross_mix_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 26,
+          "line": 188,
+          "offset": 6413
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 188,
+          "offset": 6392
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_rot8"
+      },
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_rot8@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::cross_mix_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 25,
+          "line": 189,
+          "offset": 6439
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 189,
+          "offset": 6419
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_mix"
+      },
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_mix@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::cross_mix_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 27,
+          "line": 190,
+          "offset": 6467
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 190,
+          "offset": 6445
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_rot16"
+      },
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_rot16@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::cross_mix_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 28,
+          "line": 191,
+          "offset": 6496
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 191,
+          "offset": 6473
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_manual_parallel_workload_9634__branch_cross"
+      },
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__branch_cross@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::final_reduce",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 27,
+          "line": 211,
+          "offset": 7460
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 211,
+          "offset": 7438
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "final_reduce__ckks_manual_parallel_workload_9801__merged_left"
+      },
+      "value_id": "final_reduce__ckks_manual_parallel_workload_9801__merged_left@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::final_reduce",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 26,
+          "line": 212,
+          "offset": 7487
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 212,
+          "offset": 7466
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "final_reduce__ckks_manual_parallel_workload_9801__merged_all"
+      },
+      "value_id": "final_reduce__ckks_manual_parallel_workload_9801__merged_all@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::final_reduce",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 25,
+          "line": 213,
+          "offset": 7513
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 213,
+          "offset": 7493
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod"
+      },
+      "value_id": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::final_reduce",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 31,
+          "line": 214,
+          "offset": 7545
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 214,
+          "offset": 7519
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod_relin"
+      },
+      "value_id": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod_relin@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::final_reduce",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 26,
+          "line": 215,
+          "offset": 7572
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 215,
+          "offset": 7551
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "final_reduce__ckks_manual_parallel_workload_9801__tail_rot32"
+      },
+      "value_id": "final_reduce__ckks_manual_parallel_workload_9801__tail_rot32@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::smooth_square_branch",
+      "producer_op_id": "op0",
+      "source_span": {
+        "end": {
+          "column": 37,
+          "line": 144,
+          "offset": 4577
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 144,
+          "offset": 4545
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_manual_parallel_workload_9433__sum_ab"
+      },
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__sum_ab@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::smooth_square_branch",
+      "producer_op_id": "op1",
+      "source_span": {
+        "end": {
+          "column": 54,
+          "line": 145,
+          "offset": 4632
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 145,
+          "offset": 4583
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_manual_parallel_workload_9433__rot_ab_1"
+      },
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__rot_ab_1@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::smooth_square_branch",
+      "producer_op_id": "op2",
+      "source_span": {
+        "end": {
+          "column": 46,
+          "line": 146,
+          "offset": 4679
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 146,
+          "offset": 4638
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_ab"
+      },
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_ab@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::smooth_square_branch",
+      "producer_op_id": "op3",
+      "source_span": {
+        "end": {
+          "column": 55,
+          "line": 147,
+          "offset": 4735
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 147,
+          "offset": 4685
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq"
+      },
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::smooth_square_branch",
+      "producer_op_id": "op4",
+      "source_span": {
+        "end": {
+          "column": 65,
+          "line": 148,
+          "offset": 4801
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 148,
+          "offset": 4741
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_relin"
+      },
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_relin@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::smooth_square_branch",
+      "producer_op_id": "op5",
+      "source_span": {
+        "end": {
+          "column": 70,
+          "line": 149,
+          "offset": 4872
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 149,
+          "offset": 4807
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_relin"
+      },
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_relin@2",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::smooth_square_branch",
+      "producer_op_id": "op6",
+      "source_span": {
+        "end": {
+          "column": 69,
+          "line": 150,
+          "offset": 4942
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 150,
+          "offset": 4878
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_rot4"
+      },
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__smooth_sq_rot4@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::smooth_square_branch",
+      "producer_op_id": "op7",
+      "source_span": {
+        "end": {
+          "column": 62,
+          "line": 151,
+          "offset": 5005
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 151,
+          "offset": 4948
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_manual_parallel_workload_9433__branch_add"
+      },
+      "value_id": "smooth_square_branch__ckks_manual_parallel_workload_9433__branch_add@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload",
+      "producer_op_id": "op8",
+      "source_span": {
+        "end": {
+          "column": 72,
+          "line": 253,
+          "offset": 9520
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 2,
+          "line": 252,
+          "offset": 9433
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "branch_add"
+      },
+      "value_id": "branch_add@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::diff_energy_branch",
+      "producer_op_id": "op9",
+      "source_span": {
+        "end": {
+          "column": 38,
+          "line": 167,
+          "offset": 5500
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 167,
+          "offset": 5467
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_cd"
+      },
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_cd@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::diff_energy_branch",
+      "producer_op_id": "op10",
+      "source_span": {
+        "end": {
+          "column": 56,
+          "line": 168,
+          "offset": 5557
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 168,
+          "offset": 5506
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_rot2"
+      },
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_rot2@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::diff_energy_branch",
+      "producer_op_id": "op11",
+      "source_span": {
+        "end": {
+          "column": 47,
+          "line": 169,
+          "offset": 5605
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 169,
+          "offset": 5563
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_mix"
+      },
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_mix@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::diff_energy_branch",
+      "producer_op_id": "op12",
+      "source_span": {
+        "end": {
+          "column": 51,
+          "line": 170,
+          "offset": 5657
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 170,
+          "offset": 5611
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq"
+      },
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::diff_energy_branch",
+      "producer_op_id": "op13",
+      "source_span": {
+        "end": {
+          "column": 61,
+          "line": 171,
+          "offset": 5719
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 171,
+          "offset": 5663
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_relin"
+      },
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_relin@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::diff_energy_branch",
+      "producer_op_id": "op14",
+      "source_span": {
+        "end": {
+          "column": 66,
+          "line": 172,
+          "offset": 5786
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 172,
+          "offset": 5725
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_relin"
+      },
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_relin@2",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::diff_energy_branch",
+      "producer_op_id": "op15",
+      "source_span": {
+        "end": {
+          "column": 65,
+          "line": 173,
+          "offset": 5852
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 173,
+          "offset": 5792
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_rot8"
+      },
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__diff_sq_rot8@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::diff_energy_branch",
+      "producer_op_id": "op16",
+      "source_span": {
+        "end": {
+          "column": 59,
+          "line": 174,
+          "offset": 5912
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 174,
+          "offset": 5858
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_manual_parallel_workload_9524__branch_quad"
+      },
+      "value_id": "diff_energy_branch__ckks_manual_parallel_workload_9524__branch_quad@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload",
+      "producer_op_id": "op17",
+      "source_span": {
+        "end": {
+          "column": 36,
+          "line": 255,
+          "offset": 9610
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 76,
+          "line": 253,
+          "offset": 9524
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "branch_quad"
+      },
+      "value_id": "branch_quad@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::cross_mix_branch",
+      "producer_op_id": "op18",
+      "source_span": {
+        "end": {
+          "column": 43,
+          "line": 193,
+          "offset": 6541
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 193,
+          "offset": 6503
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac"
+      },
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::cross_mix_branch",
+      "producer_op_id": "op19",
+      "source_span": {
+        "end": {
+          "column": 61,
+          "line": 194,
+          "offset": 6603
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 194,
+          "offset": 6547
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac_relin"
+      },
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac_relin@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::cross_mix_branch",
+      "producer_op_id": "op20",
+      "source_span": {
+        "end": {
+          "column": 66,
+          "line": 195,
+          "offset": 6670
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 195,
+          "offset": 6609
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac_relin"
+      },
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_ac_relin@2",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::cross_mix_branch",
+      "producer_op_id": "op21",
+      "source_span": {
+        "end": {
+          "column": 43,
+          "line": 196,
+          "offset": 6714
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 196,
+          "offset": 6676
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd"
+      },
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::cross_mix_branch",
+      "producer_op_id": "op22",
+      "source_span": {
+        "end": {
+          "column": 61,
+          "line": 197,
+          "offset": 6776
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 197,
+          "offset": 6720
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd_relin"
+      },
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd_relin@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::cross_mix_branch",
+      "producer_op_id": "op23",
+      "source_span": {
+        "end": {
+          "column": 66,
+          "line": 198,
+          "offset": 6843
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 198,
+          "offset": 6782
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd_relin"
+      },
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__prod_bd_relin@2",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::cross_mix_branch",
+      "producer_op_id": "op24",
+      "source_span": {
+        "end": {
+          "column": 58,
+          "line": 199,
+          "offset": 6902
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 199,
+          "offset": 6849
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_sum"
+      },
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_sum@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::cross_mix_branch",
+      "producer_op_id": "op25",
+      "source_span": {
+        "end": {
+          "column": 59,
+          "line": 200,
+          "offset": 6962
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 200,
+          "offset": 6908
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_rot8"
+      },
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_rot8@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::cross_mix_branch",
+      "producer_op_id": "op26",
+      "source_span": {
+        "end": {
+          "column": 51,
+          "line": 201,
+          "offset": 7014
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 201,
+          "offset": 6968
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_mix"
+      },
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_mix@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::cross_mix_branch",
+      "producer_op_id": "op27",
+      "source_span": {
+        "end": {
+          "column": 61,
+          "line": 202,
+          "offset": 7076
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 202,
+          "offset": 7020
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_rot16"
+      },
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__cross_rot16@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::cross_mix_branch",
+      "producer_op_id": "op28",
+      "source_span": {
+        "end": {
+          "column": 55,
+          "line": 203,
+          "offset": 7132
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 203,
+          "offset": 7082
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_manual_parallel_workload_9634__branch_cross"
+      },
+      "value_id": "cross_mix_branch__ckks_manual_parallel_workload_9634__branch_cross@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload",
+      "producer_op_id": "op29",
+      "source_span": {
+        "end": {
+          "column": 34,
+          "line": 258,
+          "offset": 9756
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 60,
+          "line": 255,
+          "offset": 9634
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "branch_cross"
+      },
+      "value_id": "branch_cross@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::final_reduce",
+      "producer_op_id": "op30",
+      "source_span": {
+        "end": {
+          "column": 55,
+          "line": 217,
+          "offset": 7629
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 217,
+          "offset": 7579
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "final_reduce__ckks_manual_parallel_workload_9801__merged_left"
+      },
+      "value_id": "final_reduce__ckks_manual_parallel_workload_9801__merged_left@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::final_reduce",
+      "producer_op_id": "op31",
+      "source_span": {
+        "end": {
+          "column": 56,
+          "line": 218,
+          "offset": 7686
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 218,
+          "offset": 7635
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "final_reduce__ckks_manual_parallel_workload_9801__merged_all"
+      },
+      "value_id": "final_reduce__ckks_manual_parallel_workload_9801__merged_all@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::final_reduce",
+      "producer_op_id": "op32",
+      "source_span": {
+        "end": {
+          "column": 57,
+          "line": 219,
+          "offset": 7744
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 219,
+          "offset": 7692
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod"
+      },
+      "value_id": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::final_reduce",
+      "producer_op_id": "op33",
+      "source_span": {
+        "end": {
+          "column": 65,
+          "line": 220,
+          "offset": 7810
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 220,
+          "offset": 7750
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod_relin"
+      },
+      "value_id": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod_relin@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::final_reduce",
+      "producer_op_id": "op34",
+      "source_span": {
+        "end": {
+          "column": 70,
+          "line": 221,
+          "offset": 7881
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 221,
+          "offset": 7816
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod_relin"
+      },
+      "value_id": "final_reduce__ckks_manual_parallel_workload_9801__tail_prod_relin@2",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload::final_reduce",
+      "producer_op_id": "op35",
+      "source_span": {
+        "end": {
+          "column": 66,
+          "line": 222,
+          "offset": 7948
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 222,
+          "offset": 7887
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "final_reduce__ckks_manual_parallel_workload_9801__tail_rot32"
+      },
+      "value_id": "final_reduce__ckks_manual_parallel_workload_9801__tail_rot32@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_manual_parallel_workload",
+      "producer_op_id": "op36",
+      "source_span": {
+        "end": {
+          "column": 54,
+          "line": 223,
+          "offset": 8003
+        },
+        "file": "examples/ckks/test_ckks_dag_manual_parallel.cpp",
+        "start": {
+          "column": 5,
+          "line": 223,
+          "offset": 7954
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "branch_cross"
+      },
+      "value_id": "branch_cross@2",
+      "value_kind": "ciphertext"
+    }
+  ]
+}

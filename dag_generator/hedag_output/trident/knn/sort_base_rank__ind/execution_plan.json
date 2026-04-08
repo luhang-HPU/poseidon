@@ -1,0 +1,249 @@
+{
+  "barriers": [
+    "op2",
+    "op3",
+    "op1",
+    "op7",
+    "op9",
+    "op10",
+    "op12"
+  ],
+  "critical_path_cost": 44,
+  "entry_function": "ind",
+  "layers": [
+    [
+      "op0"
+    ],
+    [
+      "op2"
+    ],
+    [
+      "op3"
+    ],
+    [
+      "op1"
+    ],
+    [
+      "op4"
+    ],
+    [
+      "op5"
+    ],
+    [
+      "op6"
+    ],
+    [
+      "op7"
+    ],
+    [
+      "op8"
+    ],
+    [
+      "op9"
+    ],
+    [
+      "op10"
+    ],
+    [
+      "op11"
+    ],
+    [
+      "op12"
+    ],
+    [
+      "op13"
+    ]
+  ],
+  "max_parallel_width": 1,
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "op_schedule": {
+    "op0": {
+      "barrier": false,
+      "cost": 3,
+      "critical": false,
+      "earliest_finish": 3,
+      "earliest_start": 0,
+      "latest_finish": 14,
+      "latest_start": 11,
+      "layer": 0,
+      "slack": 11,
+      "source_line": 257
+    },
+    "op1": {
+      "barrier": true,
+      "cost": 4,
+      "critical": false,
+      "earliest_finish": 7,
+      "earliest_start": 3,
+      "latest_finish": 18,
+      "latest_start": 14,
+      "layer": 3,
+      "slack": 11,
+      "source_line": 258
+    },
+    "op10": {
+      "barrier": true,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 36,
+      "earliest_start": 32,
+      "latest_finish": 36,
+      "latest_start": 32,
+      "layer": 10,
+      "slack": 0,
+      "source_line": 269
+    },
+    "op11": {
+      "barrier": false,
+      "cost": 3,
+      "critical": true,
+      "earliest_finish": 39,
+      "earliest_start": 36,
+      "latest_finish": 39,
+      "latest_start": 36,
+      "layer": 11,
+      "slack": 0,
+      "source_line": 272
+    },
+    "op12": {
+      "barrier": true,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 43,
+      "earliest_start": 39,
+      "latest_finish": 43,
+      "latest_start": 39,
+      "layer": 12,
+      "slack": 0,
+      "source_line": 273
+    },
+    "op13": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 44,
+      "earliest_start": 43,
+      "latest_finish": 44,
+      "latest_start": 43,
+      "layer": 13,
+      "slack": 0,
+      "source_line": 274
+    },
+    "op2": {
+      "barrier": true,
+      "cost": 8,
+      "critical": true,
+      "earliest_finish": 8,
+      "earliest_start": 0,
+      "latest_finish": 8,
+      "latest_start": 0,
+      "layer": 1,
+      "slack": 0,
+      "source_line": 223
+    },
+    "op3": {
+      "barrier": true,
+      "cost": 8,
+      "critical": true,
+      "earliest_finish": 16,
+      "earliest_start": 8,
+      "latest_finish": 16,
+      "latest_start": 8,
+      "layer": 2,
+      "slack": 0,
+      "source_line": 224
+    },
+    "op4": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 17,
+      "earliest_start": 16,
+      "latest_finish": 17,
+      "latest_start": 16,
+      "layer": 4,
+      "slack": 0,
+      "source_line": 227
+    },
+    "op5": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 18,
+      "earliest_start": 17,
+      "latest_finish": 18,
+      "latest_start": 17,
+      "layer": 5,
+      "slack": 0,
+      "source_line": 259
+    },
+    "op6": {
+      "barrier": false,
+      "cost": 3,
+      "critical": true,
+      "earliest_finish": 21,
+      "earliest_start": 18,
+      "latest_finish": 21,
+      "latest_start": 18,
+      "layer": 6,
+      "slack": 0,
+      "source_line": 261
+    },
+    "op7": {
+      "barrier": true,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 25,
+      "earliest_start": 21,
+      "latest_finish": 25,
+      "latest_start": 21,
+      "layer": 7,
+      "slack": 0,
+      "source_line": 262
+    },
+    "op8": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 26,
+      "earliest_start": 25,
+      "latest_finish": 26,
+      "latest_start": 25,
+      "layer": 8,
+      "slack": 0,
+      "source_line": 265
+    },
+    "op9": {
+      "barrier": true,
+      "cost": 6,
+      "critical": true,
+      "earliest_finish": 32,
+      "earliest_start": 26,
+      "latest_finish": 32,
+      "latest_start": 26,
+      "layer": 9,
+      "slack": 0,
+      "source_line": 268
+    }
+  },
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+  "topological_order": [
+    "op2",
+    "op0",
+    "op3",
+    "op1",
+    "op4",
+    "op5",
+    "op6",
+    "op7",
+    "op8",
+    "op9",
+    "op10",
+    "op11",
+    "op12",
+    "op13"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "barriers": [],
+  "critical_path_cost": 4,
+  "entry_function": "generate_serialized_query",
+  "layers": [
+    [
+      "op0"
+    ]
+  ],
+  "max_parallel_width": 1,
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "op_schedule": {
+    "op0": {
+      "barrier": false,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 4,
+      "earliest_start": 0,
+      "latest_finish": 4,
+      "latest_start": 0,
+      "layer": 0,
+      "slack": 0,
+      "source_line": 81
+    }
+  },
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+  "topological_order": [
+    "op0"
+  ]
+}

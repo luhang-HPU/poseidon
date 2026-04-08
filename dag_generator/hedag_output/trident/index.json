@@ -1,0 +1,119 @@
+{
+  "cases": [
+    {
+      "diagnostic_count": 0,
+      "entry_function": "encode_and_encrypt",
+      "max_parallel_width": 1,
+      "op_count": 3,
+      "output_dir": "dag_generator/hedag_output/trident/lr_train/batch_handler__encode_and_encrypt",
+      "rewrite_status": "ready",
+      "source_file": "Trident/lr_train/batch_handler.cpp"
+    },
+    {
+      "diagnostic_count": 0,
+      "entry_function": "decrypt_and_decode",
+      "max_parallel_width": 1,
+      "op_count": 3,
+      "output_dir": "dag_generator/hedag_output/trident/lr_train/batch_handler__decrypt_and_decode",
+      "rewrite_status": "ready",
+      "source_file": "Trident/lr_train/batch_handler.cpp"
+    },
+    {
+      "diagnostic_count": 0,
+      "entry_function": "encode_and_encrypt_block",
+      "max_parallel_width": 0,
+      "op_count": 0,
+      "output_dir": "dag_generator/hedag_output/trident/lr_train/batch_handler__encode_and_encrypt_block",
+      "rewrite_status": "ready",
+      "source_file": "Trident/lr_train/batch_handler.cpp"
+    },
+    {
+      "diagnostic_count": 2,
+      "entry_function": "encode_and_encrypt_weight",
+      "max_parallel_width": 0,
+      "op_count": 0,
+      "output_dir": "dag_generator/hedag_output/trident/lr_train/batch_handler__encode_and_encrypt_weight",
+      "rewrite_status": "blocked",
+      "source_file": "Trident/lr_train/batch_handler.cpp"
+    },
+    {
+      "diagnostic_count": 0,
+      "entry_function": "encode_and_encrypt_tranpose",
+      "max_parallel_width": 0,
+      "op_count": 0,
+      "output_dir": "dag_generator/hedag_output/trident/lr_train/batch_handler__encode_and_encrypt_tranpose",
+      "rewrite_status": "ready",
+      "source_file": "Trident/lr_train/batch_handler.cpp"
+    },
+    {
+      "diagnostic_count": 5,
+      "entry_function": "main",
+      "max_parallel_width": 4,
+      "op_count": 4,
+      "output_dir": "dag_generator/hedag_output/trident/lr_train/ckks_lrtrain__main",
+      "rewrite_status": "blocked",
+      "source_file": "Trident/lr_train/ckks_lrtrain.cpp"
+    },
+    {
+      "diagnostic_count": 0,
+      "entry_function": "sigmoid_approx",
+      "max_parallel_width": 1,
+      "op_count": 2,
+      "output_dir": "dag_generator/hedag_output/trident/lr_train/ckks_lrtrain__sigmoid_approx",
+      "rewrite_status": "ready",
+      "source_file": "Trident/lr_train/ckks_lrtrain.cpp"
+    },
+    {
+      "diagnostic_count": 0,
+      "entry_function": "accuracy_of_ciph",
+      "max_parallel_width": 2,
+      "op_count": 3,
+      "output_dir": "dag_generator/hedag_output/trident/lr_train/ckks_lrtrain__accuracy_of_ciph",
+      "rewrite_status": "ready",
+      "source_file": "Trident/lr_train/ckks_lrtrain.cpp"
+    },
+    {
+      "diagnostic_count": 2,
+      "entry_function": "accumulate_top_n",
+      "max_parallel_width": 1,
+      "op_count": 4,
+      "output_dir": "dag_generator/hedag_output/trident/lr_train/ckks_lrtrain__accumulate_top_n",
+      "rewrite_status": "blocked",
+      "source_file": "Trident/lr_train/ckks_lrtrain.cpp"
+    },
+    {
+      "diagnostic_count": 0,
+      "entry_function": "accumulate_block_matrix",
+      "max_parallel_width": 1,
+      "op_count": 2,
+      "output_dir": "dag_generator/hedag_output/trident/lr_train/ckks_lrtrain__accumulate_block_matrix",
+      "rewrite_status": "ready",
+      "source_file": "Trident/lr_train/ckks_lrtrain.cpp"
+    },
+    {
+      "diagnostic_count": 0,
+      "entry_function": "accumulate_slot_matrix",
+      "max_parallel_width": 1,
+      "op_count": 2,
+      "output_dir": "dag_generator/hedag_output/trident/lr_train/ckks_lrtrain__accumulate_slot_matrix",
+      "rewrite_status": "ready",
+      "source_file": "Trident/lr_train/ckks_lrtrain.cpp"
+    }
+  ],
+  "output_root": "dag_generator/hedag_output/trident",
+  "overviews": [
+    {
+      "case_count": 11,
+      "component": "lr_train",
+      "files": {
+        "dot": "dag_generator/hedag_output/trident/lr_train/overview.dot",
+        "json": "dag_generator/hedag_output/trident/lr_train/overview.json",
+        "png": "dag_generator/hedag_output/trident/lr_train/overview.png",
+        "svg": "dag_generator/hedag_output/trident/lr_train/overview.svg"
+      }
+    }
+  ],
+  "schema_version": 1,
+  "skipped": [],
+  "trident_root": "Trident"
+}

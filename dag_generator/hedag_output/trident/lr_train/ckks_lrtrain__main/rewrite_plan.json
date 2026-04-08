@@ -1,0 +1,246 @@
+{
+  "barriers": [],
+  "blocking_diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "for (int i = 0; i < n; ++i)\n    {\n        weight[i].imag(0);\n        double sum = 0;\n        for (int j = 0; j < 200; ++j)\n            sum += rand() / (RAND_MAX + 1.0);\n        sum -= 100;\n        sum /= sqrt(200.0 * n / 12);\n        weight[i].real(sum);\n    }"
+      },
+      "reason": "unsupported dynamic loop boundary",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 188,
+          "offset": 5159
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+        "start": {
+          "column": 5,
+          "line": 179,
+          "offset": 4900
+        }
+      },
+      "stmt_id": "main@4900",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (weight_extend.size() < block_size)\n        {\n            weight_extend.insert(weight_extend.end(), block_size - weight_extend.size(), {0.0, 0.0});\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 216,
+          "offset": 5919
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+        "start": {
+          "column": 9,
+          "line": 213,
+          "offset": 5760
+        }
+      },
+      "stmt_id": "main@5760",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "for (auto i = 0; i < block_size; ++i)\n        {\n            block_weight.insert(block_weight.end(), weight_concat.begin() + i, weight_concat.begin() + i + block_size);\n        }"
+      },
+      "reason": "unsupported dynamic loop boundary",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 226,
+          "offset": 6264
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+        "start": {
+          "column": 9,
+          "line": 223,
+          "offset": 6088
+        }
+      },
+      "stmt_id": "main@6088",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "while (block_weight.size() < slot_size)\n        {\n            block_weight.insert(block_weight.end(), block_weight.begin(), block_weight.end());\n        }"
+      },
+      "reason": "unsupported control flow: while",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 231,
+          "offset": 6428
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+        "start": {
+          "column": 9,
+          "line": 228,
+          "offset": 6275
+        }
+      },
+      "stmt_id": "main@6275",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "for (auto epoch = 0; epoch < EPOCHS; ++epoch)\n    {\n        util::Timestacs timer;\n        timer.start();\n        std::cout << \"epoch \" << epoch << \" start...\" << std::endl;\n\n        Ciphertext ciph_product;\n        Ciphertext ciph_x_diag_tmp = ciph_x_diag;\n        if (ciph_x_diag_tmp.level() != ciph_weight.level())\n        {\n            ckks_eva->drop_modulus(ciph_x_diag_tmp, ciph_x_diag_tmp, ciph_weight.parms_id());\n        }\n        ckks_eva->multiply_relin(ciph_x_diag_tmp, ciph_weight, ciph_product, relin_keys);\n        ckks_eva->rescale_dynamic(ciph_product, ciph_product, scale);\n        ciph_product = accumulate_block_matrix(ckks_eva, rot_keys, ciph_product, block_size);\n\n\n        \n        std::vector<double> expected_dot_product;\n        {\n            for (auto i = 0; i < m; ++i)\n            {\n                double _sum = 0.0;\n                for (auto j = 0; j < n; ++j)\n                {\n                    _sum += x[i][j].real() * expected_weight[j].real();\n                }\n                expected_dot_product.push_back(_sum);\n            }\n\n            auto fhe_dot_product = batch_handler.decrypt_and_decode(ckks_encoder, dec, ciph_product);\n\n            std::cout << \"fhe value  |  expected value\" << std::endl;\n            for (auto i = 0; i < m; ++i)\n            {\n                std::cout << \"dot product[\" << i << \"]: \" << fhe_dot_product[i % block_size + i / block_size * block_size * block_size].real() << \" \" << expected_dot_product[i] << std::endl;\n            }\n        }\n\n\n        \n        Ciphertext ciph_sigmoid =\n            sigmoid_approx(ciph_product, polys, ckks_encoder, ckks_eva, relin_keys);\n\n\n        \n        std::vector<double> expected_sigmoid(m, 0.0);\n        {\n            auto fhe_sigmoid = batch_handler.decrypt_and_decode(ckks_encoder, dec, ciph_sigmoid);\n            std::cout << \"fhe sigmoid  |  expected sigmoid\" << std::endl;\n            for (auto i = 0; i < m; ++i)\n            {\n                expected_sigmoid[i] = sigmoid(expected_dot_product[i]);\n                std::cout << \"sigmoid[\" << i << \"]: \" << fhe_sigmoid[i / block_size * block_size * block_size + (i % block_size)].real() << \" \" << expected_sigmoid[i] << std::endl;\n            }\n        }\n\n\n        \n        auto ciph_y_tmp = ciph_y;\n        if (ciph_y_tmp.level() != ciph_sigmoid.level())\n        {\n            ckks_eva->drop_modulus(ciph_y_tmp, ciph_y_tmp, ciph_sigmoid.parms_id());\n        }\n\n        if(!util::are_approximate(ciph_y_tmp.scale(), ciph_sigmoid.scale()))\n        {\n            std::vector<std::complex<double>> vec_tmp(slot_size, {1.0, 0.0});\n            Plaintext plt_tmp;\n\n            \n            {\n                ckks_encoder.encode(vec_tmp, ciph_y_tmp.parms_id(), scale * scale / ciph_y_tmp.scale(), plt_tmp);\n                ckks_eva->multiply_plain(ciph_y_tmp, plt_tmp, ciph_y_tmp);\n                ckks_eva->rescale(ciph_y_tmp, ciph_y_tmp);\n            }\n\n            \n            {\n                ckks_encoder.encode(vec_tmp, ciph_sigmoid.parms_id(), scale * scale / ciph_sigmoid.scale(), plt_tmp);\n                ckks_eva->multiply_plain(ciph_sigmoid, plt_tmp, ciph_sigmoid);\n                ckks_eva->rescale(ciph_sigmoid, ciph_sigmoid);\n            }\n        }\n\n        ckks_eva->sub_dynamic(ciph_sigmoid, ciph_y_tmp, ciph_sigmoid, ckks_encoder);\n\n        Ciphertext ciph_gradient;\n        for (auto i = 0; i < n; ++i)\n        {\n            auto ciph = ciph_x_transpose[i];\n            ckks_eva->drop_modulus(ciph, ciph, ciph_sigmoid.parms_id());\n            ckks_eva->multiply_relin(ciph, ciph_sigmoid, ciph, relin_keys);\n            ckks_eva->rescale_dynamic(ciph, ciph, scale);\n\n            ciph = accumulate_slot_matrix(ckks_eva, rot_keys, ciph, block_size, block_num);\n            ciph = accumulate_top_n(ciph, block_size, ckks_encoder, enc, ckks_eva, rot_keys);\n\n            std::vector<std::complex<double>> vec_mask{1.0};\n            Plaintext plain_mask;\n            ckks_encoder.encode(vec_mask, ciph.parms_id(), ciph.scale(), plain_mask);\n            ckks_eva->multiply_plain(ciph, plain_mask, ciph);\n\n            ckks_eva->rotate(ciph, ciph, -i, rot_keys);\n            if (i == 0)\n            {\n                ciph_gradient = ciph;\n            }\n            else\n            {\n                ckks_eva->add(ciph, ciph_gradient, ciph_gradient);\n            }\n        }\n        ckks_eva->rescale_dynamic(ciph_gradient, ciph_gradient, scale);\n\n        ckks_eva->multiply_const(ciph_gradient, learning_rate / m , ciph_gradient.scale(), ciph_gradient, ckks_encoder);\n        ckks_eva->rescale_dynamic(ciph_gradient, ciph_gradient, scale);\n\n\n        \n        std::vector<double> expected_gradient(n, 0.0);\n        {\n            for (auto i = 0; i < m; ++i)\n            {\n                for (auto j = 0; j < n; ++j)\n                {\n                    expected_gradient[j] += (expected_sigmoid[i] - y[i].real()) * x_transpose[j][i].real();\n                }\n            }\n\n            auto res = batch_handler.decrypt_and_decode(ckks_encoder, dec, ciph_gradient);\n            std::cout << \"fhe gradient  |  expected gradient\" << std::endl;\n            for (auto i = 0; i < n; ++i)\n            {\n                std::cout << \"grad[\" << i << \"]: \" << res[i].real() << \" \" << expected_gradient[i] * learning_rate / m << std::endl;\n            }\n        }\n\n\n        \n        Ciphertext ciph_grad_concat;\n        {\n            Ciphertext ciph_grad_rotated;\n            ckks_eva->rotate(ciph_gradient, ciph_grad_rotated, -block_size, rot_keys);\n            ckks_eva->add(ciph_gradient, ciph_grad_rotated, ciph_grad_concat);\n        }\n\n        \n        Ciphertext ciph_grad_block;\n        for (auto i = 0; i < block_size; ++i)\n        {\n            std::vector<std::complex<double>> mask(block_size * 2, {0.0, 0.0});\n            std::fill_n(mask.begin() + i, block_size, std::complex<double>{1.0, 0.0});\n            Plaintext plain_mask;\n            ckks_encoder.encode(mask, ciph_grad_concat.parms_id(), ciph_grad_concat.scale(), plain_mask);\n\n            Ciphertext ciph_grad_concat_rotated;\n            ckks_eva->multiply_plain(ciph_grad_concat, plain_mask, ciph_grad_concat_rotated);\n            ckks_eva->rescale(ciph_grad_concat_rotated, ciph_grad_concat_rotated);\n            ckks_eva->rotate(ciph_grad_concat_rotated, ciph_grad_concat_rotated, -(i * block_size - i), rot_keys);\n\n            if (i == 0)\n            {\n                ciph_grad_block = ciph_grad_concat_rotated;\n            }\n            else\n            {\n                ckks_eva->add_dynamic(ciph_grad_concat_rotated, ciph_grad_block, ciph_grad_block, ckks_encoder);\n            }\n        }\n\n        \n        Ciphertext ciph_for_grad_update = ciph_grad_block;\n        for (auto i = block_size * block_size; i < slot_size; i *= 2)\n        {\n            Ciphertext ciph_tmp;\n            ckks_eva->rotate(ciph_for_grad_update, ciph_tmp, -i, rot_keys);\n            ckks_eva->add(ciph_for_grad_update, ciph_tmp, ciph_for_grad_update);\n        }\n\n        \n        if (ciph_weight.level() > ciph_for_grad_update.level())\n        {\n            ckks_eva->drop_modulus(ciph_weight, ciph_weight, ciph_for_grad_update.parms_id());\n        }\n\n        if(!util::are_approximate(ciph_for_grad_update.scale(), ciph_weight.scale()))\n        {\n            std::vector<std::complex<double>> vec_tmp(slot_size, {1.0, 0.0});\n            Plaintext plt_tmp;\n\n            \n            {\n                ckks_encoder.encode(vec_tmp, ciph_for_grad_update.parms_id(), scale * scale / ciph_for_grad_update.scale(), plt_tmp);\n                ckks_eva->multiply_plain(ciph_for_grad_update, plt_tmp, ciph_for_grad_update);\n                ckks_eva->rescale(ciph_for_grad_update, ciph_for_grad_update);\n            }\n\n            \n            {\n                ckks_encoder.encode(vec_tmp, ciph_weight.parms_id(), scale * scale / ciph_weight.scale(), plt_tmp);\n                ckks_eva->multiply_plain(ciph_weight, plt_tmp, ciph_weight);\n                ckks_eva->rescale(ciph_weight, ciph_weight);\n            }\n        }\n\n        ckks_eva->sub_dynamic(ciph_weight, ciph_for_grad_update, ciph_weight, ckks_encoder);\n\n\n\n        \n        {\n            for (auto i = 0; i < n; ++i)\n            {\n                expected_weight[i] -= learning_rate * expected_gradient[i] / m;\n            }\n            std::cout << \"fhe weight  |  expected weight\" << std::endl;\n            auto res = batch_handler.decrypt_and_decode(ckks_encoder, dec, ciph_weight);\n            for (auto i = 0; i < n; ++i)\n            {\n                std::cout << \"weight[\" << i << \"]: \" << res[i].real() << \" \" << expected_weight[i].real() << std::endl;\n            }\n        }\n\n\n        timer.end();\n        std::cout << \"epoch \" << epoch << \" end...\" << std::endl;\n        timer.print_time(\"lr train time: \");\n\n        \n        if(ciph_weight.level() < 12){\n            auto start = chrono::high_resolution_clock::now();\n            std::cout << \"bootstraping start...\" << std::endl;\n            EvalModPoly eval_mod_poly(context, CosDiscrete, (uint64_t)1 << 40, 1,\n                                      9, 3, 16, 0, 30);\n            ckks_eva->bootstrap(ciph_weight, ciph_weight, relin_keys,rot_keys, ckks_encoder, eval_mod_poly);\n            auto stop = chrono::high_resolution_clock::now();\n            auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);\n            std::cout << \"bootstraping TIME: \" << duration.count() << \" microseconds\" << std::endl;\n\n\n            \n            {\n                auto wegiht_after_bootstrap = batch_handler.decrypt_and_decode(ckks_encoder, dec, ciph_weight);\n                std::cout << \"weight after bootstrap\" << std::endl;\n                for (auto i = 0; i < n; ++i)\n                {\n                    std::cout << \"weight[\" << i << \"]: \" << wegiht_after_bootstrap[i].real() << std::endl;\n                }\n            }\n\n        }\n    }"
+      },
+      "reason": "unsupported dynamic loop boundary",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 539,
+          "offset": 18319
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+        "start": {
+          "column": 5,
+          "line": 287,
+          "offset": 8430
+        }
+      },
+      "stmt_id": "main@8430",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "entry_function": "main",
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "operation_order": [
+    "op0",
+    "op1",
+    "op2",
+    "op3"
+  ],
+  "parallel_blocks": [
+    {
+      "anchor_stmt_ids": [
+        "main@6717",
+        "main@6757",
+        "main@6797",
+        "main@18552"
+      ],
+      "op_ids": [
+        "op0",
+        "op1",
+        "op2",
+        "op3"
+      ],
+      "region_id": "region0"
+    }
+  ],
+  "regions": [
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op0",
+        "op1",
+        "op2",
+        "op3"
+      ],
+      "region_id": "region0",
+      "source_spans": [
+        {
+          "end": {
+            "column": 39,
+            "line": 244,
+            "offset": 6751
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+          "start": {
+            "column": 5,
+            "line": 244,
+            "offset": 6717
+          }
+        },
+        {
+          "end": {
+            "column": 39,
+            "line": 245,
+            "offset": 6791
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+          "start": {
+            "column": 5,
+            "line": 245,
+            "offset": 6757
+          }
+        },
+        {
+          "end": {
+            "column": 38,
+            "line": 246,
+            "offset": 6830
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+          "start": {
+            "column": 5,
+            "line": 246,
+            "offset": 6797
+          }
+        },
+        {
+          "end": {
+            "column": 13,
+            "line": 546,
+            "offset": 18560
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+          "start": {
+            "column": 5,
+            "line": 546,
+            "offset": 18552
+          }
+        }
+      ],
+      "stmt_ids": [
+        "main@6717",
+        "main@6757",
+        "main@6797",
+        "main@18552"
+      ]
+    }
+  ],
+  "required_temporaries": [
+    {
+      "symbol": "public_key"
+    },
+    {
+      "symbol": "relin_keys"
+    },
+    {
+      "symbol": "rot_keys"
+    }
+  ],
+  "schema_version": 2,
+  "source_edits_anchor": {
+    "end": {
+      "column": 1,
+      "line": 547,
+      "offset": 18562
+    },
+    "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+    "start": {
+      "column": 5,
+      "line": 141,
+      "offset": 3421
+    }
+  },
+  "source_file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+  "status": "blocked"
+}

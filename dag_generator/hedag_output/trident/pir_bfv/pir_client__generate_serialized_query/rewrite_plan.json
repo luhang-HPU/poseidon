@@ -1,0 +1,107 @@
+{
+  "barriers": [],
+  "blocking_diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (indices_[i] >= N * j && indices_[i] <= N * (j + 1))\n            {\n                uint64_t real_index = indices_[i] - N * j;\n                uint64_t n_i = pir_params_.nvec[i];\n                uint64_t total = N;\n                if (j == num_ptxts - 1)\n                {\n                    total = n_i % N;\n                }\n                uint64_t log_total = std::ceil(log2(total));\n\n                std::cout << \"Client: Inverting \" << pow(2, log_total) << std::endl;\n                pt[real_index] = invert_mod(pow(2, log_total), enc_params_.plain_modulus());\n            }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 13,
+          "line": 75,
+          "offset": 2406
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+        "start": {
+          "column": 13,
+          "line": 62,
+          "offset": 1824
+        }
+      },
+      "stmt_id": "generate_serialized_query@1824",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (pir_params_.enable_symmetric)\n            {\n                output_size += encryptor_->encrypt_symmetric(pt).save(stream);\n            }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 13,
+          "line": 80,
+          "offset": 2560
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+        "start": {
+          "column": 13,
+          "line": 77,
+          "offset": 2421
+        }
+      },
+      "stmt_id": "generate_serialized_query@2421",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "entry_function": "generate_serialized_query",
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "operation_order": [
+    "op0"
+  ],
+  "parallel_blocks": [],
+  "regions": [
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op0"
+      ],
+      "region_id": "region0",
+      "source_spans": [
+        {
+          "end": {
+            "column": 68,
+            "line": 83,
+            "offset": 2660
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+          "start": {
+            "column": 13,
+            "line": 81,
+            "offset": 2574
+          }
+        }
+      ],
+      "stmt_ids": [
+        "generate_serialized_query@2574"
+      ]
+    }
+  ],
+  "required_temporaries": [
+    {
+      "symbol": "pt).save(stream"
+    }
+  ],
+  "schema_version": 2,
+  "source_edits_anchor": {
+    "end": {
+      "column": 1,
+      "line": 89,
+      "offset": 2717
+    },
+    "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+    "start": {
+      "column": 16,
+      "line": 43,
+      "offset": 1119
+    }
+  },
+  "source_file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+  "status": "blocked"
+}

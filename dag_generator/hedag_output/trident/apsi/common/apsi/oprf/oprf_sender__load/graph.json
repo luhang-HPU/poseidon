@@ -1,0 +1,27 @@
+{
+  "diagnostics": [],
+  "edges": [],
+  "entry_function": "load",
+  "frontend": "textual_fallback",
+  "metadata": {
+    "entry_span": {
+      "end": {
+        "column": 9,
+        "line": 34,
+        "offset": 621
+      },
+      "file": "/home/guoshuai/github/poseidon/Trident/apsi/common/apsi/oprf/oprf_sender.cpp",
+      "start": {
+        "column": 23,
+        "line": 31,
+        "offset": 488
+      }
+    },
+    "frontend_mode": "textual_fallback",
+    "source_hash": "3dd555a485bf62c101485f829e5f3ec886d1a6b0817ff7bda8f393ebaf9d6a12"
+  },
+  "ops": [],
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/apsi/common/apsi/oprf/oprf_sender.cpp",
+  "values": []
+}

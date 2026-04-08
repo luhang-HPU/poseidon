@@ -1,0 +1,287 @@
+digraph hedag_v2 {
+  rankdir=LR;
+  node [shape=box, style="rounded,filled", fontname="Helvetica"];
+  edge [fontname="Helvetica"];
+  subgraph cluster_layer_0 {
+    label="layer 0";
+    color="#d1d5db";
+    op0 [label="op0\nadd\nline 144\nlayer 0\ncost 1\nout smooth_square_branch__ckks_single_thread_workload_8036__sum_ab@1\nin scale@0, ct_a@0", fillcolor="#e5e7eb"];
+    op11 [label="op11\nsub\nline 170\nlayer 0\ncost 1\nout diff_energy_branch__ckks_single_thread_workload_8140__diff_cd@1\nin scale@0, ct_c@0", fillcolor="#e5e7eb"];
+    op22 [label="op22\nmultiply\nline 198\nlayer 0\ncost 5\nout cross_mix_branch__ckks_single_thread_workload_8243__prod_ac@1\nin scale@0, ct_b@0", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_1 {
+    label="layer 1";
+    color="#d1d5db";
+    op1 [label="op1\nrotate\nline 145\nlayer 1\ncost 4\nout smooth_square_branch__ckks_single_thread_workload_8036__rot_ab_1@1\nin smooth_square_branch__ckks_single_thread_workload_8036__sum_ab@1", fillcolor="#9467bd"];
+    op12 [label="op12\nrotate\nline 171\nlayer 1\ncost 4\nout diff_energy_branch__ckks_single_thread_workload_8140__diff_rot1@1\nin diff_energy_branch__ckks_single_thread_workload_8140__diff_cd@1", fillcolor="#9467bd"];
+  }
+  subgraph cluster_layer_2 {
+    label="layer 2";
+    color="#d1d5db";
+    op23 [label="op23\nrelinearize\nline 199\nlayer 2\ncost 4\nout cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin@1\nin cross_mix_branch__ckks_single_thread_workload_8243__prod_ac@1", fillcolor="#dbeafe"];
+  }
+  subgraph cluster_layer_3 {
+    label="layer 3";
+    color="#d1d5db";
+    op2 [label="op2\nadd\nline 146\nlayer 3\ncost 1\nout smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab@1\nin smooth_square_branch__ckks_single_thread_workload_8036__sum_ab@1, smooth_square_branch__ckks_single_thread_workload_8036__rot_ab_1@1", fillcolor="#e5e7eb"];
+    op13 [label="op13\nadd\nline 172\nlayer 3\ncost 1\nout diff_energy_branch__ckks_single_thread_workload_8140__diff_mix@1\nin diff_energy_branch__ckks_single_thread_workload_8140__diff_cd@1, diff_energy_branch__ckks_single_thread_workload_8140__diff_rot1@1", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_4 {
+    label="layer 4";
+    color="#d1d5db";
+    op24 [label="op24\nrescale_dynamic\nline 200\nlayer 4\ncost 4\nout cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin@2\nin cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin@1", fillcolor="#8c564b"];
+  }
+  subgraph cluster_layer_5 {
+    label="layer 5";
+    color="#d1d5db";
+    op3 [label="op3\nrotate\nline 147\nlayer 5\ncost 4\nout smooth_square_branch__ckks_single_thread_workload_8036__rot_smooth_2@1\nin smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab@1", fillcolor="#9467bd"];
+    op14 [label="op14\nmultiply\nline 173\nlayer 5\ncost 5\nout diff_energy_branch__ckks_single_thread_workload_8140__diff_sq@1\nin diff_energy_branch__ckks_single_thread_workload_8140__diff_mix@1, diff_energy_branch__ckks_single_thread_workload_8140__diff_mix@1", fillcolor="#e5e7eb"];
+    op25 [label="op25\nmultiply\nline 201\nlayer 5\ncost 5\nout cross_mix_branch__ckks_single_thread_workload_8243__prod_bd@1\nin ct_a@0, ct_c@0", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_6 {
+    label="layer 6";
+    color="#d1d5db";
+    op4 [label="op4\nadd\nline 148\nlayer 6\ncost 1\nout smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab_2@1\nin smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab@1, smooth_square_branch__ckks_single_thread_workload_8036__rot_smooth_2@1", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_7 {
+    label="layer 7";
+    color="#d1d5db";
+    op15 [label="op15\nrelinearize\nline 174\nlayer 7\ncost 4\nout diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin@1\nin diff_energy_branch__ckks_single_thread_workload_8140__diff_sq@1", fillcolor="#dbeafe"];
+  }
+  subgraph cluster_layer_8 {
+    label="layer 8";
+    color="#d1d5db";
+    op26 [label="op26\nrelinearize\nline 202\nlayer 8\ncost 4\nout cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin@1\nin cross_mix_branch__ckks_single_thread_workload_8243__prod_bd@1", fillcolor="#dbeafe"];
+  }
+  subgraph cluster_layer_9 {
+    label="layer 9";
+    color="#d1d5db";
+    op5 [label="op5\nmultiply\nline 149\nlayer 9\ncost 5\nout smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq@1\nin smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab_2@1, smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab_2@1", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_10 {
+    label="layer 10";
+    color="#d1d5db";
+    op16 [label="op16\nrescale_dynamic\nline 175\nlayer 10\ncost 4\nout diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin@2\nin diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin@1", fillcolor="#8c564b"];
+  }
+  subgraph cluster_layer_11 {
+    label="layer 11";
+    color="#d1d5db";
+    op27 [label="op27\nrescale_dynamic\nline 203\nlayer 11\ncost 4\nout cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin@2\nin cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin@1", fillcolor="#8c564b"];
+  }
+  subgraph cluster_layer_12 {
+    label="layer 12";
+    color="#d1d5db";
+    op17 [label="op17\nrotate\nline 176\nlayer 12\ncost 4\nout diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot2@1\nin diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin@2", fillcolor="#9467bd"];
+    op28 [label="op28\nadd\nline 204\nlayer 12\ncost 1\nout cross_mix_branch__ckks_single_thread_workload_8243__cross_sum@1\nin cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin@2, cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin@2", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_13 {
+    label="layer 13";
+    color="#d1d5db";
+    op6 [label="op6\nrelinearize\nline 150\nlayer 13\ncost 4\nout smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin@1\nin smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq@1", fillcolor="#dbeafe"];
+  }
+  subgraph cluster_layer_14 {
+    label="layer 14";
+    color="#d1d5db";
+    op18 [label="op18\nrotate\nline 177\nlayer 14\ncost 4\nout diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot8@1\nin diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin@2", fillcolor="#9467bd"];
+    op29 [label="op29\nrotate\nline 205\nlayer 14\ncost 4\nout cross_mix_branch__ckks_single_thread_workload_8243__cross_rot8@1\nin cross_mix_branch__ckks_single_thread_workload_8243__cross_sum@1", fillcolor="#9467bd"];
+  }
+  subgraph cluster_layer_15 {
+    label="layer 15";
+    color="#d1d5db";
+    op7 [label="op7\nrescale_dynamic\nline 151\nlayer 15\ncost 4\nout smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin@2\nin smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin@1", fillcolor="#8c564b"];
+  }
+  subgraph cluster_layer_16 {
+    label="layer 16";
+    color="#d1d5db";
+    op8 [label="op8\nrotate\nline 152\nlayer 16\ncost 4\nout smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_rot4@1\nin smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin@2", fillcolor="#9467bd"];
+    op19 [label="op19\nadd\nline 178\nlayer 16\ncost 1\nout diff_energy_branch__ckks_single_thread_workload_8140__branch_quad@1\nin diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin@2, diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot2@1", fillcolor="#e5e7eb"];
+    op30 [label="op30\nadd\nline 206\nlayer 16\ncost 1\nout cross_mix_branch__ckks_single_thread_workload_8243__cross_mix@1\nin cross_mix_branch__ckks_single_thread_workload_8243__cross_sum@1, cross_mix_branch__ckks_single_thread_workload_8243__cross_rot8@1", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_17 {
+    label="layer 17";
+    color="#d1d5db";
+    op9 [label="op9\nadd\nline 153\nlayer 17\ncost 1\nout smooth_square_branch__ckks_single_thread_workload_8036__branch_add@1\nin smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin@2, smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_rot4@1", fillcolor="#e5e7eb"];
+    op20 [label="op20\nadd\nline 179\nlayer 17\ncost 1\nout diff_energy_branch__ckks_single_thread_workload_8140__branch_quad@2\nin diff_energy_branch__ckks_single_thread_workload_8140__branch_quad@1, diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot8@1", fillcolor="#e5e7eb"];
+    op31 [label="op31\nrotate\nline 207\nlayer 17\ncost 4\nout cross_mix_branch__ckks_single_thread_workload_8243__cross_rot16@1\nin cross_mix_branch__ckks_single_thread_workload_8243__cross_mix@1", fillcolor="#9467bd"];
+  }
+  subgraph cluster_layer_18 {
+    label="layer 18";
+    color="#d1d5db";
+    op10 [label="op10\nassign\nline 218\nlayer 18\ncost 1\nout branch_add@1\nin smooth_square_branch__ckks_single_thread_workload_8036__branch_add@1", fillcolor="#17becf"];
+    op21 [label="op21\nassign\nline 219\nlayer 18\ncost 1\nout branch_quad@1\nin diff_energy_branch__ckks_single_thread_workload_8140__branch_quad@2", fillcolor="#17becf"];
+    op32 [label="op32\nadd\nline 208\nlayer 18\ncost 1\nout cross_mix_branch__ckks_single_thread_workload_8243__branch_cross@1\nin cross_mix_branch__ckks_single_thread_workload_8243__cross_mix@1, cross_mix_branch__ckks_single_thread_workload_8243__cross_rot16@1", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_19 {
+    label="layer 19";
+    color="#d1d5db";
+    op34 [label="op34\nadd\nline 230\nlayer 19\ncost 1\nout merged_left@1\nin branch_add@1, branch_quad@1", fillcolor="#e5e7eb"];
+    op33 [label="op33\nassign\nline 220\nlayer 19\ncost 1\nout branch_cross@1\nin cross_mix_branch__ckks_single_thread_workload_8243__branch_cross@1", fillcolor="#17becf"];
+  }
+  subgraph cluster_layer_20 {
+    label="layer 20";
+    color="#d1d5db";
+    op35 [label="op35\nadd\nline 231\nlayer 20\ncost 1\nout merged_all@1\nin merged_left@1, branch_cross@1", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_21 {
+    label="layer 21";
+    color="#d1d5db";
+    op36 [label="op36\nmultiply\nline 232\nlayer 21\ncost 5\nout tail_prod@1\nin merged_all@1, branch_add@1", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_22 {
+    label="layer 22";
+    color="#d1d5db";
+    op37 [label="op37\nrelinearize\nline 233\nlayer 22\ncost 4\nout tail_prod_relin@1\nin tail_prod@1", fillcolor="#dbeafe"];
+  }
+  subgraph cluster_layer_23 {
+    label="layer 23";
+    color="#d1d5db";
+    op38 [label="op38\nrescale_dynamic\nline 234\nlayer 23\ncost 4\nout tail_prod_relin@2\nin tail_prod_relin@1", fillcolor="#8c564b"];
+  }
+  subgraph cluster_layer_24 {
+    label="layer 24";
+    color="#d1d5db";
+    op39 [label="op39\nrotate\nline 235\nlayer 24\ncost 4\nout tail_rot32@1\nin tail_prod_relin@2", fillcolor="#9467bd"];
+  }
+  subgraph cluster_layer_25 {
+    label="layer 25";
+    color="#d1d5db";
+    op40 [label="op40\nadd\nline 236\nlayer 25\ncost 1\nout result@1\nin tail_prod_relin@2, tail_rot32@1", fillcolor="#e5e7eb"];
+  }
+  op0 -> op1 [color="#1f2937", label="smooth_square_branch__ckks_single_thread_workload_8036__sum_ab"];
+  op0 -> op1 [color="#2563eb", label="smooth_square_branch__ckks_single_thread_workload_8036__sum_ab"];
+  op0 -> op1 [color="#0f766e", label="ckks_single_thread_workload@8036"];
+  op0 -> op2 [color="#1f2937", label="smooth_square_branch__ckks_single_thread_workload_8036__sum_ab"];
+  op0 -> op2 [color="#2563eb", label="smooth_square_branch__ckks_single_thread_workload_8036__sum_ab"];
+  op1 -> op2 [color="#1f2937", label="smooth_square_branch__ckks_single_thread_workload_8036__rot_ab_1"];
+  op1 -> op2 [color="#2563eb", label="smooth_square_branch__ckks_single_thread_workload_8036__rot_ab_1"];
+  op1 -> op2 [color="#0f766e", label="ckks_single_thread_workload@8036"];
+  op2 -> op3 [color="#1f2937", label="smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab"];
+  op2 -> op3 [color="#2563eb", label="smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab"];
+  op2 -> op3 [color="#0f766e", label="ckks_single_thread_workload@8036"];
+  op2 -> op4 [color="#1f2937", label="smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab"];
+  op2 -> op4 [color="#2563eb", label="smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab"];
+  op3 -> op4 [color="#1f2937", label="smooth_square_branch__ckks_single_thread_workload_8036__rot_smooth_2"];
+  op3 -> op4 [color="#2563eb", label="smooth_square_branch__ckks_single_thread_workload_8036__rot_smooth_2"];
+  op3 -> op4 [color="#0f766e", label="ckks_single_thread_workload@8036"];
+  op4 -> op5 [color="#1f2937", label="smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab_2"];
+  op4 -> op5 [color="#2563eb", label="smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab_2"];
+  op4 -> op5 [color="#0f766e", label="ckks_single_thread_workload@8036"];
+  op5 -> op6 [color="#1f2937", label="smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq"];
+  op5 -> op6 [color="#2563eb", label="smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq"];
+  op5 -> op6 [color="#0f766e", label="ckks_single_thread_workload@8036"];
+  op6 -> op7 [color="#1f2937", label="smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin"];
+  op6 -> op7 [color="#2563eb", label="smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin"];
+  op6 -> op7 [color="#f97316", label="smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin"];
+  op6 -> op7 [color="#0f766e", label="ckks_single_thread_workload@8036"];
+  op7 -> op8 [color="#1f2937", label="smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin"];
+  op7 -> op8 [color="#2563eb", label="smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin"];
+  op7 -> op8 [color="#0f766e", label="ckks_single_thread_workload@8036"];
+  op7 -> op9 [color="#1f2937", label="smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin"];
+  op7 -> op9 [color="#2563eb", label="smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin"];
+  op8 -> op9 [color="#1f2937", label="smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_rot4"];
+  op8 -> op9 [color="#2563eb", label="smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_rot4"];
+  op8 -> op9 [color="#0f766e", label="ckks_single_thread_workload@8036"];
+  op9 -> op10 [color="#1f2937", label="smooth_square_branch__ckks_single_thread_workload_8036__branch_add"];
+  op9 -> op10 [color="#2563eb", label="smooth_square_branch__ckks_single_thread_workload_8036__branch_add"];
+  op9 -> op10 [color="#0f766e", label="ckks_single_thread_workload@8036"];
+  op11 -> op12 [color="#1f2937", label="diff_energy_branch__ckks_single_thread_workload_8140__diff_cd"];
+  op11 -> op12 [color="#2563eb", label="diff_energy_branch__ckks_single_thread_workload_8140__diff_cd"];
+  op11 -> op12 [color="#0f766e", label="ckks_single_thread_workload@8140"];
+  op11 -> op13 [color="#1f2937", label="diff_energy_branch__ckks_single_thread_workload_8140__diff_cd"];
+  op11 -> op13 [color="#2563eb", label="diff_energy_branch__ckks_single_thread_workload_8140__diff_cd"];
+  op12 -> op13 [color="#1f2937", label="diff_energy_branch__ckks_single_thread_workload_8140__diff_rot1"];
+  op12 -> op13 [color="#2563eb", label="diff_energy_branch__ckks_single_thread_workload_8140__diff_rot1"];
+  op12 -> op13 [color="#0f766e", label="ckks_single_thread_workload@8140"];
+  op13 -> op14 [color="#1f2937", label="diff_energy_branch__ckks_single_thread_workload_8140__diff_mix"];
+  op13 -> op14 [color="#2563eb", label="diff_energy_branch__ckks_single_thread_workload_8140__diff_mix"];
+  op13 -> op14 [color="#0f766e", label="ckks_single_thread_workload@8140"];
+  op14 -> op15 [color="#1f2937", label="diff_energy_branch__ckks_single_thread_workload_8140__diff_sq"];
+  op14 -> op15 [color="#2563eb", label="diff_energy_branch__ckks_single_thread_workload_8140__diff_sq"];
+  op14 -> op15 [color="#0f766e", label="ckks_single_thread_workload@8140"];
+  op15 -> op16 [color="#1f2937", label="diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin"];
+  op15 -> op16 [color="#2563eb", label="diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin"];
+  op15 -> op16 [color="#f97316", label="diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin"];
+  op15 -> op16 [color="#0f766e", label="ckks_single_thread_workload@8140"];
+  op16 -> op17 [color="#1f2937", label="diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin"];
+  op16 -> op17 [color="#2563eb", label="diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin"];
+  op16 -> op17 [color="#0f766e", label="ckks_single_thread_workload@8140"];
+  op16 -> op18 [color="#1f2937", label="diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin"];
+  op16 -> op18 [color="#2563eb", label="diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin"];
+  op17 -> op18 [color="#0f766e", label="ckks_single_thread_workload@8140"];
+  op16 -> op19 [color="#1f2937", label="diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin"];
+  op16 -> op19 [color="#2563eb", label="diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin"];
+  op17 -> op19 [color="#1f2937", label="diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot2"];
+  op17 -> op19 [color="#2563eb", label="diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot2"];
+  op18 -> op19 [color="#0f766e", label="ckks_single_thread_workload@8140"];
+  op19 -> op20 [color="#1f2937", label="diff_energy_branch__ckks_single_thread_workload_8140__branch_quad"];
+  op19 -> op20 [color="#2563eb", label="diff_energy_branch__ckks_single_thread_workload_8140__branch_quad"];
+  op18 -> op20 [color="#1f2937", label="diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot8"];
+  op18 -> op20 [color="#2563eb", label="diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot8"];
+  op19 -> op20 [color="#f97316", label="diff_energy_branch__ckks_single_thread_workload_8140__branch_quad"];
+  op19 -> op20 [color="#0f766e", label="ckks_single_thread_workload@8140"];
+  op20 -> op21 [color="#1f2937", label="diff_energy_branch__ckks_single_thread_workload_8140__branch_quad"];
+  op20 -> op21 [color="#2563eb", label="diff_energy_branch__ckks_single_thread_workload_8140__branch_quad"];
+  op20 -> op21 [color="#0f766e", label="ckks_single_thread_workload@8140"];
+  op22 -> op23 [color="#1f2937", label="cross_mix_branch__ckks_single_thread_workload_8243__prod_ac"];
+  op22 -> op23 [color="#2563eb", label="cross_mix_branch__ckks_single_thread_workload_8243__prod_ac"];
+  op22 -> op23 [color="#0f766e", label="ckks_single_thread_workload@8243"];
+  op23 -> op24 [color="#1f2937", label="cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin"];
+  op23 -> op24 [color="#2563eb", label="cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin"];
+  op23 -> op24 [color="#f97316", label="cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin"];
+  op23 -> op24 [color="#0f766e", label="ckks_single_thread_workload@8243"];
+  op24 -> op25 [color="#0f766e", label="ckks_single_thread_workload@8243"];
+  op25 -> op26 [color="#1f2937", label="cross_mix_branch__ckks_single_thread_workload_8243__prod_bd"];
+  op25 -> op26 [color="#2563eb", label="cross_mix_branch__ckks_single_thread_workload_8243__prod_bd"];
+  op25 -> op26 [color="#0f766e", label="ckks_single_thread_workload@8243"];
+  op26 -> op27 [color="#1f2937", label="cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin"];
+  op26 -> op27 [color="#2563eb", label="cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin"];
+  op26 -> op27 [color="#f97316", label="cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin"];
+  op26 -> op27 [color="#0f766e", label="ckks_single_thread_workload@8243"];
+  op24 -> op28 [color="#1f2937", label="cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin"];
+  op24 -> op28 [color="#2563eb", label="cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin"];
+  op27 -> op28 [color="#1f2937", label="cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin"];
+  op27 -> op28 [color="#2563eb", label="cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin"];
+  op27 -> op28 [color="#0f766e", label="ckks_single_thread_workload@8243"];
+  op28 -> op29 [color="#1f2937", label="cross_mix_branch__ckks_single_thread_workload_8243__cross_sum"];
+  op28 -> op29 [color="#2563eb", label="cross_mix_branch__ckks_single_thread_workload_8243__cross_sum"];
+  op28 -> op29 [color="#0f766e", label="ckks_single_thread_workload@8243"];
+  op28 -> op30 [color="#1f2937", label="cross_mix_branch__ckks_single_thread_workload_8243__cross_sum"];
+  op28 -> op30 [color="#2563eb", label="cross_mix_branch__ckks_single_thread_workload_8243__cross_sum"];
+  op29 -> op30 [color="#1f2937", label="cross_mix_branch__ckks_single_thread_workload_8243__cross_rot8"];
+  op29 -> op30 [color="#2563eb", label="cross_mix_branch__ckks_single_thread_workload_8243__cross_rot8"];
+  op29 -> op30 [color="#0f766e", label="ckks_single_thread_workload@8243"];
+  op30 -> op31 [color="#1f2937", label="cross_mix_branch__ckks_single_thread_workload_8243__cross_mix"];
+  op30 -> op31 [color="#2563eb", label="cross_mix_branch__ckks_single_thread_workload_8243__cross_mix"];
+  op30 -> op31 [color="#0f766e", label="ckks_single_thread_workload@8243"];
+  op30 -> op32 [color="#1f2937", label="cross_mix_branch__ckks_single_thread_workload_8243__cross_mix"];
+  op30 -> op32 [color="#2563eb", label="cross_mix_branch__ckks_single_thread_workload_8243__cross_mix"];
+  op31 -> op32 [color="#1f2937", label="cross_mix_branch__ckks_single_thread_workload_8243__cross_rot16"];
+  op31 -> op32 [color="#2563eb", label="cross_mix_branch__ckks_single_thread_workload_8243__cross_rot16"];
+  op31 -> op32 [color="#0f766e", label="ckks_single_thread_workload@8243"];
+  op32 -> op33 [color="#1f2937", label="cross_mix_branch__ckks_single_thread_workload_8243__branch_cross"];
+  op32 -> op33 [color="#2563eb", label="cross_mix_branch__ckks_single_thread_workload_8243__branch_cross"];
+  op32 -> op33 [color="#0f766e", label="ckks_single_thread_workload@8243"];
+  op10 -> op34 [color="#1f2937", label="branch_add"];
+  op10 -> op34 [color="#2563eb", label="branch_add"];
+  op21 -> op34 [color="#1f2937", label="branch_quad"];
+  op21 -> op34 [color="#2563eb", label="branch_quad"];
+  op34 -> op35 [color="#1f2937", label="merged_left"];
+  op34 -> op35 [color="#2563eb", label="merged_left"];
+  op33 -> op35 [color="#1f2937", label="branch_cross"];
+  op33 -> op35 [color="#2563eb", label="branch_cross"];
+  op35 -> op36 [color="#1f2937", label="merged_all"];
+  op35 -> op36 [color="#2563eb", label="merged_all"];
+  op10 -> op36 [color="#1f2937", label="branch_add"];
+  op10 -> op36 [color="#2563eb", label="branch_add"];
+  op36 -> op37 [color="#1f2937", label="tail_prod"];
+  op36 -> op37 [color="#2563eb", label="tail_prod"];
+  op37 -> op38 [color="#1f2937", label="tail_prod_relin"];
+  op37 -> op38 [color="#2563eb", label="tail_prod_relin"];
+  op37 -> op38 [color="#f97316", label="tail_prod_relin"];
+  op38 -> op39 [color="#1f2937", label="tail_prod_relin"];
+  op38 -> op39 [color="#2563eb", label="tail_prod_relin"];
+  op38 -> op40 [color="#1f2937", label="tail_prod_relin"];
+  op38 -> op40 [color="#2563eb", label="tail_prod_relin"];
+  op39 -> op40 [color="#1f2937", label="tail_rot32"];
+  op39 -> op40 [color="#2563eb", label="tail_rot32"];
+}

@@ -1,0 +1,40 @@
+{
+  "critical_path_cost": 1,
+  "diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "for (int w = 0; w < num_threads; ++w)\n    {\n        int start = w * work_load;\n        int end = std::min<int>(start + work_load, message.size());\n\n        if (end > start)\n        {\n\n                    for (size_t i = s; i < e; ++i)\n                    {\n                        encode_and_encrypt(encoder, encryptor, message[i], scale, vec_ciph[i]);\n                    }\n                \n        }\n    }"
+      },
+      "reason": "unsupported dynamic loop boundary",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 60,
+          "line": 202,
+          "offset": 5764
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 5,
+          "line": 190,
+          "offset": 5358
+        }
+      },
+      "stmt_id": "encode_and_encrypt_mt@5358",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "edges": 0,
+  "entry_function": "encode_and_encrypt_mt",
+  "frontend": "textual_fallback",
+  "layers": [
+    "layer 0: op0"
+  ],
+  "max_parallel_width": 1,
+  "ops": 1,
+  "rewrite_status": "blocked",
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+  "values": 5
+}

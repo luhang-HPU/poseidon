@@ -1,0 +1,66 @@
+{
+  "critical_path_cost": 7,
+  "diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (n <= 0)\n    {\n        POSEIDON_THROW(invalid_argument_error, \"n cannot be negative\");\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 285,
+          "offset": 8134
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+        "start": {
+          "column": 5,
+          "line": 282,
+          "offset": 8040
+        }
+      },
+      "stmt_id": "sum_row@8040",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "while (n > 1)\n    {\n        Ciphertext ciph_tmp;\n        if (n & 1 && n != 1)\n        {\n            ckks_eva->add(ciph_sum, ciph_rotate_sum, ciph_sum);\n            ckks_eva->rotate(ciph_rotate_sum, ciph_rotate_sum, slot_count, rot_keys);\n            n--;\n        }\n        n = n >> 1;\n        if (n)\n        {\n            ckks_eva->rotate(ciph_rotate_sum, ciph_tmp, n * slot_count, rot_keys);\n            ckks_eva->add(ciph_rotate_sum, ciph_tmp, ciph_rotate_sum);\n        }\n    }"
+      },
+      "reason": "unsupported control flow: while",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 313,
+          "offset": 8946
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+        "start": {
+          "column": 5,
+          "line": 298,
+          "offset": 8468
+        }
+      },
+      "stmt_id": "sum_row@8468",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "edges": 7,
+  "entry_function": "sum_row",
+  "frontend": "textual_fallback",
+  "layers": [
+    "layer 0: op0",
+    "layer 1: op1",
+    "layer 2: op2",
+    "layer 3: op3"
+  ],
+  "max_parallel_width": 1,
+  "ops": 4,
+  "rewrite_status": "blocked",
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+  "values": 14
+}

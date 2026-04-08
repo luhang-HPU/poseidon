@@ -1,0 +1,96 @@
+{
+  "diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (pir_params_.enable_mswitching)\n    {\n        parms = context_->crt_context()->last_context_data()->parms();\n        parms_id = context_->crt_context()->last_parms_id();\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 212,
+          "offset": 6569
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_client.cpp",
+        "start": {
+          "column": 5,
+          "line": 208,
+          "offset": 6392
+        }
+      },
+      "stmt_id": "decode_reply@6392",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (!temp[j].is_ntt_form())\n            {\n                evaluator_->ntt_fwd(temp[j], temp[j]);\n            }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 13,
+          "line": 239,
+          "offset": 7446
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_client.cpp",
+        "start": {
+          "column": 13,
+          "line": 236,
+          "offset": 7337
+        }
+      },
+      "stmt_id": "decode_reply@7337",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if ((j + 1) % (exp_ratio * ciphertext_size) == 0 && j > 0)\n            {\n                \n                Ciphertext combined(*context_, parms_id);\n                compose_to_ciphertext(parms, tempplain, combined);\n                newtemp.push_back(combined);\n                tempplain.clear();\n                \n                \n            }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 13,
+          "line": 263,
+          "offset": 8194
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_client.cpp",
+        "start": {
+          "column": 13,
+          "line": 254,
+          "offset": 7853
+        }
+      },
+      "stmt_id": "decode_reply@7853",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (i == recursion_level - 1)\n        {\n            assert(temp.size() == 1);\n            return tempplain[0];\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 271,
+          "offset": 8416
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_client.cpp",
+        "start": {
+          "column": 9,
+          "line": 267,
+          "offset": 8297
+        }
+      },
+      "stmt_id": "decode_reply@8297",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ]
+}

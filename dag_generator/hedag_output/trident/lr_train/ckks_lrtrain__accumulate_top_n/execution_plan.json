@@ -1,0 +1,81 @@
+{
+  "barriers": [],
+  "critical_path_cost": 7,
+  "entry_function": "accumulate_top_n",
+  "layers": [
+    [
+      "op0"
+    ],
+    [
+      "op1"
+    ],
+    [
+      "op2"
+    ],
+    [
+      "op3"
+    ]
+  ],
+  "max_parallel_width": 1,
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "op_schedule": {
+    "op0": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "latest_finish": 1,
+      "latest_start": 0,
+      "layer": 0,
+      "slack": 0,
+      "source_line": 688
+    },
+    "op1": {
+      "barrier": false,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 5,
+      "earliest_start": 1,
+      "latest_finish": 5,
+      "latest_start": 1,
+      "layer": 1,
+      "slack": 0,
+      "source_line": 689
+    },
+    "op2": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 6,
+      "earliest_start": 5,
+      "latest_finish": 6,
+      "latest_start": 5,
+      "layer": 2,
+      "slack": 0,
+      "source_line": 711
+    },
+    "op3": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 7,
+      "earliest_start": 6,
+      "latest_finish": 7,
+      "latest_start": 6,
+      "layer": 3,
+      "slack": 0,
+      "source_line": 712
+    }
+  },
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+  "topological_order": [
+    "op0",
+    "op1",
+    "op2",
+    "op3"
+  ]
+}

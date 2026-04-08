@@ -1,0 +1,27 @@
+{
+  "diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (pd.is_configured()) {\n        cout << \"Found configuration with depth \" << pd.depth() << endl;\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 49,
+          "offset": 1065
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/cli/pd_tool/pd_tool.cpp",
+        "start": {
+          "column": 5,
+          "line": 47,
+          "offset": 962
+        }
+      },
+      "stmt_id": "main@962",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ]
+}

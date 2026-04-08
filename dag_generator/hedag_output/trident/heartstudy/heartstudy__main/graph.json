@@ -1,0 +1,5094 @@
+{
+  "diagnostics": [],
+  "edges": [
+    {
+      "dst": "op8",
+      "kind": "data",
+      "reason": "plain_age",
+      "src": "op2",
+      "value_id": "plain_age@1"
+    },
+    {
+      "dst": "op8",
+      "kind": "read_after_write",
+      "reason": "plain_age",
+      "src": "op2",
+      "value_id": "plain_age@1"
+    },
+    {
+      "dst": "op9",
+      "kind": "data",
+      "reason": "plain_sbp",
+      "src": "op3",
+      "value_id": "plain_sbp@1"
+    },
+    {
+      "dst": "op9",
+      "kind": "read_after_write",
+      "reason": "plain_sbp",
+      "src": "op3",
+      "value_id": "plain_sbp@1"
+    },
+    {
+      "dst": "op10",
+      "kind": "data",
+      "reason": "plain_dbp",
+      "src": "op4",
+      "value_id": "plain_dbp@1"
+    },
+    {
+      "dst": "op10",
+      "kind": "read_after_write",
+      "reason": "plain_dbp",
+      "src": "op4",
+      "value_id": "plain_dbp@1"
+    },
+    {
+      "dst": "op11",
+      "kind": "data",
+      "reason": "plain_chl",
+      "src": "op5",
+      "value_id": "plain_chl@1"
+    },
+    {
+      "dst": "op11",
+      "kind": "read_after_write",
+      "reason": "plain_chl",
+      "src": "op5",
+      "value_id": "plain_chl@1"
+    },
+    {
+      "dst": "op12",
+      "kind": "data",
+      "reason": "plain_height",
+      "src": "op6",
+      "value_id": "plain_height@1"
+    },
+    {
+      "dst": "op12",
+      "kind": "read_after_write",
+      "reason": "plain_height",
+      "src": "op6",
+      "value_id": "plain_height@1"
+    },
+    {
+      "dst": "op13",
+      "kind": "data",
+      "reason": "plain_weight",
+      "src": "op7",
+      "value_id": "plain_weight@1"
+    },
+    {
+      "dst": "op13",
+      "kind": "read_after_write",
+      "reason": "plain_weight",
+      "src": "op7",
+      "value_id": "plain_weight@1"
+    },
+    {
+      "dst": "op14",
+      "kind": "data",
+      "reason": "cipher_age",
+      "src": "op8",
+      "value_id": "cipher_age@1"
+    },
+    {
+      "dst": "op14",
+      "kind": "read_after_write",
+      "reason": "cipher_age",
+      "src": "op8",
+      "value_id": "cipher_age@1"
+    },
+    {
+      "dst": "op14",
+      "kind": "write_after_write",
+      "reason": "cipher_age",
+      "src": "op8",
+      "value_id": "cipher_age@2"
+    },
+    {
+      "dst": "op15",
+      "kind": "data",
+      "reason": "cipher_sbp",
+      "src": "op9",
+      "value_id": "cipher_sbp@1"
+    },
+    {
+      "dst": "op15",
+      "kind": "read_after_write",
+      "reason": "cipher_sbp",
+      "src": "op9",
+      "value_id": "cipher_sbp@1"
+    },
+    {
+      "dst": "op15",
+      "kind": "write_after_write",
+      "reason": "cipher_sbp",
+      "src": "op9",
+      "value_id": "cipher_sbp@2"
+    },
+    {
+      "dst": "op16",
+      "kind": "data",
+      "reason": "cipher_dbp",
+      "src": "op10",
+      "value_id": "cipher_dbp@1"
+    },
+    {
+      "dst": "op16",
+      "kind": "read_after_write",
+      "reason": "cipher_dbp",
+      "src": "op10",
+      "value_id": "cipher_dbp@1"
+    },
+    {
+      "dst": "op16",
+      "kind": "write_after_write",
+      "reason": "cipher_dbp",
+      "src": "op10",
+      "value_id": "cipher_dbp@2"
+    },
+    {
+      "dst": "op17",
+      "kind": "data",
+      "reason": "cipher_chl",
+      "src": "op11",
+      "value_id": "cipher_chl@1"
+    },
+    {
+      "dst": "op17",
+      "kind": "read_after_write",
+      "reason": "cipher_chl",
+      "src": "op11",
+      "value_id": "cipher_chl@1"
+    },
+    {
+      "dst": "op17",
+      "kind": "write_after_write",
+      "reason": "cipher_chl",
+      "src": "op11",
+      "value_id": "cipher_chl@2"
+    },
+    {
+      "dst": "op18",
+      "kind": "data",
+      "reason": "cipher_height",
+      "src": "op12",
+      "value_id": "cipher_height@1"
+    },
+    {
+      "dst": "op18",
+      "kind": "read_after_write",
+      "reason": "cipher_height",
+      "src": "op12",
+      "value_id": "cipher_height@1"
+    },
+    {
+      "dst": "op18",
+      "kind": "write_after_write",
+      "reason": "cipher_height",
+      "src": "op12",
+      "value_id": "cipher_height@2"
+    },
+    {
+      "dst": "op19",
+      "kind": "data",
+      "reason": "cipher_weight",
+      "src": "op13",
+      "value_id": "cipher_weight@1"
+    },
+    {
+      "dst": "op19",
+      "kind": "read_after_write",
+      "reason": "cipher_weight",
+      "src": "op13",
+      "value_id": "cipher_weight@1"
+    },
+    {
+      "dst": "op19",
+      "kind": "write_after_write",
+      "reason": "cipher_weight",
+      "src": "op13",
+      "value_id": "cipher_weight@2"
+    },
+    {
+      "dst": "op20",
+      "kind": "data",
+      "reason": "cipher_age",
+      "src": "op14",
+      "value_id": "cipher_age@2"
+    },
+    {
+      "dst": "op20",
+      "kind": "read_after_write",
+      "reason": "cipher_age",
+      "src": "op14",
+      "value_id": "cipher_age@2"
+    },
+    {
+      "dst": "op20",
+      "kind": "data",
+      "reason": "cipher_sbp",
+      "src": "op15",
+      "value_id": "cipher_sbp@2"
+    },
+    {
+      "dst": "op20",
+      "kind": "read_after_write",
+      "reason": "cipher_sbp",
+      "src": "op15",
+      "value_id": "cipher_sbp@2"
+    },
+    {
+      "dst": "op21",
+      "kind": "data",
+      "reason": "cipher_x",
+      "src": "op20",
+      "value_id": "cipher_x@1"
+    },
+    {
+      "dst": "op21",
+      "kind": "read_after_write",
+      "reason": "cipher_x",
+      "src": "op20",
+      "value_id": "cipher_x@1"
+    },
+    {
+      "dst": "op21",
+      "kind": "data",
+      "reason": "cipher_dbp",
+      "src": "op16",
+      "value_id": "cipher_dbp@2"
+    },
+    {
+      "dst": "op21",
+      "kind": "read_after_write",
+      "reason": "cipher_dbp",
+      "src": "op16",
+      "value_id": "cipher_dbp@2"
+    },
+    {
+      "dst": "op21",
+      "kind": "write_after_write",
+      "reason": "cipher_x",
+      "src": "op20",
+      "value_id": "cipher_x@2"
+    },
+    {
+      "dst": "op22",
+      "kind": "data",
+      "reason": "cipher_x",
+      "src": "op21",
+      "value_id": "cipher_x@2"
+    },
+    {
+      "dst": "op22",
+      "kind": "read_after_write",
+      "reason": "cipher_x",
+      "src": "op21",
+      "value_id": "cipher_x@2"
+    },
+    {
+      "dst": "op22",
+      "kind": "data",
+      "reason": "cipher_chl",
+      "src": "op17",
+      "value_id": "cipher_chl@2"
+    },
+    {
+      "dst": "op22",
+      "kind": "read_after_write",
+      "reason": "cipher_chl",
+      "src": "op17",
+      "value_id": "cipher_chl@2"
+    },
+    {
+      "dst": "op22",
+      "kind": "write_after_write",
+      "reason": "cipher_x",
+      "src": "op21",
+      "value_id": "cipher_x@3"
+    },
+    {
+      "dst": "op22",
+      "kind": "write_after_read",
+      "reason": "cipher_x",
+      "src": "op21",
+      "value_id": "cipher_x@3"
+    },
+    {
+      "dst": "op23",
+      "kind": "data",
+      "reason": "cipher_x",
+      "src": "op22",
+      "value_id": "cipher_x@3"
+    },
+    {
+      "dst": "op23",
+      "kind": "read_after_write",
+      "reason": "cipher_x",
+      "src": "op22",
+      "value_id": "cipher_x@3"
+    },
+    {
+      "dst": "op23",
+      "kind": "data",
+      "reason": "cipher_height",
+      "src": "op18",
+      "value_id": "cipher_height@2"
+    },
+    {
+      "dst": "op23",
+      "kind": "read_after_write",
+      "reason": "cipher_height",
+      "src": "op18",
+      "value_id": "cipher_height@2"
+    },
+    {
+      "dst": "op23",
+      "kind": "write_after_write",
+      "reason": "cipher_x",
+      "src": "op22",
+      "value_id": "cipher_x@4"
+    },
+    {
+      "dst": "op23",
+      "kind": "write_after_read",
+      "reason": "cipher_x",
+      "src": "op22",
+      "value_id": "cipher_x@4"
+    },
+    {
+      "dst": "op24",
+      "kind": "data",
+      "reason": "cipher_x",
+      "src": "op23",
+      "value_id": "cipher_x@4"
+    },
+    {
+      "dst": "op24",
+      "kind": "read_after_write",
+      "reason": "cipher_x",
+      "src": "op23",
+      "value_id": "cipher_x@4"
+    },
+    {
+      "dst": "op24",
+      "kind": "data",
+      "reason": "cipher_weight",
+      "src": "op19",
+      "value_id": "cipher_weight@2"
+    },
+    {
+      "dst": "op24",
+      "kind": "read_after_write",
+      "reason": "cipher_weight",
+      "src": "op19",
+      "value_id": "cipher_weight@2"
+    },
+    {
+      "dst": "op24",
+      "kind": "write_after_write",
+      "reason": "cipher_x",
+      "src": "op23",
+      "value_id": "cipher_x@5"
+    },
+    {
+      "dst": "op24",
+      "kind": "write_after_read",
+      "reason": "cipher_x",
+      "src": "op23",
+      "value_id": "cipher_x@5"
+    },
+    {
+      "dst": "op25",
+      "kind": "data",
+      "reason": "cipher_x",
+      "src": "op24",
+      "value_id": "cipher_x@5"
+    },
+    {
+      "dst": "op25",
+      "kind": "read_after_write",
+      "reason": "cipher_x",
+      "src": "op24",
+      "value_id": "cipher_x@5"
+    },
+    {
+      "dst": "op25",
+      "kind": "write_after_write",
+      "reason": "cipher_x",
+      "src": "op24",
+      "value_id": "cipher_x@6"
+    },
+    {
+      "dst": "op25",
+      "kind": "write_after_read",
+      "reason": "cipher_x",
+      "src": "op24",
+      "value_id": "cipher_x@6"
+    },
+    {
+      "dst": "op26",
+      "kind": "data",
+      "reason": "cipher_x",
+      "src": "op25",
+      "value_id": "cipher_x@6"
+    },
+    {
+      "dst": "op26",
+      "kind": "read_after_write",
+      "reason": "cipher_x",
+      "src": "op25",
+      "value_id": "cipher_x@6"
+    },
+    {
+      "dst": "op26",
+      "kind": "resource_use",
+      "reason": "relinKeys",
+      "src": "op1",
+      "value_id": "relinKeys@1"
+    },
+    {
+      "dst": "op27",
+      "kind": "data",
+      "reason": "cipher_x_square",
+      "src": "op26",
+      "value_id": "cipher_x_square@1"
+    },
+    {
+      "dst": "op27",
+      "kind": "read_after_write",
+      "reason": "cipher_x_square",
+      "src": "op26",
+      "value_id": "cipher_x_square@1"
+    },
+    {
+      "dst": "op27",
+      "kind": "write_after_write",
+      "reason": "cipher_x_square",
+      "src": "op26",
+      "value_id": "cipher_x_square@2"
+    },
+    {
+      "dst": "op28",
+      "kind": "data",
+      "reason": "cipher_x_square",
+      "src": "op27",
+      "value_id": "cipher_x_square@2"
+    },
+    {
+      "dst": "op28",
+      "kind": "read_after_write",
+      "reason": "cipher_x_square",
+      "src": "op27",
+      "value_id": "cipher_x_square@2"
+    },
+    {
+      "dst": "op29",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op28",
+      "value_id": "cipher_result@1"
+    },
+    {
+      "dst": "op29",
+      "kind": "read_after_write",
+      "reason": "cipher_result",
+      "src": "op28",
+      "value_id": "cipher_result@1"
+    },
+    {
+      "dst": "op29",
+      "kind": "write_after_write",
+      "reason": "cipher_result",
+      "src": "op28",
+      "value_id": "cipher_result@2"
+    },
+    {
+      "dst": "op30",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op29",
+      "value_id": "cipher_result@2"
+    },
+    {
+      "dst": "op30",
+      "kind": "read_after_write",
+      "reason": "cipher_result",
+      "src": "op29",
+      "value_id": "cipher_result@2"
+    },
+    {
+      "dst": "op30",
+      "kind": "write_after_write",
+      "reason": "cipher_result",
+      "src": "op29",
+      "value_id": "cipher_result@3"
+    },
+    {
+      "dst": "op30",
+      "kind": "write_after_read",
+      "reason": "cipher_result",
+      "src": "op29",
+      "value_id": "cipher_result@3"
+    },
+    {
+      "dst": "op31",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op30",
+      "value_id": "cipher_result@3"
+    },
+    {
+      "dst": "op31",
+      "kind": "read_after_write",
+      "reason": "cipher_result",
+      "src": "op30",
+      "value_id": "cipher_result@3"
+    },
+    {
+      "dst": "op31",
+      "kind": "data",
+      "reason": "cipher_x_square",
+      "src": "op27",
+      "value_id": "cipher_x_square@2"
+    },
+    {
+      "dst": "op31",
+      "kind": "read_after_write",
+      "reason": "cipher_x_square",
+      "src": "op27",
+      "value_id": "cipher_x_square@2"
+    },
+    {
+      "dst": "op31",
+      "kind": "resource_use",
+      "reason": "relinKeys",
+      "src": "op1",
+      "value_id": "relinKeys@1"
+    },
+    {
+      "dst": "op31",
+      "kind": "write_after_write",
+      "reason": "cipher_result",
+      "src": "op30",
+      "value_id": "cipher_result@4"
+    },
+    {
+      "dst": "op31",
+      "kind": "write_after_read",
+      "reason": "cipher_result",
+      "src": "op30",
+      "value_id": "cipher_result@4"
+    },
+    {
+      "dst": "op32",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op31",
+      "value_id": "cipher_result@4"
+    },
+    {
+      "dst": "op32",
+      "kind": "read_after_write",
+      "reason": "cipher_result",
+      "src": "op31",
+      "value_id": "cipher_result@4"
+    },
+    {
+      "dst": "op32",
+      "kind": "write_after_write",
+      "reason": "cipher_result",
+      "src": "op31",
+      "value_id": "cipher_result@5"
+    },
+    {
+      "dst": "op32",
+      "kind": "write_after_read",
+      "reason": "cipher_result",
+      "src": "op31",
+      "value_id": "cipher_result@5"
+    },
+    {
+      "dst": "op33",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op32",
+      "value_id": "cipher_result@5"
+    },
+    {
+      "dst": "op33",
+      "kind": "read_after_write",
+      "reason": "cipher_result",
+      "src": "op32",
+      "value_id": "cipher_result@5"
+    },
+    {
+      "dst": "op33",
+      "kind": "write_after_write",
+      "reason": "cipher_result",
+      "src": "op32",
+      "value_id": "cipher_result@6"
+    },
+    {
+      "dst": "op33",
+      "kind": "write_after_read",
+      "reason": "cipher_result",
+      "src": "op32",
+      "value_id": "cipher_result@6"
+    },
+    {
+      "dst": "op34",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op33",
+      "value_id": "cipher_result@6"
+    },
+    {
+      "dst": "op34",
+      "kind": "read_after_write",
+      "reason": "cipher_result",
+      "src": "op33",
+      "value_id": "cipher_result@6"
+    },
+    {
+      "dst": "op34",
+      "kind": "data",
+      "reason": "cipher_x_square",
+      "src": "op27",
+      "value_id": "cipher_x_square@2"
+    },
+    {
+      "dst": "op34",
+      "kind": "read_after_write",
+      "reason": "cipher_x_square",
+      "src": "op27",
+      "value_id": "cipher_x_square@2"
+    },
+    {
+      "dst": "op34",
+      "kind": "resource_use",
+      "reason": "relinKeys",
+      "src": "op1",
+      "value_id": "relinKeys@1"
+    },
+    {
+      "dst": "op34",
+      "kind": "write_after_write",
+      "reason": "cipher_result",
+      "src": "op33",
+      "value_id": "cipher_result@7"
+    },
+    {
+      "dst": "op34",
+      "kind": "write_after_read",
+      "reason": "cipher_result",
+      "src": "op33",
+      "value_id": "cipher_result@7"
+    },
+    {
+      "dst": "op35",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op34",
+      "value_id": "cipher_result@7"
+    },
+    {
+      "dst": "op35",
+      "kind": "read_after_write",
+      "reason": "cipher_result",
+      "src": "op34",
+      "value_id": "cipher_result@7"
+    },
+    {
+      "dst": "op35",
+      "kind": "write_after_write",
+      "reason": "cipher_result",
+      "src": "op34",
+      "value_id": "cipher_result@8"
+    },
+    {
+      "dst": "op35",
+      "kind": "write_after_read",
+      "reason": "cipher_result",
+      "src": "op34",
+      "value_id": "cipher_result@8"
+    },
+    {
+      "dst": "op36",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op35",
+      "value_id": "cipher_result@8"
+    },
+    {
+      "dst": "op36",
+      "kind": "read_after_write",
+      "reason": "cipher_result",
+      "src": "op35",
+      "value_id": "cipher_result@8"
+    },
+    {
+      "dst": "op36",
+      "kind": "write_after_write",
+      "reason": "cipher_result",
+      "src": "op35",
+      "value_id": "cipher_result@9"
+    },
+    {
+      "dst": "op36",
+      "kind": "write_after_read",
+      "reason": "cipher_result",
+      "src": "op35",
+      "value_id": "cipher_result@9"
+    },
+    {
+      "dst": "op37",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op36",
+      "value_id": "cipher_result@9"
+    },
+    {
+      "dst": "op37",
+      "kind": "read_after_write",
+      "reason": "cipher_result",
+      "src": "op36",
+      "value_id": "cipher_result@9"
+    },
+    {
+      "dst": "op37",
+      "kind": "data",
+      "reason": "cipher_x_square",
+      "src": "op27",
+      "value_id": "cipher_x_square@2"
+    },
+    {
+      "dst": "op37",
+      "kind": "read_after_write",
+      "reason": "cipher_x_square",
+      "src": "op27",
+      "value_id": "cipher_x_square@2"
+    },
+    {
+      "dst": "op37",
+      "kind": "resource_use",
+      "reason": "relinKeys",
+      "src": "op1",
+      "value_id": "relinKeys@1"
+    },
+    {
+      "dst": "op37",
+      "kind": "write_after_write",
+      "reason": "cipher_result",
+      "src": "op36",
+      "value_id": "cipher_result@10"
+    },
+    {
+      "dst": "op37",
+      "kind": "write_after_read",
+      "reason": "cipher_result",
+      "src": "op36",
+      "value_id": "cipher_result@10"
+    },
+    {
+      "dst": "op38",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op37",
+      "value_id": "cipher_result@10"
+    },
+    {
+      "dst": "op38",
+      "kind": "read_after_write",
+      "reason": "cipher_result",
+      "src": "op37",
+      "value_id": "cipher_result@10"
+    },
+    {
+      "dst": "op38",
+      "kind": "write_after_write",
+      "reason": "cipher_result",
+      "src": "op37",
+      "value_id": "cipher_result@11"
+    },
+    {
+      "dst": "op38",
+      "kind": "write_after_read",
+      "reason": "cipher_result",
+      "src": "op37",
+      "value_id": "cipher_result@11"
+    },
+    {
+      "dst": "op39",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op38",
+      "value_id": "cipher_result@11"
+    },
+    {
+      "dst": "op39",
+      "kind": "read_after_write",
+      "reason": "cipher_result",
+      "src": "op38",
+      "value_id": "cipher_result@11"
+    },
+    {
+      "dst": "op39",
+      "kind": "data",
+      "reason": "cipher_x",
+      "src": "op25",
+      "value_id": "cipher_x@6"
+    },
+    {
+      "dst": "op39",
+      "kind": "read_after_write",
+      "reason": "cipher_x",
+      "src": "op25",
+      "value_id": "cipher_x@6"
+    },
+    {
+      "dst": "op39",
+      "kind": "resource_use",
+      "reason": "relinKeys",
+      "src": "op1",
+      "value_id": "relinKeys@1"
+    },
+    {
+      "dst": "op39",
+      "kind": "write_after_write",
+      "reason": "cipher_result",
+      "src": "op38",
+      "value_id": "cipher_result@12"
+    },
+    {
+      "dst": "op39",
+      "kind": "write_after_read",
+      "reason": "cipher_result",
+      "src": "op38",
+      "value_id": "cipher_result@12"
+    },
+    {
+      "dst": "op40",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op39",
+      "value_id": "cipher_result@12"
+    },
+    {
+      "dst": "op40",
+      "kind": "read_after_write",
+      "reason": "cipher_result",
+      "src": "op39",
+      "value_id": "cipher_result@12"
+    },
+    {
+      "dst": "op40",
+      "kind": "write_after_write",
+      "reason": "cipher_result",
+      "src": "op39",
+      "value_id": "cipher_result@13"
+    },
+    {
+      "dst": "op40",
+      "kind": "write_after_read",
+      "reason": "cipher_result",
+      "src": "op39",
+      "value_id": "cipher_result@13"
+    },
+    {
+      "dst": "op41",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op40",
+      "value_id": "cipher_result@13"
+    },
+    {
+      "dst": "op41",
+      "kind": "read_after_write",
+      "reason": "cipher_result",
+      "src": "op40",
+      "value_id": "cipher_result@13"
+    },
+    {
+      "dst": "op42",
+      "kind": "data",
+      "reason": "cipher_result",
+      "src": "op40",
+      "value_id": "cipher_result@13"
+    },
+    {
+      "dst": "op42",
+      "kind": "read_after_write",
+      "reason": "cipher_result",
+      "src": "op40",
+      "value_id": "cipher_result@13"
+    },
+    {
+      "dst": "op43",
+      "kind": "data",
+      "reason": "plain_result",
+      "src": "op42",
+      "value_id": "plain_result@1"
+    },
+    {
+      "dst": "op43",
+      "kind": "read_after_write",
+      "reason": "plain_result",
+      "src": "op42",
+      "value_id": "plain_result@1"
+    }
+  ],
+  "entry_function": "main",
+  "frontend": "textual_fallback",
+  "metadata": {
+    "entry_span": {
+      "end": {
+        "column": 1,
+        "line": 208,
+        "offset": 6336
+      },
+      "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+      "start": {
+        "column": 5,
+        "line": 16,
+        "offset": 95
+      }
+    },
+    "frontend_mode": "textual_fallback",
+    "source_hash": "d7d645a90edde33fddbda782efb58c663ae3dfe8655e70e83f15acb5c004b67d"
+  },
+  "ops": [
+    {
+      "api_name": "create_public_key",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 2,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "kgen",
+        "source_text": "kgen.create_public_key(public_key)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "public_key"
+          }
+        }
+      ],
+      "inputs": [],
+      "op_id": "op0",
+      "op_kind": "create_public_key",
+      "origin_callstack": [],
+      "outputs": [
+        "public_key@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 39,
+          "line": 108,
+          "offset": 2386
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 108,
+          "offset": 2352
+        }
+      },
+      "stmt_id": "main@2352"
+    },
+    {
+      "api_name": "create_relin_keys",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 2,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "kgen",
+        "source_text": "kgen.create_relin_keys(relinKeys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "relinKeys"
+          }
+        }
+      ],
+      "inputs": [],
+      "op_id": "op1",
+      "op_kind": "create_relin_keys",
+      "origin_callstack": [],
+      "outputs": [
+        "relinKeys@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 38,
+          "line": 109,
+          "offset": 2425
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 109,
+          "offset": 2392
+        }
+      },
+      "stmt_id": "main@2392"
+    },
+    {
+      "api_name": "encode",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "ckks_param_literal.scale()"
+        ],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_encoder",
+        "source_text": "ckks_encoder.encode(message_age,ckks_param_literal.scale(), plain_age)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "plain_age"
+          }
+        }
+      ],
+      "inputs": [
+        "message_age@0"
+      ],
+      "op_id": "op2",
+      "op_kind": "encode",
+      "origin_callstack": [],
+      "outputs": [
+        "plain_age@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 75,
+          "line": 116,
+          "offset": 2616
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 116,
+          "offset": 2546
+        }
+      },
+      "stmt_id": "main@2546"
+    },
+    {
+      "api_name": "encode",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "ckks_param_literal.scale()"
+        ],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_encoder",
+        "source_text": "ckks_encoder.encode(message_sbp,ckks_param_literal.scale(), plain_sbp)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "plain_sbp"
+          }
+        }
+      ],
+      "inputs": [
+        "message_sbp@0"
+      ],
+      "op_id": "op3",
+      "op_kind": "encode",
+      "origin_callstack": [],
+      "outputs": [
+        "plain_sbp@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 75,
+          "line": 117,
+          "offset": 2692
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 117,
+          "offset": 2622
+        }
+      },
+      "stmt_id": "main@2622"
+    },
+    {
+      "api_name": "encode",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "ckks_param_literal.scale()"
+        ],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_encoder",
+        "source_text": "ckks_encoder.encode(message_dbp,ckks_param_literal.scale(), plain_dbp)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "plain_dbp"
+          }
+        }
+      ],
+      "inputs": [
+        "message_dbp@0"
+      ],
+      "op_id": "op4",
+      "op_kind": "encode",
+      "origin_callstack": [],
+      "outputs": [
+        "plain_dbp@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 75,
+          "line": 118,
+          "offset": 2768
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 118,
+          "offset": 2698
+        }
+      },
+      "stmt_id": "main@2698"
+    },
+    {
+      "api_name": "encode",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "ckks_param_literal.scale()"
+        ],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_encoder",
+        "source_text": "ckks_encoder.encode(message_chl, ckks_param_literal.scale(),plain_chl)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "plain_chl"
+          }
+        }
+      ],
+      "inputs": [
+        "message_chl@0"
+      ],
+      "op_id": "op5",
+      "op_kind": "encode",
+      "origin_callstack": [],
+      "outputs": [
+        "plain_chl@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 75,
+          "line": 119,
+          "offset": 2844
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 119,
+          "offset": 2774
+        }
+      },
+      "stmt_id": "main@2774"
+    },
+    {
+      "api_name": "encode",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "ckks_param_literal.scale()"
+        ],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_encoder",
+        "source_text": "ckks_encoder.encode(message_height,ckks_param_literal.scale(), plain_height)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "plain_height"
+          }
+        }
+      ],
+      "inputs": [
+        "message_height@0"
+      ],
+      "op_id": "op6",
+      "op_kind": "encode",
+      "origin_callstack": [],
+      "outputs": [
+        "plain_height@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 81,
+          "line": 120,
+          "offset": 2926
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 120,
+          "offset": 2850
+        }
+      },
+      "stmt_id": "main@2850"
+    },
+    {
+      "api_name": "encode",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "ckks_param_literal.scale()"
+        ],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_encoder",
+        "source_text": "ckks_encoder.encode(message_weight,ckks_param_literal.scale(), plain_weight)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "plain_weight"
+          }
+        }
+      ],
+      "inputs": [
+        "message_weight@0"
+      ],
+      "op_id": "op7",
+      "op_kind": "encode",
+      "origin_callstack": [],
+      "outputs": [
+        "plain_weight@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 81,
+          "line": 121,
+          "offset": 3008
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 121,
+          "offset": 2932
+        }
+      },
+      "stmt_id": "main@2932"
+    },
+    {
+      "api_name": "encrypt",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "enc",
+        "source_text": "enc.encrypt(plain_age,cipher_age)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_age"
+          }
+        }
+      ],
+      "inputs": [
+        "plain_age@1"
+      ],
+      "op_id": "op8",
+      "op_kind": "encrypt",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_age@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 38,
+          "line": 124,
+          "offset": 3053
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 124,
+          "offset": 3020
+        }
+      },
+      "stmt_id": "main@3020"
+    },
+    {
+      "api_name": "encrypt",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "enc",
+        "source_text": "enc.encrypt(plain_sbp,cipher_sbp)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_sbp"
+          }
+        }
+      ],
+      "inputs": [
+        "plain_sbp@1"
+      ],
+      "op_id": "op9",
+      "op_kind": "encrypt",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_sbp@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 38,
+          "line": 125,
+          "offset": 3092
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 125,
+          "offset": 3059
+        }
+      },
+      "stmt_id": "main@3059"
+    },
+    {
+      "api_name": "encrypt",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "enc",
+        "source_text": "enc.encrypt(plain_dbp,cipher_dbp)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_dbp"
+          }
+        }
+      ],
+      "inputs": [
+        "plain_dbp@1"
+      ],
+      "op_id": "op10",
+      "op_kind": "encrypt",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_dbp@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 38,
+          "line": 126,
+          "offset": 3131
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 126,
+          "offset": 3098
+        }
+      },
+      "stmt_id": "main@3098"
+    },
+    {
+      "api_name": "encrypt",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "enc",
+        "source_text": "enc.encrypt(plain_chl,cipher_chl)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_chl"
+          }
+        }
+      ],
+      "inputs": [
+        "plain_chl@1"
+      ],
+      "op_id": "op11",
+      "op_kind": "encrypt",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_chl@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 38,
+          "line": 127,
+          "offset": 3170
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 127,
+          "offset": 3137
+        }
+      },
+      "stmt_id": "main@3137"
+    },
+    {
+      "api_name": "encrypt",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "enc",
+        "source_text": "enc.encrypt(plain_height,cipher_height)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_height"
+          }
+        }
+      ],
+      "inputs": [
+        "plain_height@1"
+      ],
+      "op_id": "op12",
+      "op_kind": "encrypt",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_height@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 44,
+          "line": 128,
+          "offset": 3215
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 128,
+          "offset": 3176
+        }
+      },
+      "stmt_id": "main@3176"
+    },
+    {
+      "api_name": "encrypt",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "enc",
+        "source_text": "enc.encrypt(plain_weight,cipher_weight)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_weight"
+          }
+        }
+      ],
+      "inputs": [
+        "plain_weight@1"
+      ],
+      "op_id": "op13",
+      "op_kind": "encrypt",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_weight@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 44,
+          "line": 129,
+          "offset": 3260
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 129,
+          "offset": 3221
+        }
+      },
+      "stmt_id": "main@3221"
+    },
+    {
+      "api_name": "multiply_const",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "coef_age",
+          "scale"
+        ],
+        "cost": 3,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->multiply_const(cipher_age, coef_age, scale,cipher_age,ckks_encoder)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_age"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_age@1"
+      ],
+      "op_id": "op14",
+      "op_kind": "multiply_const",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_age@2"
+      ],
+      "resources": [
+        "ckks_encoder@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 82,
+          "line": 140,
+          "offset": 3535
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 140,
+          "offset": 3458
+        }
+      },
+      "stmt_id": "main@3458"
+    },
+    {
+      "api_name": "multiply_const",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "coef_sbp",
+          "scale"
+        ],
+        "cost": 3,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->multiply_const(cipher_sbp, coef_sbp, scale,cipher_sbp,ckks_encoder)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_sbp"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_sbp@1"
+      ],
+      "op_id": "op15",
+      "op_kind": "multiply_const",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_sbp@2"
+      ],
+      "resources": [
+        "ckks_encoder@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 82,
+          "line": 141,
+          "offset": 3618
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 141,
+          "offset": 3541
+        }
+      },
+      "stmt_id": "main@3541"
+    },
+    {
+      "api_name": "multiply_const",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "coef_dbp",
+          "scale"
+        ],
+        "cost": 3,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->multiply_const(cipher_dbp, coef_dbp, scale,cipher_dbp,ckks_encoder)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_dbp"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_dbp@1"
+      ],
+      "op_id": "op16",
+      "op_kind": "multiply_const",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_dbp@2"
+      ],
+      "resources": [
+        "ckks_encoder@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 82,
+          "line": 142,
+          "offset": 3701
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 142,
+          "offset": 3624
+        }
+      },
+      "stmt_id": "main@3624"
+    },
+    {
+      "api_name": "multiply_const",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "coef_chl",
+          "scale"
+        ],
+        "cost": 3,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->multiply_const(cipher_chl, coef_chl, scale,cipher_chl,ckks_encoder)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_chl"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_chl@1"
+      ],
+      "op_id": "op17",
+      "op_kind": "multiply_const",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_chl@2"
+      ],
+      "resources": [
+        "ckks_encoder@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 82,
+          "line": 143,
+          "offset": 3784
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 143,
+          "offset": 3707
+        }
+      },
+      "stmt_id": "main@3707"
+    },
+    {
+      "api_name": "multiply_const",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "coef_height",
+          "scale"
+        ],
+        "cost": 3,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->multiply_const(cipher_height, coef_height, scale,cipher_height,ckks_encoder)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_height"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_height@1"
+      ],
+      "op_id": "op18",
+      "op_kind": "multiply_const",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_height@2"
+      ],
+      "resources": [
+        "ckks_encoder@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 91,
+          "line": 144,
+          "offset": 3876
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 144,
+          "offset": 3790
+        }
+      },
+      "stmt_id": "main@3790"
+    },
+    {
+      "api_name": "multiply_const",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "coef_weight",
+          "scale"
+        ],
+        "cost": 3,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->multiply_const(cipher_weight, coef_weight, scale,cipher_weight,ckks_encoder)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_weight"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_weight@1"
+      ],
+      "op_id": "op19",
+      "op_kind": "multiply_const",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_weight@2"
+      ],
+      "resources": [
+        "ckks_encoder@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 91,
+          "line": 145,
+          "offset": 3968
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 145,
+          "offset": 3882
+        }
+      },
+      "stmt_id": "main@3882"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->add(cipher_age, cipher_sbp, cipher_x)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_x"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_age@2",
+        "cipher_sbp@2"
+      ],
+      "op_id": "op20",
+      "op_kind": "add",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_x@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 52,
+          "line": 147,
+          "offset": 4022
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 147,
+          "offset": 3975
+        }
+      },
+      "stmt_id": "main@3975"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->add(cipher_x, cipher_dbp, cipher_x)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_x"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_x@1",
+        "cipher_dbp@2"
+      ],
+      "op_id": "op21",
+      "op_kind": "add",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_x@2"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 50,
+          "line": 148,
+          "offset": 4073
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 148,
+          "offset": 4028
+        }
+      },
+      "stmt_id": "main@4028"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->add(cipher_x, cipher_chl, cipher_x)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_x"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_x@2",
+        "cipher_chl@2"
+      ],
+      "op_id": "op22",
+      "op_kind": "add",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_x@3"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 50,
+          "line": 149,
+          "offset": 4124
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 149,
+          "offset": 4079
+        }
+      },
+      "stmt_id": "main@4079"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->add(cipher_x, cipher_height, cipher_x)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_x"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_x@3",
+        "cipher_height@2"
+      ],
+      "op_id": "op23",
+      "op_kind": "add",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_x@4"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 53,
+          "line": 150,
+          "offset": 4178
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 150,
+          "offset": 4130
+        }
+      },
+      "stmt_id": "main@4130"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->add(cipher_x, cipher_weight, cipher_x)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_x"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_x@4",
+        "cipher_weight@2"
+      ],
+      "op_id": "op24",
+      "op_kind": "add",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_x@5"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 53,
+          "line": 151,
+          "offset": 4232
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 151,
+          "offset": 4184
+        }
+      },
+      "stmt_id": "main@4184"
+    },
+    {
+      "api_name": "rescale_dynamic",
+      "attrs": {
+        "barrier": true,
+        "constants": [
+          "scale"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->rescale_dynamic(cipher_x,cipher_x,scale)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_x"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_x@5"
+      ],
+      "op_id": "op25",
+      "op_kind": "rescale_dynamic",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_x@6"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 55,
+          "line": 152,
+          "offset": 4288
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 152,
+          "offset": 4238
+        }
+      },
+      "stmt_id": "main@4238"
+    },
+    {
+      "api_name": "multiply_relin_dynamic",
+      "attrs": {
+        "barrier": true,
+        "constants": [],
+        "cost": 6,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->multiply_relin_dynamic(cipher_x, cipher_x, cipher_x_square, relinKeys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_x_square"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_x@6",
+        "cipher_x@6"
+      ],
+      "op_id": "op26",
+      "op_kind": "multiply_relin_dynamic",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_x_square@1"
+      ],
+      "resources": [
+        "relinKeys@1"
+      ],
+      "source_span": {
+        "end": {
+          "column": 85,
+          "line": 156,
+          "offset": 4381
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 156,
+          "offset": 4301
+        }
+      },
+      "stmt_id": "main@4301"
+    },
+    {
+      "api_name": "rescale_dynamic",
+      "attrs": {
+        "barrier": true,
+        "constants": [
+          "scale"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->rescale_dynamic(cipher_x_square,cipher_x_square,scale)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_x_square"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_x_square@1"
+      ],
+      "op_id": "op27",
+      "op_kind": "rescale_dynamic",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_x_square@2"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 69,
+          "line": 160,
+          "offset": 4462
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 160,
+          "offset": 4398
+        }
+      },
+      "stmt_id": "main@4398"
+    },
+    {
+      "api_name": "multiply_const",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "taylor_coef_9",
+          "scale"
+        ],
+        "cost": 3,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->multiply_const(cipher_x_square, taylor_coef_9, scale,cipher_result,ckks_encoder)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_result"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_x_square@2"
+      ],
+      "op_id": "op28",
+      "op_kind": "multiply_const",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_result@1"
+      ],
+      "resources": [
+        "ckks_encoder@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 95,
+          "line": 163,
+          "offset": 4564
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 163,
+          "offset": 4474
+        }
+      },
+      "stmt_id": "main@4474"
+    },
+    {
+      "api_name": "add_const",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "taylor_coef_7"
+        ],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->add_const(cipher_result, taylor_coef_7, cipher_result,ckks_encoder)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_result"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_result@1"
+      ],
+      "op_id": "op29",
+      "op_kind": "add_const",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_result@2"
+      ],
+      "resources": [
+        "ckks_encoder@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 82,
+          "line": 165,
+          "offset": 4721
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 165,
+          "offset": 4644
+        }
+      },
+      "stmt_id": "main@4644"
+    },
+    {
+      "api_name": "rescale_dynamic",
+      "attrs": {
+        "barrier": true,
+        "constants": [
+          "scale"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->rescale_dynamic(cipher_result,cipher_result,scale)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_result"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_result@2"
+      ],
+      "op_id": "op30",
+      "op_kind": "rescale_dynamic",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_result@3"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 65,
+          "line": 169,
+          "offset": 4863
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 169,
+          "offset": 4803
+        }
+      },
+      "stmt_id": "main@4803"
+    },
+    {
+      "api_name": "multiply_relin_dynamic",
+      "attrs": {
+        "barrier": true,
+        "constants": [],
+        "cost": 6,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->multiply_relin_dynamic(cipher_result, cipher_x_square, cipher_result, relinKeys)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_result"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_result@3",
+        "cipher_x_square@2"
+      ],
+      "op_id": "op31",
+      "op_kind": "multiply_relin_dynamic",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_result@4"
+      ],
+      "resources": [
+        "relinKeys@1"
+      ],
+      "source_span": {
+        "end": {
+          "column": 95,
+          "line": 170,
+          "offset": 4959
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 170,
+          "offset": 4869
+        }
+      },
+      "stmt_id": "main@4869"
+    },
+    {
+      "api_name": "add_const",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "taylor_coef_5"
+        ],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->add_const(cipher_result, taylor_coef_5, cipher_result,ckks_encoder)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_result"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_result@4"
+      ],
+      "op_id": "op32",
+      "op_kind": "add_const",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_result@5"
+      ],
+      "resources": [
+        "ckks_encoder@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 82,
+          "line": 171,
+          "offset": 5042
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 171,
+          "offset": 4965
+        }
+      },
+      "stmt_id": "main@4965"
+    },
+    {
+      "api_name": "rescale_dynamic",
+      "attrs": {
+        "barrier": true,
+        "constants": [
+          "scale"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->rescale_dynamic(cipher_result,cipher_result,scale)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_result"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_result@5"
+      ],
+      "op_id": "op33",
+      "op_kind": "rescale_dynamic",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_result@6"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 65,
+          "line": 174,
+          "offset": 5110
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 174,
+          "offset": 5050
+        }
+      },
+      "stmt_id": "main@5050"
+    },
+    {
+      "api_name": "multiply_relin_dynamic",
+      "attrs": {
+        "barrier": true,
+        "constants": [],
+        "cost": 6,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->multiply_relin_dynamic(cipher_result, cipher_x_square, cipher_result, relinKeys)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_result"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_result@6",
+        "cipher_x_square@2"
+      ],
+      "op_id": "op34",
+      "op_kind": "multiply_relin_dynamic",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_result@7"
+      ],
+      "resources": [
+        "relinKeys@1"
+      ],
+      "source_span": {
+        "end": {
+          "column": 95,
+          "line": 175,
+          "offset": 5206
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 175,
+          "offset": 5116
+        }
+      },
+      "stmt_id": "main@5116"
+    },
+    {
+      "api_name": "add_const",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "taylor_coef_3"
+        ],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->add_const(cipher_result, taylor_coef_3, cipher_result,ckks_encoder)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_result"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_result@7"
+      ],
+      "op_id": "op35",
+      "op_kind": "add_const",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_result@8"
+      ],
+      "resources": [
+        "ckks_encoder@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 82,
+          "line": 176,
+          "offset": 5289
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 176,
+          "offset": 5212
+        }
+      },
+      "stmt_id": "main@5212"
+    },
+    {
+      "api_name": "rescale_dynamic",
+      "attrs": {
+        "barrier": true,
+        "constants": [
+          "scale"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->rescale_dynamic(cipher_result,cipher_result,scale)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_result"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_result@8"
+      ],
+      "op_id": "op36",
+      "op_kind": "rescale_dynamic",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_result@9"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 65,
+          "line": 179,
+          "offset": 5357
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 179,
+          "offset": 5297
+        }
+      },
+      "stmt_id": "main@5297"
+    },
+    {
+      "api_name": "multiply_relin_dynamic",
+      "attrs": {
+        "barrier": true,
+        "constants": [],
+        "cost": 6,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->multiply_relin_dynamic(cipher_result, cipher_x_square, cipher_result, relinKeys)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_result"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_result@9",
+        "cipher_x_square@2"
+      ],
+      "op_id": "op37",
+      "op_kind": "multiply_relin_dynamic",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_result@10"
+      ],
+      "resources": [
+        "relinKeys@1"
+      ],
+      "source_span": {
+        "end": {
+          "column": 95,
+          "line": 180,
+          "offset": 5453
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 180,
+          "offset": 5363
+        }
+      },
+      "stmt_id": "main@5363"
+    },
+    {
+      "api_name": "add_const",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "taylor_coef_1"
+        ],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->add_const(cipher_result, taylor_coef_1, cipher_result,ckks_encoder)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_result"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_result@10"
+      ],
+      "op_id": "op38",
+      "op_kind": "add_const",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_result@11"
+      ],
+      "resources": [
+        "ckks_encoder@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 82,
+          "line": 181,
+          "offset": 5536
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 181,
+          "offset": 5459
+        }
+      },
+      "stmt_id": "main@5459"
+    },
+    {
+      "api_name": "multiply_relin_dynamic",
+      "attrs": {
+        "barrier": true,
+        "constants": [],
+        "cost": 6,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->multiply_relin_dynamic(cipher_result, cipher_x, cipher_result, relinKeys)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_result"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_result@11",
+        "cipher_x@6"
+      ],
+      "op_id": "op39",
+      "op_kind": "multiply_relin_dynamic",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_result@12"
+      ],
+      "resources": [
+        "relinKeys@1"
+      ],
+      "source_span": {
+        "end": {
+          "column": 88,
+          "line": 184,
+          "offset": 5627
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 184,
+          "offset": 5544
+        }
+      },
+      "stmt_id": "main@5544"
+    },
+    {
+      "api_name": "add_const",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "taylor_coef_0"
+        ],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->add_const(cipher_result, taylor_coef_0, cipher_result,ckks_encoder)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cipher_result"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_result@12"
+      ],
+      "op_id": "op40",
+      "op_kind": "add_const",
+      "origin_callstack": [],
+      "outputs": [
+        "cipher_result@13"
+      ],
+      "resources": [
+        "ckks_encoder@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 82,
+          "line": 185,
+          "offset": 5710
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 185,
+          "offset": 5633
+        }
+      },
+      "stmt_id": "main@5633"
+    },
+    {
+      "api_name": "read",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva->read(cipher_result)"
+      },
+      "effects": [],
+      "inputs": [
+        "cipher_result@13"
+      ],
+      "op_id": "op41",
+      "op_kind": "read",
+      "origin_callstack": [],
+      "outputs": [],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 34,
+          "line": 187,
+          "offset": 5746
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 187,
+          "offset": 5717
+        }
+      },
+      "stmt_id": "main@5717"
+    },
+    {
+      "api_name": "decrypt",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "dec",
+        "source_text": "dec.decrypt(cipher_result, plain_result)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "plain_result"
+          }
+        }
+      ],
+      "inputs": [
+        "cipher_result@13"
+      ],
+      "op_id": "op42",
+      "op_kind": "decrypt",
+      "origin_callstack": [],
+      "outputs": [
+        "plain_result@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 45,
+          "line": 193,
+          "offset": 6003
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 193,
+          "offset": 5963
+        }
+      },
+      "stmt_id": "main@5963"
+    },
+    {
+      "api_name": "decode",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_encoder",
+        "source_text": "ckks_encoder.decode(plain_result, vec_result)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "vec_result"
+          }
+        }
+      ],
+      "inputs": [
+        "plain_result@1"
+      ],
+      "op_id": "op43",
+      "op_kind": "decode",
+      "origin_callstack": [],
+      "outputs": [
+        "vec_result@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 50,
+          "line": 194,
+          "offset": 6054
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 194,
+          "offset": 6009
+        }
+      },
+      "stmt_id": "main@6009"
+    },
+    {
+      "api_name": "return",
+      "attrs": {
+        "barrier": false,
+        "cost": 1,
+        "source_text": "return 0"
+      },
+      "effects": [],
+      "inputs": [
+        "0@0"
+      ],
+      "op_id": "op44",
+      "op_kind": "return",
+      "origin_callstack": [],
+      "outputs": [
+        "__return__@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 13,
+          "line": 207,
+          "offset": 6334
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 207,
+          "offset": 6326
+        }
+      },
+      "stmt_id": "main@6326"
+    }
+  ],
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+  "values": [
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 123,
+          "line": 64,
+          "offset": 1133
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 64,
+          "offset": 1015
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "message_age"
+      },
+      "value_id": "message_age@0",
+      "value_kind": "complex_vector"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 123,
+          "line": 64,
+          "offset": 1133
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 64,
+          "offset": 1015
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "message_sbp"
+      },
+      "value_id": "message_sbp@0",
+      "value_kind": "complex_vector"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 123,
+          "line": 64,
+          "offset": 1133
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 64,
+          "offset": 1015
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "message_dbp"
+      },
+      "value_id": "message_dbp@0",
+      "value_kind": "complex_vector"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 123,
+          "line": 64,
+          "offset": 1133
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 64,
+          "offset": 1015
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "message_chl"
+      },
+      "value_id": "message_chl@0",
+      "value_kind": "complex_vector"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 123,
+          "line": 64,
+          "offset": 1133
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 64,
+          "offset": 1015
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "message_height"
+      },
+      "value_id": "message_height@0",
+      "value_kind": "complex_vector"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 123,
+          "line": 64,
+          "offset": 1133
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 64,
+          "offset": 1015
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "message_weight"
+      },
+      "value_id": "message_weight@0",
+      "value_kind": "complex_vector"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 123,
+          "line": 64,
+          "offset": 1133
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 64,
+          "offset": 1015
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "vec_result"
+      },
+      "value_id": "vec_result@0",
+      "value_kind": "complex_vector"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 99,
+          "line": 97,
+          "offset": 2048
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 97,
+          "offset": 1954
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "plain_age"
+      },
+      "value_id": "plain_age@0",
+      "value_kind": "plaintext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 99,
+          "line": 97,
+          "offset": 2048
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 97,
+          "offset": 1954
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "plain_sbp"
+      },
+      "value_id": "plain_sbp@0",
+      "value_kind": "plaintext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 99,
+          "line": 97,
+          "offset": 2048
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 97,
+          "offset": 1954
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "plain_dbp"
+      },
+      "value_id": "plain_dbp@0",
+      "value_kind": "plaintext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 99,
+          "line": 97,
+          "offset": 2048
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 97,
+          "offset": 1954
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "plain_chl"
+      },
+      "value_id": "plain_chl@0",
+      "value_kind": "plaintext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 99,
+          "line": 97,
+          "offset": 2048
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 97,
+          "offset": 1954
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "plain_height"
+      },
+      "value_id": "plain_height@0",
+      "value_kind": "plaintext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 99,
+          "line": 97,
+          "offset": 2048
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 97,
+          "offset": 1954
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "plain_weight"
+      },
+      "value_id": "plain_weight@0",
+      "value_kind": "plaintext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 99,
+          "line": 97,
+          "offset": 2048
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 97,
+          "offset": 1954
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "plain_result"
+      },
+      "value_id": "plain_result@0",
+      "value_kind": "plaintext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 134,
+          "line": 98,
+          "offset": 2183
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 98,
+          "offset": 2054
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_age"
+      },
+      "value_id": "cipher_age@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 134,
+          "line": 98,
+          "offset": 2183
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 98,
+          "offset": 2054
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_sbp"
+      },
+      "value_id": "cipher_sbp@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 134,
+          "line": 98,
+          "offset": 2183
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 98,
+          "offset": 2054
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_dbp"
+      },
+      "value_id": "cipher_dbp@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 134,
+          "line": 98,
+          "offset": 2183
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 98,
+          "offset": 2054
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_chl"
+      },
+      "value_id": "cipher_chl@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 134,
+          "line": 98,
+          "offset": 2183
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 98,
+          "offset": 2054
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_height"
+      },
+      "value_id": "cipher_height@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 134,
+          "line": 98,
+          "offset": 2183
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 98,
+          "offset": 2054
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_weight"
+      },
+      "value_id": "cipher_weight@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 134,
+          "line": 98,
+          "offset": 2183
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 98,
+          "offset": 2054
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_x"
+      },
+      "value_id": "cipher_x@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 134,
+          "line": 98,
+          "offset": 2183
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 98,
+          "offset": 2054
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_x_square"
+      },
+      "value_id": "cipher_x_square@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 134,
+          "line": 98,
+          "offset": 2183
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 98,
+          "offset": 2054
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_result"
+      },
+      "value_id": "cipher_result@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 25,
+          "line": 99,
+          "offset": 2209
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 99,
+          "offset": 2189
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "public_key"
+      },
+      "value_id": "public_key@0",
+      "value_kind": "public_key"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 24,
+          "line": 100,
+          "offset": 2234
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 100,
+          "offset": 2215
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "relinKeys"
+      },
+      "value_id": "relinKeys@0",
+      "value_kind": "relin_keys"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 24,
+          "line": 102,
+          "offset": 2264
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 102,
+          "offset": 2245
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "conjKeys"
+      },
+      "value_id": "conjKeys@0",
+      "value_kind": "galois_keys"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op0",
+      "source_span": {
+        "end": {
+          "column": 39,
+          "line": 108,
+          "offset": 2386
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 108,
+          "offset": 2352
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "public_key"
+      },
+      "value_id": "public_key@1",
+      "value_kind": "public_key"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op1",
+      "source_span": {
+        "end": {
+          "column": 38,
+          "line": 109,
+          "offset": 2425
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 109,
+          "offset": 2392
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "relinKeys"
+      },
+      "value_id": "relinKeys@1",
+      "value_kind": "relin_keys"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op2",
+      "source_span": {
+        "end": {
+          "column": 75,
+          "line": 116,
+          "offset": 2616
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 116,
+          "offset": 2546
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "plain_age"
+      },
+      "value_id": "plain_age@1",
+      "value_kind": "plaintext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op3",
+      "source_span": {
+        "end": {
+          "column": 75,
+          "line": 117,
+          "offset": 2692
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 117,
+          "offset": 2622
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "plain_sbp"
+      },
+      "value_id": "plain_sbp@1",
+      "value_kind": "plaintext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op4",
+      "source_span": {
+        "end": {
+          "column": 75,
+          "line": 118,
+          "offset": 2768
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 118,
+          "offset": 2698
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "plain_dbp"
+      },
+      "value_id": "plain_dbp@1",
+      "value_kind": "plaintext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op5",
+      "source_span": {
+        "end": {
+          "column": 75,
+          "line": 119,
+          "offset": 2844
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 119,
+          "offset": 2774
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "plain_chl"
+      },
+      "value_id": "plain_chl@1",
+      "value_kind": "plaintext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op6",
+      "source_span": {
+        "end": {
+          "column": 81,
+          "line": 120,
+          "offset": 2926
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 120,
+          "offset": 2850
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "plain_height"
+      },
+      "value_id": "plain_height@1",
+      "value_kind": "plaintext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op7",
+      "source_span": {
+        "end": {
+          "column": 81,
+          "line": 121,
+          "offset": 3008
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 121,
+          "offset": 2932
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "plain_weight"
+      },
+      "value_id": "plain_weight@1",
+      "value_kind": "plaintext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op8",
+      "source_span": {
+        "end": {
+          "column": 38,
+          "line": 124,
+          "offset": 3053
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 124,
+          "offset": 3020
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_age"
+      },
+      "value_id": "cipher_age@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op9",
+      "source_span": {
+        "end": {
+          "column": 38,
+          "line": 125,
+          "offset": 3092
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 125,
+          "offset": 3059
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_sbp"
+      },
+      "value_id": "cipher_sbp@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op10",
+      "source_span": {
+        "end": {
+          "column": 38,
+          "line": 126,
+          "offset": 3131
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 126,
+          "offset": 3098
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_dbp"
+      },
+      "value_id": "cipher_dbp@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op11",
+      "source_span": {
+        "end": {
+          "column": 38,
+          "line": 127,
+          "offset": 3170
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 127,
+          "offset": 3137
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_chl"
+      },
+      "value_id": "cipher_chl@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op12",
+      "source_span": {
+        "end": {
+          "column": 44,
+          "line": 128,
+          "offset": 3215
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 128,
+          "offset": 3176
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_height"
+      },
+      "value_id": "cipher_height@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op13",
+      "source_span": {
+        "end": {
+          "column": 44,
+          "line": 129,
+          "offset": 3260
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 129,
+          "offset": 3221
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_weight"
+      },
+      "value_id": "cipher_weight@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 82,
+          "line": 140,
+          "offset": 3535
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 140,
+          "offset": 3458
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ckks_encoder"
+      },
+      "value_id": "ckks_encoder@0",
+      "value_kind": "resource"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op14",
+      "source_span": {
+        "end": {
+          "column": 82,
+          "line": 140,
+          "offset": 3535
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 140,
+          "offset": 3458
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_age"
+      },
+      "value_id": "cipher_age@2",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op15",
+      "source_span": {
+        "end": {
+          "column": 82,
+          "line": 141,
+          "offset": 3618
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 141,
+          "offset": 3541
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_sbp"
+      },
+      "value_id": "cipher_sbp@2",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op16",
+      "source_span": {
+        "end": {
+          "column": 82,
+          "line": 142,
+          "offset": 3701
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 142,
+          "offset": 3624
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_dbp"
+      },
+      "value_id": "cipher_dbp@2",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op17",
+      "source_span": {
+        "end": {
+          "column": 82,
+          "line": 143,
+          "offset": 3784
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 143,
+          "offset": 3707
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_chl"
+      },
+      "value_id": "cipher_chl@2",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op18",
+      "source_span": {
+        "end": {
+          "column": 91,
+          "line": 144,
+          "offset": 3876
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 144,
+          "offset": 3790
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_height"
+      },
+      "value_id": "cipher_height@2",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op19",
+      "source_span": {
+        "end": {
+          "column": 91,
+          "line": 145,
+          "offset": 3968
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 145,
+          "offset": 3882
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_weight"
+      },
+      "value_id": "cipher_weight@2",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op20",
+      "source_span": {
+        "end": {
+          "column": 52,
+          "line": 147,
+          "offset": 4022
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 147,
+          "offset": 3975
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_x"
+      },
+      "value_id": "cipher_x@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op21",
+      "source_span": {
+        "end": {
+          "column": 50,
+          "line": 148,
+          "offset": 4073
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 148,
+          "offset": 4028
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_x"
+      },
+      "value_id": "cipher_x@2",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op22",
+      "source_span": {
+        "end": {
+          "column": 50,
+          "line": 149,
+          "offset": 4124
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 149,
+          "offset": 4079
+        }
+      },
+      "ssa_index": 3,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_x"
+      },
+      "value_id": "cipher_x@3",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op23",
+      "source_span": {
+        "end": {
+          "column": 53,
+          "line": 150,
+          "offset": 4178
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 150,
+          "offset": 4130
+        }
+      },
+      "ssa_index": 4,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_x"
+      },
+      "value_id": "cipher_x@4",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op24",
+      "source_span": {
+        "end": {
+          "column": 53,
+          "line": 151,
+          "offset": 4232
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 151,
+          "offset": 4184
+        }
+      },
+      "ssa_index": 5,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_x"
+      },
+      "value_id": "cipher_x@5",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op25",
+      "source_span": {
+        "end": {
+          "column": 55,
+          "line": 152,
+          "offset": 4288
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 152,
+          "offset": 4238
+        }
+      },
+      "ssa_index": 6,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_x"
+      },
+      "value_id": "cipher_x@6",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op26",
+      "source_span": {
+        "end": {
+          "column": 85,
+          "line": 156,
+          "offset": 4381
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 156,
+          "offset": 4301
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_x_square"
+      },
+      "value_id": "cipher_x_square@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op27",
+      "source_span": {
+        "end": {
+          "column": 69,
+          "line": 160,
+          "offset": 4462
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 160,
+          "offset": 4398
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_x_square"
+      },
+      "value_id": "cipher_x_square@2",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op28",
+      "source_span": {
+        "end": {
+          "column": 95,
+          "line": 163,
+          "offset": 4564
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 163,
+          "offset": 4474
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_result"
+      },
+      "value_id": "cipher_result@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op29",
+      "source_span": {
+        "end": {
+          "column": 82,
+          "line": 165,
+          "offset": 4721
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 165,
+          "offset": 4644
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_result"
+      },
+      "value_id": "cipher_result@2",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op30",
+      "source_span": {
+        "end": {
+          "column": 65,
+          "line": 169,
+          "offset": 4863
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 169,
+          "offset": 4803
+        }
+      },
+      "ssa_index": 3,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_result"
+      },
+      "value_id": "cipher_result@3",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op31",
+      "source_span": {
+        "end": {
+          "column": 95,
+          "line": 170,
+          "offset": 4959
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 170,
+          "offset": 4869
+        }
+      },
+      "ssa_index": 4,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_result"
+      },
+      "value_id": "cipher_result@4",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op32",
+      "source_span": {
+        "end": {
+          "column": 82,
+          "line": 171,
+          "offset": 5042
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 171,
+          "offset": 4965
+        }
+      },
+      "ssa_index": 5,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_result"
+      },
+      "value_id": "cipher_result@5",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op33",
+      "source_span": {
+        "end": {
+          "column": 65,
+          "line": 174,
+          "offset": 5110
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 174,
+          "offset": 5050
+        }
+      },
+      "ssa_index": 6,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_result"
+      },
+      "value_id": "cipher_result@6",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op34",
+      "source_span": {
+        "end": {
+          "column": 95,
+          "line": 175,
+          "offset": 5206
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 175,
+          "offset": 5116
+        }
+      },
+      "ssa_index": 7,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_result"
+      },
+      "value_id": "cipher_result@7",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op35",
+      "source_span": {
+        "end": {
+          "column": 82,
+          "line": 176,
+          "offset": 5289
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 176,
+          "offset": 5212
+        }
+      },
+      "ssa_index": 8,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_result"
+      },
+      "value_id": "cipher_result@8",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op36",
+      "source_span": {
+        "end": {
+          "column": 65,
+          "line": 179,
+          "offset": 5357
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 179,
+          "offset": 5297
+        }
+      },
+      "ssa_index": 9,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_result"
+      },
+      "value_id": "cipher_result@9",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op37",
+      "source_span": {
+        "end": {
+          "column": 95,
+          "line": 180,
+          "offset": 5453
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 180,
+          "offset": 5363
+        }
+      },
+      "ssa_index": 10,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_result"
+      },
+      "value_id": "cipher_result@10",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op38",
+      "source_span": {
+        "end": {
+          "column": 82,
+          "line": 181,
+          "offset": 5536
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 181,
+          "offset": 5459
+        }
+      },
+      "ssa_index": 11,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_result"
+      },
+      "value_id": "cipher_result@11",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op39",
+      "source_span": {
+        "end": {
+          "column": 88,
+          "line": 184,
+          "offset": 5627
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 184,
+          "offset": 5544
+        }
+      },
+      "ssa_index": 12,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_result"
+      },
+      "value_id": "cipher_result@12",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op40",
+      "source_span": {
+        "end": {
+          "column": 82,
+          "line": 185,
+          "offset": 5710
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 185,
+          "offset": 5633
+        }
+      },
+      "ssa_index": 13,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher_result"
+      },
+      "value_id": "cipher_result@13",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op42",
+      "source_span": {
+        "end": {
+          "column": 45,
+          "line": 193,
+          "offset": 6003
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 193,
+          "offset": 5963
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "plain_result"
+      },
+      "value_id": "plain_result@1",
+      "value_kind": "plaintext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op43",
+      "source_span": {
+        "end": {
+          "column": 50,
+          "line": 194,
+          "offset": 6054
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 194,
+          "offset": 6009
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "vec_result"
+      },
+      "value_id": "vec_result@1",
+      "value_kind": "complex_vector"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 13,
+          "line": 207,
+          "offset": 6334
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 207,
+          "offset": 6326
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "0"
+      },
+      "value_id": "0@0",
+      "value_kind": "external"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "main",
+      "producer_op_id": "op44",
+      "source_span": {
+        "end": {
+          "column": 13,
+          "line": 207,
+          "offset": 6334
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+        "start": {
+          "column": 5,
+          "line": 207,
+          "offset": 6326
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "__return__"
+      },
+      "value_id": "__return__@1",
+      "value_kind": "external"
+    }
+  ]
+}

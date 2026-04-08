@@ -1,0 +1,29 @@
+digraph hedag_v2 {
+  rankdir=LR;
+  node [shape=box, style="rounded,filled", fontname="Helvetica"];
+  edge [fontname="Helvetica"];
+  subgraph cluster_layer_0 {
+    label="layer 0";
+    color="#d1d5db";
+    op0 [label="op0\nmultiply\nline 262\nlayer 0\ncost 5\nout prod@1", fillcolor="#e5e7eb"];
+    op2 [label="op2\nntt_fwd\nline 305\nlayer 0\ncost 3\nout powers_at_this_bundle_idx[power]@1", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_1 {
+    label="layer 1";
+    color="#d1d5db";
+    op1 [label="op1\nrelinearize\nline 266\nlayer 1\ncost 4\nout prod@2", fillcolor="#dbeafe"];
+  }
+  subgraph cluster_layer_2 {
+    label="layer 2";
+    color="#d1d5db";
+    op3 [label="op3\ndrop_modulus\nline 307\nlayer 2\ncost 4\nout powers_at_this_bundle_idx[power]@2", fillcolor="#dbeafe"];
+  }
+  subgraph cluster_layer_3 {
+    label="layer 3";
+    color="#d1d5db";
+    op4 [label="op4\ndrop_modulus\nline 320\nlayer 3\ncost 4\nout powers_at_this_bundle_idx[power]@3", fillcolor="#dbeafe"];
+  }
+  op0 -> op1 [color="#f97316", label="prod"];
+  op2 -> op3 [color="#f97316", label="powers_at_this_bundle_idx[power]"];
+  op3 -> op4 [color="#f97316", label="powers_at_this_bundle_idx[power]"];
+}

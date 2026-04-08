@@ -1,0 +1,66 @@
+{
+  "critical_path_cost": 7,
+  "diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (n <= 0)\n    {\n        POSEIDON_THROW(invalid_argument_error, \"n cannot be negative\");\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 681,
+          "offset": 22557
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+        "start": {
+          "column": 5,
+          "line": 678,
+          "offset": 22463
+        }
+      },
+      "stmt_id": "accumulate_top_n@22463",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "while (n)\n    {\n        Ciphertext ciph_tmp;\n        if (n & 1 && n != 1)\n        {\n            bottom_nth += 1 << cnt;\n            ckks_eva->rotate(ciph_rotate_sum, ciph_tmp, const_n - bottom_nth, rot_keys);\n            ckks_eva->add(ciph_sum, ciph_tmp, ciph_sum);\n        }\n        n = n >> 1;\n        if (n)\n        {\n            ckks_eva->rotate(ciph_rotate_sum, ciph_tmp, 1 << cnt, rot_keys);\n            ckks_eva->add(ciph_rotate_sum, ciph_tmp, ciph_rotate_sum);\n        }\n        ++cnt;\n    }"
+      },
+      "reason": "unsupported control flow: while",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 710,
+          "offset": 23389
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+        "start": {
+          "column": 5,
+          "line": 694,
+          "offset": 22891
+        }
+      },
+      "stmt_id": "accumulate_top_n@22891",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "edges": 7,
+  "entry_function": "accumulate_top_n",
+  "frontend": "textual_fallback",
+  "layers": [
+    "layer 0: op0",
+    "layer 1: op1",
+    "layer 2: op2",
+    "layer 3: op3"
+  ],
+  "max_parallel_width": 1,
+  "ops": 4,
+  "rewrite_status": "blocked",
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+  "values": 14
+}

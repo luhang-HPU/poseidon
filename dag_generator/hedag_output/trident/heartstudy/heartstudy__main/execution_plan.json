@@ -1,0 +1,710 @@
+{
+  "barriers": [
+    "op25",
+    "op26",
+    "op27",
+    "op30",
+    "op31",
+    "op33",
+    "op34",
+    "op36",
+    "op37",
+    "op39"
+  ],
+  "critical_path_cost": 76,
+  "entry_function": "main",
+  "layers": [
+    [
+      "op0",
+      "op1",
+      "op2",
+      "op3",
+      "op4",
+      "op5",
+      "op6",
+      "op7",
+      "op44"
+    ],
+    [
+      "op8",
+      "op9",
+      "op10",
+      "op11",
+      "op12",
+      "op13"
+    ],
+    [
+      "op14",
+      "op15",
+      "op16",
+      "op17",
+      "op18",
+      "op19"
+    ],
+    [
+      "op20"
+    ],
+    [
+      "op21"
+    ],
+    [
+      "op22"
+    ],
+    [
+      "op23"
+    ],
+    [
+      "op24"
+    ],
+    [
+      "op25"
+    ],
+    [
+      "op26"
+    ],
+    [
+      "op27"
+    ],
+    [
+      "op28"
+    ],
+    [
+      "op29"
+    ],
+    [
+      "op30"
+    ],
+    [
+      "op31"
+    ],
+    [
+      "op32"
+    ],
+    [
+      "op33"
+    ],
+    [
+      "op34"
+    ],
+    [
+      "op35"
+    ],
+    [
+      "op36"
+    ],
+    [
+      "op37"
+    ],
+    [
+      "op38"
+    ],
+    [
+      "op39"
+    ],
+    [
+      "op40"
+    ],
+    [
+      "op41",
+      "op42"
+    ],
+    [
+      "op43"
+    ]
+  ],
+  "max_parallel_width": 9,
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "op_schedule": {
+    "op0": {
+      "barrier": false,
+      "cost": 2,
+      "critical": false,
+      "earliest_finish": 2,
+      "earliest_start": 0,
+      "latest_finish": 76,
+      "latest_start": 74,
+      "layer": 0,
+      "slack": 74,
+      "source_line": 108
+    },
+    "op1": {
+      "barrier": false,
+      "cost": 2,
+      "critical": false,
+      "earliest_finish": 2,
+      "earliest_start": 0,
+      "latest_finish": 17,
+      "latest_start": 15,
+      "layer": 0,
+      "slack": 15,
+      "source_line": 109
+    },
+    "op10": {
+      "barrier": false,
+      "cost": 4,
+      "critical": false,
+      "earliest_finish": 5,
+      "earliest_start": 1,
+      "latest_finish": 6,
+      "latest_start": 2,
+      "layer": 1,
+      "slack": 1,
+      "source_line": 126
+    },
+    "op11": {
+      "barrier": false,
+      "cost": 4,
+      "critical": false,
+      "earliest_finish": 5,
+      "earliest_start": 1,
+      "latest_finish": 7,
+      "latest_start": 3,
+      "layer": 1,
+      "slack": 2,
+      "source_line": 127
+    },
+    "op12": {
+      "barrier": false,
+      "cost": 4,
+      "critical": false,
+      "earliest_finish": 5,
+      "earliest_start": 1,
+      "latest_finish": 8,
+      "latest_start": 4,
+      "layer": 1,
+      "slack": 3,
+      "source_line": 128
+    },
+    "op13": {
+      "barrier": false,
+      "cost": 4,
+      "critical": false,
+      "earliest_finish": 5,
+      "earliest_start": 1,
+      "latest_finish": 9,
+      "latest_start": 5,
+      "layer": 1,
+      "slack": 4,
+      "source_line": 129
+    },
+    "op14": {
+      "barrier": false,
+      "cost": 3,
+      "critical": true,
+      "earliest_finish": 8,
+      "earliest_start": 5,
+      "latest_finish": 8,
+      "latest_start": 5,
+      "layer": 2,
+      "slack": 0,
+      "source_line": 140
+    },
+    "op15": {
+      "barrier": false,
+      "cost": 3,
+      "critical": true,
+      "earliest_finish": 8,
+      "earliest_start": 5,
+      "latest_finish": 8,
+      "latest_start": 5,
+      "layer": 2,
+      "slack": 0,
+      "source_line": 141
+    },
+    "op16": {
+      "barrier": false,
+      "cost": 3,
+      "critical": false,
+      "earliest_finish": 8,
+      "earliest_start": 5,
+      "latest_finish": 9,
+      "latest_start": 6,
+      "layer": 2,
+      "slack": 1,
+      "source_line": 142
+    },
+    "op17": {
+      "barrier": false,
+      "cost": 3,
+      "critical": false,
+      "earliest_finish": 8,
+      "earliest_start": 5,
+      "latest_finish": 10,
+      "latest_start": 7,
+      "layer": 2,
+      "slack": 2,
+      "source_line": 143
+    },
+    "op18": {
+      "barrier": false,
+      "cost": 3,
+      "critical": false,
+      "earliest_finish": 8,
+      "earliest_start": 5,
+      "latest_finish": 11,
+      "latest_start": 8,
+      "layer": 2,
+      "slack": 3,
+      "source_line": 144
+    },
+    "op19": {
+      "barrier": false,
+      "cost": 3,
+      "critical": false,
+      "earliest_finish": 8,
+      "earliest_start": 5,
+      "latest_finish": 12,
+      "latest_start": 9,
+      "layer": 2,
+      "slack": 4,
+      "source_line": 145
+    },
+    "op2": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "latest_finish": 1,
+      "latest_start": 0,
+      "layer": 0,
+      "slack": 0,
+      "source_line": 116
+    },
+    "op20": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 9,
+      "earliest_start": 8,
+      "latest_finish": 9,
+      "latest_start": 8,
+      "layer": 3,
+      "slack": 0,
+      "source_line": 147
+    },
+    "op21": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 10,
+      "earliest_start": 9,
+      "latest_finish": 10,
+      "latest_start": 9,
+      "layer": 4,
+      "slack": 0,
+      "source_line": 148
+    },
+    "op22": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 11,
+      "earliest_start": 10,
+      "latest_finish": 11,
+      "latest_start": 10,
+      "layer": 5,
+      "slack": 0,
+      "source_line": 149
+    },
+    "op23": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 12,
+      "earliest_start": 11,
+      "latest_finish": 12,
+      "latest_start": 11,
+      "layer": 6,
+      "slack": 0,
+      "source_line": 150
+    },
+    "op24": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 13,
+      "earliest_start": 12,
+      "latest_finish": 13,
+      "latest_start": 12,
+      "layer": 7,
+      "slack": 0,
+      "source_line": 151
+    },
+    "op25": {
+      "barrier": true,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 17,
+      "earliest_start": 13,
+      "latest_finish": 17,
+      "latest_start": 13,
+      "layer": 8,
+      "slack": 0,
+      "source_line": 152
+    },
+    "op26": {
+      "barrier": true,
+      "cost": 6,
+      "critical": true,
+      "earliest_finish": 23,
+      "earliest_start": 17,
+      "latest_finish": 23,
+      "latest_start": 17,
+      "layer": 9,
+      "slack": 0,
+      "source_line": 156
+    },
+    "op27": {
+      "barrier": true,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 27,
+      "earliest_start": 23,
+      "latest_finish": 27,
+      "latest_start": 23,
+      "layer": 10,
+      "slack": 0,
+      "source_line": 160
+    },
+    "op28": {
+      "barrier": false,
+      "cost": 3,
+      "critical": true,
+      "earliest_finish": 30,
+      "earliest_start": 27,
+      "latest_finish": 30,
+      "latest_start": 27,
+      "layer": 11,
+      "slack": 0,
+      "source_line": 163
+    },
+    "op29": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 31,
+      "earliest_start": 30,
+      "latest_finish": 31,
+      "latest_start": 30,
+      "layer": 12,
+      "slack": 0,
+      "source_line": 165
+    },
+    "op3": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "latest_finish": 1,
+      "latest_start": 0,
+      "layer": 0,
+      "slack": 0,
+      "source_line": 117
+    },
+    "op30": {
+      "barrier": true,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 35,
+      "earliest_start": 31,
+      "latest_finish": 35,
+      "latest_start": 31,
+      "layer": 13,
+      "slack": 0,
+      "source_line": 169
+    },
+    "op31": {
+      "barrier": true,
+      "cost": 6,
+      "critical": true,
+      "earliest_finish": 41,
+      "earliest_start": 35,
+      "latest_finish": 41,
+      "latest_start": 35,
+      "layer": 14,
+      "slack": 0,
+      "source_line": 170
+    },
+    "op32": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 42,
+      "earliest_start": 41,
+      "latest_finish": 42,
+      "latest_start": 41,
+      "layer": 15,
+      "slack": 0,
+      "source_line": 171
+    },
+    "op33": {
+      "barrier": true,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 46,
+      "earliest_start": 42,
+      "latest_finish": 46,
+      "latest_start": 42,
+      "layer": 16,
+      "slack": 0,
+      "source_line": 174
+    },
+    "op34": {
+      "barrier": true,
+      "cost": 6,
+      "critical": true,
+      "earliest_finish": 52,
+      "earliest_start": 46,
+      "latest_finish": 52,
+      "latest_start": 46,
+      "layer": 17,
+      "slack": 0,
+      "source_line": 175
+    },
+    "op35": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 53,
+      "earliest_start": 52,
+      "latest_finish": 53,
+      "latest_start": 52,
+      "layer": 18,
+      "slack": 0,
+      "source_line": 176
+    },
+    "op36": {
+      "barrier": true,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 57,
+      "earliest_start": 53,
+      "latest_finish": 57,
+      "latest_start": 53,
+      "layer": 19,
+      "slack": 0,
+      "source_line": 179
+    },
+    "op37": {
+      "barrier": true,
+      "cost": 6,
+      "critical": true,
+      "earliest_finish": 63,
+      "earliest_start": 57,
+      "latest_finish": 63,
+      "latest_start": 57,
+      "layer": 20,
+      "slack": 0,
+      "source_line": 180
+    },
+    "op38": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 64,
+      "earliest_start": 63,
+      "latest_finish": 64,
+      "latest_start": 63,
+      "layer": 21,
+      "slack": 0,
+      "source_line": 181
+    },
+    "op39": {
+      "barrier": true,
+      "cost": 6,
+      "critical": true,
+      "earliest_finish": 70,
+      "earliest_start": 64,
+      "latest_finish": 70,
+      "latest_start": 64,
+      "layer": 22,
+      "slack": 0,
+      "source_line": 184
+    },
+    "op4": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "latest_finish": 2,
+      "latest_start": 1,
+      "layer": 0,
+      "slack": 1,
+      "source_line": 118
+    },
+    "op40": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 71,
+      "earliest_start": 70,
+      "latest_finish": 71,
+      "latest_start": 70,
+      "layer": 23,
+      "slack": 0,
+      "source_line": 185
+    },
+    "op41": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 72,
+      "earliest_start": 71,
+      "latest_finish": 76,
+      "latest_start": 75,
+      "layer": 24,
+      "slack": 4,
+      "source_line": 187
+    },
+    "op42": {
+      "barrier": false,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 75,
+      "earliest_start": 71,
+      "latest_finish": 75,
+      "latest_start": 71,
+      "layer": 24,
+      "slack": 0,
+      "source_line": 193
+    },
+    "op43": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 76,
+      "earliest_start": 75,
+      "latest_finish": 76,
+      "latest_start": 75,
+      "layer": 25,
+      "slack": 0,
+      "source_line": 194
+    },
+    "op44": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "latest_finish": 76,
+      "latest_start": 75,
+      "layer": 0,
+      "slack": 75,
+      "source_line": 207
+    },
+    "op5": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "latest_finish": 3,
+      "latest_start": 2,
+      "layer": 0,
+      "slack": 2,
+      "source_line": 119
+    },
+    "op6": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "latest_finish": 4,
+      "latest_start": 3,
+      "layer": 0,
+      "slack": 3,
+      "source_line": 120
+    },
+    "op7": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "latest_finish": 5,
+      "latest_start": 4,
+      "layer": 0,
+      "slack": 4,
+      "source_line": 121
+    },
+    "op8": {
+      "barrier": false,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 5,
+      "earliest_start": 1,
+      "latest_finish": 5,
+      "latest_start": 1,
+      "layer": 1,
+      "slack": 0,
+      "source_line": 124
+    },
+    "op9": {
+      "barrier": false,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 5,
+      "earliest_start": 1,
+      "latest_finish": 5,
+      "latest_start": 1,
+      "layer": 1,
+      "slack": 0,
+      "source_line": 125
+    }
+  },
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/heartstudy/heartstudy.cpp",
+  "topological_order": [
+    "op0",
+    "op1",
+    "op2",
+    "op3",
+    "op4",
+    "op5",
+    "op6",
+    "op7",
+    "op44",
+    "op8",
+    "op9",
+    "op10",
+    "op11",
+    "op12",
+    "op13",
+    "op14",
+    "op15",
+    "op16",
+    "op17",
+    "op18",
+    "op19",
+    "op20",
+    "op21",
+    "op22",
+    "op23",
+    "op24",
+    "op25",
+    "op26",
+    "op27",
+    "op28",
+    "op29",
+    "op30",
+    "op31",
+    "op32",
+    "op33",
+    "op34",
+    "op35",
+    "op36",
+    "op37",
+    "op38",
+    "op39",
+    "op40",
+    "op41",
+    "op42",
+    "op43"
+  ]
+}

@@ -1,0 +1,43 @@
+digraph hedag_v2 {
+  rankdir=LR;
+  node [shape=box, style="rounded,filled", fontname="Helvetica"];
+  edge [fontname="Helvetica"];
+  subgraph cluster_layer_0 {
+    label="layer 0";
+    color="#d1d5db";
+    op0 [label="op0\nassign\nline 319\nlayer 0\ncost 1\nout ciph_result@1\nin ciph@0", fillcolor="#17becf"];
+  }
+  subgraph cluster_layer_1 {
+    label="layer 1";
+    color="#d1d5db";
+    op1 [label="op1\nevaluate_poly_vector\nline 320\nlayer 1\ncost 8\nout ciph_result@2\nin ciph_result@1", fillcolor="#e377c2"];
+  }
+  subgraph cluster_layer_2 {
+    label="layer 2";
+    color="#d1d5db";
+    op2 [label="op2\nevaluate_poly_vector\nline 321\nlayer 2\ncost 8\nout ciph_result@3\nin ciph_result@2", fillcolor="#e377c2"];
+  }
+  subgraph cluster_layer_3 {
+    label="layer 3";
+    color="#d1d5db";
+    op3 [label="op3\nadd_const\nline 322\nlayer 3\ncost 1\nout ciph_result@4\nin ciph_result@3", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_4 {
+    label="layer 4";
+    color="#d1d5db";
+    op4 [label="op4\nreturn\nline 323\nlayer 4\ncost 1\nout __return__@1\nin ciph_result@4", fillcolor="#64748b"];
+  }
+  op0 -> op1 [color="#1f2937", label="ciph_result"];
+  op0 -> op1 [color="#2563eb", label="ciph_result"];
+  op0 -> op1 [color="#f97316", label="ciph_result"];
+  op1 -> op2 [color="#1f2937", label="ciph_result"];
+  op1 -> op2 [color="#2563eb", label="ciph_result"];
+  op1 -> op2 [color="#f97316", label="ciph_result"];
+  op1 -> op2 [color="#dc2626", label="ciph_result"];
+  op2 -> op3 [color="#1f2937", label="ciph_result"];
+  op2 -> op3 [color="#2563eb", label="ciph_result"];
+  op2 -> op3 [color="#f97316", label="ciph_result"];
+  op2 -> op3 [color="#dc2626", label="ciph_result"];
+  op3 -> op4 [color="#1f2937", label="ciph_result"];
+  op3 -> op4 [color="#2563eb", label="ciph_result"];
+}

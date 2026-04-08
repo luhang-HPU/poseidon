@@ -1,0 +1,125 @@
+{
+  "barriers": [],
+  "critical_path_cost": 5,
+  "entry_function": "remote_query",
+  "layers": [
+    [
+      "op0",
+      "op2"
+    ],
+    [
+      "op1",
+      "op3"
+    ],
+    [
+      "op4"
+    ],
+    [
+      "op5"
+    ],
+    [
+      "op6"
+    ]
+  ],
+  "max_parallel_width": 2,
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "op_schedule": {
+    "op0": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "latest_finish": 1,
+      "latest_start": 0,
+      "layer": 0,
+      "slack": 0,
+      "source_line": 90
+    },
+    "op1": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 2,
+      "earliest_start": 1,
+      "latest_finish": 2,
+      "latest_start": 1,
+      "layer": 1,
+      "slack": 0,
+      "source_line": 100
+    },
+    "op2": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "latest_finish": 4,
+      "latest_start": 3,
+      "layer": 0,
+      "slack": 3,
+      "source_line": 151
+    },
+    "op3": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 2,
+      "earliest_start": 1,
+      "latest_finish": 5,
+      "latest_start": 4,
+      "layer": 1,
+      "slack": 3,
+      "source_line": 108
+    },
+    "op4": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 3,
+      "earliest_start": 2,
+      "latest_finish": 3,
+      "latest_start": 2,
+      "layer": 2,
+      "slack": 0,
+      "source_line": 125
+    },
+    "op5": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 4,
+      "earliest_start": 3,
+      "latest_finish": 4,
+      "latest_start": 3,
+      "layer": 3,
+      "slack": 0,
+      "source_line": 135
+    },
+    "op6": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 5,
+      "earliest_start": 4,
+      "latest_finish": 5,
+      "latest_start": 4,
+      "layer": 4,
+      "slack": 0,
+      "source_line": 142
+    }
+  },
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/apsi/cli/receiver/receiver.cpp",
+  "topological_order": [
+    "op0",
+    "op2",
+    "op1",
+    "op3",
+    "op4",
+    "op5",
+    "op6"
+  ]
+}

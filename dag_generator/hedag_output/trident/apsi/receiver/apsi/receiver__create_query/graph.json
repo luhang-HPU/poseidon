@@ -1,0 +1,239 @@
+{
+  "diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (!cuckoo.insert(item.get_as<kuku::item_type>().front())) {\n                        \n                        \n                        \n                        \n                        \n                        \n                        \n                        \n                        if (cuckoo.is_empty_item(cuckoo.leftover_item())) {\n                            APSI_LOG_INFO(\n                                \"Skipping repeated insertion of items[\"\n                                << item_idx << \"]: \" << item.to_string());\n                        } else {\n                            APSI_LOG_ERROR(\n                                \"Failed to insert items[\"\n                                << item_idx << \"]: \" << item.to_string()\n                                << \"; cuckoo table fill-rate: \" << cuckoo.fill_rate());\n                            throw runtime_error(\"failed to insert item into cuckoo table\");\n                        }\n                    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 21,
+          "line": 266,
+          "offset": 8885
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/receiver/apsi/receiver.cpp",
+        "start": {
+          "column": 21,
+          "line": 246,
+          "offset": 7923
+        }
+      },
+      "stmt_id": "create_query@7923",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "edges": [],
+  "entry_function": "create_query",
+  "frontend": "textual_fallback",
+  "metadata": {
+    "entry_span": {
+      "end": {
+        "column": 9,
+        "line": 348,
+        "offset": 12148
+      },
+      "file": "/home/guoshuai/github/poseidon/Trident/apsi/receiver/apsi/receiver.cpp",
+      "start": {
+        "column": 56,
+        "line": 219,
+        "offset": 6690
+      }
+    },
+    "frontend_mode": "textual_fallback",
+    "source_hash": "0629b4a4c36bff8832ae1247c8b89cba87ba500ab106d6ea61e72242a612def1"
+  },
+  "ops": [
+    {
+      "api_name": "encrypt",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "plain_powers[bundle_idx]",
+        "source_text": "auto encrypted_power(plain_powers[bundle_idx].encrypt(crypto_context_))"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "crypto_context_)"
+          }
+        }
+      ],
+      "inputs": [],
+      "op_id": "op0",
+      "op_kind": "encrypt",
+      "origin_callstack": [],
+      "outputs": [
+        "crypto_context_)@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 92,
+          "line": 329,
+          "offset": 11517
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/receiver/apsi/receiver.cpp",
+        "start": {
+          "column": 21,
+          "line": 329,
+          "offset": 11446
+        }
+      },
+      "stmt_id": "create_query@11446"
+    },
+    {
+      "api_name": "return",
+      "attrs": {
+        "barrier": false,
+        "cost": 1,
+        "source_text": "return { move(sop), itt }"
+      },
+      "effects": [],
+      "inputs": [
+        "{ move(sop), itt }@0"
+      ],
+      "op_id": "op1",
+      "op_kind": "return",
+      "origin_callstack": [],
+      "outputs": [
+        "__return__@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 38,
+          "line": 347,
+          "offset": 12138
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/receiver/apsi/receiver.cpp",
+        "start": {
+          "column": 13,
+          "line": 347,
+          "offset": 12113
+        }
+      },
+      "stmt_id": "create_query@12113"
+    }
+  ],
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/apsi/receiver/apsi/receiver.cpp",
+  "values": [
+    {
+      "annotations": {},
+      "origin_scope": "create_query",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 92,
+          "line": 329,
+          "offset": 11517
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/receiver/apsi/receiver.cpp",
+        "start": {
+          "column": 21,
+          "line": 329,
+          "offset": 11446
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "crypto_context_)"
+      },
+      "value_id": "crypto_context_)@0",
+      "value_kind": "external"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "create_query",
+      "producer_op_id": "op0",
+      "source_span": {
+        "end": {
+          "column": 92,
+          "line": 329,
+          "offset": 11517
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/receiver/apsi/receiver.cpp",
+        "start": {
+          "column": 21,
+          "line": 329,
+          "offset": 11446
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "crypto_context_)"
+      },
+      "value_id": "crypto_context_)@1",
+      "value_kind": "external"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "create_query",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 38,
+          "line": 347,
+          "offset": 12138
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/receiver/apsi/receiver.cpp",
+        "start": {
+          "column": 13,
+          "line": 347,
+          "offset": 12113
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "{ move(sop), itt }"
+      },
+      "value_id": "{ move(sop), itt }@0",
+      "value_kind": "external"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "create_query",
+      "producer_op_id": "op1",
+      "source_span": {
+        "end": {
+          "column": 38,
+          "line": 347,
+          "offset": 12138
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/receiver/apsi/receiver.cpp",
+        "start": {
+          "column": 13,
+          "line": 347,
+          "offset": 12113
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "__return__"
+      },
+      "value_id": "__return__@1",
+      "value_kind": "external"
+    }
+  ]
+}

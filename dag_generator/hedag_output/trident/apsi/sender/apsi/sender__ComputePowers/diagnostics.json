@@ -1,0 +1,50 @@
+{
+  "diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (!bundle_caches.size())\n    {\n        return;\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 241,
+          "offset": 6529
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/sender/apsi/sender.cpp",
+        "start": {
+          "column": 5,
+          "line": 238,
+          "offset": 6476
+        }
+      },
+      "stmt_id": "ComputePowers@6476",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (parents.first == parents.second)\n                {\n                    evaluator->square(powers_at_this_bundle_idx[parents.first], prod);\n                }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 17,
+          "line": 261,
+          "offset": 7285
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/sender/apsi/sender.cpp",
+        "start": {
+          "column": 17,
+          "line": 258,
+          "offset": 7127
+        }
+      },
+      "stmt_id": "ComputePowers@7127",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ]
+}

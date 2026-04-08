@@ -1,0 +1,203 @@
+{
+  "diagnostics": [],
+  "edges": [
+    {
+      "dst": "op1",
+      "kind": "data",
+      "reason": "gal_keys",
+      "src": "op0",
+      "value_id": "gal_keys@1"
+    },
+    {
+      "dst": "op1",
+      "kind": "read_after_write",
+      "reason": "gal_keys",
+      "src": "op0",
+      "value_id": "gal_keys@1"
+    }
+  ],
+  "entry_function": "generate_galois_keys",
+  "frontend": "textual_fallback",
+  "metadata": {
+    "entry_span": {
+      "end": {
+        "column": 1,
+        "line": 281,
+        "offset": 8442
+      },
+      "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+      "start": {
+        "column": 23,
+        "line": 276,
+        "offset": 8328
+      }
+    },
+    "frontend_mode": "textual_fallback",
+    "source_hash": "d93968b59cd3aea77b65b46581ae3b0bd23bbb91e289f5ff474ed9526e6b0258"
+  },
+  "ops": [
+    {
+      "api_name": "create_galois_keys",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 2,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "keygen_",
+        "source_text": "keygen_->create_galois_keys(gal_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "gal_keys"
+          }
+        }
+      ],
+      "inputs": [],
+      "op_id": "op0",
+      "op_kind": "create_galois_keys",
+      "origin_callstack": [],
+      "outputs": [
+        "gal_keys@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 42,
+          "line": 279,
+          "offset": 8419
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+        "start": {
+          "column": 5,
+          "line": 279,
+          "offset": 8382
+        }
+      },
+      "stmt_id": "generate_galois_keys@8382"
+    },
+    {
+      "api_name": "return",
+      "attrs": {
+        "barrier": false,
+        "cost": 1,
+        "source_text": "return gal_keys"
+      },
+      "effects": [],
+      "inputs": [
+        "gal_keys@1"
+      ],
+      "op_id": "op1",
+      "op_kind": "return",
+      "origin_callstack": [],
+      "outputs": [
+        "__return__@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 20,
+          "line": 280,
+          "offset": 8440
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+        "start": {
+          "column": 5,
+          "line": 280,
+          "offset": 8425
+        }
+      },
+      "stmt_id": "generate_galois_keys@8425"
+    }
+  ],
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+  "values": [
+    {
+      "annotations": {},
+      "origin_scope": "generate_galois_keys",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 24,
+          "line": 278,
+          "offset": 8376
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+        "start": {
+          "column": 5,
+          "line": 278,
+          "offset": 8357
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "gal_keys"
+      },
+      "value_id": "gal_keys@0",
+      "value_kind": "galois_keys"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_galois_keys",
+      "producer_op_id": "op0",
+      "source_span": {
+        "end": {
+          "column": 42,
+          "line": 279,
+          "offset": 8419
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+        "start": {
+          "column": 5,
+          "line": 279,
+          "offset": 8382
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "gal_keys"
+      },
+      "value_id": "gal_keys@1",
+      "value_kind": "galois_keys"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_galois_keys",
+      "producer_op_id": "op1",
+      "source_span": {
+        "end": {
+          "column": 20,
+          "line": 280,
+          "offset": 8440
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+        "start": {
+          "column": 5,
+          "line": 280,
+          "offset": 8425
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "__return__"
+      },
+      "value_id": "__return__@1",
+      "value_kind": "external"
+    }
+  ]
+}

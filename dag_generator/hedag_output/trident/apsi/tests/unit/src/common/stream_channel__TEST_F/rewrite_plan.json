@@ -1,0 +1,28 @@
+{
+  "barriers": [],
+  "blocking_diagnostics": [],
+  "entry_function": "TEST_F",
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "operation_order": [],
+  "parallel_blocks": [],
+  "regions": [],
+  "required_temporaries": [],
+  "schema_version": 2,
+  "source_edits_anchor": {
+    "end": {
+      "column": 5,
+      "line": 103,
+      "offset": 2888
+    },
+    "file": "/home/guoshuai/github/poseidon/Trident/apsi/tests/unit/src/common/stream_channel.cpp",
+    "start": {
+      "column": 5,
+      "line": 71,
+      "offset": 1765
+    }
+  },
+  "source_file": "/home/guoshuai/github/poseidon/Trident/apsi/tests/unit/src/common/stream_channel.cpp",
+  "status": "ready"
+}

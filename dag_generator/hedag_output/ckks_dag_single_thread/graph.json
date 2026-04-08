@@ -1,0 +1,5893 @@
+{
+  "diagnostics": [],
+  "edges": [
+    {
+      "dst": "op1",
+      "kind": "data",
+      "reason": "smooth_square_branch__ckks_single_thread_workload_8036__sum_ab",
+      "src": "op0",
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__sum_ab@1"
+    },
+    {
+      "dst": "op1",
+      "kind": "read_after_write",
+      "reason": "smooth_square_branch__ckks_single_thread_workload_8036__sum_ab",
+      "src": "op0",
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__sum_ab@1"
+    },
+    {
+      "dst": "op1",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8036",
+      "src": "op0",
+      "value_id": null
+    },
+    {
+      "dst": "op2",
+      "kind": "data",
+      "reason": "smooth_square_branch__ckks_single_thread_workload_8036__sum_ab",
+      "src": "op0",
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__sum_ab@1"
+    },
+    {
+      "dst": "op2",
+      "kind": "read_after_write",
+      "reason": "smooth_square_branch__ckks_single_thread_workload_8036__sum_ab",
+      "src": "op0",
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__sum_ab@1"
+    },
+    {
+      "dst": "op2",
+      "kind": "data",
+      "reason": "smooth_square_branch__ckks_single_thread_workload_8036__rot_ab_1",
+      "src": "op1",
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__rot_ab_1@1"
+    },
+    {
+      "dst": "op2",
+      "kind": "read_after_write",
+      "reason": "smooth_square_branch__ckks_single_thread_workload_8036__rot_ab_1",
+      "src": "op1",
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__rot_ab_1@1"
+    },
+    {
+      "dst": "op2",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8036",
+      "src": "op1",
+      "value_id": null
+    },
+    {
+      "dst": "op3",
+      "kind": "data",
+      "reason": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab",
+      "src": "op2",
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab@1"
+    },
+    {
+      "dst": "op3",
+      "kind": "read_after_write",
+      "reason": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab",
+      "src": "op2",
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab@1"
+    },
+    {
+      "dst": "op3",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8036",
+      "src": "op2",
+      "value_id": null
+    },
+    {
+      "dst": "op4",
+      "kind": "data",
+      "reason": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab",
+      "src": "op2",
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab@1"
+    },
+    {
+      "dst": "op4",
+      "kind": "read_after_write",
+      "reason": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab",
+      "src": "op2",
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab@1"
+    },
+    {
+      "dst": "op4",
+      "kind": "data",
+      "reason": "smooth_square_branch__ckks_single_thread_workload_8036__rot_smooth_2",
+      "src": "op3",
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__rot_smooth_2@1"
+    },
+    {
+      "dst": "op4",
+      "kind": "read_after_write",
+      "reason": "smooth_square_branch__ckks_single_thread_workload_8036__rot_smooth_2",
+      "src": "op3",
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__rot_smooth_2@1"
+    },
+    {
+      "dst": "op4",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8036",
+      "src": "op3",
+      "value_id": null
+    },
+    {
+      "dst": "op5",
+      "kind": "data",
+      "reason": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab_2",
+      "src": "op4",
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab_2@1"
+    },
+    {
+      "dst": "op5",
+      "kind": "read_after_write",
+      "reason": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab_2",
+      "src": "op4",
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab_2@1"
+    },
+    {
+      "dst": "op5",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8036",
+      "src": "op4",
+      "value_id": null
+    },
+    {
+      "dst": "op6",
+      "kind": "data",
+      "reason": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq",
+      "src": "op5",
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq@1"
+    },
+    {
+      "dst": "op6",
+      "kind": "read_after_write",
+      "reason": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq",
+      "src": "op5",
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq@1"
+    },
+    {
+      "dst": "op6",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8036",
+      "src": "op5",
+      "value_id": null
+    },
+    {
+      "dst": "op7",
+      "kind": "data",
+      "reason": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin",
+      "src": "op6",
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin@1"
+    },
+    {
+      "dst": "op7",
+      "kind": "read_after_write",
+      "reason": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin",
+      "src": "op6",
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin@1"
+    },
+    {
+      "dst": "op7",
+      "kind": "write_after_write",
+      "reason": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin",
+      "src": "op6",
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin@2"
+    },
+    {
+      "dst": "op7",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8036",
+      "src": "op6",
+      "value_id": null
+    },
+    {
+      "dst": "op8",
+      "kind": "data",
+      "reason": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin",
+      "src": "op7",
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin@2"
+    },
+    {
+      "dst": "op8",
+      "kind": "read_after_write",
+      "reason": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin",
+      "src": "op7",
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin@2"
+    },
+    {
+      "dst": "op8",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8036",
+      "src": "op7",
+      "value_id": null
+    },
+    {
+      "dst": "op9",
+      "kind": "data",
+      "reason": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin",
+      "src": "op7",
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin@2"
+    },
+    {
+      "dst": "op9",
+      "kind": "read_after_write",
+      "reason": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin",
+      "src": "op7",
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin@2"
+    },
+    {
+      "dst": "op9",
+      "kind": "data",
+      "reason": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_rot4",
+      "src": "op8",
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_rot4@1"
+    },
+    {
+      "dst": "op9",
+      "kind": "read_after_write",
+      "reason": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_rot4",
+      "src": "op8",
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_rot4@1"
+    },
+    {
+      "dst": "op9",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8036",
+      "src": "op8",
+      "value_id": null
+    },
+    {
+      "dst": "op10",
+      "kind": "data",
+      "reason": "smooth_square_branch__ckks_single_thread_workload_8036__branch_add",
+      "src": "op9",
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__branch_add@1"
+    },
+    {
+      "dst": "op10",
+      "kind": "read_after_write",
+      "reason": "smooth_square_branch__ckks_single_thread_workload_8036__branch_add",
+      "src": "op9",
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__branch_add@1"
+    },
+    {
+      "dst": "op10",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8036",
+      "src": "op9",
+      "value_id": null
+    },
+    {
+      "dst": "op12",
+      "kind": "data",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__diff_cd",
+      "src": "op11",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_cd@1"
+    },
+    {
+      "dst": "op12",
+      "kind": "read_after_write",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__diff_cd",
+      "src": "op11",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_cd@1"
+    },
+    {
+      "dst": "op12",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8140",
+      "src": "op11",
+      "value_id": null
+    },
+    {
+      "dst": "op13",
+      "kind": "data",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__diff_cd",
+      "src": "op11",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_cd@1"
+    },
+    {
+      "dst": "op13",
+      "kind": "read_after_write",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__diff_cd",
+      "src": "op11",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_cd@1"
+    },
+    {
+      "dst": "op13",
+      "kind": "data",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__diff_rot1",
+      "src": "op12",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_rot1@1"
+    },
+    {
+      "dst": "op13",
+      "kind": "read_after_write",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__diff_rot1",
+      "src": "op12",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_rot1@1"
+    },
+    {
+      "dst": "op13",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8140",
+      "src": "op12",
+      "value_id": null
+    },
+    {
+      "dst": "op14",
+      "kind": "data",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__diff_mix",
+      "src": "op13",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_mix@1"
+    },
+    {
+      "dst": "op14",
+      "kind": "read_after_write",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__diff_mix",
+      "src": "op13",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_mix@1"
+    },
+    {
+      "dst": "op14",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8140",
+      "src": "op13",
+      "value_id": null
+    },
+    {
+      "dst": "op15",
+      "kind": "data",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq",
+      "src": "op14",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq@1"
+    },
+    {
+      "dst": "op15",
+      "kind": "read_after_write",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq",
+      "src": "op14",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq@1"
+    },
+    {
+      "dst": "op15",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8140",
+      "src": "op14",
+      "value_id": null
+    },
+    {
+      "dst": "op16",
+      "kind": "data",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin",
+      "src": "op15",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin@1"
+    },
+    {
+      "dst": "op16",
+      "kind": "read_after_write",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin",
+      "src": "op15",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin@1"
+    },
+    {
+      "dst": "op16",
+      "kind": "write_after_write",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin",
+      "src": "op15",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin@2"
+    },
+    {
+      "dst": "op16",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8140",
+      "src": "op15",
+      "value_id": null
+    },
+    {
+      "dst": "op17",
+      "kind": "data",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin",
+      "src": "op16",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin@2"
+    },
+    {
+      "dst": "op17",
+      "kind": "read_after_write",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin",
+      "src": "op16",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin@2"
+    },
+    {
+      "dst": "op17",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8140",
+      "src": "op16",
+      "value_id": null
+    },
+    {
+      "dst": "op18",
+      "kind": "data",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin",
+      "src": "op16",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin@2"
+    },
+    {
+      "dst": "op18",
+      "kind": "read_after_write",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin",
+      "src": "op16",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin@2"
+    },
+    {
+      "dst": "op18",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8140",
+      "src": "op17",
+      "value_id": null
+    },
+    {
+      "dst": "op19",
+      "kind": "data",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin",
+      "src": "op16",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin@2"
+    },
+    {
+      "dst": "op19",
+      "kind": "read_after_write",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin",
+      "src": "op16",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin@2"
+    },
+    {
+      "dst": "op19",
+      "kind": "data",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot2",
+      "src": "op17",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot2@1"
+    },
+    {
+      "dst": "op19",
+      "kind": "read_after_write",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot2",
+      "src": "op17",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot2@1"
+    },
+    {
+      "dst": "op19",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8140",
+      "src": "op18",
+      "value_id": null
+    },
+    {
+      "dst": "op20",
+      "kind": "data",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__branch_quad",
+      "src": "op19",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__branch_quad@1"
+    },
+    {
+      "dst": "op20",
+      "kind": "read_after_write",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__branch_quad",
+      "src": "op19",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__branch_quad@1"
+    },
+    {
+      "dst": "op20",
+      "kind": "data",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot8",
+      "src": "op18",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot8@1"
+    },
+    {
+      "dst": "op20",
+      "kind": "read_after_write",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot8",
+      "src": "op18",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot8@1"
+    },
+    {
+      "dst": "op20",
+      "kind": "write_after_write",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__branch_quad",
+      "src": "op19",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__branch_quad@2"
+    },
+    {
+      "dst": "op20",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8140",
+      "src": "op19",
+      "value_id": null
+    },
+    {
+      "dst": "op21",
+      "kind": "data",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__branch_quad",
+      "src": "op20",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__branch_quad@2"
+    },
+    {
+      "dst": "op21",
+      "kind": "read_after_write",
+      "reason": "diff_energy_branch__ckks_single_thread_workload_8140__branch_quad",
+      "src": "op20",
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__branch_quad@2"
+    },
+    {
+      "dst": "op21",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8140",
+      "src": "op20",
+      "value_id": null
+    },
+    {
+      "dst": "op23",
+      "kind": "data",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac",
+      "src": "op22",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac@1"
+    },
+    {
+      "dst": "op23",
+      "kind": "read_after_write",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac",
+      "src": "op22",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac@1"
+    },
+    {
+      "dst": "op23",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8243",
+      "src": "op22",
+      "value_id": null
+    },
+    {
+      "dst": "op24",
+      "kind": "data",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin",
+      "src": "op23",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin@1"
+    },
+    {
+      "dst": "op24",
+      "kind": "read_after_write",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin",
+      "src": "op23",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin@1"
+    },
+    {
+      "dst": "op24",
+      "kind": "write_after_write",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin",
+      "src": "op23",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin@2"
+    },
+    {
+      "dst": "op24",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8243",
+      "src": "op23",
+      "value_id": null
+    },
+    {
+      "dst": "op25",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8243",
+      "src": "op24",
+      "value_id": null
+    },
+    {
+      "dst": "op26",
+      "kind": "data",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd",
+      "src": "op25",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd@1"
+    },
+    {
+      "dst": "op26",
+      "kind": "read_after_write",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd",
+      "src": "op25",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd@1"
+    },
+    {
+      "dst": "op26",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8243",
+      "src": "op25",
+      "value_id": null
+    },
+    {
+      "dst": "op27",
+      "kind": "data",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin",
+      "src": "op26",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin@1"
+    },
+    {
+      "dst": "op27",
+      "kind": "read_after_write",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin",
+      "src": "op26",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin@1"
+    },
+    {
+      "dst": "op27",
+      "kind": "write_after_write",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin",
+      "src": "op26",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin@2"
+    },
+    {
+      "dst": "op27",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8243",
+      "src": "op26",
+      "value_id": null
+    },
+    {
+      "dst": "op28",
+      "kind": "data",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin",
+      "src": "op24",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin@2"
+    },
+    {
+      "dst": "op28",
+      "kind": "read_after_write",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin",
+      "src": "op24",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin@2"
+    },
+    {
+      "dst": "op28",
+      "kind": "data",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin",
+      "src": "op27",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin@2"
+    },
+    {
+      "dst": "op28",
+      "kind": "read_after_write",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin",
+      "src": "op27",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin@2"
+    },
+    {
+      "dst": "op28",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8243",
+      "src": "op27",
+      "value_id": null
+    },
+    {
+      "dst": "op29",
+      "kind": "data",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__cross_sum",
+      "src": "op28",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__cross_sum@1"
+    },
+    {
+      "dst": "op29",
+      "kind": "read_after_write",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__cross_sum",
+      "src": "op28",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__cross_sum@1"
+    },
+    {
+      "dst": "op29",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8243",
+      "src": "op28",
+      "value_id": null
+    },
+    {
+      "dst": "op30",
+      "kind": "data",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__cross_sum",
+      "src": "op28",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__cross_sum@1"
+    },
+    {
+      "dst": "op30",
+      "kind": "read_after_write",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__cross_sum",
+      "src": "op28",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__cross_sum@1"
+    },
+    {
+      "dst": "op30",
+      "kind": "data",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__cross_rot8",
+      "src": "op29",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__cross_rot8@1"
+    },
+    {
+      "dst": "op30",
+      "kind": "read_after_write",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__cross_rot8",
+      "src": "op29",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__cross_rot8@1"
+    },
+    {
+      "dst": "op30",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8243",
+      "src": "op29",
+      "value_id": null
+    },
+    {
+      "dst": "op31",
+      "kind": "data",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__cross_mix",
+      "src": "op30",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__cross_mix@1"
+    },
+    {
+      "dst": "op31",
+      "kind": "read_after_write",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__cross_mix",
+      "src": "op30",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__cross_mix@1"
+    },
+    {
+      "dst": "op31",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8243",
+      "src": "op30",
+      "value_id": null
+    },
+    {
+      "dst": "op32",
+      "kind": "data",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__cross_mix",
+      "src": "op30",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__cross_mix@1"
+    },
+    {
+      "dst": "op32",
+      "kind": "read_after_write",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__cross_mix",
+      "src": "op30",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__cross_mix@1"
+    },
+    {
+      "dst": "op32",
+      "kind": "data",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__cross_rot16",
+      "src": "op31",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__cross_rot16@1"
+    },
+    {
+      "dst": "op32",
+      "kind": "read_after_write",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__cross_rot16",
+      "src": "op31",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__cross_rot16@1"
+    },
+    {
+      "dst": "op32",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8243",
+      "src": "op31",
+      "value_id": null
+    },
+    {
+      "dst": "op33",
+      "kind": "data",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__branch_cross",
+      "src": "op32",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__branch_cross@1"
+    },
+    {
+      "dst": "op33",
+      "kind": "read_after_write",
+      "reason": "cross_mix_branch__ckks_single_thread_workload_8243__branch_cross",
+      "src": "op32",
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__branch_cross@1"
+    },
+    {
+      "dst": "op33",
+      "kind": "call_order",
+      "reason": "ckks_single_thread_workload@8243",
+      "src": "op32",
+      "value_id": null
+    },
+    {
+      "dst": "op34",
+      "kind": "data",
+      "reason": "branch_add",
+      "src": "op10",
+      "value_id": "branch_add@1"
+    },
+    {
+      "dst": "op34",
+      "kind": "read_after_write",
+      "reason": "branch_add",
+      "src": "op10",
+      "value_id": "branch_add@1"
+    },
+    {
+      "dst": "op34",
+      "kind": "data",
+      "reason": "branch_quad",
+      "src": "op21",
+      "value_id": "branch_quad@1"
+    },
+    {
+      "dst": "op34",
+      "kind": "read_after_write",
+      "reason": "branch_quad",
+      "src": "op21",
+      "value_id": "branch_quad@1"
+    },
+    {
+      "dst": "op35",
+      "kind": "data",
+      "reason": "merged_left",
+      "src": "op34",
+      "value_id": "merged_left@1"
+    },
+    {
+      "dst": "op35",
+      "kind": "read_after_write",
+      "reason": "merged_left",
+      "src": "op34",
+      "value_id": "merged_left@1"
+    },
+    {
+      "dst": "op35",
+      "kind": "data",
+      "reason": "branch_cross",
+      "src": "op33",
+      "value_id": "branch_cross@1"
+    },
+    {
+      "dst": "op35",
+      "kind": "read_after_write",
+      "reason": "branch_cross",
+      "src": "op33",
+      "value_id": "branch_cross@1"
+    },
+    {
+      "dst": "op36",
+      "kind": "data",
+      "reason": "merged_all",
+      "src": "op35",
+      "value_id": "merged_all@1"
+    },
+    {
+      "dst": "op36",
+      "kind": "read_after_write",
+      "reason": "merged_all",
+      "src": "op35",
+      "value_id": "merged_all@1"
+    },
+    {
+      "dst": "op36",
+      "kind": "data",
+      "reason": "branch_add",
+      "src": "op10",
+      "value_id": "branch_add@1"
+    },
+    {
+      "dst": "op36",
+      "kind": "read_after_write",
+      "reason": "branch_add",
+      "src": "op10",
+      "value_id": "branch_add@1"
+    },
+    {
+      "dst": "op37",
+      "kind": "data",
+      "reason": "tail_prod",
+      "src": "op36",
+      "value_id": "tail_prod@1"
+    },
+    {
+      "dst": "op37",
+      "kind": "read_after_write",
+      "reason": "tail_prod",
+      "src": "op36",
+      "value_id": "tail_prod@1"
+    },
+    {
+      "dst": "op38",
+      "kind": "data",
+      "reason": "tail_prod_relin",
+      "src": "op37",
+      "value_id": "tail_prod_relin@1"
+    },
+    {
+      "dst": "op38",
+      "kind": "read_after_write",
+      "reason": "tail_prod_relin",
+      "src": "op37",
+      "value_id": "tail_prod_relin@1"
+    },
+    {
+      "dst": "op38",
+      "kind": "write_after_write",
+      "reason": "tail_prod_relin",
+      "src": "op37",
+      "value_id": "tail_prod_relin@2"
+    },
+    {
+      "dst": "op39",
+      "kind": "data",
+      "reason": "tail_prod_relin",
+      "src": "op38",
+      "value_id": "tail_prod_relin@2"
+    },
+    {
+      "dst": "op39",
+      "kind": "read_after_write",
+      "reason": "tail_prod_relin",
+      "src": "op38",
+      "value_id": "tail_prod_relin@2"
+    },
+    {
+      "dst": "op40",
+      "kind": "data",
+      "reason": "tail_prod_relin",
+      "src": "op38",
+      "value_id": "tail_prod_relin@2"
+    },
+    {
+      "dst": "op40",
+      "kind": "read_after_write",
+      "reason": "tail_prod_relin",
+      "src": "op38",
+      "value_id": "tail_prod_relin@2"
+    },
+    {
+      "dst": "op40",
+      "kind": "data",
+      "reason": "tail_rot32",
+      "src": "op39",
+      "value_id": "tail_rot32@1"
+    },
+    {
+      "dst": "op40",
+      "kind": "read_after_write",
+      "reason": "tail_rot32",
+      "src": "op39",
+      "value_id": "tail_rot32@1"
+    }
+  ],
+  "entry_function": "ckks_single_thread_workload",
+  "frontend": "textual_fallback",
+  "metadata": {
+    "entry_span": {
+      "end": {
+        "column": 1,
+        "line": 237,
+        "offset": 8938
+      },
+      "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+      "start": {
+        "column": 6,
+        "line": 212,
+        "offset": 7651
+      }
+    },
+    "frontend_mode": "textual_fallback",
+    "source_hash": "bd5c806ce7c55b681e2873bdadf426782a723532f0d535ee8f605cd51ec8e4e4"
+  },
+  "ops": [
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.add(ct_a, ct_b, sum_ab)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "sum_ab"
+          }
+        }
+      ],
+      "inputs": [
+        "scale@0",
+        "ct_a@0"
+      ],
+      "op_id": "op0",
+      "op_kind": "add",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 103,
+              "line": 218,
+              "offset": 8134
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 218,
+              "offset": 8036
+            }
+          },
+          "source_text": "Ciphertext branch_add = smooth_square_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b)",
+          "stmt_id": "ckks_single_thread_workload@8036"
+        }
+      ],
+      "outputs": [
+        "smooth_square_branch__ckks_single_thread_workload_8036__sum_ab@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 37,
+          "line": 144,
+          "offset": 4786
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 144,
+          "offset": 4754
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8036::smooth_square_branch@4754"
+    },
+    {
+      "api_name": "rotate",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "1"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.rotate(sum_ab, rot_ab_1, 1, galois_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "rot_ab_1"
+          }
+        }
+      ],
+      "inputs": [
+        "smooth_square_branch__ckks_single_thread_workload_8036__sum_ab@1"
+      ],
+      "op_id": "op1",
+      "op_kind": "rotate",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 103,
+              "line": 218,
+              "offset": 8134
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 218,
+              "offset": 8036
+            }
+          },
+          "source_text": "Ciphertext branch_add = smooth_square_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b)",
+          "stmt_id": "ckks_single_thread_workload@8036"
+        }
+      ],
+      "outputs": [
+        "smooth_square_branch__ckks_single_thread_workload_8036__rot_ab_1@1"
+      ],
+      "resources": [
+        "galois_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 54,
+          "line": 145,
+          "offset": 4841
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 145,
+          "offset": 4792
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8036::smooth_square_branch@4792"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.add(sum_ab, rot_ab_1, smooth_ab)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "smooth_ab"
+          }
+        }
+      ],
+      "inputs": [
+        "smooth_square_branch__ckks_single_thread_workload_8036__sum_ab@1",
+        "smooth_square_branch__ckks_single_thread_workload_8036__rot_ab_1@1"
+      ],
+      "op_id": "op2",
+      "op_kind": "add",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 103,
+              "line": 218,
+              "offset": 8134
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 218,
+              "offset": 8036
+            }
+          },
+          "source_text": "Ciphertext branch_add = smooth_square_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b)",
+          "stmt_id": "ckks_single_thread_workload@8036"
+        }
+      ],
+      "outputs": [
+        "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 46,
+          "line": 146,
+          "offset": 4888
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 146,
+          "offset": 4847
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8036::smooth_square_branch@4847"
+    },
+    {
+      "api_name": "rotate",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "2"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.rotate(smooth_ab, rot_smooth_2, 2, galois_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "rot_smooth_2"
+          }
+        }
+      ],
+      "inputs": [
+        "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab@1"
+      ],
+      "op_id": "op3",
+      "op_kind": "rotate",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 103,
+              "line": 218,
+              "offset": 8134
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 218,
+              "offset": 8036
+            }
+          },
+          "source_text": "Ciphertext branch_add = smooth_square_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b)",
+          "stmt_id": "ckks_single_thread_workload@8036"
+        }
+      ],
+      "outputs": [
+        "smooth_square_branch__ckks_single_thread_workload_8036__rot_smooth_2@1"
+      ],
+      "resources": [
+        "galois_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 61,
+          "line": 147,
+          "offset": 4950
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 147,
+          "offset": 4894
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8036::smooth_square_branch@4894"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.add(smooth_ab, rot_smooth_2, smooth_ab_2)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "smooth_ab_2"
+          }
+        }
+      ],
+      "inputs": [
+        "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab@1",
+        "smooth_square_branch__ckks_single_thread_workload_8036__rot_smooth_2@1"
+      ],
+      "op_id": "op4",
+      "op_kind": "add",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 103,
+              "line": 218,
+              "offset": 8134
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 218,
+              "offset": 8036
+            }
+          },
+          "source_text": "Ciphertext branch_add = smooth_square_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b)",
+          "stmt_id": "ckks_single_thread_workload@8036"
+        }
+      ],
+      "outputs": [
+        "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab_2@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 55,
+          "line": 148,
+          "offset": 5006
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 148,
+          "offset": 4956
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8036::smooth_square_branch@4956"
+    },
+    {
+      "api_name": "multiply",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 5,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.multiply(smooth_ab_2, smooth_ab_2, smooth_sq)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "smooth_sq"
+          }
+        }
+      ],
+      "inputs": [
+        "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab_2@1",
+        "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab_2@1"
+      ],
+      "op_id": "op5",
+      "op_kind": "multiply",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 103,
+              "line": 218,
+              "offset": 8134
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 218,
+              "offset": 8036
+            }
+          },
+          "source_text": "Ciphertext branch_add = smooth_square_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b)",
+          "stmt_id": "ckks_single_thread_workload@8036"
+        }
+      ],
+      "outputs": [
+        "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 59,
+          "line": 149,
+          "offset": 5066
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 149,
+          "offset": 5012
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8036::smooth_square_branch@5012"
+    },
+    {
+      "api_name": "relinearize",
+      "attrs": {
+        "barrier": true,
+        "constants": [],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.relinearize(smooth_sq, smooth_sq_relin, relin_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "smooth_sq_relin"
+          }
+        }
+      ],
+      "inputs": [
+        "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq@1"
+      ],
+      "op_id": "op6",
+      "op_kind": "relinearize",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 103,
+              "line": 218,
+              "offset": 8134
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 218,
+              "offset": 8036
+            }
+          },
+          "source_text": "Ciphertext branch_add = smooth_square_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b)",
+          "stmt_id": "ckks_single_thread_workload@8036"
+        }
+      ],
+      "outputs": [
+        "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin@1"
+      ],
+      "resources": [
+        "relin_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 65,
+          "line": 150,
+          "offset": 5132
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 150,
+          "offset": 5072
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8036::smooth_square_branch@5072"
+    },
+    {
+      "api_name": "rescale_dynamic",
+      "attrs": {
+        "barrier": true,
+        "constants": [
+          "scale"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.rescale_dynamic(smooth_sq_relin, smooth_sq_relin, scale)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "smooth_sq_relin"
+          }
+        }
+      ],
+      "inputs": [
+        "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin@1"
+      ],
+      "op_id": "op7",
+      "op_kind": "rescale_dynamic",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 103,
+              "line": 218,
+              "offset": 8134
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 218,
+              "offset": 8036
+            }
+          },
+          "source_text": "Ciphertext branch_add = smooth_square_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b)",
+          "stmt_id": "ckks_single_thread_workload@8036"
+        }
+      ],
+      "outputs": [
+        "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin@2"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 70,
+          "line": 151,
+          "offset": 5203
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 151,
+          "offset": 5138
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8036::smooth_square_branch@5138"
+    },
+    {
+      "api_name": "rotate",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "4"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.rotate(smooth_sq_relin, smooth_sq_rot4, 4, galois_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "smooth_sq_rot4"
+          }
+        }
+      ],
+      "inputs": [
+        "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin@2"
+      ],
+      "op_id": "op8",
+      "op_kind": "rotate",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 103,
+              "line": 218,
+              "offset": 8134
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 218,
+              "offset": 8036
+            }
+          },
+          "source_text": "Ciphertext branch_add = smooth_square_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b)",
+          "stmt_id": "ckks_single_thread_workload@8036"
+        }
+      ],
+      "outputs": [
+        "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_rot4@1"
+      ],
+      "resources": [
+        "galois_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 69,
+          "line": 152,
+          "offset": 5273
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 152,
+          "offset": 5209
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8036::smooth_square_branch@5209"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.add(smooth_sq_relin, smooth_sq_rot4, branch_add)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "branch_add"
+          }
+        }
+      ],
+      "inputs": [
+        "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin@2",
+        "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_rot4@1"
+      ],
+      "op_id": "op9",
+      "op_kind": "add",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 103,
+              "line": 218,
+              "offset": 8134
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 218,
+              "offset": 8036
+            }
+          },
+          "source_text": "Ciphertext branch_add = smooth_square_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b)",
+          "stmt_id": "ckks_single_thread_workload@8036"
+        }
+      ],
+      "outputs": [
+        "smooth_square_branch__ckks_single_thread_workload_8036__branch_add@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 62,
+          "line": 153,
+          "offset": 5336
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 153,
+          "offset": 5279
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8036::smooth_square_branch@5279"
+    },
+    {
+      "api_name": "assign",
+      "attrs": {
+        "barrier": false,
+        "cost": 1,
+        "source_text": "Ciphertext branch_add = smooth_square_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "branch_add"
+          }
+        }
+      ],
+      "inputs": [
+        "smooth_square_branch__ckks_single_thread_workload_8036__branch_add@1"
+      ],
+      "op_id": "op10",
+      "op_kind": "assign",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 103,
+              "line": 218,
+              "offset": 8134
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 218,
+              "offset": 8036
+            }
+          },
+          "source_text": "Ciphertext branch_add = smooth_square_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b)",
+          "stmt_id": "ckks_single_thread_workload@8036"
+        }
+      ],
+      "outputs": [
+        "branch_add@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 103,
+          "line": 218,
+          "offset": 8134
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 218,
+          "offset": 8036
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8036::return"
+    },
+    {
+      "api_name": "sub",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.sub(ct_c, ct_d, diff_cd)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "diff_cd"
+          }
+        }
+      ],
+      "inputs": [
+        "scale@0",
+        "ct_c@0"
+      ],
+      "op_id": "op11",
+      "op_kind": "sub",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 102,
+              "line": 219,
+              "offset": 8237
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 219,
+              "offset": 8140
+            }
+          },
+          "source_text": "Ciphertext branch_quad = diff_energy_branch(ckks_eva, relin_keys, galois_keys, scale, ct_c, ct_d)",
+          "stmt_id": "ckks_single_thread_workload@8140"
+        }
+      ],
+      "outputs": [
+        "diff_energy_branch__ckks_single_thread_workload_8140__diff_cd@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 38,
+          "line": 170,
+          "offset": 5860
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 170,
+          "offset": 5827
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8140::diff_energy_branch@5827"
+    },
+    {
+      "api_name": "rotate",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "1"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.rotate(diff_cd, diff_rot1, 1, galois_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "diff_rot1"
+          }
+        }
+      ],
+      "inputs": [
+        "diff_energy_branch__ckks_single_thread_workload_8140__diff_cd@1"
+      ],
+      "op_id": "op12",
+      "op_kind": "rotate",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 102,
+              "line": 219,
+              "offset": 8237
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 219,
+              "offset": 8140
+            }
+          },
+          "source_text": "Ciphertext branch_quad = diff_energy_branch(ckks_eva, relin_keys, galois_keys, scale, ct_c, ct_d)",
+          "stmt_id": "ckks_single_thread_workload@8140"
+        }
+      ],
+      "outputs": [
+        "diff_energy_branch__ckks_single_thread_workload_8140__diff_rot1@1"
+      ],
+      "resources": [
+        "galois_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 56,
+          "line": 171,
+          "offset": 5917
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 171,
+          "offset": 5866
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8140::diff_energy_branch@5866"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.add(diff_cd, diff_rot1, diff_mix)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "diff_mix"
+          }
+        }
+      ],
+      "inputs": [
+        "diff_energy_branch__ckks_single_thread_workload_8140__diff_cd@1",
+        "diff_energy_branch__ckks_single_thread_workload_8140__diff_rot1@1"
+      ],
+      "op_id": "op13",
+      "op_kind": "add",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 102,
+              "line": 219,
+              "offset": 8237
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 219,
+              "offset": 8140
+            }
+          },
+          "source_text": "Ciphertext branch_quad = diff_energy_branch(ckks_eva, relin_keys, galois_keys, scale, ct_c, ct_d)",
+          "stmt_id": "ckks_single_thread_workload@8140"
+        }
+      ],
+      "outputs": [
+        "diff_energy_branch__ckks_single_thread_workload_8140__diff_mix@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 47,
+          "line": 172,
+          "offset": 5965
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 172,
+          "offset": 5923
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8140::diff_energy_branch@5923"
+    },
+    {
+      "api_name": "multiply",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 5,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.multiply(diff_mix, diff_mix, diff_sq)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "diff_sq"
+          }
+        }
+      ],
+      "inputs": [
+        "diff_energy_branch__ckks_single_thread_workload_8140__diff_mix@1",
+        "diff_energy_branch__ckks_single_thread_workload_8140__diff_mix@1"
+      ],
+      "op_id": "op14",
+      "op_kind": "multiply",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 102,
+              "line": 219,
+              "offset": 8237
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 219,
+              "offset": 8140
+            }
+          },
+          "source_text": "Ciphertext branch_quad = diff_energy_branch(ckks_eva, relin_keys, galois_keys, scale, ct_c, ct_d)",
+          "stmt_id": "ckks_single_thread_workload@8140"
+        }
+      ],
+      "outputs": [
+        "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 51,
+          "line": 173,
+          "offset": 6017
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 173,
+          "offset": 5971
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8140::diff_energy_branch@5971"
+    },
+    {
+      "api_name": "relinearize",
+      "attrs": {
+        "barrier": true,
+        "constants": [],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.relinearize(diff_sq, diff_sq_relin, relin_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "diff_sq_relin"
+          }
+        }
+      ],
+      "inputs": [
+        "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq@1"
+      ],
+      "op_id": "op15",
+      "op_kind": "relinearize",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 102,
+              "line": 219,
+              "offset": 8237
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 219,
+              "offset": 8140
+            }
+          },
+          "source_text": "Ciphertext branch_quad = diff_energy_branch(ckks_eva, relin_keys, galois_keys, scale, ct_c, ct_d)",
+          "stmt_id": "ckks_single_thread_workload@8140"
+        }
+      ],
+      "outputs": [
+        "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin@1"
+      ],
+      "resources": [
+        "relin_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 61,
+          "line": 174,
+          "offset": 6079
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 174,
+          "offset": 6023
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8140::diff_energy_branch@6023"
+    },
+    {
+      "api_name": "rescale_dynamic",
+      "attrs": {
+        "barrier": true,
+        "constants": [
+          "scale"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.rescale_dynamic(diff_sq_relin, diff_sq_relin, scale)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "diff_sq_relin"
+          }
+        }
+      ],
+      "inputs": [
+        "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin@1"
+      ],
+      "op_id": "op16",
+      "op_kind": "rescale_dynamic",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 102,
+              "line": 219,
+              "offset": 8237
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 219,
+              "offset": 8140
+            }
+          },
+          "source_text": "Ciphertext branch_quad = diff_energy_branch(ckks_eva, relin_keys, galois_keys, scale, ct_c, ct_d)",
+          "stmt_id": "ckks_single_thread_workload@8140"
+        }
+      ],
+      "outputs": [
+        "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin@2"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 66,
+          "line": 175,
+          "offset": 6146
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 175,
+          "offset": 6085
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8140::diff_energy_branch@6085"
+    },
+    {
+      "api_name": "rotate",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "2"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.rotate(diff_sq_relin, diff_sq_rot2, 2, galois_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "diff_sq_rot2"
+          }
+        }
+      ],
+      "inputs": [
+        "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin@2"
+      ],
+      "op_id": "op17",
+      "op_kind": "rotate",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 102,
+              "line": 219,
+              "offset": 8237
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 219,
+              "offset": 8140
+            }
+          },
+          "source_text": "Ciphertext branch_quad = diff_energy_branch(ckks_eva, relin_keys, galois_keys, scale, ct_c, ct_d)",
+          "stmt_id": "ckks_single_thread_workload@8140"
+        }
+      ],
+      "outputs": [
+        "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot2@1"
+      ],
+      "resources": [
+        "galois_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 65,
+          "line": 176,
+          "offset": 6212
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 176,
+          "offset": 6152
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8140::diff_energy_branch@6152"
+    },
+    {
+      "api_name": "rotate",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "8"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.rotate(diff_sq_relin, diff_sq_rot8, 8, galois_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "diff_sq_rot8"
+          }
+        }
+      ],
+      "inputs": [
+        "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin@2"
+      ],
+      "op_id": "op18",
+      "op_kind": "rotate",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 102,
+              "line": 219,
+              "offset": 8237
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 219,
+              "offset": 8140
+            }
+          },
+          "source_text": "Ciphertext branch_quad = diff_energy_branch(ckks_eva, relin_keys, galois_keys, scale, ct_c, ct_d)",
+          "stmt_id": "ckks_single_thread_workload@8140"
+        }
+      ],
+      "outputs": [
+        "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot8@1"
+      ],
+      "resources": [
+        "galois_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 65,
+          "line": 177,
+          "offset": 6278
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 177,
+          "offset": 6218
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8140::diff_energy_branch@6218"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.add(diff_sq_relin, diff_sq_rot2, branch_quad)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "branch_quad"
+          }
+        }
+      ],
+      "inputs": [
+        "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin@2",
+        "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot2@1"
+      ],
+      "op_id": "op19",
+      "op_kind": "add",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 102,
+              "line": 219,
+              "offset": 8237
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 219,
+              "offset": 8140
+            }
+          },
+          "source_text": "Ciphertext branch_quad = diff_energy_branch(ckks_eva, relin_keys, galois_keys, scale, ct_c, ct_d)",
+          "stmt_id": "ckks_single_thread_workload@8140"
+        }
+      ],
+      "outputs": [
+        "diff_energy_branch__ckks_single_thread_workload_8140__branch_quad@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 59,
+          "line": 178,
+          "offset": 6338
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 178,
+          "offset": 6284
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8140::diff_energy_branch@6284"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.add(branch_quad, diff_sq_rot8, branch_quad)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "branch_quad"
+          }
+        }
+      ],
+      "inputs": [
+        "diff_energy_branch__ckks_single_thread_workload_8140__branch_quad@1",
+        "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot8@1"
+      ],
+      "op_id": "op20",
+      "op_kind": "add",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 102,
+              "line": 219,
+              "offset": 8237
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 219,
+              "offset": 8140
+            }
+          },
+          "source_text": "Ciphertext branch_quad = diff_energy_branch(ckks_eva, relin_keys, galois_keys, scale, ct_c, ct_d)",
+          "stmt_id": "ckks_single_thread_workload@8140"
+        }
+      ],
+      "outputs": [
+        "diff_energy_branch__ckks_single_thread_workload_8140__branch_quad@2"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 57,
+          "line": 179,
+          "offset": 6396
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 179,
+          "offset": 6344
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8140::diff_energy_branch@6344"
+    },
+    {
+      "api_name": "assign",
+      "attrs": {
+        "barrier": false,
+        "cost": 1,
+        "source_text": "Ciphertext branch_quad = diff_energy_branch(ckks_eva, relin_keys, galois_keys, scale, ct_c, ct_d)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "branch_quad"
+          }
+        }
+      ],
+      "inputs": [
+        "diff_energy_branch__ckks_single_thread_workload_8140__branch_quad@2"
+      ],
+      "op_id": "op21",
+      "op_kind": "assign",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 102,
+              "line": 219,
+              "offset": 8237
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 219,
+              "offset": 8140
+            }
+          },
+          "source_text": "Ciphertext branch_quad = diff_energy_branch(ckks_eva, relin_keys, galois_keys, scale, ct_c, ct_d)",
+          "stmt_id": "ckks_single_thread_workload@8140"
+        }
+      ],
+      "outputs": [
+        "branch_quad@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 102,
+          "line": 219,
+          "offset": 8237
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 219,
+          "offset": 8140
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8140::return"
+    },
+    {
+      "api_name": "multiply",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 5,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.multiply(ct_a, ct_c, prod_ac)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "prod_ac"
+          }
+        }
+      ],
+      "inputs": [
+        "scale@0",
+        "ct_b@0"
+      ],
+      "op_id": "op22",
+      "op_kind": "multiply",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 91,
+              "line": 221,
+              "offset": 8359
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 220,
+              "offset": 8243
+            }
+          },
+          "source_text": "Ciphertext branch_cross =\n        cross_mix_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d)",
+          "stmt_id": "ckks_single_thread_workload@8243"
+        }
+      ],
+      "outputs": [
+        "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 43,
+          "line": 198,
+          "offset": 7025
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 198,
+          "offset": 6987
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8243::cross_mix_branch@6987"
+    },
+    {
+      "api_name": "relinearize",
+      "attrs": {
+        "barrier": true,
+        "constants": [],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.relinearize(prod_ac, prod_ac_relin, relin_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "prod_ac_relin"
+          }
+        }
+      ],
+      "inputs": [
+        "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac@1"
+      ],
+      "op_id": "op23",
+      "op_kind": "relinearize",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 91,
+              "line": 221,
+              "offset": 8359
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 220,
+              "offset": 8243
+            }
+          },
+          "source_text": "Ciphertext branch_cross =\n        cross_mix_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d)",
+          "stmt_id": "ckks_single_thread_workload@8243"
+        }
+      ],
+      "outputs": [
+        "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin@1"
+      ],
+      "resources": [
+        "relin_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 61,
+          "line": 199,
+          "offset": 7087
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 199,
+          "offset": 7031
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8243::cross_mix_branch@7031"
+    },
+    {
+      "api_name": "rescale_dynamic",
+      "attrs": {
+        "barrier": true,
+        "constants": [
+          "scale"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.rescale_dynamic(prod_ac_relin, prod_ac_relin, scale)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "prod_ac_relin"
+          }
+        }
+      ],
+      "inputs": [
+        "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin@1"
+      ],
+      "op_id": "op24",
+      "op_kind": "rescale_dynamic",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 91,
+              "line": 221,
+              "offset": 8359
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 220,
+              "offset": 8243
+            }
+          },
+          "source_text": "Ciphertext branch_cross =\n        cross_mix_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d)",
+          "stmt_id": "ckks_single_thread_workload@8243"
+        }
+      ],
+      "outputs": [
+        "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin@2"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 66,
+          "line": 200,
+          "offset": 7154
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 200,
+          "offset": 7093
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8243::cross_mix_branch@7093"
+    },
+    {
+      "api_name": "multiply",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 5,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.multiply(ct_b, ct_d, prod_bd)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "prod_bd"
+          }
+        }
+      ],
+      "inputs": [
+        "ct_a@0",
+        "ct_c@0"
+      ],
+      "op_id": "op25",
+      "op_kind": "multiply",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 91,
+              "line": 221,
+              "offset": 8359
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 220,
+              "offset": 8243
+            }
+          },
+          "source_text": "Ciphertext branch_cross =\n        cross_mix_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d)",
+          "stmt_id": "ckks_single_thread_workload@8243"
+        }
+      ],
+      "outputs": [
+        "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 43,
+          "line": 201,
+          "offset": 7198
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 201,
+          "offset": 7160
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8243::cross_mix_branch@7160"
+    },
+    {
+      "api_name": "relinearize",
+      "attrs": {
+        "barrier": true,
+        "constants": [],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.relinearize(prod_bd, prod_bd_relin, relin_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "prod_bd_relin"
+          }
+        }
+      ],
+      "inputs": [
+        "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd@1"
+      ],
+      "op_id": "op26",
+      "op_kind": "relinearize",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 91,
+              "line": 221,
+              "offset": 8359
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 220,
+              "offset": 8243
+            }
+          },
+          "source_text": "Ciphertext branch_cross =\n        cross_mix_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d)",
+          "stmt_id": "ckks_single_thread_workload@8243"
+        }
+      ],
+      "outputs": [
+        "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin@1"
+      ],
+      "resources": [
+        "relin_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 61,
+          "line": 202,
+          "offset": 7260
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 202,
+          "offset": 7204
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8243::cross_mix_branch@7204"
+    },
+    {
+      "api_name": "rescale_dynamic",
+      "attrs": {
+        "barrier": true,
+        "constants": [
+          "scale"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.rescale_dynamic(prod_bd_relin, prod_bd_relin, scale)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "prod_bd_relin"
+          }
+        }
+      ],
+      "inputs": [
+        "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin@1"
+      ],
+      "op_id": "op27",
+      "op_kind": "rescale_dynamic",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 91,
+              "line": 221,
+              "offset": 8359
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 220,
+              "offset": 8243
+            }
+          },
+          "source_text": "Ciphertext branch_cross =\n        cross_mix_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d)",
+          "stmt_id": "ckks_single_thread_workload@8243"
+        }
+      ],
+      "outputs": [
+        "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin@2"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 66,
+          "line": 203,
+          "offset": 7327
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 203,
+          "offset": 7266
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8243::cross_mix_branch@7266"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.add(prod_ac_relin, prod_bd_relin, cross_sum)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cross_sum"
+          }
+        }
+      ],
+      "inputs": [
+        "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin@2",
+        "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin@2"
+      ],
+      "op_id": "op28",
+      "op_kind": "add",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 91,
+              "line": 221,
+              "offset": 8359
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 220,
+              "offset": 8243
+            }
+          },
+          "source_text": "Ciphertext branch_cross =\n        cross_mix_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d)",
+          "stmt_id": "ckks_single_thread_workload@8243"
+        }
+      ],
+      "outputs": [
+        "cross_mix_branch__ckks_single_thread_workload_8243__cross_sum@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 58,
+          "line": 204,
+          "offset": 7386
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 204,
+          "offset": 7333
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8243::cross_mix_branch@7333"
+    },
+    {
+      "api_name": "rotate",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "8"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.rotate(cross_sum, cross_rot8, 8, galois_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cross_rot8"
+          }
+        }
+      ],
+      "inputs": [
+        "cross_mix_branch__ckks_single_thread_workload_8243__cross_sum@1"
+      ],
+      "op_id": "op29",
+      "op_kind": "rotate",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 91,
+              "line": 221,
+              "offset": 8359
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 220,
+              "offset": 8243
+            }
+          },
+          "source_text": "Ciphertext branch_cross =\n        cross_mix_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d)",
+          "stmt_id": "ckks_single_thread_workload@8243"
+        }
+      ],
+      "outputs": [
+        "cross_mix_branch__ckks_single_thread_workload_8243__cross_rot8@1"
+      ],
+      "resources": [
+        "galois_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 59,
+          "line": 205,
+          "offset": 7446
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 205,
+          "offset": 7392
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8243::cross_mix_branch@7392"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.add(cross_sum, cross_rot8, cross_mix)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cross_mix"
+          }
+        }
+      ],
+      "inputs": [
+        "cross_mix_branch__ckks_single_thread_workload_8243__cross_sum@1",
+        "cross_mix_branch__ckks_single_thread_workload_8243__cross_rot8@1"
+      ],
+      "op_id": "op30",
+      "op_kind": "add",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 91,
+              "line": 221,
+              "offset": 8359
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 220,
+              "offset": 8243
+            }
+          },
+          "source_text": "Ciphertext branch_cross =\n        cross_mix_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d)",
+          "stmt_id": "ckks_single_thread_workload@8243"
+        }
+      ],
+      "outputs": [
+        "cross_mix_branch__ckks_single_thread_workload_8243__cross_mix@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 51,
+          "line": 206,
+          "offset": 7498
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 206,
+          "offset": 7452
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8243::cross_mix_branch@7452"
+    },
+    {
+      "api_name": "rotate",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "16"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.rotate(cross_mix, cross_rot16, 16, galois_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "cross_rot16"
+          }
+        }
+      ],
+      "inputs": [
+        "cross_mix_branch__ckks_single_thread_workload_8243__cross_mix@1"
+      ],
+      "op_id": "op31",
+      "op_kind": "rotate",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 91,
+              "line": 221,
+              "offset": 8359
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 220,
+              "offset": 8243
+            }
+          },
+          "source_text": "Ciphertext branch_cross =\n        cross_mix_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d)",
+          "stmt_id": "ckks_single_thread_workload@8243"
+        }
+      ],
+      "outputs": [
+        "cross_mix_branch__ckks_single_thread_workload_8243__cross_rot16@1"
+      ],
+      "resources": [
+        "galois_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 61,
+          "line": 207,
+          "offset": 7560
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 207,
+          "offset": 7504
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8243::cross_mix_branch@7504"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.add(cross_mix, cross_rot16, branch_cross)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "branch_cross"
+          }
+        }
+      ],
+      "inputs": [
+        "cross_mix_branch__ckks_single_thread_workload_8243__cross_mix@1",
+        "cross_mix_branch__ckks_single_thread_workload_8243__cross_rot16@1"
+      ],
+      "op_id": "op32",
+      "op_kind": "add",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 91,
+              "line": 221,
+              "offset": 8359
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 220,
+              "offset": 8243
+            }
+          },
+          "source_text": "Ciphertext branch_cross =\n        cross_mix_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d)",
+          "stmt_id": "ckks_single_thread_workload@8243"
+        }
+      ],
+      "outputs": [
+        "cross_mix_branch__ckks_single_thread_workload_8243__branch_cross@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 55,
+          "line": 208,
+          "offset": 7616
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 208,
+          "offset": 7566
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8243::cross_mix_branch@7566"
+    },
+    {
+      "api_name": "assign",
+      "attrs": {
+        "barrier": false,
+        "cost": 1,
+        "source_text": "Ciphertext branch_cross =\n        cross_mix_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "branch_cross"
+          }
+        }
+      ],
+      "inputs": [
+        "cross_mix_branch__ckks_single_thread_workload_8243__branch_cross@1"
+      ],
+      "op_id": "op33",
+      "op_kind": "assign",
+      "origin_callstack": [
+        {
+          "function": "ckks_single_thread_workload",
+          "source_span": {
+            "end": {
+              "column": 91,
+              "line": 221,
+              "offset": 8359
+            },
+            "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+            "start": {
+              "column": 5,
+              "line": 220,
+              "offset": 8243
+            }
+          },
+          "source_text": "Ciphertext branch_cross =\n        cross_mix_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d)",
+          "stmt_id": "ckks_single_thread_workload@8243"
+        }
+      ],
+      "outputs": [
+        "branch_cross@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 91,
+          "line": 221,
+          "offset": 8359
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 220,
+          "offset": 8243
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8243::return"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.add(branch_add, branch_quad, merged_left)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "merged_left"
+          }
+        }
+      ],
+      "inputs": [
+        "branch_add@1",
+        "branch_quad@1"
+      ],
+      "op_id": "op34",
+      "op_kind": "add",
+      "origin_callstack": [],
+      "outputs": [
+        "merged_left@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 55,
+          "line": 230,
+          "offset": 8562
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 230,
+          "offset": 8512
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8512"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.add(merged_left, branch_cross, merged_all)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "merged_all"
+          }
+        }
+      ],
+      "inputs": [
+        "merged_left@1",
+        "branch_cross@1"
+      ],
+      "op_id": "op35",
+      "op_kind": "add",
+      "origin_callstack": [],
+      "outputs": [
+        "merged_all@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 56,
+          "line": 231,
+          "offset": 8619
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 231,
+          "offset": 8568
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8568"
+    },
+    {
+      "api_name": "multiply",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 5,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.multiply(merged_all, branch_add, tail_prod)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "tail_prod"
+          }
+        }
+      ],
+      "inputs": [
+        "merged_all@1",
+        "branch_add@1"
+      ],
+      "op_id": "op36",
+      "op_kind": "multiply",
+      "origin_callstack": [],
+      "outputs": [
+        "tail_prod@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 57,
+          "line": 232,
+          "offset": 8677
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 232,
+          "offset": 8625
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8625"
+    },
+    {
+      "api_name": "relinearize",
+      "attrs": {
+        "barrier": true,
+        "constants": [],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.relinearize(tail_prod, tail_prod_relin, relin_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "tail_prod_relin"
+          }
+        }
+      ],
+      "inputs": [
+        "tail_prod@1"
+      ],
+      "op_id": "op37",
+      "op_kind": "relinearize",
+      "origin_callstack": [],
+      "outputs": [
+        "tail_prod_relin@1"
+      ],
+      "resources": [
+        "relin_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 65,
+          "line": 233,
+          "offset": 8743
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 233,
+          "offset": 8683
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8683"
+    },
+    {
+      "api_name": "rescale_dynamic",
+      "attrs": {
+        "barrier": true,
+        "constants": [
+          "scale"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.rescale_dynamic(tail_prod_relin, tail_prod_relin, scale)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "tail_prod_relin"
+          }
+        }
+      ],
+      "inputs": [
+        "tail_prod_relin@1"
+      ],
+      "op_id": "op38",
+      "op_kind": "rescale_dynamic",
+      "origin_callstack": [],
+      "outputs": [
+        "tail_prod_relin@2"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 70,
+          "line": 234,
+          "offset": 8814
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 234,
+          "offset": 8749
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8749"
+    },
+    {
+      "api_name": "rotate",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "32"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.rotate(tail_prod_relin, tail_rot32, 32, galois_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "tail_rot32"
+          }
+        }
+      ],
+      "inputs": [
+        "tail_prod_relin@2"
+      ],
+      "op_id": "op39",
+      "op_kind": "rotate",
+      "origin_callstack": [],
+      "outputs": [
+        "tail_rot32@1"
+      ],
+      "resources": [
+        "galois_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 66,
+          "line": 235,
+          "offset": 8881
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 235,
+          "offset": 8820
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8820"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "ckks_eva",
+        "source_text": "ckks_eva.add(tail_prod_relin, tail_rot32, result)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "result"
+          }
+        }
+      ],
+      "inputs": [
+        "tail_prod_relin@2",
+        "tail_rot32@1"
+      ],
+      "op_id": "op40",
+      "op_kind": "add",
+      "origin_callstack": [],
+      "outputs": [
+        "result@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 54,
+          "line": 236,
+          "offset": 8936
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 236,
+          "offset": 8887
+        }
+      },
+      "stmt_id": "ckks_single_thread_workload@8887"
+    }
+  ],
+  "schema_version": 2,
+  "source_file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+  "values": [
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 33,
+          "line": 212,
+          "offset": 7678
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 6,
+          "line": 212,
+          "offset": 7651
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ckks_eva"
+      },
+      "value_id": "ckks_eva@0",
+      "value_kind": "evaluator"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 62,
+          "line": 212,
+          "offset": 7707
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 35,
+          "line": 212,
+          "offset": 7680
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "relin_keys"
+      },
+      "value_id": "relin_keys@0",
+      "value_kind": "relin_keys"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 35,
+          "line": 213,
+          "offset": 7771
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 6,
+          "line": 213,
+          "offset": 7742
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "galois_keys"
+      },
+      "value_id": "galois_keys@0",
+      "value_kind": "galois_keys"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 28,
+          "line": 214,
+          "offset": 7842
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 6,
+          "line": 214,
+          "offset": 7820
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ct_a"
+      },
+      "value_id": "ct_a@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 52,
+          "line": 214,
+          "offset": 7866
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 30,
+          "line": 214,
+          "offset": 7844
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ct_b"
+      },
+      "value_id": "ct_b@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 28,
+          "line": 215,
+          "offset": 7923
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 6,
+          "line": 215,
+          "offset": 7901
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ct_c"
+      },
+      "value_id": "ct_c@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 52,
+          "line": 215,
+          "offset": 7947
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 30,
+          "line": 215,
+          "offset": 7925
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ct_d"
+      },
+      "value_id": "ct_d@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 24,
+          "line": 216,
+          "offset": 8000
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 6,
+          "line": 216,
+          "offset": 7982
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "result"
+      },
+      "value_id": "result@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 103,
+          "line": 218,
+          "offset": 8134
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 218,
+          "offset": 8036
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "branch_add"
+      },
+      "value_id": "branch_add@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 103,
+          "line": 218,
+          "offset": 8134
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 218,
+          "offset": 8036
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "scale"
+      },
+      "value_id": "scale@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::smooth_square_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 22,
+          "line": 134,
+          "offset": 4523
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 134,
+          "offset": 4506
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_single_thread_workload_8036__sum_ab"
+      },
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__sum_ab@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::smooth_square_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 24,
+          "line": 135,
+          "offset": 4548
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 135,
+          "offset": 4529
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_single_thread_workload_8036__rot_ab_1"
+      },
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__rot_ab_1@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::smooth_square_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 25,
+          "line": 136,
+          "offset": 4574
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 136,
+          "offset": 4554
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab"
+      },
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::smooth_square_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 28,
+          "line": 137,
+          "offset": 4603
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 137,
+          "offset": 4580
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_single_thread_workload_8036__rot_smooth_2"
+      },
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__rot_smooth_2@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::smooth_square_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 27,
+          "line": 138,
+          "offset": 4631
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 138,
+          "offset": 4609
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab_2"
+      },
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab_2@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::smooth_square_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 25,
+          "line": 139,
+          "offset": 4657
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 139,
+          "offset": 4637
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq"
+      },
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::smooth_square_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 31,
+          "line": 140,
+          "offset": 4689
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 140,
+          "offset": 4663
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin"
+      },
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::smooth_square_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 30,
+          "line": 141,
+          "offset": 4720
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 141,
+          "offset": 4695
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_rot4"
+      },
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_rot4@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::smooth_square_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 26,
+          "line": 142,
+          "offset": 4747
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 142,
+          "offset": 4726
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_single_thread_workload_8036__branch_add"
+      },
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__branch_add@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 102,
+          "line": 219,
+          "offset": 8237
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 219,
+          "offset": 8140
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "branch_quad"
+      },
+      "value_id": "branch_quad@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::diff_energy_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 23,
+          "line": 161,
+          "offset": 5629
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 161,
+          "offset": 5611
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_single_thread_workload_8140__diff_cd"
+      },
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_cd@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::diff_energy_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 25,
+          "line": 162,
+          "offset": 5655
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 162,
+          "offset": 5635
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_single_thread_workload_8140__diff_rot1"
+      },
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_rot1@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::diff_energy_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 24,
+          "line": 163,
+          "offset": 5680
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 163,
+          "offset": 5661
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_single_thread_workload_8140__diff_mix"
+      },
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_mix@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::diff_energy_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 23,
+          "line": 164,
+          "offset": 5704
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 164,
+          "offset": 5686
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq"
+      },
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::diff_energy_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 29,
+          "line": 165,
+          "offset": 5734
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 165,
+          "offset": 5710
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin"
+      },
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::diff_energy_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 28,
+          "line": 166,
+          "offset": 5763
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 166,
+          "offset": 5740
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot2"
+      },
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot2@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::diff_energy_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 28,
+          "line": 167,
+          "offset": 5792
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 167,
+          "offset": 5769
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot8"
+      },
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot8@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::diff_energy_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 27,
+          "line": 168,
+          "offset": 5820
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 168,
+          "offset": 5798
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_single_thread_workload_8140__branch_quad"
+      },
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__branch_quad@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 91,
+          "line": 221,
+          "offset": 8359
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 220,
+          "offset": 8243
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "branch_cross"
+      },
+      "value_id": "branch_cross@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::cross_mix_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 23,
+          "line": 188,
+          "offset": 6760
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 188,
+          "offset": 6742
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac"
+      },
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::cross_mix_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 29,
+          "line": 189,
+          "offset": 6790
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 189,
+          "offset": 6766
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin"
+      },
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::cross_mix_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 23,
+          "line": 190,
+          "offset": 6814
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 190,
+          "offset": 6796
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd"
+      },
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::cross_mix_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 29,
+          "line": 191,
+          "offset": 6844
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 191,
+          "offset": 6820
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin"
+      },
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::cross_mix_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 25,
+          "line": 192,
+          "offset": 6870
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 192,
+          "offset": 6850
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_single_thread_workload_8243__cross_sum"
+      },
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__cross_sum@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::cross_mix_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 26,
+          "line": 193,
+          "offset": 6897
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 193,
+          "offset": 6876
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_single_thread_workload_8243__cross_rot8"
+      },
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__cross_rot8@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::cross_mix_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 25,
+          "line": 194,
+          "offset": 6923
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 194,
+          "offset": 6903
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_single_thread_workload_8243__cross_mix"
+      },
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__cross_mix@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::cross_mix_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 27,
+          "line": 195,
+          "offset": 6951
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 195,
+          "offset": 6929
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_single_thread_workload_8243__cross_rot16"
+      },
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__cross_rot16@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::cross_mix_branch",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 28,
+          "line": 196,
+          "offset": 6980
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 196,
+          "offset": 6957
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_single_thread_workload_8243__branch_cross"
+      },
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__branch_cross@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 27,
+          "line": 223,
+          "offset": 8388
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 223,
+          "offset": 8366
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "merged_left"
+      },
+      "value_id": "merged_left@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 26,
+          "line": 224,
+          "offset": 8415
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 224,
+          "offset": 8394
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "merged_all"
+      },
+      "value_id": "merged_all@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 25,
+          "line": 225,
+          "offset": 8441
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 225,
+          "offset": 8421
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "tail_prod"
+      },
+      "value_id": "tail_prod@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 31,
+          "line": 226,
+          "offset": 8473
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 226,
+          "offset": 8447
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "tail_prod_relin"
+      },
+      "value_id": "tail_prod_relin@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 26,
+          "line": 227,
+          "offset": 8500
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 227,
+          "offset": 8479
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "tail_rot32"
+      },
+      "value_id": "tail_rot32@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::smooth_square_branch",
+      "producer_op_id": "op0",
+      "source_span": {
+        "end": {
+          "column": 37,
+          "line": 144,
+          "offset": 4786
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 144,
+          "offset": 4754
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_single_thread_workload_8036__sum_ab"
+      },
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__sum_ab@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::smooth_square_branch",
+      "producer_op_id": "op1",
+      "source_span": {
+        "end": {
+          "column": 54,
+          "line": 145,
+          "offset": 4841
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 145,
+          "offset": 4792
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_single_thread_workload_8036__rot_ab_1"
+      },
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__rot_ab_1@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::smooth_square_branch",
+      "producer_op_id": "op2",
+      "source_span": {
+        "end": {
+          "column": 46,
+          "line": 146,
+          "offset": 4888
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 146,
+          "offset": 4847
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab"
+      },
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::smooth_square_branch",
+      "producer_op_id": "op3",
+      "source_span": {
+        "end": {
+          "column": 61,
+          "line": 147,
+          "offset": 4950
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 147,
+          "offset": 4894
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_single_thread_workload_8036__rot_smooth_2"
+      },
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__rot_smooth_2@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::smooth_square_branch",
+      "producer_op_id": "op4",
+      "source_span": {
+        "end": {
+          "column": 55,
+          "line": 148,
+          "offset": 5006
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 148,
+          "offset": 4956
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab_2"
+      },
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab_2@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::smooth_square_branch",
+      "producer_op_id": "op5",
+      "source_span": {
+        "end": {
+          "column": 59,
+          "line": 149,
+          "offset": 5066
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 149,
+          "offset": 5012
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq"
+      },
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::smooth_square_branch",
+      "producer_op_id": "op6",
+      "source_span": {
+        "end": {
+          "column": 65,
+          "line": 150,
+          "offset": 5132
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 150,
+          "offset": 5072
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin"
+      },
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::smooth_square_branch",
+      "producer_op_id": "op7",
+      "source_span": {
+        "end": {
+          "column": 70,
+          "line": 151,
+          "offset": 5203
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 151,
+          "offset": 5138
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin"
+      },
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin@2",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::smooth_square_branch",
+      "producer_op_id": "op8",
+      "source_span": {
+        "end": {
+          "column": 69,
+          "line": 152,
+          "offset": 5273
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 152,
+          "offset": 5209
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_rot4"
+      },
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_rot4@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::smooth_square_branch",
+      "producer_op_id": "op9",
+      "source_span": {
+        "end": {
+          "column": 62,
+          "line": 153,
+          "offset": 5336
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 153,
+          "offset": 5279
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "smooth_square_branch__ckks_single_thread_workload_8036__branch_add"
+      },
+      "value_id": "smooth_square_branch__ckks_single_thread_workload_8036__branch_add@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload",
+      "producer_op_id": "op10",
+      "source_span": {
+        "end": {
+          "column": 103,
+          "line": 218,
+          "offset": 8134
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 218,
+          "offset": 8036
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "branch_add"
+      },
+      "value_id": "branch_add@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::diff_energy_branch",
+      "producer_op_id": "op11",
+      "source_span": {
+        "end": {
+          "column": 38,
+          "line": 170,
+          "offset": 5860
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 170,
+          "offset": 5827
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_single_thread_workload_8140__diff_cd"
+      },
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_cd@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::diff_energy_branch",
+      "producer_op_id": "op12",
+      "source_span": {
+        "end": {
+          "column": 56,
+          "line": 171,
+          "offset": 5917
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 171,
+          "offset": 5866
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_single_thread_workload_8140__diff_rot1"
+      },
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_rot1@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::diff_energy_branch",
+      "producer_op_id": "op13",
+      "source_span": {
+        "end": {
+          "column": 47,
+          "line": 172,
+          "offset": 5965
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 172,
+          "offset": 5923
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_single_thread_workload_8140__diff_mix"
+      },
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_mix@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::diff_energy_branch",
+      "producer_op_id": "op14",
+      "source_span": {
+        "end": {
+          "column": 51,
+          "line": 173,
+          "offset": 6017
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 173,
+          "offset": 5971
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq"
+      },
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::diff_energy_branch",
+      "producer_op_id": "op15",
+      "source_span": {
+        "end": {
+          "column": 61,
+          "line": 174,
+          "offset": 6079
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 174,
+          "offset": 6023
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin"
+      },
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::diff_energy_branch",
+      "producer_op_id": "op16",
+      "source_span": {
+        "end": {
+          "column": 66,
+          "line": 175,
+          "offset": 6146
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 175,
+          "offset": 6085
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin"
+      },
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin@2",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::diff_energy_branch",
+      "producer_op_id": "op17",
+      "source_span": {
+        "end": {
+          "column": 65,
+          "line": 176,
+          "offset": 6212
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 176,
+          "offset": 6152
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot2"
+      },
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot2@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::diff_energy_branch",
+      "producer_op_id": "op18",
+      "source_span": {
+        "end": {
+          "column": 65,
+          "line": 177,
+          "offset": 6278
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 177,
+          "offset": 6218
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot8"
+      },
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot8@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::diff_energy_branch",
+      "producer_op_id": "op19",
+      "source_span": {
+        "end": {
+          "column": 59,
+          "line": 178,
+          "offset": 6338
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 178,
+          "offset": 6284
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_single_thread_workload_8140__branch_quad"
+      },
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__branch_quad@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::diff_energy_branch",
+      "producer_op_id": "op20",
+      "source_span": {
+        "end": {
+          "column": 57,
+          "line": 179,
+          "offset": 6396
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 179,
+          "offset": 6344
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "diff_energy_branch__ckks_single_thread_workload_8140__branch_quad"
+      },
+      "value_id": "diff_energy_branch__ckks_single_thread_workload_8140__branch_quad@2",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload",
+      "producer_op_id": "op21",
+      "source_span": {
+        "end": {
+          "column": 102,
+          "line": 219,
+          "offset": 8237
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 219,
+          "offset": 8140
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "branch_quad"
+      },
+      "value_id": "branch_quad@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::cross_mix_branch",
+      "producer_op_id": "op22",
+      "source_span": {
+        "end": {
+          "column": 43,
+          "line": 198,
+          "offset": 7025
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 198,
+          "offset": 6987
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac"
+      },
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::cross_mix_branch",
+      "producer_op_id": "op23",
+      "source_span": {
+        "end": {
+          "column": 61,
+          "line": 199,
+          "offset": 7087
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 199,
+          "offset": 7031
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin"
+      },
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::cross_mix_branch",
+      "producer_op_id": "op24",
+      "source_span": {
+        "end": {
+          "column": 66,
+          "line": 200,
+          "offset": 7154
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 200,
+          "offset": 7093
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin"
+      },
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin@2",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::cross_mix_branch",
+      "producer_op_id": "op25",
+      "source_span": {
+        "end": {
+          "column": 43,
+          "line": 201,
+          "offset": 7198
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 201,
+          "offset": 7160
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd"
+      },
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::cross_mix_branch",
+      "producer_op_id": "op26",
+      "source_span": {
+        "end": {
+          "column": 61,
+          "line": 202,
+          "offset": 7260
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 202,
+          "offset": 7204
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin"
+      },
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::cross_mix_branch",
+      "producer_op_id": "op27",
+      "source_span": {
+        "end": {
+          "column": 66,
+          "line": 203,
+          "offset": 7327
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 203,
+          "offset": 7266
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin"
+      },
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin@2",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::cross_mix_branch",
+      "producer_op_id": "op28",
+      "source_span": {
+        "end": {
+          "column": 58,
+          "line": 204,
+          "offset": 7386
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 204,
+          "offset": 7333
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_single_thread_workload_8243__cross_sum"
+      },
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__cross_sum@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::cross_mix_branch",
+      "producer_op_id": "op29",
+      "source_span": {
+        "end": {
+          "column": 59,
+          "line": 205,
+          "offset": 7446
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 205,
+          "offset": 7392
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_single_thread_workload_8243__cross_rot8"
+      },
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__cross_rot8@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::cross_mix_branch",
+      "producer_op_id": "op30",
+      "source_span": {
+        "end": {
+          "column": 51,
+          "line": 206,
+          "offset": 7498
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 206,
+          "offset": 7452
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_single_thread_workload_8243__cross_mix"
+      },
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__cross_mix@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::cross_mix_branch",
+      "producer_op_id": "op31",
+      "source_span": {
+        "end": {
+          "column": 61,
+          "line": 207,
+          "offset": 7560
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 207,
+          "offset": 7504
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_single_thread_workload_8243__cross_rot16"
+      },
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__cross_rot16@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload::cross_mix_branch",
+      "producer_op_id": "op32",
+      "source_span": {
+        "end": {
+          "column": 55,
+          "line": 208,
+          "offset": 7616
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 208,
+          "offset": 7566
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cross_mix_branch__ckks_single_thread_workload_8243__branch_cross"
+      },
+      "value_id": "cross_mix_branch__ckks_single_thread_workload_8243__branch_cross@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload",
+      "producer_op_id": "op33",
+      "source_span": {
+        "end": {
+          "column": 91,
+          "line": 221,
+          "offset": 8359
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 220,
+          "offset": 8243
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "branch_cross"
+      },
+      "value_id": "branch_cross@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload",
+      "producer_op_id": "op34",
+      "source_span": {
+        "end": {
+          "column": 55,
+          "line": 230,
+          "offset": 8562
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 230,
+          "offset": 8512
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "merged_left"
+      },
+      "value_id": "merged_left@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload",
+      "producer_op_id": "op35",
+      "source_span": {
+        "end": {
+          "column": 56,
+          "line": 231,
+          "offset": 8619
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 231,
+          "offset": 8568
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "merged_all"
+      },
+      "value_id": "merged_all@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload",
+      "producer_op_id": "op36",
+      "source_span": {
+        "end": {
+          "column": 57,
+          "line": 232,
+          "offset": 8677
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 232,
+          "offset": 8625
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "tail_prod"
+      },
+      "value_id": "tail_prod@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload",
+      "producer_op_id": "op37",
+      "source_span": {
+        "end": {
+          "column": 65,
+          "line": 233,
+          "offset": 8743
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 233,
+          "offset": 8683
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "tail_prod_relin"
+      },
+      "value_id": "tail_prod_relin@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload",
+      "producer_op_id": "op38",
+      "source_span": {
+        "end": {
+          "column": 70,
+          "line": 234,
+          "offset": 8814
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 234,
+          "offset": 8749
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "tail_prod_relin"
+      },
+      "value_id": "tail_prod_relin@2",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload",
+      "producer_op_id": "op39",
+      "source_span": {
+        "end": {
+          "column": 66,
+          "line": 235,
+          "offset": 8881
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 235,
+          "offset": 8820
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "tail_rot32"
+      },
+      "value_id": "tail_rot32@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "ckks_single_thread_workload",
+      "producer_op_id": "op40",
+      "source_span": {
+        "end": {
+          "column": 54,
+          "line": 236,
+          "offset": 8936
+        },
+        "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+        "start": {
+          "column": 5,
+          "line": 236,
+          "offset": 8887
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "result"
+      },
+      "value_id": "result@1",
+      "value_kind": "ciphertext"
+    }
+  ]
+}

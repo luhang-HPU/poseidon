@@ -1,0 +1,86 @@
+{
+  "barriers": [],
+  "blocking_diagnostics": [],
+  "entry_function": "encode_with_consistent_level",
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "operation_order": [
+    "op0",
+    "op1"
+  ],
+  "parallel_blocks": [],
+  "regions": [
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op0"
+      ],
+      "region_id": "region0",
+      "source_spans": [
+        {
+          "end": {
+            "column": 69,
+            "line": 137,
+            "offset": 3729
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/mnist/mnist.cpp",
+          "start": {
+            "column": 5,
+            "line": 137,
+            "offset": 3665
+          }
+        }
+      ],
+      "stmt_ids": [
+        "encode_with_consistent_level@3665"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op1"
+      ],
+      "region_id": "region1",
+      "source_spans": [
+        {
+          "end": {
+            "column": 18,
+            "line": 138,
+            "offset": 3748
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/mnist/mnist.cpp",
+          "start": {
+            "column": 5,
+            "line": 138,
+            "offset": 3735
+          }
+        }
+      ],
+      "stmt_ids": [
+        "encode_with_consistent_level@3735"
+      ]
+    }
+  ],
+  "required_temporaries": [
+    {
+      "symbol": "result"
+    }
+  ],
+  "schema_version": 2,
+  "source_edits_anchor": {
+    "end": {
+      "column": 1,
+      "line": 139,
+      "offset": 3750
+    },
+    "file": "/home/guoshuai/github/poseidon/Trident/mnist/mnist.cpp",
+    "start": {
+      "column": 11,
+      "line": 133,
+      "offset": 3487
+    }
+  },
+  "source_file": "/home/guoshuai/github/poseidon/Trident/mnist/mnist.cpp",
+  "status": "ready"
+}

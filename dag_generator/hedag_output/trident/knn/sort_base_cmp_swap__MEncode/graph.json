@@ -1,0 +1,2234 @@
+{
+  "diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "for (int i = 0; i < slot_count; ++i)\n    {\n        mask1[i] = 1.0;\n    }"
+      },
+      "reason": "unsupported dynamic loop boundary",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 180,
+          "offset": 5814
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 177,
+          "offset": 5743
+        }
+      },
+      "stmt_id": "copy_ciph@5743",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "edges": [
+    {
+      "dst": "op1",
+      "kind": "data",
+      "reason": "ciph_tmp",
+      "src": "op0",
+      "value_id": "ciph_tmp@1"
+    },
+    {
+      "dst": "op1",
+      "kind": "read_after_write",
+      "reason": "ciph_tmp",
+      "src": "op0",
+      "value_id": "ciph_tmp@1"
+    },
+    {
+      "dst": "op1",
+      "kind": "write_after_write",
+      "reason": "ciph_tmp",
+      "src": "op0",
+      "value_id": "ciph_tmp@2"
+    },
+    {
+      "dst": "op3",
+      "kind": "data",
+      "reason": "ciph_tmp",
+      "src": "op1",
+      "value_id": "ciph_tmp@2"
+    },
+    {
+      "dst": "op3",
+      "kind": "read_after_write",
+      "reason": "ciph_tmp",
+      "src": "op1",
+      "value_id": "ciph_tmp@2"
+    },
+    {
+      "dst": "op3",
+      "kind": "data",
+      "reason": "eli_plain",
+      "src": "op2",
+      "value_id": "eli_plain@1"
+    },
+    {
+      "dst": "op3",
+      "kind": "read_after_write",
+      "reason": "eli_plain",
+      "src": "op2",
+      "value_id": "eli_plain@1"
+    },
+    {
+      "dst": "op5",
+      "kind": "data",
+      "reason": "ciph_sub_mask",
+      "src": "op3",
+      "value_id": "ciph_sub_mask@1"
+    },
+    {
+      "dst": "op5",
+      "kind": "read_after_write",
+      "reason": "ciph_sub_mask",
+      "src": "op3",
+      "value_id": "ciph_sub_mask@1"
+    },
+    {
+      "dst": "op5",
+      "kind": "data",
+      "reason": "copy_ciph__MEncode_7860__plain",
+      "src": "op4",
+      "value_id": "copy_ciph__MEncode_7860__plain@1"
+    },
+    {
+      "dst": "op5",
+      "kind": "read_after_write",
+      "reason": "copy_ciph__MEncode_7860__plain",
+      "src": "op4",
+      "value_id": "copy_ciph__MEncode_7860__plain@1"
+    },
+    {
+      "dst": "op5",
+      "kind": "call_order",
+      "reason": "MEncode@7860",
+      "src": "op4",
+      "value_id": null
+    },
+    {
+      "dst": "op6",
+      "kind": "data",
+      "reason": "copy_ciph__MEncode_7860__ciph_ct_mask1",
+      "src": "op5",
+      "value_id": "copy_ciph__MEncode_7860__ciph_ct_mask1@1"
+    },
+    {
+      "dst": "op6",
+      "kind": "read_after_write",
+      "reason": "copy_ciph__MEncode_7860__ciph_ct_mask1",
+      "src": "op5",
+      "value_id": "copy_ciph__MEncode_7860__ciph_ct_mask1@1"
+    },
+    {
+      "dst": "op6",
+      "kind": "write_after_write",
+      "reason": "copy_ciph__MEncode_7860__ciph_ct_mask1",
+      "src": "op5",
+      "value_id": "copy_ciph__MEncode_7860__ciph_ct_mask1@2"
+    },
+    {
+      "dst": "op6",
+      "kind": "call_order",
+      "reason": "MEncode@7860",
+      "src": "op5",
+      "value_id": null
+    },
+    {
+      "dst": "op7",
+      "kind": "data",
+      "reason": "ciph_sub_mask",
+      "src": "op3",
+      "value_id": "ciph_sub_mask@1"
+    },
+    {
+      "dst": "op7",
+      "kind": "read_after_write",
+      "reason": "ciph_sub_mask",
+      "src": "op3",
+      "value_id": "ciph_sub_mask@1"
+    },
+    {
+      "dst": "op7",
+      "kind": "call_order",
+      "reason": "MEncode@7860",
+      "src": "op6",
+      "value_id": null
+    },
+    {
+      "dst": "op8",
+      "kind": "write_after_write",
+      "reason": "copy_ciph__MEncode_7860__plain",
+      "src": "op4",
+      "value_id": "copy_ciph__MEncode_7860__plain@2"
+    },
+    {
+      "dst": "op8",
+      "kind": "write_after_read",
+      "reason": "copy_ciph__MEncode_7860__plain",
+      "src": "op5",
+      "value_id": "copy_ciph__MEncode_7860__plain@2"
+    },
+    {
+      "dst": "op8",
+      "kind": "call_order",
+      "reason": "MEncode@7860",
+      "src": "op7",
+      "value_id": null
+    },
+    {
+      "dst": "op9",
+      "kind": "data",
+      "reason": "copy_ciph__MEncode_7860__ciph_ct_mask2",
+      "src": "op7",
+      "value_id": "copy_ciph__MEncode_7860__ciph_ct_mask2@1"
+    },
+    {
+      "dst": "op9",
+      "kind": "read_after_write",
+      "reason": "copy_ciph__MEncode_7860__ciph_ct_mask2",
+      "src": "op7",
+      "value_id": "copy_ciph__MEncode_7860__ciph_ct_mask2@1"
+    },
+    {
+      "dst": "op9",
+      "kind": "data",
+      "reason": "copy_ciph__MEncode_7860__plain",
+      "src": "op8",
+      "value_id": "copy_ciph__MEncode_7860__plain@2"
+    },
+    {
+      "dst": "op9",
+      "kind": "read_after_write",
+      "reason": "copy_ciph__MEncode_7860__plain",
+      "src": "op8",
+      "value_id": "copy_ciph__MEncode_7860__plain@2"
+    },
+    {
+      "dst": "op9",
+      "kind": "write_after_write",
+      "reason": "copy_ciph__MEncode_7860__ciph_ct_mask2",
+      "src": "op7",
+      "value_id": "copy_ciph__MEncode_7860__ciph_ct_mask2@2"
+    },
+    {
+      "dst": "op9",
+      "kind": "call_order",
+      "reason": "MEncode@7860",
+      "src": "op8",
+      "value_id": null
+    },
+    {
+      "dst": "op10",
+      "kind": "data",
+      "reason": "copy_ciph__MEncode_7860__ciph_ct_mask2",
+      "src": "op9",
+      "value_id": "copy_ciph__MEncode_7860__ciph_ct_mask2@2"
+    },
+    {
+      "dst": "op10",
+      "kind": "read_after_write",
+      "reason": "copy_ciph__MEncode_7860__ciph_ct_mask2",
+      "src": "op9",
+      "value_id": "copy_ciph__MEncode_7860__ciph_ct_mask2@2"
+    },
+    {
+      "dst": "op10",
+      "kind": "write_after_write",
+      "reason": "copy_ciph__MEncode_7860__ciph_ct_mask2",
+      "src": "op9",
+      "value_id": "copy_ciph__MEncode_7860__ciph_ct_mask2@3"
+    },
+    {
+      "dst": "op10",
+      "kind": "write_after_read",
+      "reason": "copy_ciph__MEncode_7860__ciph_ct_mask2",
+      "src": "op9",
+      "value_id": "copy_ciph__MEncode_7860__ciph_ct_mask2@3"
+    },
+    {
+      "dst": "op10",
+      "kind": "call_order",
+      "reason": "MEncode@7860",
+      "src": "op9",
+      "value_id": null
+    },
+    {
+      "dst": "op11",
+      "kind": "data",
+      "reason": "copy_ciph__MEncode_7860__ciph_ct_mask1",
+      "src": "op6",
+      "value_id": "copy_ciph__MEncode_7860__ciph_ct_mask1@2"
+    },
+    {
+      "dst": "op11",
+      "kind": "read_after_write",
+      "reason": "copy_ciph__MEncode_7860__ciph_ct_mask1",
+      "src": "op6",
+      "value_id": "copy_ciph__MEncode_7860__ciph_ct_mask1@2"
+    },
+    {
+      "dst": "op11",
+      "kind": "data",
+      "reason": "copy_ciph__MEncode_7860__ciph_ct_mask2",
+      "src": "op10",
+      "value_id": "copy_ciph__MEncode_7860__ciph_ct_mask2@3"
+    },
+    {
+      "dst": "op11",
+      "kind": "read_after_write",
+      "reason": "copy_ciph__MEncode_7860__ciph_ct_mask2",
+      "src": "op10",
+      "value_id": "copy_ciph__MEncode_7860__ciph_ct_mask2@3"
+    },
+    {
+      "dst": "op11",
+      "kind": "call_order",
+      "reason": "MEncode@7860",
+      "src": "op10",
+      "value_id": null
+    },
+    {
+      "dst": "op12",
+      "kind": "data",
+      "reason": "copy_ciph__MEncode_7860__ciph_result",
+      "src": "op11",
+      "value_id": "copy_ciph__MEncode_7860__ciph_result@1"
+    },
+    {
+      "dst": "op12",
+      "kind": "read_after_write",
+      "reason": "copy_ciph__MEncode_7860__ciph_result",
+      "src": "op11",
+      "value_id": "copy_ciph__MEncode_7860__ciph_result@1"
+    },
+    {
+      "dst": "op12",
+      "kind": "call_order",
+      "reason": "MEncode@7860",
+      "src": "op11",
+      "value_id": null
+    },
+    {
+      "dst": "op13",
+      "kind": "data",
+      "reason": "ciph_copy",
+      "src": "op12",
+      "value_id": "ciph_copy@1"
+    },
+    {
+      "dst": "op13",
+      "kind": "read_after_write",
+      "reason": "ciph_copy",
+      "src": "op12",
+      "value_id": "ciph_copy@1"
+    },
+    {
+      "dst": "op14",
+      "kind": "write_after_write",
+      "reason": "ciph_tmp",
+      "src": "op1",
+      "value_id": "ciph_tmp@3"
+    },
+    {
+      "dst": "op14",
+      "kind": "write_after_read",
+      "reason": "ciph_tmp",
+      "src": "op1",
+      "value_id": "ciph_tmp@3"
+    },
+    {
+      "dst": "op14",
+      "kind": "write_after_read",
+      "reason": "ciph_tmp",
+      "src": "op3",
+      "value_id": "ciph_tmp@3"
+    },
+    {
+      "dst": "op15",
+      "kind": "data",
+      "reason": "ciph_tmp",
+      "src": "op14",
+      "value_id": "ciph_tmp@3"
+    },
+    {
+      "dst": "op15",
+      "kind": "read_after_write",
+      "reason": "ciph_tmp",
+      "src": "op14",
+      "value_id": "ciph_tmp@3"
+    }
+  ],
+  "entry_function": "MEncode",
+  "frontend": "textual_fallback",
+  "metadata": {
+    "entry_span": {
+      "end": {
+        "column": 1,
+        "line": 250,
+        "offset": 8156
+      },
+      "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+      "start": {
+        "column": 6,
+        "line": 206,
+        "offset": 6594
+      }
+    },
+    "frontend_mode": "textual_fallback",
+    "source_hash": "59240ac22bb6acc0bb37f995ee409a5e486ada24e61c52ab53d6aed761ee5d68"
+  },
+  "ops": [
+    {
+      "api_name": "multiply_const",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "-1.0",
+          "ciph.scale()"
+        ],
+        "cost": 3,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "} } evaluator",
+        "source_text": "} } evaluator->multiply_const(ciph, -1.0, ciph.scale(), ciph_tmp, encoder)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "ciph_tmp"
+          }
+        }
+      ],
+      "inputs": [
+        "ciph@0"
+      ],
+      "op_id": "op0",
+      "op_kind": "multiply_const",
+      "origin_callstack": [],
+      "outputs": [
+        "ciph_tmp@1"
+      ],
+      "resources": [
+        "encoder@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 75,
+          "line": 238,
+          "offset": 7598
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 9,
+          "line": 235,
+          "offset": 7515
+        }
+      },
+      "stmt_id": "MEncode@7515"
+    },
+    {
+      "api_name": "rescale_dynamic",
+      "attrs": {
+        "barrier": true,
+        "constants": [
+          "scale"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "evaluator",
+        "source_text": "evaluator->rescale_dynamic(ciph_tmp, ciph_tmp, scale)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "ciph_tmp"
+          }
+        }
+      ],
+      "inputs": [
+        "ciph_tmp@1"
+      ],
+      "op_id": "op1",
+      "op_kind": "rescale_dynamic",
+      "origin_callstack": [],
+      "outputs": [
+        "ciph_tmp@2"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 58,
+          "line": 239,
+          "offset": 7657
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 239,
+          "offset": 7604
+        }
+      },
+      "stmt_id": "MEncode@7604"
+    },
+    {
+      "api_name": "encode",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "eli_vector",
+          "ciph_tmp.parms_id()",
+          "ciph_tmp.scale()"
+        ],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "encoder",
+        "source_text": "encoder.encode(eli_vector, ciph_tmp.parms_id(), ciph_tmp.scale(), eli_plain)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "eli_plain"
+          }
+        }
+      ],
+      "inputs": [],
+      "op_id": "op2",
+      "op_kind": "encode",
+      "origin_callstack": [],
+      "outputs": [
+        "eli_plain@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 81,
+          "line": 242,
+          "offset": 7765
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 242,
+          "offset": 7689
+        }
+      },
+      "stmt_id": "MEncode@7689"
+    },
+    {
+      "api_name": "add_plain",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "evaluator",
+        "source_text": "evaluator->add_plain(ciph_tmp, eli_plain, ciph_sub_mask)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "ciph_sub_mask"
+          }
+        }
+      ],
+      "inputs": [
+        "ciph_tmp@2",
+        "eli_plain@1"
+      ],
+      "op_id": "op3",
+      "op_kind": "add_plain",
+      "origin_callstack": [],
+      "outputs": [
+        "ciph_sub_mask@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 61,
+          "line": 243,
+          "offset": 7827
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 243,
+          "offset": 7771
+        }
+      },
+      "stmt_id": "MEncode@7771"
+    },
+    {
+      "api_name": "encode",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "mask1",
+          "ciph.parms_id()",
+          "ciph.scale()"
+        ],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "encoder",
+        "source_text": "encoder.encode(mask1, ciph.parms_id(), ciph.scale(), plain)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "plain"
+          }
+        }
+      ],
+      "inputs": [],
+      "op_id": "op4",
+      "op_kind": "encode",
+      "origin_callstack": [
+        {
+          "function": "MEncode",
+          "source_span": {
+            "end": {
+              "column": 113,
+              "line": 246,
+              "offset": 7968
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+            "start": {
+              "column": 5,
+              "line": 246,
+              "offset": 7860
+            }
+          },
+          "source_text": "ciph_copy = copy_ciph(ciph_sub_mask, slot_count, slot_size, encoder, evaluator, relin_keys, rot_keys, scale)",
+          "stmt_id": "MEncode@7860"
+        }
+      ],
+      "outputs": [
+        "copy_ciph__MEncode_7860__plain@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 64,
+          "line": 189,
+          "offset": 6068
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 189,
+          "offset": 6009
+        }
+      },
+      "stmt_id": "MEncode@7860::copy_ciph@6009"
+    },
+    {
+      "api_name": "multiply_plain",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 3,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "evaluator",
+        "source_text": "evaluator->multiply_plain(ciph, plain, ciph_ct_mask1)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "ciph_ct_mask1"
+          }
+        }
+      ],
+      "inputs": [
+        "ciph_sub_mask@1",
+        "copy_ciph__MEncode_7860__plain@1"
+      ],
+      "op_id": "op5",
+      "op_kind": "multiply_plain",
+      "origin_callstack": [
+        {
+          "function": "MEncode",
+          "source_span": {
+            "end": {
+              "column": 113,
+              "line": 246,
+              "offset": 7968
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+            "start": {
+              "column": 5,
+              "line": 246,
+              "offset": 7860
+            }
+          },
+          "source_text": "ciph_copy = copy_ciph(ciph_sub_mask, slot_count, slot_size, encoder, evaluator, relin_keys, rot_keys, scale)",
+          "stmt_id": "MEncode@7860"
+        }
+      ],
+      "outputs": [
+        "copy_ciph__MEncode_7860__ciph_ct_mask1@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 58,
+          "line": 191,
+          "offset": 6132
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 191,
+          "offset": 6079
+        }
+      },
+      "stmt_id": "MEncode@7860::copy_ciph@6079"
+    },
+    {
+      "api_name": "rescale_dynamic",
+      "attrs": {
+        "barrier": true,
+        "constants": [
+          "scale"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "evaluator",
+        "source_text": "evaluator->rescale_dynamic(ciph_ct_mask1, ciph_ct_mask1, scale)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "ciph_ct_mask1"
+          }
+        }
+      ],
+      "inputs": [
+        "copy_ciph__MEncode_7860__ciph_ct_mask1@1"
+      ],
+      "op_id": "op6",
+      "op_kind": "rescale_dynamic",
+      "origin_callstack": [
+        {
+          "function": "MEncode",
+          "source_span": {
+            "end": {
+              "column": 113,
+              "line": 246,
+              "offset": 7968
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+            "start": {
+              "column": 5,
+              "line": 246,
+              "offset": 7860
+            }
+          },
+          "source_text": "ciph_copy = copy_ciph(ciph_sub_mask, slot_count, slot_size, encoder, evaluator, relin_keys, rot_keys, scale)",
+          "stmt_id": "MEncode@7860"
+        }
+      ],
+      "outputs": [
+        "copy_ciph__MEncode_7860__ciph_ct_mask1@2"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 68,
+          "line": 192,
+          "offset": 6201
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 192,
+          "offset": 6138
+        }
+      },
+      "stmt_id": "MEncode@7860::copy_ciph@6138"
+    },
+    {
+      "api_name": "rotate",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "-slot_count"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "evaluator",
+        "source_text": "evaluator->rotate(ciph, ciph_ct_mask2, -slot_count, rot_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "ciph_ct_mask2"
+          }
+        }
+      ],
+      "inputs": [
+        "ciph_sub_mask@1"
+      ],
+      "op_id": "op7",
+      "op_kind": "rotate",
+      "origin_callstack": [
+        {
+          "function": "MEncode",
+          "source_span": {
+            "end": {
+              "column": 113,
+              "line": 246,
+              "offset": 7968
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+            "start": {
+              "column": 5,
+              "line": 246,
+              "offset": 7860
+            }
+          },
+          "source_text": "ciph_copy = copy_ciph(ciph_sub_mask, slot_count, slot_size, encoder, evaluator, relin_keys, rot_keys, scale)",
+          "stmt_id": "MEncode@7860"
+        }
+      ],
+      "outputs": [
+        "copy_ciph__MEncode_7860__ciph_ct_mask2@1"
+      ],
+      "resources": [
+        "evaluator@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 66,
+          "line": 195,
+          "offset": 6274
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 195,
+          "offset": 6213
+        }
+      },
+      "stmt_id": "MEncode@7860::copy_ciph@6213"
+    },
+    {
+      "api_name": "encode",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "mask2",
+          "ciph_ct_mask2.parms_id()",
+          "ciph_ct_mask2.scale()"
+        ],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "encoder",
+        "source_text": "encoder.encode(mask2, ciph_ct_mask2.parms_id(), ciph_ct_mask2.scale(), plain)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "plain"
+          }
+        }
+      ],
+      "inputs": [],
+      "op_id": "op8",
+      "op_kind": "encode",
+      "origin_callstack": [
+        {
+          "function": "MEncode",
+          "source_span": {
+            "end": {
+              "column": 113,
+              "line": 246,
+              "offset": 7968
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+            "start": {
+              "column": 5,
+              "line": 246,
+              "offset": 7860
+            }
+          },
+          "source_text": "ciph_copy = copy_ciph(ciph_sub_mask, slot_count, slot_size, encoder, evaluator, relin_keys, rot_keys, scale)",
+          "stmt_id": "MEncode@7860"
+        }
+      ],
+      "outputs": [
+        "copy_ciph__MEncode_7860__plain@2"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 82,
+          "line": 196,
+          "offset": 6357
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 196,
+          "offset": 6280
+        }
+      },
+      "stmt_id": "MEncode@7860::copy_ciph@6280"
+    },
+    {
+      "api_name": "multiply_plain",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 3,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "evaluator",
+        "source_text": "evaluator->multiply_plain(ciph_ct_mask2, plain, ciph_ct_mask2)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "ciph_ct_mask2"
+          }
+        }
+      ],
+      "inputs": [
+        "copy_ciph__MEncode_7860__ciph_ct_mask2@1",
+        "copy_ciph__MEncode_7860__plain@2"
+      ],
+      "op_id": "op9",
+      "op_kind": "multiply_plain",
+      "origin_callstack": [
+        {
+          "function": "MEncode",
+          "source_span": {
+            "end": {
+              "column": 113,
+              "line": 246,
+              "offset": 7968
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+            "start": {
+              "column": 5,
+              "line": 246,
+              "offset": 7860
+            }
+          },
+          "source_text": "ciph_copy = copy_ciph(ciph_sub_mask, slot_count, slot_size, encoder, evaluator, relin_keys, rot_keys, scale)",
+          "stmt_id": "MEncode@7860"
+        }
+      ],
+      "outputs": [
+        "copy_ciph__MEncode_7860__ciph_ct_mask2@2"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 67,
+          "line": 197,
+          "offset": 6425
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 197,
+          "offset": 6363
+        }
+      },
+      "stmt_id": "MEncode@7860::copy_ciph@6363"
+    },
+    {
+      "api_name": "rescale_dynamic",
+      "attrs": {
+        "barrier": true,
+        "constants": [
+          "scale"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "evaluator",
+        "source_text": "evaluator->rescale_dynamic(ciph_ct_mask2, ciph_ct_mask2, scale)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "ciph_ct_mask2"
+          }
+        }
+      ],
+      "inputs": [
+        "copy_ciph__MEncode_7860__ciph_ct_mask2@2"
+      ],
+      "op_id": "op10",
+      "op_kind": "rescale_dynamic",
+      "origin_callstack": [
+        {
+          "function": "MEncode",
+          "source_span": {
+            "end": {
+              "column": 113,
+              "line": 246,
+              "offset": 7968
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+            "start": {
+              "column": 5,
+              "line": 246,
+              "offset": 7860
+            }
+          },
+          "source_text": "ciph_copy = copy_ciph(ciph_sub_mask, slot_count, slot_size, encoder, evaluator, relin_keys, rot_keys, scale)",
+          "stmt_id": "MEncode@7860"
+        }
+      ],
+      "outputs": [
+        "copy_ciph__MEncode_7860__ciph_ct_mask2@3"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 68,
+          "line": 198,
+          "offset": 6494
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 198,
+          "offset": 6431
+        }
+      },
+      "stmt_id": "MEncode@7860::copy_ciph@6431"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "evaluator",
+        "source_text": "evaluator->add(ciph_ct_mask1, ciph_ct_mask2, ciph_result)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "ciph_result"
+          }
+        }
+      ],
+      "inputs": [
+        "copy_ciph__MEncode_7860__ciph_ct_mask1@2",
+        "copy_ciph__MEncode_7860__ciph_ct_mask2@3"
+      ],
+      "op_id": "op11",
+      "op_kind": "add",
+      "origin_callstack": [
+        {
+          "function": "MEncode",
+          "source_span": {
+            "end": {
+              "column": 113,
+              "line": 246,
+              "offset": 7968
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+            "start": {
+              "column": 5,
+              "line": 246,
+              "offset": 7860
+            }
+          },
+          "source_text": "ciph_copy = copy_ciph(ciph_sub_mask, slot_count, slot_size, encoder, evaluator, relin_keys, rot_keys, scale)",
+          "stmt_id": "MEncode@7860"
+        }
+      ],
+      "outputs": [
+        "copy_ciph__MEncode_7860__ciph_result@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 62,
+          "line": 200,
+          "offset": 6558
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 200,
+          "offset": 6501
+        }
+      },
+      "stmt_id": "MEncode@7860::copy_ciph@6501"
+    },
+    {
+      "api_name": "assign",
+      "attrs": {
+        "barrier": false,
+        "cost": 1,
+        "source_text": "ciph_copy = copy_ciph(ciph_sub_mask, slot_count, slot_size, encoder, evaluator, relin_keys, rot_keys, scale)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "ciph_copy"
+          }
+        }
+      ],
+      "inputs": [
+        "copy_ciph__MEncode_7860__ciph_result@1"
+      ],
+      "op_id": "op12",
+      "op_kind": "assign",
+      "origin_callstack": [
+        {
+          "function": "MEncode",
+          "source_span": {
+            "end": {
+              "column": 113,
+              "line": 246,
+              "offset": 7968
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+            "start": {
+              "column": 5,
+              "line": 246,
+              "offset": 7860
+            }
+          },
+          "source_text": "ciph_copy = copy_ciph(ciph_sub_mask, slot_count, slot_size, encoder, evaluator, relin_keys, rot_keys, scale)",
+          "stmt_id": "MEncode@7860"
+        }
+      ],
+      "outputs": [
+        "ciph_copy@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 113,
+          "line": 246,
+          "offset": 7968
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 246,
+          "offset": 7860
+        }
+      },
+      "stmt_id": "MEncode@7860::return"
+    },
+    {
+      "api_name": "rotate",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "slot_count - half"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "evaluator",
+        "source_text": "evaluator->rotate(ciph_copy, ciph_sup_mask, slot_count - half, rot_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "ciph_sup_mask"
+          }
+        }
+      ],
+      "inputs": [
+        "ciph_copy@1"
+      ],
+      "op_id": "op13",
+      "op_kind": "rotate",
+      "origin_callstack": [],
+      "outputs": [
+        "ciph_sup_mask@1"
+      ],
+      "resources": [
+        "rot_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 77,
+          "line": 247,
+          "offset": 8046
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 247,
+          "offset": 7974
+        }
+      },
+      "stmt_id": "MEncode@7974"
+    },
+    {
+      "api_name": "rotate",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "-half"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "evaluator",
+        "source_text": "evaluator->rotate(ciph, ciph_tmp, -half, rot_keys)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "ciph_tmp"
+          }
+        }
+      ],
+      "inputs": [
+        "ciph@0"
+      ],
+      "op_id": "op14",
+      "op_kind": "rotate",
+      "origin_callstack": [],
+      "outputs": [
+        "ciph_tmp@3"
+      ],
+      "resources": [
+        "rot_keys@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 55,
+          "line": 248,
+          "offset": 8102
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 248,
+          "offset": 8052
+        }
+      },
+      "stmt_id": "MEncode@8052"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "evaluator",
+        "source_text": "evaluator->add(ciph, ciph_tmp, ciph_diag_mask)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "ciph_diag_mask"
+          }
+        }
+      ],
+      "inputs": [
+        "ciph@0",
+        "ciph_tmp@3"
+      ],
+      "op_id": "op15",
+      "op_kind": "add",
+      "origin_callstack": [],
+      "outputs": [
+        "ciph_diag_mask@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 51,
+          "line": 249,
+          "offset": 8154
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 249,
+          "offset": 8108
+        }
+      },
+      "stmt_id": "MEncode@8108"
+    }
+  ],
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+  "values": [
+    {
+      "annotations": {},
+      "origin_scope": "MEncode",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 28,
+          "line": 206,
+          "offset": 6616
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 6,
+          "line": 206,
+          "offset": 6594
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ciph"
+      },
+      "value_id": "ciph@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 32,
+          "line": 211,
+          "offset": 6766
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 6,
+          "line": 211,
+          "offset": 6740
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "encoder"
+      },
+      "value_id": "encoder@0",
+      "value_kind": "encoder"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 50,
+          "line": 212,
+          "offset": 6825
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 6,
+          "line": 212,
+          "offset": 6781
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "evaluator"
+      },
+      "value_id": "evaluator@0",
+      "value_kind": "evaluator"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 33,
+          "line": 213,
+          "offset": 6867
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 6,
+          "line": 213,
+          "offset": 6840
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "relin_keys"
+      },
+      "value_id": "relin_keys@0",
+      "value_kind": "relin_keys"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 31,
+          "line": 214,
+          "offset": 6907
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 6,
+          "line": 214,
+          "offset": 6882
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "rot_keys"
+      },
+      "value_id": "rot_keys@0",
+      "value_kind": "galois_keys"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 31,
+          "line": 216,
+          "offset": 6974
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 6,
+          "line": 216,
+          "offset": 6949
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ciph_sup_mask"
+      },
+      "value_id": "ciph_sup_mask@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 32,
+          "line": 217,
+          "offset": 7015
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 6,
+          "line": 217,
+          "offset": 6989
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ciph_diag_mask"
+      },
+      "value_id": "ciph_diag_mask@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 31,
+          "line": 218,
+          "offset": 7055
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 6,
+          "line": 218,
+          "offset": 7030
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ciph_sub_mask"
+      },
+      "value_id": "ciph_sub_mask@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 24,
+          "line": 221,
+          "offset": 7091
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 221,
+          "offset": 7072
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ciph_tmp"
+      },
+      "value_id": "ciph_tmp@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 24,
+          "line": 241,
+          "offset": 7683
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 241,
+          "offset": 7664
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "eli_plain"
+      },
+      "value_id": "eli_plain@0",
+      "value_kind": "plaintext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 25,
+          "line": 245,
+          "offset": 7854
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 245,
+          "offset": 7834
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ciph_copy"
+      },
+      "value_id": "ciph_copy@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 113,
+          "line": 246,
+          "offset": 7968
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 246,
+          "offset": 7860
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "slot_count"
+      },
+      "value_id": "slot_count@0",
+      "value_kind": "encoder"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 113,
+          "line": 246,
+          "offset": 7968
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 246,
+          "offset": 7860
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "slot_size"
+      },
+      "value_id": "slot_size@0",
+      "value_kind": "evaluator"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode::copy_ciph",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 27,
+          "line": 172,
+          "offset": 5609
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 172,
+          "offset": 5587
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "copy_ciph__MEncode_7860__ciph_result"
+      },
+      "value_id": "copy_ciph__MEncode_7860__ciph_result@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode::copy_ciph",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 29,
+          "line": 187,
+          "offset": 5973
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 187,
+          "offset": 5949
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "copy_ciph__MEncode_7860__ciph_ct_mask1"
+      },
+      "value_id": "copy_ciph__MEncode_7860__ciph_ct_mask1@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode::copy_ciph",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 29,
+          "line": 188,
+          "offset": 6003
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 188,
+          "offset": 5979
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "copy_ciph__MEncode_7860__ciph_ct_mask2"
+      },
+      "value_id": "copy_ciph__MEncode_7860__ciph_ct_mask2@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode::copy_ciph",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 64,
+          "line": 189,
+          "offset": 6068
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 189,
+          "offset": 6009
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "copy_ciph__MEncode_7860__plain"
+      },
+      "value_id": "copy_ciph__MEncode_7860__plain@0",
+      "value_kind": "encoder"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode",
+      "producer_op_id": "op0",
+      "source_span": {
+        "end": {
+          "column": 75,
+          "line": 238,
+          "offset": 7598
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 9,
+          "line": 235,
+          "offset": 7515
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ciph_tmp"
+      },
+      "value_id": "ciph_tmp@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode",
+      "producer_op_id": "op1",
+      "source_span": {
+        "end": {
+          "column": 58,
+          "line": 239,
+          "offset": 7657
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 239,
+          "offset": 7604
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ciph_tmp"
+      },
+      "value_id": "ciph_tmp@2",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode",
+      "producer_op_id": "op2",
+      "source_span": {
+        "end": {
+          "column": 81,
+          "line": 242,
+          "offset": 7765
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 242,
+          "offset": 7689
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "eli_plain"
+      },
+      "value_id": "eli_plain@1",
+      "value_kind": "plaintext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode",
+      "producer_op_id": "op3",
+      "source_span": {
+        "end": {
+          "column": 61,
+          "line": 243,
+          "offset": 7827
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 243,
+          "offset": 7771
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ciph_sub_mask"
+      },
+      "value_id": "ciph_sub_mask@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode::copy_ciph",
+      "producer_op_id": "op4",
+      "source_span": {
+        "end": {
+          "column": 64,
+          "line": 189,
+          "offset": 6068
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 189,
+          "offset": 6009
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "copy_ciph__MEncode_7860__plain"
+      },
+      "value_id": "copy_ciph__MEncode_7860__plain@1",
+      "value_kind": "encoder"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode::copy_ciph",
+      "producer_op_id": "op5",
+      "source_span": {
+        "end": {
+          "column": 58,
+          "line": 191,
+          "offset": 6132
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 191,
+          "offset": 6079
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "copy_ciph__MEncode_7860__ciph_ct_mask1"
+      },
+      "value_id": "copy_ciph__MEncode_7860__ciph_ct_mask1@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode::copy_ciph",
+      "producer_op_id": "op6",
+      "source_span": {
+        "end": {
+          "column": 68,
+          "line": 192,
+          "offset": 6201
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 192,
+          "offset": 6138
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "copy_ciph__MEncode_7860__ciph_ct_mask1"
+      },
+      "value_id": "copy_ciph__MEncode_7860__ciph_ct_mask1@2",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode::copy_ciph",
+      "producer_op_id": "op7",
+      "source_span": {
+        "end": {
+          "column": 66,
+          "line": 195,
+          "offset": 6274
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 195,
+          "offset": 6213
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "copy_ciph__MEncode_7860__ciph_ct_mask2"
+      },
+      "value_id": "copy_ciph__MEncode_7860__ciph_ct_mask2@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode::copy_ciph",
+      "producer_op_id": "op8",
+      "source_span": {
+        "end": {
+          "column": 82,
+          "line": 196,
+          "offset": 6357
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 196,
+          "offset": 6280
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "copy_ciph__MEncode_7860__plain"
+      },
+      "value_id": "copy_ciph__MEncode_7860__plain@2",
+      "value_kind": "encoder"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode::copy_ciph",
+      "producer_op_id": "op9",
+      "source_span": {
+        "end": {
+          "column": 67,
+          "line": 197,
+          "offset": 6425
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 197,
+          "offset": 6363
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "copy_ciph__MEncode_7860__ciph_ct_mask2"
+      },
+      "value_id": "copy_ciph__MEncode_7860__ciph_ct_mask2@2",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode::copy_ciph",
+      "producer_op_id": "op10",
+      "source_span": {
+        "end": {
+          "column": 68,
+          "line": 198,
+          "offset": 6494
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 198,
+          "offset": 6431
+        }
+      },
+      "ssa_index": 3,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "copy_ciph__MEncode_7860__ciph_ct_mask2"
+      },
+      "value_id": "copy_ciph__MEncode_7860__ciph_ct_mask2@3",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode::copy_ciph",
+      "producer_op_id": "op11",
+      "source_span": {
+        "end": {
+          "column": 62,
+          "line": 200,
+          "offset": 6558
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 200,
+          "offset": 6501
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "copy_ciph__MEncode_7860__ciph_result"
+      },
+      "value_id": "copy_ciph__MEncode_7860__ciph_result@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode",
+      "producer_op_id": "op12",
+      "source_span": {
+        "end": {
+          "column": 113,
+          "line": 246,
+          "offset": 7968
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 246,
+          "offset": 7860
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ciph_copy"
+      },
+      "value_id": "ciph_copy@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode",
+      "producer_op_id": "op13",
+      "source_span": {
+        "end": {
+          "column": 77,
+          "line": 247,
+          "offset": 8046
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 247,
+          "offset": 7974
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ciph_sup_mask"
+      },
+      "value_id": "ciph_sup_mask@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode",
+      "producer_op_id": "op14",
+      "source_span": {
+        "end": {
+          "column": 55,
+          "line": 248,
+          "offset": 8102
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 248,
+          "offset": 8052
+        }
+      },
+      "ssa_index": 3,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ciph_tmp"
+      },
+      "value_id": "ciph_tmp@3",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "MEncode",
+      "producer_op_id": "op15",
+      "source_span": {
+        "end": {
+          "column": 51,
+          "line": 249,
+          "offset": 8154
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_cmp_swap.cpp",
+        "start": {
+          "column": 5,
+          "line": 249,
+          "offset": 8108
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ciph_diag_mask"
+      },
+      "value_id": "ciph_diag_mask@1",
+      "value_kind": "ciphertext"
+    }
+  ]
+}

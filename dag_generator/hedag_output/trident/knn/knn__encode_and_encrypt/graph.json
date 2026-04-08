@@ -1,0 +1,403 @@
+{
+  "diagnostics": [],
+  "edges": [
+    {
+      "dst": "op1",
+      "kind": "data",
+      "reason": "plain",
+      "src": "op0",
+      "value_id": "plain@1"
+    },
+    {
+      "dst": "op1",
+      "kind": "read_after_write",
+      "reason": "plain",
+      "src": "op0",
+      "value_id": "plain@1"
+    },
+    {
+      "dst": "op2",
+      "kind": "data",
+      "reason": "ciph",
+      "src": "op1",
+      "value_id": "ciph@1"
+    },
+    {
+      "dst": "op2",
+      "kind": "read_after_write",
+      "reason": "ciph",
+      "src": "op1",
+      "value_id": "ciph@1"
+    }
+  ],
+  "entry_function": "encode_and_encrypt",
+  "frontend": "textual_fallback",
+  "metadata": {
+    "entry_span": {
+      "end": {
+        "column": 1,
+        "line": 146,
+        "offset": 3711
+      },
+      "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+      "start": {
+        "column": 12,
+        "line": 138,
+        "offset": 3408
+      }
+    },
+    "frontend_mode": "textual_fallback",
+    "source_hash": "4317e5dc0f307d91b4775c34191191ef4d4f75db3f6d1895c04e644d42bcc650"
+  },
+  "ops": [
+    {
+      "api_name": "encode",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "scale"
+        ],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "encoder",
+        "source_text": "encoder.encode(message, scale, plain)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "plain"
+          }
+        }
+      ],
+      "inputs": [
+        "message@0"
+      ],
+      "op_id": "op0",
+      "op_kind": "encode",
+      "origin_callstack": [],
+      "outputs": [
+        "plain@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 42,
+          "line": 143,
+          "offset": 3656
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 5,
+          "line": 143,
+          "offset": 3619
+        }
+      },
+      "stmt_id": "encode_and_encrypt@3619"
+    },
+    {
+      "api_name": "encrypt",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "encryptor",
+        "source_text": "encryptor.encrypt(plain, ciph)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "ciph"
+          }
+        }
+      ],
+      "inputs": [
+        "plain@1"
+      ],
+      "op_id": "op1",
+      "op_kind": "encrypt",
+      "origin_callstack": [],
+      "outputs": [
+        "ciph@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 35,
+          "line": 144,
+          "offset": 3692
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 5,
+          "line": 144,
+          "offset": 3662
+        }
+      },
+      "stmt_id": "encode_and_encrypt@3662"
+    },
+    {
+      "api_name": "return",
+      "attrs": {
+        "barrier": false,
+        "cost": 1,
+        "source_text": "return ciph"
+      },
+      "effects": [],
+      "inputs": [
+        "ciph@1"
+      ],
+      "op_id": "op2",
+      "op_kind": "return",
+      "origin_callstack": [],
+      "outputs": [
+        "__return__@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 16,
+          "line": 145,
+          "offset": 3709
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 5,
+          "line": 145,
+          "offset": 3698
+        }
+      },
+      "stmt_id": "encode_and_encrypt@3698"
+    }
+  ],
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+  "values": [
+    {
+      "annotations": {},
+      "origin_scope": "encode_and_encrypt",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 38,
+          "line": 138,
+          "offset": 3434
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 12,
+          "line": 138,
+          "offset": 3408
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "encoder"
+      },
+      "value_id": "encoder@0",
+      "value_kind": "encoder"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "encode_and_encrypt",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 66,
+          "line": 138,
+          "offset": 3462
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 40,
+          "line": 138,
+          "offset": 3436
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "encryptor"
+      },
+      "value_id": "encryptor@0",
+      "value_kind": "encryptor"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "encode_and_encrypt",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 54,
+          "line": 139,
+          "offset": 3536
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 12,
+          "line": 139,
+          "offset": 3494
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "message"
+      },
+      "value_id": "message@0",
+      "value_kind": "complex_vector"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "encode_and_encrypt",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 20,
+          "line": 141,
+          "offset": 3592
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 5,
+          "line": 141,
+          "offset": 3577
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "plain"
+      },
+      "value_id": "plain@0",
+      "value_kind": "plaintext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "encode_and_encrypt",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 20,
+          "line": 142,
+          "offset": 3613
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 5,
+          "line": 142,
+          "offset": 3598
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ciph"
+      },
+      "value_id": "ciph@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "encode_and_encrypt",
+      "producer_op_id": "op0",
+      "source_span": {
+        "end": {
+          "column": 42,
+          "line": 143,
+          "offset": 3656
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 5,
+          "line": 143,
+          "offset": 3619
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "plain"
+      },
+      "value_id": "plain@1",
+      "value_kind": "plaintext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "encode_and_encrypt",
+      "producer_op_id": "op1",
+      "source_span": {
+        "end": {
+          "column": 35,
+          "line": 144,
+          "offset": 3692
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 5,
+          "line": 144,
+          "offset": 3662
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "ciph"
+      },
+      "value_id": "ciph@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "encode_and_encrypt",
+      "producer_op_id": "op2",
+      "source_span": {
+        "end": {
+          "column": 16,
+          "line": 145,
+          "offset": 3709
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 5,
+          "line": 145,
+          "offset": 3698
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "__return__"
+      },
+      "value_id": "__return__@1",
+      "value_kind": "external"
+    }
+  ]
+}

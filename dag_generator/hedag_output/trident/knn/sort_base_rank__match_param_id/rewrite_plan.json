@@ -1,0 +1,52 @@
+{
+  "barriers": [],
+  "blocking_diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (ciph1.level() > ciph2.level())\n    {\n        evaluator->drop_modulus(ciph1, ciph1, ciph2.parms_id());\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 64,
+          "offset": 1422
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+        "start": {
+          "column": 5,
+          "line": 61,
+          "offset": 1312
+        }
+      },
+      "stmt_id": "match_param_id@1312",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "entry_function": "match_param_id",
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "operation_order": [],
+  "parallel_blocks": [],
+  "regions": [],
+  "required_temporaries": [],
+  "schema_version": 2,
+  "source_edits_anchor": {
+    "end": {
+      "column": 1,
+      "line": 69,
+      "offset": 1545
+    },
+    "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+    "start": {
+      "column": 6,
+      "line": 58,
+      "offset": 1187
+    }
+  },
+  "source_file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+  "status": "blocked"
+}

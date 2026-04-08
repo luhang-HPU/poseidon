@@ -1,0 +1,149 @@
+{
+  "diagnostics": [],
+  "edges": [],
+  "entry_function": "load_db",
+  "frontend": "textual_fallback",
+  "metadata": {
+    "entry_span": {
+      "end": {
+        "column": 1,
+        "line": 158,
+        "offset": 4138
+      },
+      "file": "/home/guoshuai/github/poseidon/Trident/apsi/cli/receiver/receiver.cpp",
+      "start": {
+        "column": 53,
+        "line": 145,
+        "offset": 3693
+      }
+    },
+    "frontend_mode": "textual_fallback",
+    "source_hash": "d65ea7b9843ab98c4315bc2bbdc3275ad896428b1c126934af996c4012c3c41d"
+  },
+  "ops": [
+    {
+      "api_name": "read",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "= reader",
+        "source_text": "tie(db_data, orig_items) = reader.read()"
+      },
+      "effects": [],
+      "inputs": [],
+      "op_id": "op0",
+      "op_kind": "read",
+      "origin_callstack": [],
+      "outputs": [],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 49,
+          "line": 151,
+          "offset": 3881
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/cli/receiver/receiver.cpp",
+        "start": {
+          "column": 9,
+          "line": 151,
+          "offset": 3841
+        }
+      },
+      "stmt_id": "load_db@3841"
+    },
+    {
+      "api_name": "return",
+      "attrs": {
+        "barrier": false,
+        "cost": 1,
+        "source_text": "return { nullptr, orig_items }"
+      },
+      "effects": [],
+      "inputs": [
+        "{ nullptr, orig_items }@0"
+      ],
+      "op_id": "op1",
+      "op_kind": "return",
+      "origin_callstack": [],
+      "outputs": [
+        "__return__@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 39,
+          "line": 154,
+          "offset": 4049
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/cli/receiver/receiver.cpp",
+        "start": {
+          "column": 9,
+          "line": 154,
+          "offset": 4019
+        }
+      },
+      "stmt_id": "load_db@4019"
+    }
+  ],
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/apsi/cli/receiver/receiver.cpp",
+  "values": [
+    {
+      "annotations": {},
+      "origin_scope": "load_db",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 39,
+          "line": 154,
+          "offset": 4049
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/cli/receiver/receiver.cpp",
+        "start": {
+          "column": 9,
+          "line": 154,
+          "offset": 4019
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "{ nullptr, orig_items }"
+      },
+      "value_id": "{ nullptr, orig_items }@0",
+      "value_kind": "external"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "load_db",
+      "producer_op_id": "op1",
+      "source_span": {
+        "end": {
+          "column": 39,
+          "line": 154,
+          "offset": 4049
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/cli/receiver/receiver.cpp",
+        "start": {
+          "column": 9,
+          "line": 154,
+          "offset": 4019
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "__return__"
+      },
+      "value_id": "__return__@1",
+      "value_kind": "external"
+    }
+  ]
+}

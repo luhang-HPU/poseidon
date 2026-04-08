@@ -1,0 +1,261 @@
+{
+  "diagnostics": [],
+  "edges": [
+    {
+      "dst": "op1",
+      "kind": "data",
+      "reason": "result",
+      "src": "op0",
+      "value_id": "result@1"
+    },
+    {
+      "dst": "op1",
+      "kind": "read_after_write",
+      "reason": "result",
+      "src": "op0",
+      "value_id": "result@1"
+    }
+  ],
+  "entry_function": "encode_with_consistent_level",
+  "frontend": "textual_fallback",
+  "metadata": {
+    "entry_span": {
+      "end": {
+        "column": 1,
+        "line": 139,
+        "offset": 3750
+      },
+      "file": "/home/guoshuai/github/poseidon/Trident/mnist/mnist.cpp",
+      "start": {
+        "column": 11,
+        "line": 133,
+        "offset": 3487
+      }
+    },
+    "frontend_mode": "textual_fallback",
+    "source_hash": "3aed6404c749189d3f1560e640d8366960c0189a0e2c94c5ea8d1e350ce0f03c"
+  },
+  "ops": [
+    {
+      "api_name": "encode",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "input",
+          "cipher.parms_id()",
+          "cipher.scale()"
+        ],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "encoder",
+        "source_text": "encoder.encode(input, cipher.parms_id(), cipher.scale(), result)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "result"
+          }
+        }
+      ],
+      "inputs": [],
+      "op_id": "op0",
+      "op_kind": "encode",
+      "origin_callstack": [],
+      "outputs": [
+        "result@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 69,
+          "line": 137,
+          "offset": 3729
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/mnist/mnist.cpp",
+        "start": {
+          "column": 5,
+          "line": 137,
+          "offset": 3665
+        }
+      },
+      "stmt_id": "encode_with_consistent_level@3665"
+    },
+    {
+      "api_name": "return",
+      "attrs": {
+        "barrier": false,
+        "cost": 1,
+        "source_text": "return result"
+      },
+      "effects": [],
+      "inputs": [
+        "result@1"
+      ],
+      "op_id": "op1",
+      "op_kind": "return",
+      "origin_callstack": [],
+      "outputs": [
+        "__return__@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 18,
+          "line": 138,
+          "offset": 3748
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/mnist/mnist.cpp",
+        "start": {
+          "column": 5,
+          "line": 138,
+          "offset": 3735
+        }
+      },
+      "stmt_id": "encode_with_consistent_level@3735"
+    }
+  ],
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/mnist/mnist.cpp",
+  "values": [
+    {
+      "annotations": {},
+      "origin_scope": "encode_with_consistent_level",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 69,
+          "line": 133,
+          "offset": 3545
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/mnist/mnist.cpp",
+        "start": {
+          "column": 45,
+          "line": 133,
+          "offset": 3521
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "cipher"
+      },
+      "value_id": "cipher@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "encode_with_consistent_level",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 31,
+          "line": 134,
+          "offset": 3606
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/mnist/mnist.cpp",
+        "start": {
+          "column": 11,
+          "line": 134,
+          "offset": 3586
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "encoder"
+      },
+      "value_id": "encoder@0",
+      "value_kind": "encoder"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "encode_with_consistent_level",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 21,
+          "line": 136,
+          "offset": 3659
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/mnist/mnist.cpp",
+        "start": {
+          "column": 5,
+          "line": 136,
+          "offset": 3643
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "result"
+      },
+      "value_id": "result@0",
+      "value_kind": "plaintext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "encode_with_consistent_level",
+      "producer_op_id": "op0",
+      "source_span": {
+        "end": {
+          "column": 69,
+          "line": 137,
+          "offset": 3729
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/mnist/mnist.cpp",
+        "start": {
+          "column": 5,
+          "line": 137,
+          "offset": 3665
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "result"
+      },
+      "value_id": "result@1",
+      "value_kind": "plaintext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "encode_with_consistent_level",
+      "producer_op_id": "op1",
+      "source_span": {
+        "end": {
+          "column": 18,
+          "line": 138,
+          "offset": 3748
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/mnist/mnist.cpp",
+        "start": {
+          "column": 5,
+          "line": 138,
+          "offset": 3735
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "__return__"
+      },
+      "value_id": "__return__@1",
+      "value_kind": "external"
+    }
+  ]
+}

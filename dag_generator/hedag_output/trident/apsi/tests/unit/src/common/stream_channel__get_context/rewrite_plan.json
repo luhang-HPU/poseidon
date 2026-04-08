@@ -1,0 +1,80 @@
+{
+  "barriers": [],
+  "blocking_diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (!context) {\n                context = make_shared<CryptoContext>(*get_params());\n                KeyGenerator keygen(*context->context());\n                context->set_secret(keygen.secret_key());\n                RelinKeys rlk;\n                keygen.create_relin_keys(rlk);\n                context->set_evaluator(move(rlk));\n            }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 13,
+          "line": 56,
+          "offset": 1551
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/tests/unit/src/common/stream_channel.cpp",
+        "start": {
+          "column": 13,
+          "line": 49,
+          "offset": 1209
+        }
+      },
+      "stmt_id": "get_context@1209",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "entry_function": "get_context",
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "operation_order": [
+    "op0"
+  ],
+  "parallel_blocks": [],
+  "regions": [
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op0"
+      ],
+      "region_id": "region0",
+      "source_spans": [
+        {
+          "end": {
+            "column": 27,
+            "line": 58,
+            "offset": 1580
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/apsi/tests/unit/src/common/stream_channel.cpp",
+          "start": {
+            "column": 13,
+            "line": 58,
+            "offset": 1566
+          }
+        }
+      ],
+      "stmt_ids": [
+        "get_context@1566"
+      ]
+    }
+  ],
+  "required_temporaries": [],
+  "schema_version": 2,
+  "source_edits_anchor": {
+    "end": {
+      "column": 9,
+      "line": 59,
+      "offset": 1590
+    },
+    "file": "/home/guoshuai/github/poseidon/Trident/apsi/tests/unit/src/common/stream_channel.cpp",
+    "start": {
+      "column": 35,
+      "line": 46,
+      "offset": 1109
+    }
+  },
+  "source_file": "/home/guoshuai/github/poseidon/Trident/apsi/tests/unit/src/common/stream_channel.cpp",
+  "status": "blocked"
+}

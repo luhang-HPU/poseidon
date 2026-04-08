@@ -1,0 +1,20 @@
+{
+  "critical_path_cost": 19,
+  "diagnostics": [],
+  "edges": 13,
+  "entry_function": "sign_1",
+  "frontend": "textual_fallback",
+  "layers": [
+    "layer 0: op0",
+    "layer 1: op1",
+    "layer 2: op2",
+    "layer 3: op3",
+    "layer 4: op4"
+  ],
+  "max_parallel_width": 1,
+  "ops": 5,
+  "rewrite_status": "ready",
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+  "values": 12
+}

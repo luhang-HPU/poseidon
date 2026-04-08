@@ -1,0 +1,27 @@
+{
+  "diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (!crypto_context.decryptor()) {\n                throw runtime_error(\"decryptor is not configured in CryptoContext\");\n            }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 13,
+          "line": 168,
+          "offset": 6021
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/common/apsi/network/result_package.cpp",
+        "start": {
+          "column": 13,
+          "line": 166,
+          "offset": 5889
+        }
+      },
+      "stmt_id": "extract@5889",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ]
+}

@@ -1,0 +1,152 @@
+{
+  "diagnostics": [],
+  "edges": [],
+  "entry_function": "load_binary_param",
+  "frontend": "textual_fallback",
+  "metadata": {
+    "entry_span": {
+      "end": {
+        "column": 1,
+        "line": 118,
+        "offset": 3176
+      },
+      "file": "/home/guoshuai/github/poseidon/Trident/mnist/mnist.cpp",
+      "start": {
+        "column": 20,
+        "line": 109,
+        "offset": 2792
+      }
+    },
+    "frontend_mode": "textual_fallback",
+    "source_hash": "3aed6404c749189d3f1560e640d8366960c0189a0e2c94c5ea8d1e350ce0f03c"
+  },
+  "ops": [
+    {
+      "api_name": "read",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "reinterpret_cast<char *>(param_data.data())",
+          "file_size"
+        ],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "file",
+        "source_text": "file.read(reinterpret_cast<char *>(param_data.data()), file_size)"
+      },
+      "effects": [],
+      "inputs": [],
+      "op_id": "op0",
+      "op_kind": "read",
+      "origin_callstack": [],
+      "outputs": [],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 70,
+          "line": 116,
+          "offset": 3151
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/mnist/mnist.cpp",
+        "start": {
+          "column": 5,
+          "line": 116,
+          "offset": 3086
+        }
+      },
+      "stmt_id": "load_binary_param@3086"
+    },
+    {
+      "api_name": "return",
+      "attrs": {
+        "barrier": false,
+        "cost": 1,
+        "source_text": "return param_data"
+      },
+      "effects": [],
+      "inputs": [
+        "param_data@0"
+      ],
+      "op_id": "op1",
+      "op_kind": "return",
+      "origin_callstack": [],
+      "outputs": [
+        "__return__@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 22,
+          "line": 117,
+          "offset": 3174
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/mnist/mnist.cpp",
+        "start": {
+          "column": 5,
+          "line": 117,
+          "offset": 3157
+        }
+      },
+      "stmt_id": "load_binary_param@3157"
+    }
+  ],
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/mnist/mnist.cpp",
+  "values": [
+    {
+      "annotations": {},
+      "origin_scope": "load_binary_param",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 22,
+          "line": 117,
+          "offset": 3174
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/mnist/mnist.cpp",
+        "start": {
+          "column": 5,
+          "line": 117,
+          "offset": 3157
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "param_data"
+      },
+      "value_id": "param_data@0",
+      "value_kind": "external"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "load_binary_param",
+      "producer_op_id": "op1",
+      "source_span": {
+        "end": {
+          "column": 22,
+          "line": 117,
+          "offset": 3174
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/mnist/mnist.cpp",
+        "start": {
+          "column": 5,
+          "line": 117,
+          "offset": 3157
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "__return__"
+      },
+      "value_id": "__return__@1",
+      "value_kind": "external"
+    }
+  ]
+}

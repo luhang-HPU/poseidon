@@ -1,0 +1,1316 @@
+{
+  "barriers": [
+    "op12",
+    "op13",
+    "op11",
+    "op2",
+    "op17",
+    "op19",
+    "op20",
+    "op22",
+    "op27",
+    "op28",
+    "op36"
+  ],
+  "blocking_diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "for (size_t i = 0; i < slot_count; i++)\n    {\n        for (size_t j = 0; j < slot_count; j++)\n        {\n            constant_vec[j + slot_count * i] = i + 1;\n        }\n    }"
+      },
+      "reason": "unsupported dynamic loop boundary",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 442,
+          "offset": 13447
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+        "start": {
+          "column": 5,
+          "line": 436,
+          "offset": 13275
+        }
+      },
+      "stmt_id": "sort_product_rank@13275",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (ciph1.level() > ciph2.level())\n    {\n        evaluator->drop_modulus(ciph1, ciph1, ciph2.parms_id());\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 64,
+          "offset": 1422
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+        "start": {
+          "column": 5,
+          "line": 61,
+          "offset": 1312
+        }
+      },
+      "stmt_id": "match_param_id@1312",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (!util::are_approximate(ciph1.scale(), ciph2.scale()))\n    {\n        ciph1.scale() = ciph2.scale();\n        std::vector<std::complex<double>> vec_tmp(slot_size, {1.0, 0.0});\n        Plaintext plt_tmp;\n\n        \n        encoder.encode(vec_tmp, ciph1.parms_id(), scale * scale / ciph1.scale(), plt_tmp);\n        evaluator->multiply_plain(ciph1, plt_tmp, ciph1);\n        evaluator->rescale(ciph1, ciph1);\n\n        \n        encoder.encode(vec_tmp, ciph2.parms_id(), scale * scale / ciph2.scale(), plt_tmp);\n        evaluator->multiply_plain(ciph2, plt_tmp, ciph2);\n        evaluator->rescale(ciph2, ciph2);\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 92,
+          "offset": 2396
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+        "start": {
+          "column": 5,
+          "line": 77,
+          "offset": 1786
+        }
+      },
+      "stmt_id": "match_scale@1786",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "for (int i = 0; i < slot_size; i++)\n    {\n        idxF[i] = i;\n    }"
+      },
+      "reason": "unsupported dynamic loop boundary",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 201,
+          "offset": 4769
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+        "start": {
+          "column": 5,
+          "line": 198,
+          "offset": 4702
+        }
+      },
+      "stmt_id": "sign@4702",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (ciph1.level() > ciph2.level())\n    {\n        evaluator->drop_modulus(ciph1, ciph1, ciph2.parms_id());\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 64,
+          "offset": 1422
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+        "start": {
+          "column": 5,
+          "line": 61,
+          "offset": 1312
+        }
+      },
+      "stmt_id": "match_param_id@1312",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (!util::are_approximate(ciph1.scale(), ciph2.scale()))\n    {\n        ciph1.scale() = ciph2.scale();\n        std::vector<std::complex<double>> vec_tmp(slot_size, {1.0, 0.0});\n        Plaintext plt_tmp;\n\n        \n        encoder.encode(vec_tmp, ciph1.parms_id(), scale * scale / ciph1.scale(), plt_tmp);\n        evaluator->multiply_plain(ciph1, plt_tmp, ciph1);\n        evaluator->rescale(ciph1, ciph1);\n\n        \n        encoder.encode(vec_tmp, ciph2.parms_id(), scale * scale / ciph2.scale(), plt_tmp);\n        evaluator->multiply_plain(ciph2, plt_tmp, ciph2);\n        evaluator->rescale(ciph2, ciph2);\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 92,
+          "offset": 2396
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+        "start": {
+          "column": 5,
+          "line": 77,
+          "offset": 1786
+        }
+      },
+      "stmt_id": "match_scale@1786",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (ciph1.level() > ciph2.level())\n    {\n        evaluator->drop_modulus(ciph1, ciph1, ciph2.parms_id());\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 64,
+          "offset": 1422
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+        "start": {
+          "column": 5,
+          "line": 61,
+          "offset": 1312
+        }
+      },
+      "stmt_id": "match_param_id@1312",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (!util::are_approximate(ciph1.scale(), ciph2.scale()))\n    {\n        ciph1.scale() = ciph2.scale();\n        std::vector<std::complex<double>> vec_tmp(slot_size, {1.0, 0.0});\n        Plaintext plt_tmp;\n\n        \n        encoder.encode(vec_tmp, ciph1.parms_id(), scale * scale / ciph1.scale(), plt_tmp);\n        evaluator->multiply_plain(ciph1, plt_tmp, ciph1);\n        evaluator->rescale(ciph1, ciph1);\n\n        \n        encoder.encode(vec_tmp, ciph2.parms_id(), scale * scale / ciph2.scale(), plt_tmp);\n        evaluator->multiply_plain(ciph2, plt_tmp, ciph2);\n        evaluator->rescale(ciph2, ciph2);\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 92,
+          "offset": 2396
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+        "start": {
+          "column": 5,
+          "line": 77,
+          "offset": 1786
+        }
+      },
+      "stmt_id": "match_scale@1786",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (n <= 0)\n    {\n        POSEIDON_THROW(invalid_argument_error, \"n cannot be negative\");\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 326,
+          "offset": 9380
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+        "start": {
+          "column": 5,
+          "line": 323,
+          "offset": 9286
+        }
+      },
+      "stmt_id": "sum_col@9286",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "while (n > 1)\n    {\n        Ciphertext ciph_tmp;\n        if (n & 1 && n != 1)\n        {\n            ckks_eva->add(ciph_sum, ciph_rotate_sum, ciph_sum);\n            ckks_eva->rotate(ciph_rotate_sum, ciph_rotate_sum, 1, rot_keys);\n            n--;\n        }\n        n = n >> 1;\n        if (n)\n        {\n            ckks_eva->rotate(ciph_rotate_sum, ciph_tmp, n, rot_keys);\n            ckks_eva->add(ciph_rotate_sum, ciph_tmp, ciph_rotate_sum);\n        }\n    }"
+      },
+      "reason": "unsupported control flow: while",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 354,
+          "offset": 10170
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+        "start": {
+          "column": 5,
+          "line": 339,
+          "offset": 9714
+        }
+      },
+      "stmt_id": "sum_col@9714",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "for (size_t i = 1; i < slot_count; i++)\n    {\n        evaluator->rotate(ciph_tmp_rotate, ciph_tmp_rotate, rotation_step, rot_keys);\n        evaluator->add(ciph_tmp, ciph_tmp_rotate, ciph_tmp);\n    }"
+      },
+      "reason": "unsupported dynamic loop boundary",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 387,
+          "offset": 11339
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+        "start": {
+          "column": 5,
+          "line": 383,
+          "offset": 11142
+        }
+      },
+      "stmt_id": "trans_row@11142",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "entry_function": "sort_product_rank",
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "operation_order": [
+    "op6",
+    "op0",
+    "op24",
+    "op12",
+    "op10",
+    "op29",
+    "op7",
+    "op1",
+    "op25",
+    "op13",
+    "op11",
+    "op30",
+    "op8",
+    "op2",
+    "op26",
+    "op14",
+    "op31",
+    "op3",
+    "op9",
+    "op15",
+    "op4",
+    "op16",
+    "op5",
+    "op17",
+    "op18",
+    "op19",
+    "op20",
+    "op21",
+    "op22",
+    "op23",
+    "op27",
+    "op28",
+    "op32",
+    "op33",
+    "op34",
+    "op35",
+    "op36",
+    "op37",
+    "op38"
+  ],
+  "parallel_blocks": [
+    {
+      "anchor_stmt_ids": [
+        "sort_product_rank@13453::encode_and_encrypt@304",
+        "sort_product_rank@13056::mask@1020",
+        "sort_product_rank@13899::replRow@2568",
+        "sort_product_rank@13798::ind@6906",
+        "sort_product_rank@14281::sum_col@9537"
+      ],
+      "op_ids": [
+        "op6",
+        "op0",
+        "op24",
+        "op10",
+        "op29"
+      ],
+      "region_id": "region0"
+    },
+    {
+      "anchor_stmt_ids": [
+        "sort_product_rank@13453::encode_and_encrypt@347",
+        "sort_product_rank@13056::mask@1085",
+        "sort_product_rank@13899::replRow@2754",
+        "sort_product_rank@14281::sum_col@9606"
+      ],
+      "op_ids": [
+        "op7",
+        "op1",
+        "op25",
+        "op30"
+      ],
+      "region_id": "region2"
+    },
+    {
+      "anchor_stmt_ids": [
+        "sort_product_rank@13453::return",
+        "sort_product_rank@13899::replRow@2833",
+        "sort_product_rank@13798::ind@7038::sign@5897",
+        "sort_product_rank@14281::sum_col@10176"
+      ],
+      "op_ids": [
+        "op8",
+        "op26",
+        "op14",
+        "op31"
+      ],
+      "region_id": "region5"
+    },
+    {
+      "anchor_stmt_ids": [
+        "sort_product_rank@13126::replRow@2568",
+        "sort_product_rank@13717",
+        "sort_product_rank@13798::ind@7038::return"
+      ],
+      "op_ids": [
+        "op3",
+        "op9",
+        "op15"
+      ],
+      "region_id": "region7"
+    },
+    {
+      "anchor_stmt_ids": [
+        "sort_product_rank@13126::replRow@2754",
+        "sort_product_rank@13798::ind@7145"
+      ],
+      "op_ids": [
+        "op4",
+        "op16"
+      ],
+      "region_id": "region8"
+    }
+  ],
+  "regions": [
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op6",
+        "op0",
+        "op24",
+        "op10",
+        "op29"
+      ],
+      "region_id": "region0",
+      "source_spans": [
+        {
+          "end": {
+            "column": 42,
+            "line": 32,
+            "offset": 341
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 32,
+            "offset": 304
+          }
+        },
+        {
+          "end": {
+            "column": 63,
+            "line": 52,
+            "offset": 1078
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 52,
+            "offset": 1020
+          }
+        },
+        {
+          "end": {
+            "column": 23,
+            "line": 99,
+            "offset": 2586
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 99,
+            "offset": 2568
+          }
+        },
+        {
+          "end": {
+            "column": 72,
+            "line": 257,
+            "offset": 6973
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 257,
+            "offset": 6906
+          }
+        },
+        {
+          "end": {
+            "column": 68,
+            "line": 333,
+            "offset": 9600
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 333,
+            "offset": 9537
+          }
+        }
+      ],
+      "stmt_ids": [
+        "sort_product_rank@13453::encode_and_encrypt@304",
+        "sort_product_rank@13056::mask@1020",
+        "sort_product_rank@13899::replRow@2568",
+        "sort_product_rank@13798::ind@6906",
+        "sort_product_rank@14281::sum_col@9537"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op12"
+      ],
+      "region_id": "region1",
+      "source_spans": [
+        {
+          "end": {
+            "column": 113,
+            "line": 223,
+            "offset": 5771
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 223,
+            "offset": 5663
+          }
+        }
+      ],
+      "stmt_ids": [
+        "sort_product_rank@13798::ind@7038::sign@5663"
+      ]
+    },
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op7",
+        "op1",
+        "op25",
+        "op30"
+      ],
+      "region_id": "region2",
+      "source_spans": [
+        {
+          "end": {
+            "column": 35,
+            "line": 33,
+            "offset": 377
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 33,
+            "offset": 347
+          }
+        },
+        {
+          "end": {
+            "column": 50,
+            "line": 54,
+            "offset": 1130
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 54,
+            "offset": 1085
+          }
+        },
+        {
+          "end": {
+            "column": 78,
+            "line": 104,
+            "offset": 2823
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 9,
+            "line": 104,
+            "offset": 2754
+          }
+        },
+        {
+          "end": {
+            "column": 38,
+            "line": 334,
+            "offset": 9639
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 334,
+            "offset": 9606
+          }
+        }
+      ],
+      "stmt_ids": [
+        "sort_product_rank@13453::encode_and_encrypt@347",
+        "sort_product_rank@13056::mask@1085",
+        "sort_product_rank@13899::replRow@2754",
+        "sort_product_rank@14281::sum_col@9606"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op13"
+      ],
+      "region_id": "region3",
+      "source_spans": [
+        {
+          "end": {
+            "column": 113,
+            "line": 224,
+            "offset": 5885
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 224,
+            "offset": 5777
+          }
+        }
+      ],
+      "stmt_ids": [
+        "sort_product_rank@13798::ind@7038::sign@5777"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op11"
+      ],
+      "region_id": "region4",
+      "source_spans": [
+        {
+          "end": {
+            "column": 58,
+            "line": 258,
+            "offset": 7032
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 258,
+            "offset": 6979
+          }
+        }
+      ],
+      "stmt_ids": [
+        "sort_product_rank@13798::ind@6979"
+      ]
+    },
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op8",
+        "op26",
+        "op14",
+        "op31"
+      ],
+      "region_id": "region5",
+      "source_spans": [
+        {
+          "end": {
+            "column": 91,
+            "line": 443,
+            "offset": 13539
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 443,
+            "offset": 13453
+          }
+        },
+        {
+          "end": {
+            "column": 60,
+            "line": 105,
+            "offset": 2884
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 9,
+            "line": 105,
+            "offset": 2833
+          }
+        },
+        {
+          "end": {
+            "column": 65,
+            "line": 227,
+            "offset": 5957
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 227,
+            "offset": 5897
+          }
+        },
+        {
+          "end": {
+            "column": 55,
+            "line": 355,
+            "offset": 10226
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 355,
+            "offset": 10176
+          }
+        }
+      ],
+      "stmt_ids": [
+        "sort_product_rank@13453::return",
+        "sort_product_rank@13899::replRow@2833",
+        "sort_product_rank@13798::ind@7038::sign@5897",
+        "sort_product_rank@14281::sum_col@10176"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op2"
+      ],
+      "region_id": "region6",
+      "source_spans": [
+        {
+          "end": {
+            "column": 46,
+            "line": 55,
+            "offset": 1177
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 55,
+            "offset": 1136
+          }
+        }
+      ],
+      "stmt_ids": [
+        "sort_product_rank@13056::mask@1136"
+      ]
+    },
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op3",
+        "op9",
+        "op15"
+      ],
+      "region_id": "region7",
+      "source_spans": [
+        {
+          "end": {
+            "column": 23,
+            "line": 99,
+            "offset": 2586
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 99,
+            "offset": 2568
+          }
+        },
+        {
+          "end": {
+            "column": 75,
+            "line": 449,
+            "offset": 13787
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 449,
+            "offset": 13717
+          }
+        },
+        {
+          "end": {
+            "column": 101,
+            "line": 259,
+            "offset": 7134
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 259,
+            "offset": 7038
+          }
+        }
+      ],
+      "stmt_ids": [
+        "sort_product_rank@13126::replRow@2568",
+        "sort_product_rank@13717",
+        "sort_product_rank@13798::ind@7038::return"
+      ]
+    },
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op4",
+        "op16"
+      ],
+      "region_id": "region8",
+      "source_spans": [
+        {
+          "end": {
+            "column": 78,
+            "line": 104,
+            "offset": 2823
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 9,
+            "line": 104,
+            "offset": 2754
+          }
+        },
+        {
+          "end": {
+            "column": 72,
+            "line": 261,
+            "offset": 7212
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 261,
+            "offset": 7145
+          }
+        }
+      ],
+      "stmt_ids": [
+        "sort_product_rank@13126::replRow@2754",
+        "sort_product_rank@13798::ind@7145"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op5"
+      ],
+      "region_id": "region9",
+      "source_spans": [
+        {
+          "end": {
+            "column": 60,
+            "line": 105,
+            "offset": 2884
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 9,
+            "line": 105,
+            "offset": 2833
+          }
+        }
+      ],
+      "stmt_ids": [
+        "sort_product_rank@13126::replRow@2833"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op17"
+      ],
+      "region_id": "region10",
+      "source_spans": [
+        {
+          "end": {
+            "column": 58,
+            "line": 262,
+            "offset": 7271
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 262,
+            "offset": 7218
+          }
+        }
+      ],
+      "stmt_ids": [
+        "sort_product_rank@13798::ind@7218"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op18"
+      ],
+      "region_id": "region11",
+      "source_spans": [
+        {
+          "end": {
+            "column": 59,
+            "line": 265,
+            "offset": 7337
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 265,
+            "offset": 7283
+          }
+        }
+      ],
+      "stmt_ids": [
+        "sort_product_rank@13798::ind@7283"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op19"
+      ],
+      "region_id": "region12",
+      "source_spans": [
+        {
+          "end": {
+            "column": 75,
+            "line": 268,
+            "offset": 7539
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 268,
+            "offset": 7469
+          }
+        }
+      ],
+      "stmt_ids": [
+        "sort_product_rank@13798::ind@7469"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op20"
+      ],
+      "region_id": "region13",
+      "source_spans": [
+        {
+          "end": {
+            "column": 64,
+            "line": 269,
+            "offset": 7604
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 269,
+            "offset": 7545
+          }
+        }
+      ],
+      "stmt_ids": [
+        "sort_product_rank@13798::ind@7545"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op21"
+      ],
+      "region_id": "region14",
+      "source_spans": [
+        {
+          "end": {
+            "column": 77,
+            "line": 272,
+            "offset": 7688
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 272,
+            "offset": 7616
+          }
+        }
+      ],
+      "stmt_ids": [
+        "sort_product_rank@13798::ind@7616"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op22"
+      ],
+      "region_id": "region15",
+      "source_spans": [
+        {
+          "end": {
+            "column": 64,
+            "line": 273,
+            "offset": 7753
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 273,
+            "offset": 7694
+          }
+        }
+      ],
+      "stmt_ids": [
+        "sort_product_rank@13798::ind@7694"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op23"
+      ],
+      "region_id": "region16",
+      "source_spans": [
+        {
+          "end": {
+            "column": 95,
+            "line": 451,
+            "offset": 13888
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 451,
+            "offset": 13798
+          }
+        }
+      ],
+      "stmt_ids": [
+        "sort_product_rank@13798::return"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op27"
+      ],
+      "region_id": "region17",
+      "source_spans": [
+        {
+          "end": {
+            "column": 83,
+            "line": 458,
+            "offset": 14204
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 458,
+            "offset": 14126
+          }
+        }
+      ],
+      "stmt_ids": [
+        "sort_product_rank@14126"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op28"
+      ],
+      "region_id": "region18",
+      "source_spans": [
+        {
+          "end": {
+            "column": 64,
+            "line": 459,
+            "offset": 14269
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 459,
+            "offset": 14210
+          }
+        }
+      ],
+      "stmt_ids": [
+        "sort_product_rank@14210"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op32"
+      ],
+      "region_id": "region19",
+      "source_spans": [
+        {
+          "end": {
+            "column": 92,
+            "line": 462,
+            "offset": 14368
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 462,
+            "offset": 14281
+          }
+        }
+      ],
+      "stmt_ids": [
+        "sort_product_rank@14281::return"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op33"
+      ],
+      "region_id": "region20",
+      "source_spans": [
+        {
+          "end": {
+            "column": 23,
+            "line": 368,
+            "offset": 10653
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 368,
+            "offset": 10635
+          }
+        }
+      ],
+      "stmt_ids": [
+        "sort_product_rank@14374::trans_row@10635"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op34"
+      ],
+      "region_id": "region21",
+      "source_spans": [
+        {
+          "end": {
+            "column": 69,
+            "line": 376,
+            "offset": 10929
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 376,
+            "offset": 10865
+          }
+        }
+      ],
+      "stmt_ids": [
+        "sort_product_rank@14374::trans_row@10865"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op35"
+      ],
+      "region_id": "region22",
+      "source_spans": [
+        {
+          "end": {
+            "column": 62,
+            "line": 378,
+            "offset": 10993
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 378,
+            "offset": 10936
+          }
+        }
+      ],
+      "stmt_ids": [
+        "sort_product_rank@14374::trans_row@10936"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op36"
+      ],
+      "region_id": "region23",
+      "source_spans": [
+        {
+          "end": {
+            "column": 58,
+            "line": 379,
+            "offset": 11052
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 379,
+            "offset": 10999
+          }
+        }
+      ],
+      "stmt_ids": [
+        "sort_product_rank@14374::trans_row@10999"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op37"
+      ],
+      "region_id": "region24",
+      "source_spans": [
+        {
+          "end": {
+            "column": 112,
+            "line": 463,
+            "offset": 14481
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 463,
+            "offset": 14374
+          }
+        }
+      ],
+      "stmt_ids": [
+        "sort_product_rank@14374::return"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op38"
+      ],
+      "region_id": "region25",
+      "source_spans": [
+        {
+          "end": {
+            "column": 23,
+            "line": 465,
+            "offset": 14506
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+          "start": {
+            "column": 5,
+            "line": 465,
+            "offset": 14488
+          }
+        }
+      ],
+      "stmt_ids": [
+        "sort_product_rank@14488"
+      ]
+    }
+  ],
+  "required_temporaries": [
+    {
+      "symbol": "ciph_constant"
+    },
+    {
+      "symbol": "ciph_rank"
+    },
+    {
+      "symbol": "ciph_result"
+    },
+    {
+      "symbol": "ciph_sum"
+    },
+    {
+      "symbol": "ciph_tmp"
+    },
+    {
+      "symbol": "ct"
+    },
+    {
+      "symbol": "encode_and_encrypt__sort_product_rank_13453__ciph"
+    },
+    {
+      "symbol": "encode_and_encrypt__sort_product_rank_13453__plain"
+    },
+    {
+      "symbol": "ind__sort_product_rank_13798__ciph_cmp"
+    },
+    {
+      "symbol": "ind__sort_product_rank_13798__ciph_result"
+    },
+    {
+      "symbol": "ind__sort_product_rank_13798__ciph_tmp"
+    },
+    {
+      "symbol": "ind__sort_product_rank_13798__sign__ind_7038__ciph_result"
+    },
+    {
+      "symbol": "mask__sort_product_rank_13056__mask_plain"
+    },
+    {
+      "symbol": "replRow__sort_product_rank_13126__ciph_tmp"
+    },
+    {
+      "symbol": "replRow__sort_product_rank_13126__ciph_tmp_rotate"
+    },
+    {
+      "symbol": "replRow__sort_product_rank_13899__ciph_tmp"
+    },
+    {
+      "symbol": "replRow__sort_product_rank_13899__ciph_tmp_rotate"
+    },
+    {
+      "symbol": "sum_col__sort_product_rank_14281__ciph_sum"
+    },
+    {
+      "symbol": "sum_col__sort_product_rank_14281__plain_zero"
+    },
+    {
+      "symbol": "trans_row__sort_product_rank_14374__ciph_tmp"
+    },
+    {
+      "symbol": "trans_row__sort_product_rank_14374__mask_plain"
+    }
+  ],
+  "schema_version": 2,
+  "source_edits_anchor": {
+    "end": {
+      "column": 1,
+      "line": 466,
+      "offset": 14508
+    },
+    "file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+    "start": {
+      "column": 12,
+      "line": 419,
+      "offset": 12406
+    }
+  },
+  "source_file": "/home/guoshuai/github/poseidon/Trident/knn/sort_base_rank.cpp",
+  "status": "blocked"
+}

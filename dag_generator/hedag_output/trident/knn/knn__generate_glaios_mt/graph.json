@@ -1,0 +1,106 @@
+{
+  "diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "for (int w = 0; w < num_threads; ++w)\n    {\n        int start = w * work_load;\n        int end = std::min<int>(start + work_load, step.size());\n\n        if (end > start)\n        {\n\n                    for (size_t i = s; i < e; ++i)\n                    {\n                        kgen.create_galois_keys(step[i], rot_keys);\n                    }\n                \n        }\n    }"
+      },
+      "reason": "unsupported dynamic loop boundary",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 32,
+          "line": 227,
+          "offset": 6498
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 5,
+          "line": 215,
+          "offset": 6123
+        }
+      },
+      "stmt_id": "generate_glaios_mt@6123",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "edges": [],
+  "entry_function": "generate_glaios_mt",
+  "frontend": "textual_fallback",
+  "metadata": {
+    "entry_span": {
+      "end": {
+        "column": 1,
+        "line": 233,
+        "offset": 6621
+      },
+      "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+      "start": {
+        "column": 6,
+        "line": 211,
+        "offset": 5916
+      }
+    },
+    "frontend_mode": "textual_fallback",
+    "source_hash": "4317e5dc0f307d91b4775c34191191ef4d4f75db3f6d1895c04e644d42bcc650"
+  },
+  "ops": [],
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+  "values": [
+    {
+      "annotations": {},
+      "origin_scope": "generate_glaios_mt",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 24,
+          "line": 211,
+          "offset": 5934
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 6,
+          "line": 211,
+          "offset": 5916
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "kgen"
+      },
+      "value_id": "kgen@0",
+      "value_kind": "key_generator"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_glaios_mt",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 72,
+          "line": 211,
+          "offset": 5982
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/knn/knn.cpp",
+        "start": {
+          "column": 52,
+          "line": 211,
+          "offset": 5962
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "rot_keys"
+      },
+      "value_id": "rot_keys@0",
+      "value_kind": "galois_keys"
+    }
+  ]
+}

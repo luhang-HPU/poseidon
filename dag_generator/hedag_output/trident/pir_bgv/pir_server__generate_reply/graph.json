@@ -1,0 +1,3236 @@
+{
+  "diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (j == query[i].size() - 1)\n            {\n                total = n_i % N;\n            }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 13,
+          "line": 234,
+          "offset": 6250
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 13,
+          "line": 231,
+          "offset": 6161
+        }
+      },
+      "stmt_id": "generate_reply@6161",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (logm > std::ceil(std::log2(n)))\n    {\n        throw logic_error(\"m > n is not allowed.\");\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 359,
+          "offset": 10398
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 5,
+          "line": 356,
+          "offset": 10300
+        }
+      },
+      "stmt_id": "expand_query@10300",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (transform)\n    {\n        evaluator_->ntt_inv(encrypted, encrypted);\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 429,
+          "offset": 12831
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 5,
+          "line": 426,
+          "offset": 12755
+        }
+      },
+      "stmt_id": "multiply_power_of_X@12755",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (transform)\n    {\n        evaluator_->ntt_inv(encrypted, encrypted);\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 429,
+          "offset": 12831
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 5,
+          "line": 426,
+          "offset": 12755
+        }
+      },
+      "stmt_id": "multiply_power_of_X@12755",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (transform)\n    {\n        evaluator_->ntt_inv(encrypted, encrypted);\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 429,
+          "offset": 12831
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 5,
+          "line": 426,
+          "offset": 12755
+        }
+      },
+      "stmt_id": "multiply_power_of_X@12755",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (transform)\n    {\n        evaluator_->ntt_inv(encrypted, encrypted);\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 429,
+          "offset": 12831
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 5,
+          "line": 426,
+          "offset": 12755
+        }
+      },
+      "stmt_id": "multiply_power_of_X@12755",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (expanded_query.size() != n_i)\n        {\n            cout << \" size mismatch!!! \" << expanded_query.size() << \", \" << n_i << endl;\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 248,
+          "offset": 6957
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 9,
+          "line": 245,
+          "offset": 6815
+        }
+      },
+      "stmt_id": "generate_reply@6815",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if ((!is_db_preprocessed_) || i > 0)\n        {\n            for (uint32_t jj = 0; jj < cur->size(); jj++)\n            {\n                auto tem = (*cur)[jj];\n                evaluator_->transform_to_ntt_inplace((*cur)[jj],\n                                                     context_->crt_context()->first_parms_id());\n            }\n        }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 9,
+          "line": 260,
+          "offset": 7328
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 9,
+          "line": 252,
+          "offset": 6986
+        }
+      },
+      "stmt_id": "generate_reply@6986",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (pir_params_.enable_mswitching)\n                {\n                    Ciphertext tmp;\n                    evaluator_->drop_modulus(intermediateCtxts[rr], tmp,\n                                             context_->crt_context()->last_parms_id());\n                    intermediateCtxts[rr] = tmp;\n                    parms = context_->crt_context()->last_context_data()->parms();\n                }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 17,
+          "line": 318,
+          "offset": 9143
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 17,
+          "line": 311,
+          "offset": 8745
+        }
+      },
+      "stmt_id": "generate_reply@8745",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "edges": [
+    {
+      "dst": "op1",
+      "kind": "data",
+      "reason": "expand_query__generate_reply_6351__tempctxt_rotated",
+      "src": "op0",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotated@1"
+    },
+    {
+      "dst": "op1",
+      "kind": "read_after_write",
+      "reason": "expand_query__generate_reply_6351__tempctxt_rotated",
+      "src": "op0",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotated@1"
+    },
+    {
+      "dst": "op1",
+      "kind": "call_order",
+      "reason": "generate_reply@6351",
+      "src": "op0",
+      "value_id": null
+    },
+    {
+      "dst": "op3",
+      "kind": "data",
+      "reason": "expand_query__generate_reply_6351__tempctxt_shifted",
+      "src": "op2",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_shifted@1"
+    },
+    {
+      "dst": "op3",
+      "kind": "read_after_write",
+      "reason": "expand_query__generate_reply_6351__tempctxt_shifted",
+      "src": "op2",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_shifted@1"
+    },
+    {
+      "dst": "op3",
+      "kind": "write_after_write",
+      "reason": "expand_query__generate_reply_6351__tempctxt_shifted",
+      "src": "op2",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_shifted@2"
+    },
+    {
+      "dst": "op3",
+      "kind": "call_order",
+      "reason": "expand_query@11206",
+      "src": "op2",
+      "value_id": null
+    },
+    {
+      "dst": "op4",
+      "kind": "data",
+      "reason": "expand_query__generate_reply_6351__tempctxt_rotated",
+      "src": "op0",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotated@1"
+    },
+    {
+      "dst": "op4",
+      "kind": "read_after_write",
+      "reason": "expand_query__generate_reply_6351__tempctxt_rotated",
+      "src": "op0",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotated@1"
+    },
+    {
+      "dst": "op5",
+      "kind": "data",
+      "reason": "expand_query__generate_reply_6351__tempctxt_rotatedshifted",
+      "src": "op4",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotatedshifted@1"
+    },
+    {
+      "dst": "op5",
+      "kind": "read_after_write",
+      "reason": "expand_query__generate_reply_6351__tempctxt_rotatedshifted",
+      "src": "op4",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotatedshifted@1"
+    },
+    {
+      "dst": "op5",
+      "kind": "write_after_write",
+      "reason": "expand_query__generate_reply_6351__tempctxt_rotatedshifted",
+      "src": "op4",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotatedshifted@2"
+    },
+    {
+      "dst": "op5",
+      "kind": "call_order",
+      "reason": "expand_query@11277",
+      "src": "op4",
+      "value_id": null
+    },
+    {
+      "dst": "op6",
+      "kind": "data",
+      "reason": "expand_query__generate_reply_6351__tempctxt_shifted",
+      "src": "op3",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_shifted@2"
+    },
+    {
+      "dst": "op6",
+      "kind": "read_after_write",
+      "reason": "expand_query__generate_reply_6351__tempctxt_shifted",
+      "src": "op3",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_shifted@2"
+    },
+    {
+      "dst": "op6",
+      "kind": "data",
+      "reason": "expand_query__generate_reply_6351__tempctxt_rotatedshifted",
+      "src": "op5",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotatedshifted@2"
+    },
+    {
+      "dst": "op6",
+      "kind": "read_after_write",
+      "reason": "expand_query__generate_reply_6351__tempctxt_rotatedshifted",
+      "src": "op5",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotatedshifted@2"
+    },
+    {
+      "dst": "op6",
+      "kind": "call_order",
+      "reason": "generate_reply@6351",
+      "src": "op1",
+      "value_id": null
+    },
+    {
+      "dst": "op7",
+      "kind": "write_after_write",
+      "reason": "expand_query__generate_reply_6351__newtemp[a]",
+      "src": "op1",
+      "value_id": "expand_query__generate_reply_6351__newtemp[a]@2"
+    },
+    {
+      "dst": "op7",
+      "kind": "call_order",
+      "reason": "generate_reply@6351",
+      "src": "op6",
+      "value_id": null
+    },
+    {
+      "dst": "op8",
+      "kind": "write_after_write",
+      "reason": "expand_query__generate_reply_6351__tempctxt_rotated",
+      "src": "op0",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotated@2"
+    },
+    {
+      "dst": "op8",
+      "kind": "write_after_read",
+      "reason": "expand_query__generate_reply_6351__tempctxt_rotated",
+      "src": "op1",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotated@2"
+    },
+    {
+      "dst": "op8",
+      "kind": "write_after_read",
+      "reason": "expand_query__generate_reply_6351__tempctxt_rotated",
+      "src": "op4",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotated@2"
+    },
+    {
+      "dst": "op8",
+      "kind": "call_order",
+      "reason": "generate_reply@6351",
+      "src": "op7",
+      "value_id": null
+    },
+    {
+      "dst": "op9",
+      "kind": "data",
+      "reason": "expand_query__generate_reply_6351__tempctxt_rotated",
+      "src": "op8",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotated@2"
+    },
+    {
+      "dst": "op9",
+      "kind": "read_after_write",
+      "reason": "expand_query__generate_reply_6351__tempctxt_rotated",
+      "src": "op8",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotated@2"
+    },
+    {
+      "dst": "op9",
+      "kind": "write_after_write",
+      "reason": "expand_query__generate_reply_6351__newtemp[a]",
+      "src": "op7",
+      "value_id": "expand_query__generate_reply_6351__newtemp[a]@3"
+    },
+    {
+      "dst": "op9",
+      "kind": "call_order",
+      "reason": "generate_reply@6351",
+      "src": "op8",
+      "value_id": null
+    },
+    {
+      "dst": "op10",
+      "kind": "write_after_write",
+      "reason": "expand_query__generate_reply_6351__tempctxt_shifted",
+      "src": "op3",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_shifted@3"
+    },
+    {
+      "dst": "op10",
+      "kind": "write_after_read",
+      "reason": "expand_query__generate_reply_6351__tempctxt_shifted",
+      "src": "op3",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_shifted@3"
+    },
+    {
+      "dst": "op10",
+      "kind": "write_after_read",
+      "reason": "expand_query__generate_reply_6351__tempctxt_shifted",
+      "src": "op6",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_shifted@3"
+    },
+    {
+      "dst": "op11",
+      "kind": "data",
+      "reason": "expand_query__generate_reply_6351__tempctxt_shifted",
+      "src": "op10",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_shifted@3"
+    },
+    {
+      "dst": "op11",
+      "kind": "read_after_write",
+      "reason": "expand_query__generate_reply_6351__tempctxt_shifted",
+      "src": "op10",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_shifted@3"
+    },
+    {
+      "dst": "op11",
+      "kind": "write_after_write",
+      "reason": "expand_query__generate_reply_6351__tempctxt_shifted",
+      "src": "op10",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_shifted@4"
+    },
+    {
+      "dst": "op11",
+      "kind": "call_order",
+      "reason": "expand_query@12092",
+      "src": "op10",
+      "value_id": null
+    },
+    {
+      "dst": "op12",
+      "kind": "data",
+      "reason": "expand_query__generate_reply_6351__tempctxt_rotated",
+      "src": "op8",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotated@2"
+    },
+    {
+      "dst": "op12",
+      "kind": "read_after_write",
+      "reason": "expand_query__generate_reply_6351__tempctxt_rotated",
+      "src": "op8",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotated@2"
+    },
+    {
+      "dst": "op12",
+      "kind": "write_after_write",
+      "reason": "expand_query__generate_reply_6351__tempctxt_rotatedshifted",
+      "src": "op5",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotatedshifted@3"
+    },
+    {
+      "dst": "op12",
+      "kind": "write_after_read",
+      "reason": "expand_query__generate_reply_6351__tempctxt_rotatedshifted",
+      "src": "op5",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotatedshifted@3"
+    },
+    {
+      "dst": "op12",
+      "kind": "write_after_read",
+      "reason": "expand_query__generate_reply_6351__tempctxt_rotatedshifted",
+      "src": "op6",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotatedshifted@3"
+    },
+    {
+      "dst": "op13",
+      "kind": "data",
+      "reason": "expand_query__generate_reply_6351__tempctxt_rotatedshifted",
+      "src": "op12",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotatedshifted@3"
+    },
+    {
+      "dst": "op13",
+      "kind": "read_after_write",
+      "reason": "expand_query__generate_reply_6351__tempctxt_rotatedshifted",
+      "src": "op12",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotatedshifted@3"
+    },
+    {
+      "dst": "op13",
+      "kind": "write_after_write",
+      "reason": "expand_query__generate_reply_6351__tempctxt_rotatedshifted",
+      "src": "op12",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotatedshifted@4"
+    },
+    {
+      "dst": "op13",
+      "kind": "call_order",
+      "reason": "expand_query@12163",
+      "src": "op12",
+      "value_id": null
+    },
+    {
+      "dst": "op14",
+      "kind": "data",
+      "reason": "expand_query__generate_reply_6351__tempctxt_shifted",
+      "src": "op11",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_shifted@4"
+    },
+    {
+      "dst": "op14",
+      "kind": "read_after_write",
+      "reason": "expand_query__generate_reply_6351__tempctxt_shifted",
+      "src": "op11",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_shifted@4"
+    },
+    {
+      "dst": "op14",
+      "kind": "data",
+      "reason": "expand_query__generate_reply_6351__tempctxt_rotatedshifted",
+      "src": "op13",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotatedshifted@4"
+    },
+    {
+      "dst": "op14",
+      "kind": "read_after_write",
+      "reason": "expand_query__generate_reply_6351__tempctxt_rotatedshifted",
+      "src": "op13",
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotatedshifted@4"
+    },
+    {
+      "dst": "op14",
+      "kind": "write_after_write",
+      "reason": "expand_query__generate_reply_6351__newtemp[a + temp.size()]",
+      "src": "op6",
+      "value_id": "expand_query__generate_reply_6351__newtemp[a + temp.size()]@2"
+    },
+    {
+      "dst": "op14",
+      "kind": "call_order",
+      "reason": "generate_reply@6351",
+      "src": "op9",
+      "value_id": null
+    },
+    {
+      "dst": "op15",
+      "kind": "call_order",
+      "reason": "generate_reply@6351",
+      "src": "op14",
+      "value_id": null
+    }
+  ],
+  "entry_function": "generate_reply",
+  "frontend": "textual_fallback",
+  "metadata": {
+    "entry_span": {
+      "end": {
+        "column": 1,
+        "line": 341,
+        "offset": 9845
+      },
+      "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+      "start": {
+        "column": 21,
+        "line": 196,
+        "offset": 5130
+      }
+    },
+    "frontend_mode": "textual_fallback",
+    "source_hash": "353b665b0e00ae24116f88c462365fce2f8f06cc2330f7598552c0a3afe2ad3a"
+  },
+  "ops": [
+    {
+      "api_name": "apply_galois",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "temp[a]",
+          "galois_elts[i]"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "{ evaluator_",
+        "source_text": "a++) { evaluator_->apply_galois(temp[a], tempctxt_rotated, galois_elts[i], galkey)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "tempctxt_rotated"
+          }
+        }
+      ],
+      "inputs": [],
+      "op_id": "op0",
+      "op_kind": "apply_galois",
+      "origin_callstack": [
+        {
+          "function": "generate_reply",
+          "source_span": {
+            "end": {
+              "column": 80,
+              "line": 237,
+              "offset": 6471
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+            "start": {
+              "column": 13,
+              "line": 236,
+              "offset": 6351
+            }
+          },
+          "source_text": "vector<Ciphertext> expanded_query_part =\n                expand_query(query[i][j], total, client_id, encoder, decryptor)",
+          "stmt_id": "generate_reply@6351"
+        }
+      ],
+      "outputs": [
+        "expand_query__generate_reply_6351__tempctxt_rotated@1"
+      ],
+      "resources": [
+        "galkey@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 88,
+          "line": 382,
+          "offset": 11124
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 47,
+          "line": 380,
+          "offset": 11022
+        }
+      },
+      "stmt_id": "generate_reply@6351::expand_query@11022"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "temp[a]"
+        ],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "evaluator_",
+        "source_text": "evaluator_->add(temp[a], tempctxt_rotated, newtemp[a])"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": "newtemp",
+            "index": "a",
+            "kind": "indexed",
+            "text": "newtemp[a]"
+          }
+        }
+      ],
+      "inputs": [
+        "expand_query__generate_reply_6351__tempctxt_rotated@1"
+      ],
+      "op_id": "op1",
+      "op_kind": "add",
+      "origin_callstack": [
+        {
+          "function": "generate_reply",
+          "source_span": {
+            "end": {
+              "column": 80,
+              "line": 237,
+              "offset": 6471
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+            "start": {
+              "column": 13,
+              "line": 236,
+              "offset": 6351
+            }
+          },
+          "source_text": "vector<Ciphertext> expanded_query_part =\n                expand_query(query[i][j], total, client_id, encoder, decryptor)",
+          "stmt_id": "generate_reply@6351"
+        }
+      ],
+      "outputs": [
+        "expand_query__generate_reply_6351__newtemp[a]@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 67,
+          "line": 383,
+          "offset": 11192
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 13,
+          "line": 383,
+          "offset": 11138
+        }
+      },
+      "stmt_id": "generate_reply@6351::expand_query@11138"
+    },
+    {
+      "api_name": "assign",
+      "attrs": {
+        "barrier": false,
+        "cost": 1,
+        "source_text": "destination = encrypted"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "destination"
+          }
+        }
+      ],
+      "inputs": [
+        "expand_query__generate_reply_6351__temp[a]@0"
+      ],
+      "op_id": "op2",
+      "op_kind": "assign",
+      "origin_callstack": [
+        {
+          "function": "generate_reply",
+          "source_span": {
+            "end": {
+              "column": 80,
+              "line": 237,
+              "offset": 6471
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+            "start": {
+              "column": 13,
+              "line": 236,
+              "offset": 6351
+            }
+          },
+          "source_text": "vector<Ciphertext> expanded_query_part =\n                expand_query(query[i][j], total, client_id, encoder, decryptor)",
+          "stmt_id": "generate_reply@6351"
+        },
+        {
+          "function": "expand_query",
+          "source_span": {
+            "end": {
+              "column": 70,
+              "line": 384,
+              "offset": 11263
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+            "start": {
+              "column": 13,
+              "line": 384,
+              "offset": 11206
+            }
+          },
+          "source_text": "multiply_power_of_X(temp[a], tempctxt_shifted, index_raw)",
+          "stmt_id": "expand_query@11206"
+        }
+      ],
+      "outputs": [
+        "expand_query__generate_reply_6351__tempctxt_shifted@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 28,
+          "line": 439,
+          "offset": 13048
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 5,
+          "line": 439,
+          "offset": 13025
+        }
+      },
+      "stmt_id": "generate_reply@6351::expand_query@11206::multiply_power_of_X@13025"
+    },
+    {
+      "api_name": "ntt_fwd",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 3,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "{ evaluator_",
+        "source_text": "} } if (transform) { evaluator_->ntt_fwd(destination, destination)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "destination"
+          }
+        }
+      ],
+      "inputs": [
+        "expand_query__generate_reply_6351__tempctxt_shifted@1"
+      ],
+      "op_id": "op3",
+      "op_kind": "ntt_fwd",
+      "origin_callstack": [
+        {
+          "function": "generate_reply",
+          "source_span": {
+            "end": {
+              "column": 80,
+              "line": 237,
+              "offset": 6471
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+            "start": {
+              "column": 13,
+              "line": 236,
+              "offset": 6351
+            }
+          },
+          "source_text": "vector<Ciphertext> expanded_query_part =\n                expand_query(query[i][j], total, client_id, encoder, decryptor)",
+          "stmt_id": "generate_reply@6351"
+        },
+        {
+          "function": "expand_query",
+          "source_span": {
+            "end": {
+              "column": 70,
+              "line": 384,
+              "offset": 11263
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+            "start": {
+              "column": 13,
+              "line": 384,
+              "offset": 11206
+            }
+          },
+          "source_text": "multiply_power_of_X(temp[a], tempctxt_shifted, index_raw)",
+          "stmt_id": "expand_query@11206"
+        }
+      ],
+      "outputs": [
+        "expand_query__generate_reply_6351__tempctxt_shifted@2"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 54,
+          "line": 464,
+          "offset": 13768
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 9,
+          "line": 460,
+          "offset": 13682
+        }
+      },
+      "stmt_id": "generate_reply@6351::expand_query@11206::multiply_power_of_X@13682"
+    },
+    {
+      "api_name": "assign",
+      "attrs": {
+        "barrier": false,
+        "cost": 1,
+        "source_text": "destination = encrypted"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "destination"
+          }
+        }
+      ],
+      "inputs": [
+        "expand_query__generate_reply_6351__tempctxt_rotated@1"
+      ],
+      "op_id": "op4",
+      "op_kind": "assign",
+      "origin_callstack": [
+        {
+          "function": "generate_reply",
+          "source_span": {
+            "end": {
+              "column": 80,
+              "line": 237,
+              "offset": 6471
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+            "start": {
+              "column": 13,
+              "line": 236,
+              "offset": 6351
+            }
+          },
+          "source_text": "vector<Ciphertext> expanded_query_part =\n                expand_query(query[i][j], total, client_id, encoder, decryptor)",
+          "stmt_id": "generate_reply@6351"
+        },
+        {
+          "function": "expand_query",
+          "source_span": {
+            "end": {
+              "column": 82,
+              "line": 385,
+              "offset": 11346
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+            "start": {
+              "column": 13,
+              "line": 385,
+              "offset": 11277
+            }
+          },
+          "source_text": "multiply_power_of_X(tempctxt_rotated, tempctxt_rotatedshifted, index)",
+          "stmt_id": "expand_query@11277"
+        }
+      ],
+      "outputs": [
+        "expand_query__generate_reply_6351__tempctxt_rotatedshifted@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 28,
+          "line": 439,
+          "offset": 13048
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 5,
+          "line": 439,
+          "offset": 13025
+        }
+      },
+      "stmt_id": "generate_reply@6351::expand_query@11277::multiply_power_of_X@13025"
+    },
+    {
+      "api_name": "ntt_fwd",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 3,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "{ evaluator_",
+        "source_text": "} } if (transform) { evaluator_->ntt_fwd(destination, destination)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "destination"
+          }
+        }
+      ],
+      "inputs": [
+        "expand_query__generate_reply_6351__tempctxt_rotatedshifted@1"
+      ],
+      "op_id": "op5",
+      "op_kind": "ntt_fwd",
+      "origin_callstack": [
+        {
+          "function": "generate_reply",
+          "source_span": {
+            "end": {
+              "column": 80,
+              "line": 237,
+              "offset": 6471
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+            "start": {
+              "column": 13,
+              "line": 236,
+              "offset": 6351
+            }
+          },
+          "source_text": "vector<Ciphertext> expanded_query_part =\n                expand_query(query[i][j], total, client_id, encoder, decryptor)",
+          "stmt_id": "generate_reply@6351"
+        },
+        {
+          "function": "expand_query",
+          "source_span": {
+            "end": {
+              "column": 82,
+              "line": 385,
+              "offset": 11346
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+            "start": {
+              "column": 13,
+              "line": 385,
+              "offset": 11277
+            }
+          },
+          "source_text": "multiply_power_of_X(tempctxt_rotated, tempctxt_rotatedshifted, index)",
+          "stmt_id": "expand_query@11277"
+        }
+      ],
+      "outputs": [
+        "expand_query__generate_reply_6351__tempctxt_rotatedshifted@2"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 54,
+          "line": 464,
+          "offset": 13768
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 9,
+          "line": 460,
+          "offset": 13682
+        }
+      },
+      "stmt_id": "generate_reply@6351::expand_query@11277::multiply_power_of_X@13682"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "evaluator_",
+        "source_text": "evaluator_->add(tempctxt_shifted, tempctxt_rotatedshifted, newtemp[a + temp.size()])"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": "newtemp",
+            "index": "a + temp.size()",
+            "kind": "indexed",
+            "text": "newtemp[a + temp.size()]"
+          }
+        }
+      ],
+      "inputs": [
+        "expand_query__generate_reply_6351__tempctxt_shifted@2",
+        "expand_query__generate_reply_6351__tempctxt_rotatedshifted@2"
+      ],
+      "op_id": "op6",
+      "op_kind": "add",
+      "origin_callstack": [
+        {
+          "function": "generate_reply",
+          "source_span": {
+            "end": {
+              "column": 80,
+              "line": 237,
+              "offset": 6471
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+            "start": {
+              "column": 13,
+              "line": 236,
+              "offset": 6351
+            }
+          },
+          "source_text": "vector<Ciphertext> expanded_query_part =\n                expand_query(query[i][j], total, client_id, encoder, decryptor)",
+          "stmt_id": "generate_reply@6351"
+        }
+      ],
+      "outputs": [
+        "expand_query__generate_reply_6351__newtemp[a + temp.size()]@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 97,
+          "line": 387,
+          "offset": 11457
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 13,
+          "line": 387,
+          "offset": 11373
+        }
+      },
+      "stmt_id": "generate_reply@6351::expand_query@11373"
+    },
+    {
+      "api_name": "multiply_plain",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "two"
+        ],
+        "cost": 3,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "{ evaluator_",
+        "source_text": "a++) { if (a >= (m - (1 << (logm - 1)))) { evaluator_->multiply_plain(temp[a], two, newtemp[a])"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": "newtemp",
+            "index": "a",
+            "kind": "indexed",
+            "text": "newtemp[a]"
+          }
+        }
+      ],
+      "inputs": [
+        "expand_query__generate_reply_6351__temp[a]@0"
+      ],
+      "op_id": "op7",
+      "op_kind": "multiply_plain",
+      "origin_callstack": [
+        {
+          "function": "generate_reply",
+          "source_span": {
+            "end": {
+              "column": 80,
+              "line": 237,
+              "offset": 6471
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+            "start": {
+              "column": 13,
+              "line": 236,
+              "offset": 6351
+            }
+          },
+          "source_text": "vector<Ciphertext> expanded_query_part =\n                expand_query(query[i][j], total, client_id, encoder, decryptor)",
+          "stmt_id": "generate_reply@6351"
+        }
+      ],
+      "outputs": [
+        "expand_query__generate_reply_6351__newtemp[a]@2"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 51,
+          "line": 401,
+          "offset": 11879
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 43,
+          "line": 396,
+          "offset": 11711
+        }
+      },
+      "stmt_id": "generate_reply@6351::expand_query@11711"
+    },
+    {
+      "api_name": "apply_galois",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "galois_elts[logm - 1]"
+        ],
+        "cost": 4,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "} else { evaluator_",
+        "source_text": "} else { evaluator_->apply_galois(temp[a], tempctxt_rotated, galois_elts[logm - 1], galkey)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "tempctxt_rotated"
+          }
+        }
+      ],
+      "inputs": [
+        "expand_query__generate_reply_6351__temp[a]@0"
+      ],
+      "op_id": "op8",
+      "op_kind": "apply_galois",
+      "origin_callstack": [
+        {
+          "function": "generate_reply",
+          "source_span": {
+            "end": {
+              "column": 80,
+              "line": 237,
+              "offset": 6471
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+            "start": {
+              "column": 13,
+              "line": 236,
+              "offset": 6351
+            }
+          },
+          "source_text": "vector<Ciphertext> expanded_query_part =\n                expand_query(query[i][j], total, client_id, encoder, decryptor)",
+          "stmt_id": "generate_reply@6351"
+        }
+      ],
+      "outputs": [
+        "expand_query__generate_reply_6351__tempctxt_rotated@2"
+      ],
+      "resources": [
+        "galkey@0"
+      ],
+      "source_span": {
+        "end": {
+          "column": 95,
+          "line": 405,
+          "offset": 12010
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 9,
+          "line": 402,
+          "offset": 11891
+        }
+      },
+      "stmt_id": "generate_reply@6351::expand_query@11891"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "evaluator_",
+        "source_text": "evaluator_->add(temp[a], tempctxt_rotated, newtemp[a])"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": "newtemp",
+            "index": "a",
+            "kind": "indexed",
+            "text": "newtemp[a]"
+          }
+        }
+      ],
+      "inputs": [
+        "expand_query__generate_reply_6351__temp[a]@0",
+        "expand_query__generate_reply_6351__tempctxt_rotated@2"
+      ],
+      "op_id": "op9",
+      "op_kind": "add",
+      "origin_callstack": [
+        {
+          "function": "generate_reply",
+          "source_span": {
+            "end": {
+              "column": 80,
+              "line": 237,
+              "offset": 6471
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+            "start": {
+              "column": 13,
+              "line": 236,
+              "offset": 6351
+            }
+          },
+          "source_text": "vector<Ciphertext> expanded_query_part =\n                expand_query(query[i][j], total, client_id, encoder, decryptor)",
+          "stmt_id": "generate_reply@6351"
+        }
+      ],
+      "outputs": [
+        "expand_query__generate_reply_6351__newtemp[a]@3"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 67,
+          "line": 406,
+          "offset": 12078
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 13,
+          "line": 406,
+          "offset": 12024
+        }
+      },
+      "stmt_id": "generate_reply@6351::expand_query@12024"
+    },
+    {
+      "api_name": "assign",
+      "attrs": {
+        "barrier": false,
+        "cost": 1,
+        "source_text": "destination = encrypted"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "destination"
+          }
+        }
+      ],
+      "inputs": [
+        "expand_query__generate_reply_6351__temp[a]@0"
+      ],
+      "op_id": "op10",
+      "op_kind": "assign",
+      "origin_callstack": [
+        {
+          "function": "generate_reply",
+          "source_span": {
+            "end": {
+              "column": 80,
+              "line": 237,
+              "offset": 6471
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+            "start": {
+              "column": 13,
+              "line": 236,
+              "offset": 6351
+            }
+          },
+          "source_text": "vector<Ciphertext> expanded_query_part =\n                expand_query(query[i][j], total, client_id, encoder, decryptor)",
+          "stmt_id": "generate_reply@6351"
+        },
+        {
+          "function": "expand_query",
+          "source_span": {
+            "end": {
+              "column": 70,
+              "line": 407,
+              "offset": 12149
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+            "start": {
+              "column": 13,
+              "line": 407,
+              "offset": 12092
+            }
+          },
+          "source_text": "multiply_power_of_X(temp[a], tempctxt_shifted, index_raw)",
+          "stmt_id": "expand_query@12092"
+        }
+      ],
+      "outputs": [
+        "expand_query__generate_reply_6351__tempctxt_shifted@3"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 28,
+          "line": 439,
+          "offset": 13048
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 5,
+          "line": 439,
+          "offset": 13025
+        }
+      },
+      "stmt_id": "generate_reply@6351::expand_query@12092::multiply_power_of_X@13025"
+    },
+    {
+      "api_name": "ntt_fwd",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 3,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "{ evaluator_",
+        "source_text": "} } if (transform) { evaluator_->ntt_fwd(destination, destination)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "destination"
+          }
+        }
+      ],
+      "inputs": [
+        "expand_query__generate_reply_6351__tempctxt_shifted@3"
+      ],
+      "op_id": "op11",
+      "op_kind": "ntt_fwd",
+      "origin_callstack": [
+        {
+          "function": "generate_reply",
+          "source_span": {
+            "end": {
+              "column": 80,
+              "line": 237,
+              "offset": 6471
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+            "start": {
+              "column": 13,
+              "line": 236,
+              "offset": 6351
+            }
+          },
+          "source_text": "vector<Ciphertext> expanded_query_part =\n                expand_query(query[i][j], total, client_id, encoder, decryptor)",
+          "stmt_id": "generate_reply@6351"
+        },
+        {
+          "function": "expand_query",
+          "source_span": {
+            "end": {
+              "column": 70,
+              "line": 407,
+              "offset": 12149
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+            "start": {
+              "column": 13,
+              "line": 407,
+              "offset": 12092
+            }
+          },
+          "source_text": "multiply_power_of_X(temp[a], tempctxt_shifted, index_raw)",
+          "stmt_id": "expand_query@12092"
+        }
+      ],
+      "outputs": [
+        "expand_query__generate_reply_6351__tempctxt_shifted@4"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 54,
+          "line": 464,
+          "offset": 13768
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 9,
+          "line": 460,
+          "offset": 13682
+        }
+      },
+      "stmt_id": "generate_reply@6351::expand_query@12092::multiply_power_of_X@13682"
+    },
+    {
+      "api_name": "assign",
+      "attrs": {
+        "barrier": false,
+        "cost": 1,
+        "source_text": "destination = encrypted"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "destination"
+          }
+        }
+      ],
+      "inputs": [
+        "expand_query__generate_reply_6351__tempctxt_rotated@2"
+      ],
+      "op_id": "op12",
+      "op_kind": "assign",
+      "origin_callstack": [
+        {
+          "function": "generate_reply",
+          "source_span": {
+            "end": {
+              "column": 80,
+              "line": 237,
+              "offset": 6471
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+            "start": {
+              "column": 13,
+              "line": 236,
+              "offset": 6351
+            }
+          },
+          "source_text": "vector<Ciphertext> expanded_query_part =\n                expand_query(query[i][j], total, client_id, encoder, decryptor)",
+          "stmt_id": "generate_reply@6351"
+        },
+        {
+          "function": "expand_query",
+          "source_span": {
+            "end": {
+              "column": 82,
+              "line": 408,
+              "offset": 12232
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+            "start": {
+              "column": 13,
+              "line": 408,
+              "offset": 12163
+            }
+          },
+          "source_text": "multiply_power_of_X(tempctxt_rotated, tempctxt_rotatedshifted, index)",
+          "stmt_id": "expand_query@12163"
+        }
+      ],
+      "outputs": [
+        "expand_query__generate_reply_6351__tempctxt_rotatedshifted@3"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 28,
+          "line": 439,
+          "offset": 13048
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 5,
+          "line": 439,
+          "offset": 13025
+        }
+      },
+      "stmt_id": "generate_reply@6351::expand_query@12163::multiply_power_of_X@13025"
+    },
+    {
+      "api_name": "ntt_fwd",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 3,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "{ evaluator_",
+        "source_text": "} } if (transform) { evaluator_->ntt_fwd(destination, destination)"
+      },
+      "effects": [
+        {
+          "kind": "in_place_write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "destination"
+          }
+        }
+      ],
+      "inputs": [
+        "expand_query__generate_reply_6351__tempctxt_rotatedshifted@3"
+      ],
+      "op_id": "op13",
+      "op_kind": "ntt_fwd",
+      "origin_callstack": [
+        {
+          "function": "generate_reply",
+          "source_span": {
+            "end": {
+              "column": 80,
+              "line": 237,
+              "offset": 6471
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+            "start": {
+              "column": 13,
+              "line": 236,
+              "offset": 6351
+            }
+          },
+          "source_text": "vector<Ciphertext> expanded_query_part =\n                expand_query(query[i][j], total, client_id, encoder, decryptor)",
+          "stmt_id": "generate_reply@6351"
+        },
+        {
+          "function": "expand_query",
+          "source_span": {
+            "end": {
+              "column": 82,
+              "line": 408,
+              "offset": 12232
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+            "start": {
+              "column": 13,
+              "line": 408,
+              "offset": 12163
+            }
+          },
+          "source_text": "multiply_power_of_X(tempctxt_rotated, tempctxt_rotatedshifted, index)",
+          "stmt_id": "expand_query@12163"
+        }
+      ],
+      "outputs": [
+        "expand_query__generate_reply_6351__tempctxt_rotatedshifted@4"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 54,
+          "line": 464,
+          "offset": 13768
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 9,
+          "line": 460,
+          "offset": 13682
+        }
+      },
+      "stmt_id": "generate_reply@6351::expand_query@12163::multiply_power_of_X@13682"
+    },
+    {
+      "api_name": "add",
+      "attrs": {
+        "barrier": false,
+        "constants": [],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "evaluator_",
+        "source_text": "evaluator_->add(tempctxt_shifted, tempctxt_rotatedshifted, newtemp[a + temp.size()])"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": "newtemp",
+            "index": "a + temp.size()",
+            "kind": "indexed",
+            "text": "newtemp[a + temp.size()]"
+          }
+        }
+      ],
+      "inputs": [
+        "expand_query__generate_reply_6351__tempctxt_shifted@4",
+        "expand_query__generate_reply_6351__tempctxt_rotatedshifted@4"
+      ],
+      "op_id": "op14",
+      "op_kind": "add",
+      "origin_callstack": [
+        {
+          "function": "generate_reply",
+          "source_span": {
+            "end": {
+              "column": 80,
+              "line": 237,
+              "offset": 6471
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+            "start": {
+              "column": 13,
+              "line": 236,
+              "offset": 6351
+            }
+          },
+          "source_text": "vector<Ciphertext> expanded_query_part =\n                expand_query(query[i][j], total, client_id, encoder, decryptor)",
+          "stmt_id": "generate_reply@6351"
+        }
+      ],
+      "outputs": [
+        "expand_query__generate_reply_6351__newtemp[a + temp.size()]@2"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 97,
+          "line": 409,
+          "offset": 12330
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 13,
+          "line": 409,
+          "offset": 12246
+        }
+      },
+      "stmt_id": "generate_reply@6351::expand_query@12246"
+    },
+    {
+      "api_name": "assign",
+      "attrs": {
+        "barrier": false,
+        "cost": 1,
+        "source_text": "vector<Ciphertext> expanded_query_part =\n                expand_query(query[i][j], total, client_id, encoder, decryptor)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "expanded_query_part"
+          }
+        }
+      ],
+      "inputs": [
+        "newVec@0"
+      ],
+      "op_id": "op15",
+      "op_kind": "assign",
+      "origin_callstack": [
+        {
+          "function": "generate_reply",
+          "source_span": {
+            "end": {
+              "column": 80,
+              "line": 237,
+              "offset": 6471
+            },
+            "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+            "start": {
+              "column": 13,
+              "line": 236,
+              "offset": 6351
+            }
+          },
+          "source_text": "vector<Ciphertext> expanded_query_part =\n                expand_query(query[i][j], total, client_id, encoder, decryptor)",
+          "stmt_id": "generate_reply@6351"
+        }
+      ],
+      "outputs": [
+        "expanded_query_part@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 80,
+          "line": 237,
+          "offset": 6471
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 13,
+          "line": 236,
+          "offset": 6351
+        }
+      },
+      "stmt_id": "generate_reply@6351::return"
+    },
+    {
+      "api_name": "multiply_plain",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "(*cur)[k]"
+        ],
+        "cost": 3,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "{ evaluator_",
+        "source_text": "k++) { evaluator_->multiply_plain(expanded_query[0], (*cur)[k], intermediateCtxts[k])"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": "intermediateCtxts",
+            "index": "k",
+            "kind": "indexed",
+            "text": "intermediateCtxts[k]"
+          }
+        }
+      ],
+      "inputs": [
+        "expanded_query[0]@0"
+      ],
+      "op_id": "op16",
+      "op_kind": "multiply_plain",
+      "origin_callstack": [],
+      "outputs": [
+        "intermediateCtxts[k]@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 91,
+          "line": 278,
+          "offset": 7795
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 43,
+          "line": 275,
+          "offset": 7689
+        }
+      },
+      "stmt_id": "generate_reply@7689"
+    },
+    {
+      "api_name": "multiply_plain",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "(*cur)[k + j * product]"
+        ],
+        "cost": 3,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "{ evaluator_",
+        "source_text": "j++) { evaluator_->multiply_plain(expanded_query[j], (*cur)[k + j * product], temp)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "temp"
+          }
+        }
+      ],
+      "inputs": [
+        "expanded_query[j]@0"
+      ],
+      "op_id": "op17",
+      "op_kind": "multiply_plain",
+      "origin_callstack": [],
+      "outputs": [
+        "temp@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 93,
+          "line": 282,
+          "offset": 7951
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 43,
+          "line": 280,
+          "offset": 7840
+        }
+      },
+      "stmt_id": "generate_reply@7840"
+    },
+    {
+      "api_name": "ntt_inv",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "intermediateCtxts[jj]"
+        ],
+        "cost": 3,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "evaluator_",
+        "source_text": "evaluator_->ntt_inv(intermediateCtxts[jj], tmp)"
+      },
+      "effects": [
+        {
+          "kind": "write",
+          "symbol": {
+            "base": null,
+            "index": null,
+            "kind": "symbol",
+            "text": "tmp"
+          }
+        }
+      ],
+      "inputs": [],
+      "op_id": "op18",
+      "op_kind": "ntt_inv",
+      "origin_callstack": [],
+      "outputs": [
+        "tmp@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 60,
+          "line": 291,
+          "offset": 8253
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 13,
+          "line": 291,
+          "offset": 8206
+        }
+      },
+      "stmt_id": "generate_reply@8206"
+    },
+    {
+      "api_name": "return",
+      "attrs": {
+        "barrier": false,
+        "cost": 1,
+        "source_text": "return fail"
+      },
+      "effects": [],
+      "inputs": [
+        "fail@0"
+      ],
+      "op_id": "op19",
+      "op_kind": "return",
+      "origin_callstack": [],
+      "outputs": [
+        "__return__@1"
+      ],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 16,
+          "line": 340,
+          "offset": 9843
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 5,
+          "line": 340,
+          "offset": 9832
+        }
+      },
+      "stmt_id": "generate_reply@9832"
+    }
+  ],
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+  "values": [
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 79,
+          "line": 196,
+          "offset": 5188
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 58,
+          "line": 196,
+          "offset": 5167
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "encoder"
+      },
+      "value_id": "encoder@0",
+      "value_kind": "encoder"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 41,
+          "line": 197,
+          "offset": 5245
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 21,
+          "line": 197,
+          "offset": 5225
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "decryptor"
+      },
+      "value_id": "decryptor@0",
+      "value_kind": "decryptor"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 41,
+          "line": 211,
+          "offset": 5552
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 5,
+          "line": 211,
+          "offset": 5516
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "intermediate_plain"
+      },
+      "value_id": "intermediate_plain@0",
+      "value_kind": "plaintext_vector"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 42,
+          "line": 223,
+          "offset": 5885
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 9,
+          "line": 223,
+          "offset": 5852
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "expanded_query"
+      },
+      "value_id": "expanded_query@0",
+      "value_kind": "ciphertext_vector"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 80,
+          "line": 237,
+          "offset": 6471
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 13,
+          "line": 236,
+          "offset": 6351
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "expanded_query_part"
+      },
+      "value_id": "expanded_query_part@0",
+      "value_kind": "ciphertext_vector"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 80,
+          "line": 237,
+          "offset": 6471
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 13,
+          "line": 236,
+          "offset": 6351
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": "query",
+        "index": "i][j",
+        "kind": "indexed",
+        "text": "query[i][j]"
+      },
+      "value_id": "query[i][j]@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 80,
+          "line": 237,
+          "offset": 6471
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 13,
+          "line": 236,
+          "offset": 6351
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "total"
+      },
+      "value_id": "total@0",
+      "value_kind": "encoder"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 80,
+          "line": 237,
+          "offset": 6471
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 13,
+          "line": 236,
+          "offset": 6351
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "client_id"
+      },
+      "value_id": "client_id@0",
+      "value_kind": "decryptor"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply::expand_query",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 48,
+          "line": 348,
+          "offset": 10154
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 5,
+          "line": 348,
+          "offset": 10111
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": "galoisKeys_",
+        "index": "client_id",
+        "kind": "indexed",
+        "text": "expand_query__generate_reply_6351__galoisKeys_[client_id]"
+      },
+      "value_id": "expand_query__generate_reply_6351__galoisKeys_[client_id]@0",
+      "value_kind": "galois_keys"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply::expand_query",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 24,
+          "line": 367,
+          "offset": 10638
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 5,
+          "line": 367,
+          "offset": 10619
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "expand_query__generate_reply_6351__tempctxt"
+      },
+      "value_id": "expand_query__generate_reply_6351__tempctxt@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply::expand_query",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 32,
+          "line": 368,
+          "offset": 10671
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 5,
+          "line": 368,
+          "offset": 10644
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "expand_query__generate_reply_6351__tempctxt_rotated"
+      },
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotated@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply::expand_query",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 32,
+          "line": 369,
+          "offset": 10704
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 5,
+          "line": 369,
+          "offset": 10677
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "expand_query__generate_reply_6351__tempctxt_shifted"
+      },
+      "value_id": "expand_query__generate_reply_6351__tempctxt_shifted@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply::expand_query",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 39,
+          "line": 370,
+          "offset": 10744
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 5,
+          "line": 370,
+          "offset": 10710
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "expand_query__generate_reply_6351__tempctxt_rotatedshifted"
+      },
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotatedshifted@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply::expand_query",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 67,
+          "line": 383,
+          "offset": 11192
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 13,
+          "line": 383,
+          "offset": 11138
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": "newtemp",
+        "index": "a",
+        "kind": "indexed",
+        "text": "expand_query__generate_reply_6351__newtemp[a]"
+      },
+      "value_id": "expand_query__generate_reply_6351__newtemp[a]@0",
+      "value_kind": "external"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply::expand_query",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 70,
+          "line": 384,
+          "offset": 11263
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 13,
+          "line": 384,
+          "offset": 11206
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": "temp",
+        "index": "a",
+        "kind": "indexed",
+        "text": "expand_query__generate_reply_6351__temp[a]"
+      },
+      "value_id": "expand_query__generate_reply_6351__temp[a]@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply::expand_query",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 97,
+          "line": 387,
+          "offset": 11457
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 13,
+          "line": 387,
+          "offset": 11373
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": "newtemp",
+        "index": "a + temp.size()",
+        "kind": "indexed",
+        "text": "expand_query__generate_reply_6351__newtemp[a + temp.size()]"
+      },
+      "value_id": "expand_query__generate_reply_6351__newtemp[a + temp.size()]@0",
+      "value_kind": "external"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply::expand_query",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 63,
+          "line": 413,
+          "offset": 12411
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 9,
+          "line": 410,
+          "offset": 12340
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "expand_query__generate_reply_6351__first"
+      },
+      "value_id": "expand_query__generate_reply_6351__first@0",
+      "value_kind": "ciphertext_vector"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply::expand_query",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 66,
+          "line": 414,
+          "offset": 12478
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 5,
+          "line": 414,
+          "offset": 12417
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "expand_query__generate_reply_6351__last"
+      },
+      "value_id": "expand_query__generate_reply_6351__last@0",
+      "value_kind": "ciphertext_vector"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 24,
+          "line": 273,
+          "offset": 7644
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 9,
+          "line": 273,
+          "offset": 7629
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "temp"
+      },
+      "value_id": "temp@0",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 91,
+          "line": 278,
+          "offset": 7795
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 43,
+          "line": 275,
+          "offset": 7689
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": "intermediateCtxts",
+        "index": "k",
+        "kind": "indexed",
+        "text": "intermediateCtxts[k]"
+      },
+      "value_id": "intermediateCtxts[k]@0",
+      "value_kind": "external"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 60,
+          "line": 291,
+          "offset": 8253
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 13,
+          "line": 291,
+          "offset": 8206
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "tmp"
+      },
+      "value_id": "tmp@0",
+      "value_kind": "external"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 97,
+          "line": 324,
+          "offset": 9383
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 17,
+          "line": 322,
+          "offset": 9284
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "plains"
+      },
+      "value_id": "plains@0",
+      "value_kind": "plaintext_vector"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 88,
+          "line": 382,
+          "offset": 11124
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 47,
+          "line": 380,
+          "offset": 11022
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "galkey"
+      },
+      "value_id": "galkey@0",
+      "value_kind": "resource"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply::expand_query",
+      "producer_op_id": "op0",
+      "source_span": {
+        "end": {
+          "column": 88,
+          "line": 382,
+          "offset": 11124
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 47,
+          "line": 380,
+          "offset": 11022
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "expand_query__generate_reply_6351__tempctxt_rotated"
+      },
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotated@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply::expand_query",
+      "producer_op_id": "op1",
+      "source_span": {
+        "end": {
+          "column": 67,
+          "line": 383,
+          "offset": 11192
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 13,
+          "line": 383,
+          "offset": 11138
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": "newtemp",
+        "index": "a",
+        "kind": "indexed",
+        "text": "expand_query__generate_reply_6351__newtemp[a]"
+      },
+      "value_id": "expand_query__generate_reply_6351__newtemp[a]@1",
+      "value_kind": "external"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply::expand_query",
+      "producer_op_id": "op2",
+      "source_span": {
+        "end": {
+          "column": 28,
+          "line": 439,
+          "offset": 13048
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 5,
+          "line": 439,
+          "offset": 13025
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "expand_query__generate_reply_6351__tempctxt_shifted"
+      },
+      "value_id": "expand_query__generate_reply_6351__tempctxt_shifted@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply::expand_query",
+      "producer_op_id": "op3",
+      "source_span": {
+        "end": {
+          "column": 54,
+          "line": 464,
+          "offset": 13768
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 9,
+          "line": 460,
+          "offset": 13682
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "expand_query__generate_reply_6351__tempctxt_shifted"
+      },
+      "value_id": "expand_query__generate_reply_6351__tempctxt_shifted@2",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply::expand_query",
+      "producer_op_id": "op4",
+      "source_span": {
+        "end": {
+          "column": 28,
+          "line": 439,
+          "offset": 13048
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 5,
+          "line": 439,
+          "offset": 13025
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "expand_query__generate_reply_6351__tempctxt_rotatedshifted"
+      },
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotatedshifted@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply::expand_query",
+      "producer_op_id": "op5",
+      "source_span": {
+        "end": {
+          "column": 54,
+          "line": 464,
+          "offset": 13768
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 9,
+          "line": 460,
+          "offset": 13682
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "expand_query__generate_reply_6351__tempctxt_rotatedshifted"
+      },
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotatedshifted@2",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply::expand_query",
+      "producer_op_id": "op6",
+      "source_span": {
+        "end": {
+          "column": 97,
+          "line": 387,
+          "offset": 11457
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 13,
+          "line": 387,
+          "offset": 11373
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": "newtemp",
+        "index": "a + temp.size()",
+        "kind": "indexed",
+        "text": "expand_query__generate_reply_6351__newtemp[a + temp.size()]"
+      },
+      "value_id": "expand_query__generate_reply_6351__newtemp[a + temp.size()]@1",
+      "value_kind": "external"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply::expand_query",
+      "producer_op_id": "op7",
+      "source_span": {
+        "end": {
+          "column": 51,
+          "line": 401,
+          "offset": 11879
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 43,
+          "line": 396,
+          "offset": 11711
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": "newtemp",
+        "index": "a",
+        "kind": "indexed",
+        "text": "expand_query__generate_reply_6351__newtemp[a]"
+      },
+      "value_id": "expand_query__generate_reply_6351__newtemp[a]@2",
+      "value_kind": "external"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply::expand_query",
+      "producer_op_id": "op8",
+      "source_span": {
+        "end": {
+          "column": 95,
+          "line": 405,
+          "offset": 12010
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 9,
+          "line": 402,
+          "offset": 11891
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "expand_query__generate_reply_6351__tempctxt_rotated"
+      },
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotated@2",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply::expand_query",
+      "producer_op_id": "op9",
+      "source_span": {
+        "end": {
+          "column": 67,
+          "line": 406,
+          "offset": 12078
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 13,
+          "line": 406,
+          "offset": 12024
+        }
+      },
+      "ssa_index": 3,
+      "symbol": {
+        "base": "newtemp",
+        "index": "a",
+        "kind": "indexed",
+        "text": "expand_query__generate_reply_6351__newtemp[a]"
+      },
+      "value_id": "expand_query__generate_reply_6351__newtemp[a]@3",
+      "value_kind": "external"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply::expand_query",
+      "producer_op_id": "op10",
+      "source_span": {
+        "end": {
+          "column": 28,
+          "line": 439,
+          "offset": 13048
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 5,
+          "line": 439,
+          "offset": 13025
+        }
+      },
+      "ssa_index": 3,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "expand_query__generate_reply_6351__tempctxt_shifted"
+      },
+      "value_id": "expand_query__generate_reply_6351__tempctxt_shifted@3",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply::expand_query",
+      "producer_op_id": "op11",
+      "source_span": {
+        "end": {
+          "column": 54,
+          "line": 464,
+          "offset": 13768
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 9,
+          "line": 460,
+          "offset": 13682
+        }
+      },
+      "ssa_index": 4,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "expand_query__generate_reply_6351__tempctxt_shifted"
+      },
+      "value_id": "expand_query__generate_reply_6351__tempctxt_shifted@4",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply::expand_query",
+      "producer_op_id": "op12",
+      "source_span": {
+        "end": {
+          "column": 28,
+          "line": 439,
+          "offset": 13048
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 5,
+          "line": 439,
+          "offset": 13025
+        }
+      },
+      "ssa_index": 3,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "expand_query__generate_reply_6351__tempctxt_rotatedshifted"
+      },
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotatedshifted@3",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply::expand_query",
+      "producer_op_id": "op13",
+      "source_span": {
+        "end": {
+          "column": 54,
+          "line": 464,
+          "offset": 13768
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 9,
+          "line": 460,
+          "offset": 13682
+        }
+      },
+      "ssa_index": 4,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "expand_query__generate_reply_6351__tempctxt_rotatedshifted"
+      },
+      "value_id": "expand_query__generate_reply_6351__tempctxt_rotatedshifted@4",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply::expand_query",
+      "producer_op_id": "op14",
+      "source_span": {
+        "end": {
+          "column": 97,
+          "line": 409,
+          "offset": 12330
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 13,
+          "line": 409,
+          "offset": 12246
+        }
+      },
+      "ssa_index": 2,
+      "symbol": {
+        "base": "newtemp",
+        "index": "a + temp.size()",
+        "kind": "indexed",
+        "text": "expand_query__generate_reply_6351__newtemp[a + temp.size()]"
+      },
+      "value_id": "expand_query__generate_reply_6351__newtemp[a + temp.size()]@2",
+      "value_kind": "external"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 80,
+          "line": 237,
+          "offset": 6471
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 13,
+          "line": 236,
+          "offset": 6351
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "newVec"
+      },
+      "value_id": "newVec@0",
+      "value_kind": "external"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply",
+      "producer_op_id": "op15",
+      "source_span": {
+        "end": {
+          "column": 80,
+          "line": 237,
+          "offset": 6471
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 13,
+          "line": 236,
+          "offset": 6351
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "expanded_query_part"
+      },
+      "value_id": "expanded_query_part@1",
+      "value_kind": "ciphertext_vector"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 91,
+          "line": 278,
+          "offset": 7795
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 43,
+          "line": 275,
+          "offset": 7689
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": "expanded_query",
+        "index": "0",
+        "kind": "indexed",
+        "text": "expanded_query[0]"
+      },
+      "value_id": "expanded_query[0]@0",
+      "value_kind": "external"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply",
+      "producer_op_id": "op16",
+      "source_span": {
+        "end": {
+          "column": 91,
+          "line": 278,
+          "offset": 7795
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 43,
+          "line": 275,
+          "offset": 7689
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": "intermediateCtxts",
+        "index": "k",
+        "kind": "indexed",
+        "text": "intermediateCtxts[k]"
+      },
+      "value_id": "intermediateCtxts[k]@1",
+      "value_kind": "external"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 93,
+          "line": 282,
+          "offset": 7951
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 43,
+          "line": 280,
+          "offset": 7840
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": "expanded_query",
+        "index": "j",
+        "kind": "indexed",
+        "text": "expanded_query[j]"
+      },
+      "value_id": "expanded_query[j]@0",
+      "value_kind": "external"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply",
+      "producer_op_id": "op17",
+      "source_span": {
+        "end": {
+          "column": 93,
+          "line": 282,
+          "offset": 7951
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 43,
+          "line": 280,
+          "offset": 7840
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "temp"
+      },
+      "value_id": "temp@1",
+      "value_kind": "ciphertext"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply",
+      "producer_op_id": "op18",
+      "source_span": {
+        "end": {
+          "column": 60,
+          "line": 291,
+          "offset": 8253
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 13,
+          "line": 291,
+          "offset": 8206
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "tmp"
+      },
+      "value_id": "tmp@1",
+      "value_kind": "external"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply",
+      "producer_op_id": null,
+      "source_span": {
+        "end": {
+          "column": 16,
+          "line": 340,
+          "offset": 9843
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 5,
+          "line": 340,
+          "offset": 9832
+        }
+      },
+      "ssa_index": 0,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "fail"
+      },
+      "value_id": "fail@0",
+      "value_kind": "external"
+    },
+    {
+      "annotations": {},
+      "origin_scope": "generate_reply",
+      "producer_op_id": "op19",
+      "source_span": {
+        "end": {
+          "column": 16,
+          "line": 340,
+          "offset": 9843
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+        "start": {
+          "column": 5,
+          "line": 340,
+          "offset": 9832
+        }
+      },
+      "ssa_index": 1,
+      "symbol": {
+        "base": null,
+        "index": null,
+        "kind": "symbol",
+        "text": "__return__"
+      },
+      "value_id": "__return__@1",
+      "value_kind": "external"
+    }
+  ]
+}

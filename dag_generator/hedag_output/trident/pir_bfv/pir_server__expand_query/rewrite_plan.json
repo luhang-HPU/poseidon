@@ -1,0 +1,322 @@
+{
+  "barriers": [],
+  "blocking_diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (logm > std::ceil(std::log2(n)))\n    {\n        throw logic_error(\"m > n is not allowed.\");\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 440,
+          "offset": 12683
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_server.cpp",
+        "start": {
+          "column": 5,
+          "line": 437,
+          "offset": 12585
+        }
+      },
+      "stmt_id": "expand_query@12585",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "entry_function": "expand_query",
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "operation_order": [
+    "op0",
+    "op2",
+    "op4",
+    "op7",
+    "op9",
+    "op10",
+    "op1",
+    "op8",
+    "op3",
+    "op5",
+    "op6"
+  ],
+  "parallel_blocks": [
+    {
+      "anchor_stmt_ids": [
+        "expand_query@13307",
+        "expand_query@13660",
+        "expand_query@14297",
+        "expand_query@14562",
+        "expand_query@14858",
+        "expand_query@15132"
+      ],
+      "op_ids": [
+        "op0",
+        "op2",
+        "op4",
+        "op7",
+        "op9",
+        "op10"
+      ],
+      "region_id": "region0"
+    },
+    {
+      "anchor_stmt_ids": [
+        "expand_query@13423",
+        "expand_query@14760"
+      ],
+      "op_ids": [
+        "op1",
+        "op8"
+      ],
+      "region_id": "region1"
+    },
+    {
+      "anchor_stmt_ids": [
+        "expand_query@14113",
+        "expand_query@14361"
+      ],
+      "op_ids": [
+        "op3",
+        "op5"
+      ],
+      "region_id": "region2"
+    }
+  ],
+  "regions": [
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op0",
+        "op2",
+        "op4",
+        "op7",
+        "op9",
+        "op10"
+      ],
+      "region_id": "region0",
+      "source_spans": [
+        {
+          "end": {
+            "column": 88,
+            "line": 463,
+            "offset": 13409
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_server.cpp",
+          "start": {
+            "column": 47,
+            "line": 461,
+            "offset": 13307
+          }
+        },
+        {
+          "end": {
+            "column": 97,
+            "line": 470,
+            "offset": 13744
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_server.cpp",
+          "start": {
+            "column": 13,
+            "line": 470,
+            "offset": 13660
+          }
+        },
+        {
+          "end": {
+            "column": 41,
+            "line": 500,
+            "offset": 14325
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_server.cpp",
+          "start": {
+            "column": 13,
+            "line": 500,
+            "offset": 14297
+          }
+        },
+        {
+          "end": {
+            "column": 41,
+            "line": 508,
+            "offset": 14590
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_server.cpp",
+          "start": {
+            "column": 13,
+            "line": 508,
+            "offset": 14562
+          }
+        },
+        {
+          "end": {
+            "column": 55,
+            "line": 514,
+            "offset": 14900
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_server.cpp",
+          "start": {
+            "column": 13,
+            "line": 514,
+            "offset": 14858
+          }
+        },
+        {
+          "end": {
+            "column": 18,
+            "line": 531,
+            "offset": 15145
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_server.cpp",
+          "start": {
+            "column": 5,
+            "line": 531,
+            "offset": 15132
+          }
+        }
+      ],
+      "stmt_ids": [
+        "expand_query@13307",
+        "expand_query@13660",
+        "expand_query@14297",
+        "expand_query@14562",
+        "expand_query@14858",
+        "expand_query@15132"
+      ]
+    },
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op1",
+        "op8"
+      ],
+      "region_id": "region1",
+      "source_spans": [
+        {
+          "end": {
+            "column": 67,
+            "line": 464,
+            "offset": 13477
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_server.cpp",
+          "start": {
+            "column": 13,
+            "line": 464,
+            "offset": 13423
+          }
+        },
+        {
+          "end": {
+            "column": 97,
+            "line": 513,
+            "offset": 14844
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_server.cpp",
+          "start": {
+            "column": 13,
+            "line": 513,
+            "offset": 14760
+          }
+        }
+      ],
+      "stmt_ids": [
+        "expand_query@13423",
+        "expand_query@14760"
+      ]
+    },
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op3",
+        "op5"
+      ],
+      "region_id": "region2",
+      "source_spans": [
+        {
+          "end": {
+            "column": 51,
+            "line": 499,
+            "offset": 14281
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_server.cpp",
+          "start": {
+            "column": 43,
+            "line": 494,
+            "offset": 14113
+          }
+        },
+        {
+          "end": {
+            "column": 95,
+            "line": 506,
+            "offset": 14480
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_server.cpp",
+          "start": {
+            "column": 9,
+            "line": 503,
+            "offset": 14361
+          }
+        }
+      ],
+      "stmt_ids": [
+        "expand_query@14113",
+        "expand_query@14361"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op6"
+      ],
+      "region_id": "region3",
+      "source_spans": [
+        {
+          "end": {
+            "column": 67,
+            "line": 507,
+            "offset": 14548
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_server.cpp",
+          "start": {
+            "column": 13,
+            "line": 507,
+            "offset": 14494
+          }
+        }
+      ],
+      "stmt_ids": [
+        "expand_query@14494"
+      ]
+    }
+  ],
+  "required_temporaries": [
+    {
+      "symbol": "newtemp[a + temp.size()]"
+    },
+    {
+      "symbol": "newtemp[a]"
+    },
+    {
+      "symbol": "tempctxt_rotated"
+    }
+  ],
+  "schema_version": 2,
+  "source_edits_anchor": {
+    "end": {
+      "column": 1,
+      "line": 532,
+      "offset": 15147
+    },
+    "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_server.cpp",
+    "start": {
+      "column": 38,
+      "line": 422,
+      "offset": 12225
+    }
+  },
+  "source_file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_server.cpp",
+  "status": "blocked"
+}

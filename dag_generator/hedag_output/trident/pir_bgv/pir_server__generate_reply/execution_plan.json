@@ -1,0 +1,317 @@
+{
+  "barriers": [],
+  "critical_path_cost": 22,
+  "entry_function": "generate_reply",
+  "layers": [
+    [
+      "op16",
+      "op17",
+      "op18",
+      "op19",
+      "op0",
+      "op2"
+    ],
+    [
+      "op1",
+      "op4",
+      "op3"
+    ],
+    [
+      "op5"
+    ],
+    [
+      "op6"
+    ],
+    [
+      "op7",
+      "op10"
+    ],
+    [
+      "op8",
+      "op11"
+    ],
+    [
+      "op9",
+      "op12"
+    ],
+    [
+      "op13"
+    ],
+    [
+      "op14"
+    ],
+    [
+      "op15"
+    ]
+  ],
+  "max_parallel_width": 6,
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "op_schedule": {
+    "op0": {
+      "barrier": false,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 4,
+      "earliest_start": 0,
+      "latest_finish": 4,
+      "latest_start": 0,
+      "layer": 0,
+      "slack": 0,
+      "source_line": 380
+    },
+    "op1": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 5,
+      "earliest_start": 4,
+      "latest_finish": 8,
+      "latest_start": 7,
+      "layer": 1,
+      "slack": 3,
+      "source_line": 383
+    },
+    "op10": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 10,
+      "earliest_start": 9,
+      "latest_finish": 17,
+      "latest_start": 16,
+      "layer": 4,
+      "slack": 7,
+      "source_line": 439
+    },
+    "op11": {
+      "barrier": false,
+      "cost": 3,
+      "critical": false,
+      "earliest_finish": 13,
+      "earliest_start": 10,
+      "latest_finish": 20,
+      "latest_start": 17,
+      "layer": 5,
+      "slack": 7,
+      "source_line": 460
+    },
+    "op12": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 17,
+      "earliest_start": 16,
+      "latest_finish": 17,
+      "latest_start": 16,
+      "layer": 6,
+      "slack": 0,
+      "source_line": 439
+    },
+    "op13": {
+      "barrier": false,
+      "cost": 3,
+      "critical": true,
+      "earliest_finish": 20,
+      "earliest_start": 17,
+      "latest_finish": 20,
+      "latest_start": 17,
+      "layer": 7,
+      "slack": 0,
+      "source_line": 460
+    },
+    "op14": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 21,
+      "earliest_start": 20,
+      "latest_finish": 21,
+      "latest_start": 20,
+      "layer": 8,
+      "slack": 0,
+      "source_line": 409
+    },
+    "op15": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 22,
+      "earliest_start": 21,
+      "latest_finish": 22,
+      "latest_start": 21,
+      "layer": 9,
+      "slack": 0,
+      "source_line": 236
+    },
+    "op16": {
+      "barrier": false,
+      "cost": 3,
+      "critical": false,
+      "earliest_finish": 3,
+      "earliest_start": 0,
+      "latest_finish": 22,
+      "latest_start": 19,
+      "layer": 0,
+      "slack": 19,
+      "source_line": 275
+    },
+    "op17": {
+      "barrier": false,
+      "cost": 3,
+      "critical": false,
+      "earliest_finish": 3,
+      "earliest_start": 0,
+      "latest_finish": 22,
+      "latest_start": 19,
+      "layer": 0,
+      "slack": 19,
+      "source_line": 280
+    },
+    "op18": {
+      "barrier": false,
+      "cost": 3,
+      "critical": false,
+      "earliest_finish": 3,
+      "earliest_start": 0,
+      "latest_finish": 22,
+      "latest_start": 19,
+      "layer": 0,
+      "slack": 19,
+      "source_line": 291
+    },
+    "op19": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "latest_finish": 22,
+      "latest_start": 21,
+      "layer": 0,
+      "slack": 21,
+      "source_line": 340
+    },
+    "op2": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 1,
+      "earliest_start": 0,
+      "latest_finish": 5,
+      "latest_start": 4,
+      "layer": 0,
+      "slack": 4,
+      "source_line": 439
+    },
+    "op3": {
+      "barrier": false,
+      "cost": 3,
+      "critical": false,
+      "earliest_finish": 4,
+      "earliest_start": 1,
+      "latest_finish": 8,
+      "latest_start": 5,
+      "layer": 1,
+      "slack": 4,
+      "source_line": 460
+    },
+    "op4": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 5,
+      "earliest_start": 4,
+      "latest_finish": 5,
+      "latest_start": 4,
+      "layer": 1,
+      "slack": 0,
+      "source_line": 439
+    },
+    "op5": {
+      "barrier": false,
+      "cost": 3,
+      "critical": true,
+      "earliest_finish": 8,
+      "earliest_start": 5,
+      "latest_finish": 8,
+      "latest_start": 5,
+      "layer": 2,
+      "slack": 0,
+      "source_line": 460
+    },
+    "op6": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 9,
+      "earliest_start": 8,
+      "latest_finish": 9,
+      "latest_start": 8,
+      "layer": 3,
+      "slack": 0,
+      "source_line": 387
+    },
+    "op7": {
+      "barrier": false,
+      "cost": 3,
+      "critical": true,
+      "earliest_finish": 12,
+      "earliest_start": 9,
+      "latest_finish": 12,
+      "latest_start": 9,
+      "layer": 4,
+      "slack": 0,
+      "source_line": 396
+    },
+    "op8": {
+      "barrier": false,
+      "cost": 4,
+      "critical": true,
+      "earliest_finish": 16,
+      "earliest_start": 12,
+      "latest_finish": 16,
+      "latest_start": 12,
+      "layer": 5,
+      "slack": 0,
+      "source_line": 402
+    },
+    "op9": {
+      "barrier": false,
+      "cost": 1,
+      "critical": false,
+      "earliest_finish": 17,
+      "earliest_start": 16,
+      "latest_finish": 20,
+      "latest_start": 19,
+      "layer": 6,
+      "slack": 3,
+      "source_line": 406
+    }
+  },
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/pir_bgv/pir_server.cpp",
+  "topological_order": [
+    "op16",
+    "op17",
+    "op18",
+    "op19",
+    "op0",
+    "op2",
+    "op1",
+    "op4",
+    "op3",
+    "op5",
+    "op6",
+    "op7",
+    "op10",
+    "op8",
+    "op11",
+    "op9",
+    "op12",
+    "op13",
+    "op14",
+    "op15"
+  ]
+}

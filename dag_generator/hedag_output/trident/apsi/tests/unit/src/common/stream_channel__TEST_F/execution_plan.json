@@ -1,0 +1,14 @@
+{
+  "barriers": [],
+  "critical_path_cost": 0,
+  "entry_function": "TEST_F",
+  "layers": [],
+  "max_parallel_width": 0,
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "op_schedule": {},
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/apsi/tests/unit/src/common/stream_channel.cpp",
+  "topological_order": []
+}

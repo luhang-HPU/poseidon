@@ -1,0 +1,147 @@
+{
+  "barriers": [],
+  "blocking_diagnostics": [],
+  "entry_function": "replace_element",
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "operation_order": [
+    "op0",
+    "op2",
+    "op1",
+    "op3"
+  ],
+  "parallel_blocks": [
+    {
+      "anchor_stmt_ids": [
+        "replace_element@8549::extract_coeffs@5256",
+        "replace_element@8975"
+      ],
+      "op_ids": [
+        "op0",
+        "op2"
+      ],
+      "region_id": "region0"
+    },
+    {
+      "anchor_stmt_ids": [
+        "replace_element@8549::return",
+        "replace_element@9013"
+      ],
+      "op_ids": [
+        "op1",
+        "op3"
+      ],
+      "region_id": "region1"
+    }
+  ],
+  "regions": [
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op0",
+        "op2"
+      ],
+      "region_id": "region0",
+      "source_spans": [
+        {
+          "end": {
+            "column": 33,
+            "line": 178,
+            "offset": 5284
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+          "start": {
+            "column": 5,
+            "line": 178,
+            "offset": 5256
+          }
+        },
+        {
+          "end": {
+            "column": 37,
+            "line": 299,
+            "offset": 9007
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+          "start": {
+            "column": 5,
+            "line": 299,
+            "offset": 8975
+          }
+        }
+      ],
+      "stmt_ids": [
+        "replace_element@8549::extract_coeffs@5256",
+        "replace_element@8975"
+      ]
+    },
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op1",
+        "op3"
+      ],
+      "region_id": "region1",
+      "source_spans": [
+        {
+          "end": {
+            "column": 49,
+            "line": 285,
+            "offset": 8593
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+          "start": {
+            "column": 5,
+            "line": 285,
+            "offset": 8549
+          }
+        },
+        {
+          "end": {
+            "column": 18,
+            "line": 300,
+            "offset": 9026
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+          "start": {
+            "column": 5,
+            "line": 300,
+            "offset": 9013
+          }
+        }
+      ],
+      "stmt_ids": [
+        "replace_element@8549::return",
+        "replace_element@9013"
+      ]
+    }
+  ],
+  "required_temporaries": [
+    {
+      "symbol": "coeffs"
+    },
+    {
+      "symbol": "extract_coeffs__replace_element_8549__coeffs"
+    },
+    {
+      "symbol": "new_pt"
+    }
+  ],
+  "schema_version": 2,
+  "source_edits_anchor": {
+    "end": {
+      "column": 1,
+      "line": 301,
+      "offset": 9028
+    },
+    "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+    "start": {
+      "column": 22,
+      "line": 283,
+      "offset": 8466
+    }
+  },
+  "source_file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+  "status": "ready"
+}

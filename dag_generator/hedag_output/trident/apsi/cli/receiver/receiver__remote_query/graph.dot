@@ -1,0 +1,37 @@
+digraph hedag_v2 {
+  rankdir=LR;
+  node [shape=box, style="rounded,filled", fontname="Helvetica"];
+  edge [fontname="Helvetica"];
+  subgraph cluster_layer_0 {
+    label="layer 0";
+    color="#d1d5db";
+    op0 [label="op0\nreturn\nline 90\nlayer 0\ncost 1\nout __return__@1\nin -1@0", fillcolor="#64748b"];
+    op2 [label="op2\nread\nline 151\nlayer 0\ncost 1", fillcolor="#e5e7eb"];
+  }
+  subgraph cluster_layer_1 {
+    label="layer 1";
+    color="#d1d5db";
+    op1 [label="op1\nreturn\nline 100\nlayer 1\ncost 1\nout __return__@2\nin -1@0", fillcolor="#64748b"];
+    op3 [label="op3\nassign\nline 108\nlayer 1\ncost 1\nout auto[query_data, orig_items]@1\nin { nullptr, orig_items }@0", fillcolor="#17becf"];
+  }
+  subgraph cluster_layer_2 {
+    label="layer 2";
+    color="#d1d5db";
+    op4 [label="op4\nreturn\nline 125\nlayer 2\ncost 1\nout __return__@3\nin -1@0", fillcolor="#64748b"];
+  }
+  subgraph cluster_layer_3 {
+    label="layer 3";
+    color="#d1d5db";
+    op5 [label="op5\nreturn\nline 135\nlayer 3\ncost 1\nout __return__@4\nin -1@0", fillcolor="#64748b"];
+  }
+  subgraph cluster_layer_4 {
+    label="layer 4";
+    color="#d1d5db";
+    op6 [label="op6\nreturn\nline 142\nlayer 4\ncost 1\nout __return__@5\nin 0@0", fillcolor="#64748b"];
+  }
+  op0 -> op1 [color="#f97316", label="__return__"];
+  op2 -> op3 [color="#0f766e", label="remote_query@2280"];
+  op1 -> op4 [color="#f97316", label="__return__"];
+  op4 -> op5 [color="#f97316", label="__return__"];
+  op5 -> op6 [color="#f97316", label="__return__"];
+}

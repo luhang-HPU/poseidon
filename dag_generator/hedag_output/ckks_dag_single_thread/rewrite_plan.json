@@ -1,0 +1,1196 @@
+{
+  "barriers": [
+    "op23",
+    "op24",
+    "op15",
+    "op26",
+    "op16",
+    "op27",
+    "op6",
+    "op7",
+    "op37",
+    "op38"
+  ],
+  "blocking_diagnostics": [],
+  "entry_function": "ckks_single_thread_workload",
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "operation_order": [
+    "op0",
+    "op11",
+    "op22",
+    "op1",
+    "op12",
+    "op23",
+    "op2",
+    "op13",
+    "op24",
+    "op3",
+    "op14",
+    "op25",
+    "op4",
+    "op15",
+    "op26",
+    "op5",
+    "op16",
+    "op27",
+    "op6",
+    "op17",
+    "op28",
+    "op7",
+    "op18",
+    "op29",
+    "op8",
+    "op19",
+    "op30",
+    "op9",
+    "op20",
+    "op31",
+    "op10",
+    "op21",
+    "op32",
+    "op34",
+    "op33",
+    "op35",
+    "op36",
+    "op37",
+    "op38",
+    "op39",
+    "op40"
+  ],
+  "parallel_blocks": [
+    {
+      "anchor_stmt_ids": [
+        "ckks_single_thread_workload@8036::smooth_square_branch@4754",
+        "ckks_single_thread_workload@8140::diff_energy_branch@5827",
+        "ckks_single_thread_workload@8243::cross_mix_branch@6987"
+      ],
+      "op_ids": [
+        "op0",
+        "op11",
+        "op22"
+      ],
+      "region_id": "region0"
+    },
+    {
+      "anchor_stmt_ids": [
+        "ckks_single_thread_workload@8036::smooth_square_branch@4792",
+        "ckks_single_thread_workload@8140::diff_energy_branch@5866"
+      ],
+      "op_ids": [
+        "op1",
+        "op12"
+      ],
+      "region_id": "region1"
+    },
+    {
+      "anchor_stmt_ids": [
+        "ckks_single_thread_workload@8036::smooth_square_branch@4847",
+        "ckks_single_thread_workload@8140::diff_energy_branch@5923"
+      ],
+      "op_ids": [
+        "op2",
+        "op13"
+      ],
+      "region_id": "region3"
+    },
+    {
+      "anchor_stmt_ids": [
+        "ckks_single_thread_workload@8036::smooth_square_branch@4894",
+        "ckks_single_thread_workload@8140::diff_energy_branch@5971",
+        "ckks_single_thread_workload@8243::cross_mix_branch@7160"
+      ],
+      "op_ids": [
+        "op3",
+        "op14",
+        "op25"
+      ],
+      "region_id": "region5"
+    },
+    {
+      "anchor_stmt_ids": [
+        "ckks_single_thread_workload@8140::diff_energy_branch@6152",
+        "ckks_single_thread_workload@8243::cross_mix_branch@7333"
+      ],
+      "op_ids": [
+        "op17",
+        "op28"
+      ],
+      "region_id": "region12"
+    },
+    {
+      "anchor_stmt_ids": [
+        "ckks_single_thread_workload@8140::diff_energy_branch@6218",
+        "ckks_single_thread_workload@8243::cross_mix_branch@7392"
+      ],
+      "op_ids": [
+        "op18",
+        "op29"
+      ],
+      "region_id": "region14"
+    },
+    {
+      "anchor_stmt_ids": [
+        "ckks_single_thread_workload@8036::smooth_square_branch@5209",
+        "ckks_single_thread_workload@8140::diff_energy_branch@6284",
+        "ckks_single_thread_workload@8243::cross_mix_branch@7452"
+      ],
+      "op_ids": [
+        "op8",
+        "op19",
+        "op30"
+      ],
+      "region_id": "region16"
+    },
+    {
+      "anchor_stmt_ids": [
+        "ckks_single_thread_workload@8036::smooth_square_branch@5279",
+        "ckks_single_thread_workload@8140::diff_energy_branch@6344",
+        "ckks_single_thread_workload@8243::cross_mix_branch@7504"
+      ],
+      "op_ids": [
+        "op9",
+        "op20",
+        "op31"
+      ],
+      "region_id": "region17"
+    },
+    {
+      "anchor_stmt_ids": [
+        "ckks_single_thread_workload@8036::return",
+        "ckks_single_thread_workload@8140::return",
+        "ckks_single_thread_workload@8243::cross_mix_branch@7566"
+      ],
+      "op_ids": [
+        "op10",
+        "op21",
+        "op32"
+      ],
+      "region_id": "region18"
+    },
+    {
+      "anchor_stmt_ids": [
+        "ckks_single_thread_workload@8512",
+        "ckks_single_thread_workload@8243::return"
+      ],
+      "op_ids": [
+        "op34",
+        "op33"
+      ],
+      "region_id": "region19"
+    }
+  ],
+  "regions": [
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op0",
+        "op11",
+        "op22"
+      ],
+      "region_id": "region0",
+      "source_spans": [
+        {
+          "end": {
+            "column": 37,
+            "line": 144,
+            "offset": 4786
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 144,
+            "offset": 4754
+          }
+        },
+        {
+          "end": {
+            "column": 38,
+            "line": 170,
+            "offset": 5860
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 170,
+            "offset": 5827
+          }
+        },
+        {
+          "end": {
+            "column": 43,
+            "line": 198,
+            "offset": 7025
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 198,
+            "offset": 6987
+          }
+        }
+      ],
+      "stmt_ids": [
+        "ckks_single_thread_workload@8036::smooth_square_branch@4754",
+        "ckks_single_thread_workload@8140::diff_energy_branch@5827",
+        "ckks_single_thread_workload@8243::cross_mix_branch@6987"
+      ]
+    },
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op1",
+        "op12"
+      ],
+      "region_id": "region1",
+      "source_spans": [
+        {
+          "end": {
+            "column": 54,
+            "line": 145,
+            "offset": 4841
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 145,
+            "offset": 4792
+          }
+        },
+        {
+          "end": {
+            "column": 56,
+            "line": 171,
+            "offset": 5917
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 171,
+            "offset": 5866
+          }
+        }
+      ],
+      "stmt_ids": [
+        "ckks_single_thread_workload@8036::smooth_square_branch@4792",
+        "ckks_single_thread_workload@8140::diff_energy_branch@5866"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op23"
+      ],
+      "region_id": "region2",
+      "source_spans": [
+        {
+          "end": {
+            "column": 61,
+            "line": 199,
+            "offset": 7087
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 199,
+            "offset": 7031
+          }
+        }
+      ],
+      "stmt_ids": [
+        "ckks_single_thread_workload@8243::cross_mix_branch@7031"
+      ]
+    },
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op2",
+        "op13"
+      ],
+      "region_id": "region3",
+      "source_spans": [
+        {
+          "end": {
+            "column": 46,
+            "line": 146,
+            "offset": 4888
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 146,
+            "offset": 4847
+          }
+        },
+        {
+          "end": {
+            "column": 47,
+            "line": 172,
+            "offset": 5965
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 172,
+            "offset": 5923
+          }
+        }
+      ],
+      "stmt_ids": [
+        "ckks_single_thread_workload@8036::smooth_square_branch@4847",
+        "ckks_single_thread_workload@8140::diff_energy_branch@5923"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op24"
+      ],
+      "region_id": "region4",
+      "source_spans": [
+        {
+          "end": {
+            "column": 66,
+            "line": 200,
+            "offset": 7154
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 200,
+            "offset": 7093
+          }
+        }
+      ],
+      "stmt_ids": [
+        "ckks_single_thread_workload@8243::cross_mix_branch@7093"
+      ]
+    },
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op3",
+        "op14",
+        "op25"
+      ],
+      "region_id": "region5",
+      "source_spans": [
+        {
+          "end": {
+            "column": 61,
+            "line": 147,
+            "offset": 4950
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 147,
+            "offset": 4894
+          }
+        },
+        {
+          "end": {
+            "column": 51,
+            "line": 173,
+            "offset": 6017
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 173,
+            "offset": 5971
+          }
+        },
+        {
+          "end": {
+            "column": 43,
+            "line": 201,
+            "offset": 7198
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 201,
+            "offset": 7160
+          }
+        }
+      ],
+      "stmt_ids": [
+        "ckks_single_thread_workload@8036::smooth_square_branch@4894",
+        "ckks_single_thread_workload@8140::diff_energy_branch@5971",
+        "ckks_single_thread_workload@8243::cross_mix_branch@7160"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op4"
+      ],
+      "region_id": "region6",
+      "source_spans": [
+        {
+          "end": {
+            "column": 55,
+            "line": 148,
+            "offset": 5006
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 148,
+            "offset": 4956
+          }
+        }
+      ],
+      "stmt_ids": [
+        "ckks_single_thread_workload@8036::smooth_square_branch@4956"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op15"
+      ],
+      "region_id": "region7",
+      "source_spans": [
+        {
+          "end": {
+            "column": 61,
+            "line": 174,
+            "offset": 6079
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 174,
+            "offset": 6023
+          }
+        }
+      ],
+      "stmt_ids": [
+        "ckks_single_thread_workload@8140::diff_energy_branch@6023"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op26"
+      ],
+      "region_id": "region8",
+      "source_spans": [
+        {
+          "end": {
+            "column": 61,
+            "line": 202,
+            "offset": 7260
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 202,
+            "offset": 7204
+          }
+        }
+      ],
+      "stmt_ids": [
+        "ckks_single_thread_workload@8243::cross_mix_branch@7204"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op5"
+      ],
+      "region_id": "region9",
+      "source_spans": [
+        {
+          "end": {
+            "column": 59,
+            "line": 149,
+            "offset": 5066
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 149,
+            "offset": 5012
+          }
+        }
+      ],
+      "stmt_ids": [
+        "ckks_single_thread_workload@8036::smooth_square_branch@5012"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op16"
+      ],
+      "region_id": "region10",
+      "source_spans": [
+        {
+          "end": {
+            "column": 66,
+            "line": 175,
+            "offset": 6146
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 175,
+            "offset": 6085
+          }
+        }
+      ],
+      "stmt_ids": [
+        "ckks_single_thread_workload@8140::diff_energy_branch@6085"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op27"
+      ],
+      "region_id": "region11",
+      "source_spans": [
+        {
+          "end": {
+            "column": 66,
+            "line": 203,
+            "offset": 7327
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 203,
+            "offset": 7266
+          }
+        }
+      ],
+      "stmt_ids": [
+        "ckks_single_thread_workload@8243::cross_mix_branch@7266"
+      ]
+    },
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op17",
+        "op28"
+      ],
+      "region_id": "region12",
+      "source_spans": [
+        {
+          "end": {
+            "column": 65,
+            "line": 176,
+            "offset": 6212
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 176,
+            "offset": 6152
+          }
+        },
+        {
+          "end": {
+            "column": 58,
+            "line": 204,
+            "offset": 7386
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 204,
+            "offset": 7333
+          }
+        }
+      ],
+      "stmt_ids": [
+        "ckks_single_thread_workload@8140::diff_energy_branch@6152",
+        "ckks_single_thread_workload@8243::cross_mix_branch@7333"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op6"
+      ],
+      "region_id": "region13",
+      "source_spans": [
+        {
+          "end": {
+            "column": 65,
+            "line": 150,
+            "offset": 5132
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 150,
+            "offset": 5072
+          }
+        }
+      ],
+      "stmt_ids": [
+        "ckks_single_thread_workload@8036::smooth_square_branch@5072"
+      ]
+    },
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op18",
+        "op29"
+      ],
+      "region_id": "region14",
+      "source_spans": [
+        {
+          "end": {
+            "column": 65,
+            "line": 177,
+            "offset": 6278
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 177,
+            "offset": 6218
+          }
+        },
+        {
+          "end": {
+            "column": 59,
+            "line": 205,
+            "offset": 7446
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 205,
+            "offset": 7392
+          }
+        }
+      ],
+      "stmt_ids": [
+        "ckks_single_thread_workload@8140::diff_energy_branch@6218",
+        "ckks_single_thread_workload@8243::cross_mix_branch@7392"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op7"
+      ],
+      "region_id": "region15",
+      "source_spans": [
+        {
+          "end": {
+            "column": 70,
+            "line": 151,
+            "offset": 5203
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 151,
+            "offset": 5138
+          }
+        }
+      ],
+      "stmt_ids": [
+        "ckks_single_thread_workload@8036::smooth_square_branch@5138"
+      ]
+    },
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op8",
+        "op19",
+        "op30"
+      ],
+      "region_id": "region16",
+      "source_spans": [
+        {
+          "end": {
+            "column": 69,
+            "line": 152,
+            "offset": 5273
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 152,
+            "offset": 5209
+          }
+        },
+        {
+          "end": {
+            "column": 59,
+            "line": 178,
+            "offset": 6338
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 178,
+            "offset": 6284
+          }
+        },
+        {
+          "end": {
+            "column": 51,
+            "line": 206,
+            "offset": 7498
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 206,
+            "offset": 7452
+          }
+        }
+      ],
+      "stmt_ids": [
+        "ckks_single_thread_workload@8036::smooth_square_branch@5209",
+        "ckks_single_thread_workload@8140::diff_energy_branch@6284",
+        "ckks_single_thread_workload@8243::cross_mix_branch@7452"
+      ]
+    },
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op9",
+        "op20",
+        "op31"
+      ],
+      "region_id": "region17",
+      "source_spans": [
+        {
+          "end": {
+            "column": 62,
+            "line": 153,
+            "offset": 5336
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 153,
+            "offset": 5279
+          }
+        },
+        {
+          "end": {
+            "column": 57,
+            "line": 179,
+            "offset": 6396
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 179,
+            "offset": 6344
+          }
+        },
+        {
+          "end": {
+            "column": 61,
+            "line": 207,
+            "offset": 7560
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 207,
+            "offset": 7504
+          }
+        }
+      ],
+      "stmt_ids": [
+        "ckks_single_thread_workload@8036::smooth_square_branch@5279",
+        "ckks_single_thread_workload@8140::diff_energy_branch@6344",
+        "ckks_single_thread_workload@8243::cross_mix_branch@7504"
+      ]
+    },
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op10",
+        "op21",
+        "op32"
+      ],
+      "region_id": "region18",
+      "source_spans": [
+        {
+          "end": {
+            "column": 103,
+            "line": 218,
+            "offset": 8134
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 218,
+            "offset": 8036
+          }
+        },
+        {
+          "end": {
+            "column": 102,
+            "line": 219,
+            "offset": 8237
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 219,
+            "offset": 8140
+          }
+        },
+        {
+          "end": {
+            "column": 55,
+            "line": 208,
+            "offset": 7616
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 208,
+            "offset": 7566
+          }
+        }
+      ],
+      "stmt_ids": [
+        "ckks_single_thread_workload@8036::return",
+        "ckks_single_thread_workload@8140::return",
+        "ckks_single_thread_workload@8243::cross_mix_branch@7566"
+      ]
+    },
+    {
+      "kind": "parallel",
+      "op_ids": [
+        "op34",
+        "op33"
+      ],
+      "region_id": "region19",
+      "source_spans": [
+        {
+          "end": {
+            "column": 55,
+            "line": 230,
+            "offset": 8562
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 230,
+            "offset": 8512
+          }
+        },
+        {
+          "end": {
+            "column": 91,
+            "line": 221,
+            "offset": 8359
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 220,
+            "offset": 8243
+          }
+        }
+      ],
+      "stmt_ids": [
+        "ckks_single_thread_workload@8512",
+        "ckks_single_thread_workload@8243::return"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op35"
+      ],
+      "region_id": "region20",
+      "source_spans": [
+        {
+          "end": {
+            "column": 56,
+            "line": 231,
+            "offset": 8619
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 231,
+            "offset": 8568
+          }
+        }
+      ],
+      "stmt_ids": [
+        "ckks_single_thread_workload@8568"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op36"
+      ],
+      "region_id": "region21",
+      "source_spans": [
+        {
+          "end": {
+            "column": 57,
+            "line": 232,
+            "offset": 8677
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 232,
+            "offset": 8625
+          }
+        }
+      ],
+      "stmt_ids": [
+        "ckks_single_thread_workload@8625"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op37"
+      ],
+      "region_id": "region22",
+      "source_spans": [
+        {
+          "end": {
+            "column": 65,
+            "line": 233,
+            "offset": 8743
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 233,
+            "offset": 8683
+          }
+        }
+      ],
+      "stmt_ids": [
+        "ckks_single_thread_workload@8683"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op38"
+      ],
+      "region_id": "region23",
+      "source_spans": [
+        {
+          "end": {
+            "column": 70,
+            "line": 234,
+            "offset": 8814
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 234,
+            "offset": 8749
+          }
+        }
+      ],
+      "stmt_ids": [
+        "ckks_single_thread_workload@8749"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op39"
+      ],
+      "region_id": "region24",
+      "source_spans": [
+        {
+          "end": {
+            "column": 66,
+            "line": 235,
+            "offset": 8881
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 235,
+            "offset": 8820
+          }
+        }
+      ],
+      "stmt_ids": [
+        "ckks_single_thread_workload@8820"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op40"
+      ],
+      "region_id": "region25",
+      "source_spans": [
+        {
+          "end": {
+            "column": 54,
+            "line": 236,
+            "offset": 8936
+          },
+          "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+          "start": {
+            "column": 5,
+            "line": 236,
+            "offset": 8887
+          }
+        }
+      ],
+      "stmt_ids": [
+        "ckks_single_thread_workload@8887"
+      ]
+    }
+  ],
+  "required_temporaries": [
+    {
+      "symbol": "branch_add"
+    },
+    {
+      "symbol": "branch_cross"
+    },
+    {
+      "symbol": "branch_quad"
+    },
+    {
+      "symbol": "cross_mix_branch__ckks_single_thread_workload_8243__branch_cross"
+    },
+    {
+      "symbol": "cross_mix_branch__ckks_single_thread_workload_8243__cross_mix"
+    },
+    {
+      "symbol": "cross_mix_branch__ckks_single_thread_workload_8243__cross_rot16"
+    },
+    {
+      "symbol": "cross_mix_branch__ckks_single_thread_workload_8243__cross_rot8"
+    },
+    {
+      "symbol": "cross_mix_branch__ckks_single_thread_workload_8243__cross_sum"
+    },
+    {
+      "symbol": "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac"
+    },
+    {
+      "symbol": "cross_mix_branch__ckks_single_thread_workload_8243__prod_ac_relin"
+    },
+    {
+      "symbol": "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd"
+    },
+    {
+      "symbol": "cross_mix_branch__ckks_single_thread_workload_8243__prod_bd_relin"
+    },
+    {
+      "symbol": "diff_energy_branch__ckks_single_thread_workload_8140__branch_quad"
+    },
+    {
+      "symbol": "diff_energy_branch__ckks_single_thread_workload_8140__diff_cd"
+    },
+    {
+      "symbol": "diff_energy_branch__ckks_single_thread_workload_8140__diff_mix"
+    },
+    {
+      "symbol": "diff_energy_branch__ckks_single_thread_workload_8140__diff_rot1"
+    },
+    {
+      "symbol": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq"
+    },
+    {
+      "symbol": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_relin"
+    },
+    {
+      "symbol": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot2"
+    },
+    {
+      "symbol": "diff_energy_branch__ckks_single_thread_workload_8140__diff_sq_rot8"
+    },
+    {
+      "symbol": "diff_sq_relin"
+    },
+    {
+      "symbol": "merged_all"
+    },
+    {
+      "symbol": "merged_left"
+    },
+    {
+      "symbol": "prod_ac_relin"
+    },
+    {
+      "symbol": "prod_bd_relin"
+    },
+    {
+      "symbol": "result"
+    },
+    {
+      "symbol": "smooth_sq_relin"
+    },
+    {
+      "symbol": "smooth_square_branch__ckks_single_thread_workload_8036__branch_add"
+    },
+    {
+      "symbol": "smooth_square_branch__ckks_single_thread_workload_8036__rot_ab_1"
+    },
+    {
+      "symbol": "smooth_square_branch__ckks_single_thread_workload_8036__rot_smooth_2"
+    },
+    {
+      "symbol": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab"
+    },
+    {
+      "symbol": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_ab_2"
+    },
+    {
+      "symbol": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq"
+    },
+    {
+      "symbol": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_relin"
+    },
+    {
+      "symbol": "smooth_square_branch__ckks_single_thread_workload_8036__smooth_sq_rot4"
+    },
+    {
+      "symbol": "smooth_square_branch__ckks_single_thread_workload_8036__sum_ab"
+    },
+    {
+      "symbol": "tail_prod"
+    },
+    {
+      "symbol": "tail_prod_relin"
+    },
+    {
+      "symbol": "tail_rot32"
+    }
+  ],
+  "schema_version": 2,
+  "source_edits_anchor": {
+    "end": {
+      "column": 1,
+      "line": 237,
+      "offset": 8938
+    },
+    "file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+    "start": {
+      "column": 6,
+      "line": 212,
+      "offset": 7651
+    }
+  },
+  "source_file": "examples/ckks/test_ckks_dag_single_thread.cpp",
+  "status": "ready"
+}

@@ -1,0 +1,49 @@
+{
+  "barriers": [],
+  "critical_path_cost": 3,
+  "entry_function": "generate_galois_keys",
+  "layers": [
+    [
+      "op0"
+    ],
+    [
+      "op1"
+    ]
+  ],
+  "max_parallel_width": 1,
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "op_schedule": {
+    "op0": {
+      "barrier": false,
+      "cost": 2,
+      "critical": true,
+      "earliest_finish": 2,
+      "earliest_start": 0,
+      "latest_finish": 2,
+      "latest_start": 0,
+      "layer": 0,
+      "slack": 0,
+      "source_line": 279
+    },
+    "op1": {
+      "barrier": false,
+      "cost": 1,
+      "critical": true,
+      "earliest_finish": 3,
+      "earliest_start": 2,
+      "latest_finish": 3,
+      "latest_start": 2,
+      "layer": 1,
+      "slack": 0,
+      "source_line": 280
+    }
+  },
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_client.cpp",
+  "topological_order": [
+    "op0",
+    "op1"
+  ]
+}

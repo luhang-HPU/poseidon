@@ -1,0 +1,88 @@
+{
+  "diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (decode(buf.data(), pt) != ECCRYPTO_SUCCESS) {\n                    stream.exceptions(old_ex_mask);\n                    throw logic_error(\"invalid point\");\n                }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 17,
+          "line": 173,
+          "offset": 5514
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/common/apsi/oprf/ecpoint.cpp",
+        "start": {
+          "column": 17,
+          "line": 170,
+          "offset": 5340
+        }
+      },
+      "stmt_id": "load@5340",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "edges": [],
+  "entry_function": "load",
+  "frontend": "textual_fallback",
+  "metadata": {
+    "entry_span": {
+      "end": {
+        "column": 9,
+        "line": 180,
+        "offset": 5755
+      },
+      "file": "/home/guoshuai/github/poseidon/Trident/apsi/common/apsi/oprf/ecpoint.cpp",
+      "start": {
+        "column": 23,
+        "line": 160,
+        "offset": 4992
+      }
+    },
+    "frontend_mode": "textual_fallback",
+    "source_hash": "4e24a35966a6fc90a7dd12a87c8b37f10b1d4ee9c365ea95fe5fd9693f383e2a"
+  },
+  "ops": [
+    {
+      "api_name": "read",
+      "attrs": {
+        "barrier": false,
+        "constants": [
+          "reinterpret_cast<char *>(buf.data())",
+          "save_size"
+        ],
+        "cost": 1,
+        "expanded_from_loop": false,
+        "loop_context": {},
+        "receiver": "stream",
+        "source_text": "stream.read(reinterpret_cast<char *>(buf.data()), save_size)"
+      },
+      "effects": [],
+      "inputs": [],
+      "op_id": "op0",
+      "op_kind": "read",
+      "origin_callstack": [],
+      "outputs": [],
+      "resources": [],
+      "source_span": {
+        "end": {
+          "column": 77,
+          "line": 167,
+          "offset": 5293
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/apsi/common/apsi/oprf/ecpoint.cpp",
+        "start": {
+          "column": 17,
+          "line": 167,
+          "offset": 5233
+        }
+      },
+      "stmt_id": "load@5233"
+    }
+  ],
+  "schema_version": 2,
+  "source_file": "/home/guoshuai/github/poseidon/Trident/apsi/common/apsi/oprf/ecpoint.cpp",
+  "values": []
+}

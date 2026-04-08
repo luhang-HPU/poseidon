@@ -8,6 +8,7 @@
 #include <queue>
 #include <stdexcept>
 #include <thread>
+#include <type_traits>
 #include <vector>
 namespace poseidon
 {
@@ -43,6 +44,51 @@ private:
     std::condition_variable complete_condition_;
     bool stop_;
     size_t active_tasks_;
+};
+
+class ParallelGroup
+{
+public:
+    explicit ParallelGroup(ThreadPool &thread_pool) : thread_pool_(thread_pool) {}
+
+    ParallelGroup(const ParallelGroup &) = delete;
+    ParallelGroup &operator=(const ParallelGroup &) = delete;
+
+    ~ParallelGroup()
+    {
+        for (auto &future : futures_)
+        {
+            if (future.valid())
+            {
+                future.wait();
+            }
+        }
+    }
+
+    template <class F, class... Args>
+    void go(F &&f, Args &&...args)
+    {
+        using return_type = typename std::result_of<F(Args...)>::type;
+        static_assert(std::is_same<return_type, void>::value,
+                      "ParallelGroup::go requires void-returning tasks");
+        futures_.emplace_back(thread_pool_.enqueue(std::forward<F>(f), std::forward<Args>(args)...));
+    }
+
+    void wait()
+    {
+        for (auto &future : futures_)
+        {
+            if (future.valid())
+            {
+                future.get();
+            }
+        }
+        futures_.clear();
+    }
+
+private:
+    ThreadPool &thread_pool_;
+    std::vector<std::future<void>> futures_;
 };
 
 // 构造函数：创建指定数量的工作线程

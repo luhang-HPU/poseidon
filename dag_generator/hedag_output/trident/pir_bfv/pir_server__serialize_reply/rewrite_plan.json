@@ -1,0 +1,62 @@
+{
+  "barriers": [
+    "op0"
+  ],
+  "blocking_diagnostics": [],
+  "entry_function": "serialize_reply",
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "operation_order": [
+    "op0"
+  ],
+  "parallel_blocks": [],
+  "regions": [
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op0"
+      ],
+      "region_id": "region0",
+      "source_spans": [
+        {
+          "end": {
+            "column": 56,
+            "line": 215,
+            "offset": 5065
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_server.cpp",
+          "start": {
+            "column": 9,
+            "line": 215,
+            "offset": 5018
+          }
+        }
+      ],
+      "stmt_ids": [
+        "serialize_reply@5018"
+      ]
+    }
+  ],
+  "required_temporaries": [
+    {
+      "symbol": "tmp"
+    }
+  ],
+  "schema_version": 2,
+  "source_edits_anchor": {
+    "end": {
+      "column": 1,
+      "line": 220,
+      "offset": 5167
+    },
+    "file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_server.cpp",
+    "start": {
+      "column": 16,
+      "line": 209,
+      "offset": 4855
+    }
+  },
+  "source_file": "/home/guoshuai/github/poseidon/Trident/pir_bfv/pir_server.cpp",
+  "status": "ready"
+}

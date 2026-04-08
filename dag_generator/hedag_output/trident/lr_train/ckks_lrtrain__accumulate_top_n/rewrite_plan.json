@@ -1,0 +1,188 @@
+{
+  "barriers": [],
+  "blocking_diagnostics": [
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "if (n <= 0)\n    {\n        POSEIDON_THROW(invalid_argument_error, \"n cannot be negative\");\n    }"
+      },
+      "reason": "unsupported control flow: if",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 681,
+          "offset": 22557
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+        "start": {
+          "column": 5,
+          "line": 678,
+          "offset": 22463
+        }
+      },
+      "stmt_id": "accumulate_top_n@22463",
+      "suggested_fallback": "skip rewrite for this region"
+    },
+    {
+      "blocking": true,
+      "details": {
+        "source_text": "while (n)\n    {\n        Ciphertext ciph_tmp;\n        if (n & 1 && n != 1)\n        {\n            bottom_nth += 1 << cnt;\n            ckks_eva->rotate(ciph_rotate_sum, ciph_tmp, const_n - bottom_nth, rot_keys);\n            ckks_eva->add(ciph_sum, ciph_tmp, ciph_sum);\n        }\n        n = n >> 1;\n        if (n)\n        {\n            ckks_eva->rotate(ciph_rotate_sum, ciph_tmp, 1 << cnt, rot_keys);\n            ckks_eva->add(ciph_rotate_sum, ciph_tmp, ciph_rotate_sum);\n        }\n        ++cnt;\n    }"
+      },
+      "reason": "unsupported control flow: while",
+      "severity": "error",
+      "source_span": {
+        "end": {
+          "column": 5,
+          "line": 710,
+          "offset": 23389
+        },
+        "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+        "start": {
+          "column": 5,
+          "line": 694,
+          "offset": 22891
+        }
+      },
+      "stmt_id": "accumulate_top_n@22891",
+      "suggested_fallback": "skip rewrite for this region"
+    }
+  ],
+  "entry_function": "accumulate_top_n",
+  "metadata": {
+    "frontend": "textual_fallback"
+  },
+  "operation_order": [
+    "op0",
+    "op1",
+    "op2",
+    "op3"
+  ],
+  "parallel_blocks": [],
+  "regions": [
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op0"
+      ],
+      "region_id": "region0",
+      "source_spans": [
+        {
+          "end": {
+            "column": 68,
+            "line": 688,
+            "offset": 22777
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+          "start": {
+            "column": 5,
+            "line": 688,
+            "offset": 22714
+          }
+        }
+      ],
+      "stmt_ids": [
+        "accumulate_top_n@22714"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op1"
+      ],
+      "region_id": "region1",
+      "source_spans": [
+        {
+          "end": {
+            "column": 38,
+            "line": 689,
+            "offset": 22816
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+          "start": {
+            "column": 5,
+            "line": 689,
+            "offset": 22783
+          }
+        }
+      ],
+      "stmt_ids": [
+        "accumulate_top_n@22783"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op2"
+      ],
+      "region_id": "region2",
+      "source_spans": [
+        {
+          "end": {
+            "column": 55,
+            "line": 711,
+            "offset": 23445
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+          "start": {
+            "column": 5,
+            "line": 711,
+            "offset": 23395
+          }
+        }
+      ],
+      "stmt_ids": [
+        "accumulate_top_n@23395"
+      ]
+    },
+    {
+      "kind": "serial",
+      "op_ids": [
+        "op3"
+      ],
+      "region_id": "region3",
+      "source_spans": [
+        {
+          "end": {
+            "column": 20,
+            "line": 712,
+            "offset": 23466
+          },
+          "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+          "start": {
+            "column": 5,
+            "line": 712,
+            "offset": 23451
+          }
+        }
+      ],
+      "stmt_ids": [
+        "accumulate_top_n@23451"
+      ]
+    }
+  ],
+  "required_temporaries": [
+    {
+      "symbol": "ciph_sum"
+    },
+    {
+      "symbol": "plain_zero"
+    }
+  ],
+  "schema_version": 2,
+  "source_edits_anchor": {
+    "end": {
+      "column": 1,
+      "line": 713,
+      "offset": 23468
+    },
+    "file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+    "start": {
+      "column": 12,
+      "line": 674,
+      "offset": 22230
+    }
+  },
+  "source_file": "/home/guoshuai/github/poseidon/Trident/lr_train/ckks_lrtrain.cpp",
+  "status": "blocked"
+}
