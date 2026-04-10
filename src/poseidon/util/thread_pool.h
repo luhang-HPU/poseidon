@@ -38,15 +38,15 @@ private:
     std::queue<std::function<void()>> tasks;
 
     // 同步机制
-    std::mutex queue_mutex;
-    std::condition_variable condition;
-    std::condition_variable complete_condition;
-    bool stop;
-    size_t active_tasks;
+    std::mutex queue_mutex_;
+    std::condition_variable condition_;
+    std::condition_variable complete_condition_;
+    bool stop_;
+    size_t active_tasks_;
 };
 
 // 构造函数：创建指定数量的工作线程
-inline ThreadPool::ThreadPool(size_t threads) : stop(false), active_tasks(0)
+inline ThreadPool::ThreadPool(size_t threads) : stop_(false), active_tasks_(0)
 {
     for (size_t i = 0; i < threads; ++i)
         workers.emplace_back(
@@ -57,28 +57,28 @@ inline ThreadPool::ThreadPool(size_t threads) : stop(false), active_tasks(0)
                     std::function<void()> task;
 
                     {
-                        std::unique_lock<std::mutex> lock(this->queue_mutex);
-                        this->condition.wait(lock,
-                                             [this] { return this->stop || !this->tasks.empty(); });
+                        std::unique_lock<std::mutex> lock(queue_mutex_);
+                        condition_.wait(lock,
+                                             [this] { return stop_ || !tasks.empty(); });
 
-                        if (this->stop && this->tasks.empty())
+                        if (stop_ && tasks.empty())
                             return;
 
-                        task = std::move(this->tasks.front());
-                        this->tasks.pop();
-                        active_tasks++;
+                        task = std::move(tasks.front());
+                        tasks.pop();
+                        active_tasks_++;
                     }
 
                     // 执行任务
                     task();
 
                     {
-                        std::unique_lock<std::mutex> lock(this->queue_mutex);
-                        active_tasks--;
+                        std::unique_lock<std::mutex> lock(queue_mutex_);
+                        active_tasks_--;
                         // 如果所有任务都完成了，通知wait_all
-                        if (tasks.empty() && active_tasks == 0)
+                        if (tasks.empty() && active_tasks_ == 0)
                         {
-                            complete_condition.notify_one();
+                            complete_condition_.notify_one();
                         }
                     }
                 }
@@ -89,10 +89,10 @@ inline ThreadPool::ThreadPool(size_t threads) : stop(false), active_tasks(0)
 inline ThreadPool::~ThreadPool()
 {
     {
-        std::unique_lock<std::mutex> lock(queue_mutex);
-        stop = true;
+        std::unique_lock<std::mutex> lock(queue_mutex_);
+        stop_ = true;
     }
-    condition.notify_all();
+    condition_.notify_all();
     for (std::thread &worker : workers)
         worker.join();
 }
@@ -110,22 +110,22 @@ auto ThreadPool::enqueue(F &&f, Args &&...args)
 
     std::future<return_type> res = task->get_future();
     {
-        std::unique_lock<std::mutex> lock(queue_mutex);
+        std::unique_lock<std::mutex> lock(queue_mutex_);
 
         // 如果线程池已经停止，不能添加新任务
-        if (stop)
+        if (stop_)
             throw std::runtime_error("enqueue on stopped ThreadPool");
 
         tasks.emplace([task]() { (*task)(); });
     }
-    condition.notify_one();
+    condition_.notify_one();
     return res;
 }
 
 // 等待所有任务完成
 inline void ThreadPool::wait_all()
 {
-    std::unique_lock<std::mutex> lock(queue_mutex);
-    complete_condition.wait(lock, [this] { return tasks.empty() && active_tasks == 0; });
+    std::unique_lock<std::mutex> lock(queue_mutex_);
+    complete_condition_.wait(lock, [this] { return tasks.empty() && active_tasks_ == 0; });
 }
 }  // namespace poseidon
