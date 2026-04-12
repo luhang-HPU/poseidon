@@ -10,13 +10,17 @@
 #include <thread>
 #include <type_traits>
 #include <vector>
+
 namespace poseidon
 {
 class ThreadPool
 {
 public:
+    // 就绪检测函数：返回true表示任务可以执行
+    using ReadyCheck = std::function<bool()>;
+
     // 构造函数，指定线程数量
-    ThreadPool(size_t threads);
+    ThreadPool(size_t threads, bool enable_prepare = false);
 
     // 禁止拷贝构造和赋值操作
     ThreadPool(const ThreadPool &) = delete;
@@ -28,6 +32,11 @@ public:
     // 添加任务到线程池，返回future以便获取结果
     template <class F, class... Args>
     auto enqueue(F &&f, Args &&...args) -> std::future<typename std::result_of<F(Args...)>::type>;
+
+    // 预备队列提交：只有readyCheck()返回true才会执行
+    template<class F, class... Args>
+    auto enqueue_prepare(ReadyCheck readyCheck, F&& f, Args&&... args)
+        -> std::future<typename std::result_of<F(Args...)>::type>;
 
     // 等待所有任务完成
     void wait_all();
@@ -44,6 +53,22 @@ private:
     std::condition_variable complete_condition_;
     bool stop_;
     size_t active_tasks_;
+
+
+private:
+    // 预备队列项：就绪检测函数 + 任务
+    struct PrepareTask {
+        ReadyCheck check;
+        std::function<void()> task;
+    };
+
+    std::vector<PrepareTask> prepare_tasks_;  // 预备队列
+    std::mutex prepare_mtx_;                // 预备队列锁
+    std::thread checker_thread_;            // 就绪检测线程
+    std::atomic<bool> checker_stop_{false}; // 检测线程停止标记
+
+    // 就绪检测线程函数
+    void checker_loop();
 };
 
 class ParallelGroup
@@ -92,13 +117,13 @@ private:
 };
 
 // 构造函数：创建指定数量的工作线程
-inline ThreadPool::ThreadPool(size_t threads) : stop_(false), active_tasks_(0)
+inline ThreadPool::ThreadPool(size_t threads, bool enable_prepare) : stop_(false), active_tasks_(0)
 {
     for (size_t i = 0; i < threads; ++i)
         workers.emplace_back(
             [this]
             {
-                for (;;)
+                while (true)
                 {
                     std::function<void()> task;
 
@@ -129,6 +154,39 @@ inline ThreadPool::ThreadPool(size_t threads) : stop_(false), active_tasks_(0)
                     }
                 }
             });
+
+    // 启动预备队列检测线程
+    if (enable_prepare) {
+        checker_thread_ = std::thread(&ThreadPool::checker_loop, this);
+    }
+}
+
+// 检查预备队列，就绪就移入任务队列
+inline void ThreadPool::checker_loop()
+{
+    while (!checker_stop_)
+    {
+        std::lock_guard<std::mutex> lck(prepare_mtx_);
+
+        for (auto iter = prepare_tasks_.begin(); iter != prepare_tasks_.end();)
+        {
+            if (iter->check())
+            {
+                {
+                    std::lock_guard<std::mutex> task_lck(queue_mutex_);
+                    tasks.push(std::move(iter->task));
+                }
+                condition_.notify_one();
+                iter = prepare_tasks_.erase(iter);
+            }
+            else
+            {
+                ++iter;
+            }
+        }
+    }
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
 }
 
 // 析构函数：停止所有工作线程
@@ -165,6 +223,28 @@ auto ThreadPool::enqueue(F &&f, Args &&...args)
         tasks.emplace([task]() { (*task)(); });
     }
     condition_.notify_one();
+    return res;
+}
+
+// 提交到预备队列
+template<class F, class... Args>
+auto ThreadPool::enqueue_prepare(ReadyCheck readyCheck, F&& f, Args&&... args)
+    -> std::future<typename std::result_of<F(Args...)>::type> {
+    using ReturnType = typename std::result_of<F(Args...)>::type;
+    auto task = std::make_shared<std::packaged_task<ReturnType()>>(
+        std::bind(std::forward<F>(f), std::forward<Args>(args)...)
+    );
+    std::future<ReturnType> res = task->get_future();
+
+    // 包装成预备任务
+    PrepareTask pt;
+    pt.check = std::move(readyCheck);
+    pt.task = [task]() { (*task)(); };
+
+    {
+        std::lock_guard<std::mutex> lock(prepare_mtx_);
+        prepare_tasks_.push_back(std::move(pt));
+    }
     return res;
 }
 
