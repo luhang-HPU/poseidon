@@ -43,9 +43,9 @@ public:
 
 private:
     // 工作线程
-    std::vector<std::thread> workers;
+    std::vector<std::thread> workers_;
     // 任务队列
-    std::queue<std::function<void()>> tasks;
+    std::queue<std::function<void()>> tasks_;
 
     // 同步机制
     std::mutex queue_mutex_;
@@ -120,23 +120,21 @@ private:
 inline ThreadPool::ThreadPool(size_t threads, bool enable_prepare) : stop_(false), active_tasks_(0)
 {
     for (size_t i = 0; i < threads; ++i)
-        workers.emplace_back(
+        workers_.emplace_back(
             [this]
             {
                 while (true)
                 {
                     std::function<void()> task;
-
                     {
                         std::unique_lock<std::mutex> lock(queue_mutex_);
-                        condition_.wait(lock,
-                                             [this] { return stop_ || !tasks.empty(); });
+                        condition_.wait(lock, [this] { return stop_ || !tasks_.empty(); });
 
-                        if (stop_ && tasks.empty())
+                        if (stop_ && tasks_.empty())
                             return;
 
-                        task = std::move(tasks.front());
-                        tasks.pop();
+                        task = std::move(tasks_.front());
+                        tasks_.pop();
                         active_tasks_++;
                     }
 
@@ -147,7 +145,7 @@ inline ThreadPool::ThreadPool(size_t threads, bool enable_prepare) : stop_(false
                         std::unique_lock<std::mutex> lock(queue_mutex_);
                         active_tasks_--;
                         // 如果所有任务都完成了，通知wait_all
-                        if (tasks.empty() && active_tasks_ == 0)
+                        if (tasks_.empty() && active_tasks_ == 0)
                         {
                             complete_condition_.notify_one();
                         }
@@ -174,7 +172,7 @@ inline void ThreadPool::checker_loop()
             {
                 {
                     std::lock_guard<std::mutex> task_lck(queue_mutex_);
-                    tasks.push(std::move(iter->task));
+                    tasks_.push(std::move(iter->task));
                 }
                 condition_.notify_one();
                 iter = prepare_tasks_.erase(iter);
@@ -197,7 +195,7 @@ inline ThreadPool::~ThreadPool()
         stop_ = true;
     }
     condition_.notify_all();
-    for (std::thread &worker : workers)
+    for (std::thread &worker : workers_)
         worker.join();
 }
 
@@ -220,7 +218,7 @@ auto ThreadPool::enqueue(F &&f, Args &&...args)
         if (stop_)
             throw std::runtime_error("enqueue on stopped ThreadPool");
 
-        tasks.emplace([task]() { (*task)(); });
+        tasks_.emplace([task]() { (*task)(); });
     }
     condition_.notify_one();
     return res;
@@ -252,6 +250,6 @@ auto ThreadPool::enqueue_prepare(ReadyCheck readyCheck, F&& f, Args&&... args)
 inline void ThreadPool::wait_all()
 {
     std::unique_lock<std::mutex> lock(queue_mutex_);
-    complete_condition_.wait(lock, [this] { return tasks.empty() && active_tasks_ == 0; });
+    complete_condition_.wait(lock, [this] { return tasks_.empty() && active_tasks_ == 0; });
 }
 }  // namespace poseidon
