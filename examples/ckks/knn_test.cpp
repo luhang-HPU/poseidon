@@ -718,8 +718,17 @@ int main(int argc, char *argv[])
         vec_mask[i] = ran[i];
     }
 
+    auto op20 = [&ckks_encoder, &vec_mask, &ciph_result, &scale, &pl_mask] ()
+    {
+        ckks_encoder.encode(vec_mask, ciph_result.parms_id(), scale, pl_mask);
+        is_finished[20] = true;
+    };
+    auto op20_check = [] ()-> bool
+    {
+        return op_check(20);
+    };
+    thread_pool.enqueue_prepare(std::move(op20_check), std::move(op20));
 
-    ckks_encoder.encode(vec_mask, ciph_result.parms_id(), scale, pl_mask);    
     ckks_eva->multiply_plain(ciph_result, pl_mask, ciph_result);
     ckks_eva->rescale_dynamic(ciph_result, ciph_result, scale);
     std::cout << "ciph_result.coeff_modulus_size() - 1: " << ciph_result.coeff_modulus_size() - 1 << std::endl;
