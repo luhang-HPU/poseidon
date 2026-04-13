@@ -20,9 +20,9 @@ namespace
 
 using Clock = std::chrono::high_resolution_clock;
 
-long long elapsed_us(const Clock::time_point &start, const Clock::time_point &stop)
+double elapsed_ms(const Clock::time_point &start, const Clock::time_point &stop)
 {
-    return std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count();
+    return std::chrono::duration<double, std::milli>(stop - start).count();
 }
 
 std::vector<std::complex<double>> rotate_left_copy(const std::vector<std::complex<double>> &input,
@@ -250,7 +250,7 @@ int main()
     auto context = PoseidonFactory::get_instance()->create_poseidon_context(ckks_param_literal);
     auto ckks_eva = PoseidonFactory::get_instance()->create_ckks_evaluator(context);
     const auto setup_stop = Clock::now();
-    const auto setup_us = elapsed_us(setup_start, setup_stop);
+    const auto setup_ms = elapsed_ms(setup_start, setup_stop);
 
     const auto keygen_start = Clock::now();
     PublicKey public_key;
@@ -259,16 +259,17 @@ int main()
     KeyGenerator keygen(context);
     keygen.create_public_key(public_key);
     keygen.create_relin_keys(relin_keys);
-    keygen.create_galois_keys(galois_keys);
+    const std::vector<int> dag_rotation_steps{1, 2, 4, 8, 16, 32};
+    keygen.create_galois_keys(dag_rotation_steps, galois_keys);
     const auto keygen_stop = Clock::now();
-    const auto keygen_us = elapsed_us(keygen_start, keygen_stop);
+    const auto keygen_ms = elapsed_ms(keygen_start, keygen_stop);
 
     const auto runtime_setup_start = Clock::now();
     CKKSEncoder encoder(context);
     Encryptor encryptor(context, public_key);
     Decryptor decryptor(context, keygen.secret_key());
     const auto runtime_setup_stop = Clock::now();
-    const auto runtime_setup_us = elapsed_us(runtime_setup_start, runtime_setup_stop);
+    const auto runtime_setup_ms = elapsed_ms(runtime_setup_start, runtime_setup_stop);
 
     const auto slot_num = ckks_param_literal.slot();
     const double scale = ckks_param_literal.scale();
@@ -287,7 +288,7 @@ int main()
     shrink_message(msg_c);
     shrink_message(msg_d);
     const auto message_prep_stop = Clock::now();
-    const auto message_prep_us = elapsed_us(message_prep_start, message_prep_stop);
+    const auto message_prep_ms = elapsed_ms(message_prep_start, message_prep_stop);
 
     Plaintext pt_a;
     Plaintext pt_b;
@@ -300,7 +301,7 @@ int main()
     encoder.encode(msg_c, scale, pt_c);
     encoder.encode(msg_d, scale, pt_d);
     const auto encode_stop = Clock::now();
-    const auto encode_us = elapsed_us(encode_start, encode_stop);
+    const auto encode_ms = elapsed_ms(encode_start, encode_stop);
 
     Ciphertext ct_a;
     Ciphertext ct_b;
@@ -313,47 +314,47 @@ int main()
     encryptor.encrypt(pt_c, ct_c);
     encryptor.encrypt(pt_d, ct_d);
     const auto encrypt_stop = Clock::now();
-    const auto encrypt_us = elapsed_us(encrypt_start, encrypt_stop);
+    const auto encrypt_ms = elapsed_ms(encrypt_start, encrypt_stop);
 
     const auto reference_start = Clock::now();
     auto expected = build_reference(msg_a, msg_b, msg_c, msg_d);
     const auto reference_stop = Clock::now();
-    const auto reference_us = elapsed_us(reference_start, reference_stop);
+    const auto reference_ms = elapsed_ms(reference_start, reference_stop);
 
     const auto evaluation_start = Clock::now();
     ckks_single_thread_workload(*ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c,
                                 ct_d, ct_result);
     ckks_eva->read(ct_result);
     const auto evaluation_stop = Clock::now();
-    const auto evaluation_us = elapsed_us(evaluation_start, evaluation_stop);
+    const auto evaluation_ms = elapsed_ms(evaluation_start, evaluation_stop);
 
     std::vector<std::complex<double>> result;
     const auto postprocess_start = Clock::now();
     decryptor.decrypt(ct_result, pt_result);
     encoder.decode(pt_result, result);
     const auto postprocess_stop = Clock::now();
-    const auto postprocess_us = elapsed_us(postprocess_start, postprocess_stop);
+    const auto postprocess_ms = elapsed_ms(postprocess_start, postprocess_stop);
 
     const auto example_stop = Clock::now();
-    const auto ckks_full_pipeline_us = setup_us + keygen_us + runtime_setup_us + message_prep_us +
-                                       encode_us + encrypt_us + evaluation_us + postprocess_us;
-    const auto example_total_us = elapsed_us(example_start, example_stop);
+    const auto ckks_full_pipeline_ms = setup_ms + keygen_ms + runtime_setup_ms + message_prep_ms +
+                                       encode_ms + encrypt_ms + evaluation_ms + postprocess_ms;
+    const auto example_total_ms = elapsed_ms(example_start, example_stop);
 
-    std::cout << "CKKS setup TIME: " << setup_us << " microseconds" << std::endl;
-    std::cout << "CKKS key generation TIME: " << keygen_us << " microseconds" << std::endl;
-    std::cout << "CKKS runtime object setup TIME: " << runtime_setup_us << " microseconds"
+    std::cout << "CKKS setup TIME: " << setup_ms << " ms" << std::endl;
+    std::cout << "CKKS key generation TIME: " << keygen_ms << " ms" << std::endl;
+    std::cout << "CKKS runtime object setup TIME: " << runtime_setup_ms << " ms"
               << std::endl;
-    std::cout << "Message preparation TIME: " << message_prep_us << " microseconds" << std::endl;
-    std::cout << "CKKS encode TIME: " << encode_us << " microseconds" << std::endl;
-    std::cout << "CKKS encrypt TIME: " << encrypt_us << " microseconds" << std::endl;
-    std::cout << "CKKS DAG single-thread evaluation TIME: " << evaluation_us << " microseconds"
+    std::cout << "Message preparation TIME: " << message_prep_ms << " ms" << std::endl;
+    std::cout << "CKKS encode TIME: " << encode_ms << " ms" << std::endl;
+    std::cout << "CKKS encrypt TIME: " << encrypt_ms << " ms" << std::endl;
+    std::cout << "CKKS DAG single-thread evaluation TIME: " << evaluation_ms << " ms"
               << std::endl;
-    std::cout << "CKKS decrypt/decode TIME: " << postprocess_us << " microseconds" << std::endl;
-    std::cout << "Plaintext reference TIME: " << reference_us << " microseconds" << std::endl;
-    std::cout << "CKKS full pipeline TIME (setup -> decrypt/decode): " << ckks_full_pipeline_us
-              << " microseconds" << std::endl;
-    std::cout << "Example total TIME (including reference build): " << example_total_us
-              << " microseconds" << std::endl;
+    std::cout << "CKKS decrypt/decode TIME: " << postprocess_ms << " ms" << std::endl;
+    std::cout << "Plaintext reference TIME: " << reference_ms << " ms" << std::endl;
+    std::cout << "CKKS full pipeline TIME (setup -> decrypt/decode): " << ckks_full_pipeline_ms
+              << " ms" << std::endl;
+    std::cout << "Example total TIME (including reference build): " << example_total_ms
+              << " ms" << std::endl;
 
     for (int i = 0; i < 4; ++i)
     {

@@ -4,9 +4,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstdint>
-#include <iomanip>
 #include <iostream>
-#include <memory>
 #include <vector>
 
 #ifdef _OPENMP
@@ -30,9 +28,9 @@ constexpr int kOuterParallelism = 3;
 
 using Clock = std::chrono::high_resolution_clock;
 
-long long elapsed_us(const Clock::time_point &start, const Clock::time_point &stop)
+double elapsed_ms(const Clock::time_point &start, const Clock::time_point &stop)
 {
-    return std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count();
+    return std::chrono::duration<double, std::milli>(stop - start).count();
 }
 
 int read_positive_env(const char *name, int default_value)
@@ -65,13 +63,6 @@ int detect_inner_parallelism(int outer_threads)
     return std::max(1, available_procs / std::max(1, outer_threads));
 }
 
-void configure_serial_openmp()
-{
-    omp_set_dynamic(0);
-    omp_set_max_active_levels(1);
-    omp_set_num_threads(1);
-}
-
 void print_omp_configuration(int outer_threads, int inner_threads)
 {
     std::cout << "OpenMP hierarchical layout:" << std::endl;
@@ -92,11 +83,9 @@ int detect_inner_parallelism(int)
     return 1;
 }
 
-void configure_serial_openmp() {}
-
 void print_omp_configuration(int outer_threads, int inner_threads)
 {
-    std::cout << "OpenMP support is disabled in this build; hierarchical mode falls back to serial."
+    std::cout << "OpenMP support is disabled in this build; hierarchical mode falls back to non-OpenMP execution."
               << std::endl;
     std::cout << "Requested outer threads: " << outer_threads << std::endl;
     std::cout << "Requested inner threads: " << inner_threads << std::endl;
@@ -303,20 +292,6 @@ void final_reduce(EvaluatorCkksBase &ckks_eva, const RelinKeys &relin_keys,
     ckks_eva.add(tail_prod_relin, tail_rot32, result);
 }
 
-void ckks_single_thread_workload(EvaluatorCkksBase &ckks_eva, const RelinKeys &relin_keys,
-                                 const GaloisKeys &galois_keys, double scale,
-                                 const Ciphertext &ct_a, const Ciphertext &ct_b,
-                                 const Ciphertext &ct_c, const Ciphertext &ct_d,
-                                 Ciphertext &result)
-{
-    Ciphertext branch_add = smooth_square_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b);
-    Ciphertext branch_quad = diff_energy_branch(ckks_eva, relin_keys, galois_keys, scale, ct_c, ct_d);
-    Ciphertext branch_cross =
-        cross_mix_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d);
-    final_reduce(ckks_eva, relin_keys, galois_keys, scale, branch_add, branch_quad, branch_cross,
-                 result);
-}
-
 void ckks_omp_hierarchical_workload(EvaluatorCkksBase &eva_add, EvaluatorCkksBase &eva_quad,
                                     EvaluatorCkksBase &eva_cross, EvaluatorCkksBase &eva_reduce,
                                     int outer_threads, int inner_threads,
@@ -402,7 +377,7 @@ int main()
     PoseidonFactory::get_instance()->set_device_type(DEVICE_SOFTWARE);
     auto context = PoseidonFactory::get_instance()->create_poseidon_context(ckks_param_literal);
     const auto setup_stop = Clock::now();
-    const auto setup_us = elapsed_us(setup_start, setup_stop);
+    const auto setup_ms = elapsed_ms(setup_start, setup_stop);
 
     const auto keygen_start = Clock::now();
     PublicKey public_key;
@@ -411,13 +386,12 @@ int main()
     KeyGenerator keygen(context);
     keygen.create_public_key(public_key);
     keygen.create_relin_keys(relin_keys);
-    keygen.create_galois_keys(galois_keys);
+    const std::vector<int> dag_rotation_steps{1, 2, 4, 8, 16, 32};
+    keygen.create_galois_keys(dag_rotation_steps, galois_keys);
     const auto keygen_stop = Clock::now();
-    const auto keygen_us = elapsed_us(keygen_start, keygen_stop);
+    const auto keygen_ms = elapsed_ms(keygen_start, keygen_stop);
 
     const auto runtime_setup_start = Clock::now();
-    auto legacy_eva = PoseidonFactory::get_instance()->create_ckks_evaluator(context);
-    auto single_eva = PoseidonFactory::get_instance()->create_ckks_evaluator(context);
     auto eva_add = PoseidonFactory::get_instance()->create_ckks_evaluator(context);
     auto eva_quad = PoseidonFactory::get_instance()->create_ckks_evaluator(context);
     auto eva_cross = PoseidonFactory::get_instance()->create_ckks_evaluator(context);
@@ -426,7 +400,7 @@ int main()
     Encryptor encryptor(context, public_key);
     Decryptor decryptor(context, keygen.secret_key());
     const auto runtime_setup_stop = Clock::now();
-    const auto runtime_setup_us = elapsed_us(runtime_setup_start, runtime_setup_stop);
+    const auto runtime_setup_ms = elapsed_ms(runtime_setup_start, runtime_setup_stop);
 
     const auto slot_num = ckks_param_literal.slot();
     const double scale = ckks_param_literal.scale();
@@ -453,90 +427,12 @@ int main()
     shrink_message(msg_c);
     shrink_message(msg_d);
     const auto message_prep_stop = Clock::now();
-    const auto message_prep_us = elapsed_us(message_prep_start, message_prep_stop);
+    const auto message_prep_ms = elapsed_ms(message_prep_start, message_prep_stop);
 
     const auto reference_start = Clock::now();
     auto expected = build_reference(msg_a, msg_b, msg_c, msg_d);
     const auto reference_stop = Clock::now();
-    const auto reference_us = elapsed_us(reference_start, reference_stop);
-
-    Plaintext legacy_pt_a;
-    Plaintext legacy_pt_b;
-    Plaintext legacy_pt_c;
-    Plaintext legacy_pt_d;
-    const auto legacy_encode_start = Clock::now();
-    encoder.encode(msg_a, scale, legacy_pt_a);
-    encoder.encode(msg_b, scale, legacy_pt_b);
-    encoder.encode(msg_c, scale, legacy_pt_c);
-    encoder.encode(msg_d, scale, legacy_pt_d);
-    const auto legacy_encode_stop = Clock::now();
-    const auto legacy_encode_us = elapsed_us(legacy_encode_start, legacy_encode_stop);
-
-    Ciphertext legacy_ct_a;
-    Ciphertext legacy_ct_b;
-    Ciphertext legacy_ct_c;
-    Ciphertext legacy_ct_d;
-    const auto legacy_encrypt_start = Clock::now();
-    encryptor.encrypt(legacy_pt_a, legacy_ct_a);
-    encryptor.encrypt(legacy_pt_b, legacy_ct_b);
-    encryptor.encrypt(legacy_pt_c, legacy_ct_c);
-    encryptor.encrypt(legacy_pt_d, legacy_ct_d);
-    const auto legacy_encrypt_stop = Clock::now();
-    const auto legacy_encrypt_us = elapsed_us(legacy_encrypt_start, legacy_encrypt_stop);
-
-    Ciphertext legacy_result_cipher;
-    const auto legacy_evaluation_start = Clock::now();
-    ckks_single_thread_workload(*legacy_eva, relin_keys, galois_keys, scale, legacy_ct_a,
-                                legacy_ct_b, legacy_ct_c, legacy_ct_d, legacy_result_cipher);
-    legacy_eva->read(legacy_result_cipher);
-    const auto legacy_evaluation_stop = Clock::now();
-    const auto legacy_evaluation_us = elapsed_us(legacy_evaluation_start, legacy_evaluation_stop);
-
-    const auto legacy_postprocess_start = Clock::now();
-    auto legacy_result = decrypt_and_decode(legacy_result_cipher, decryptor, encoder);
-    const auto legacy_postprocess_stop = Clock::now();
-    const auto legacy_postprocess_us =
-        elapsed_us(legacy_postprocess_start, legacy_postprocess_stop);
-
-    configure_serial_openmp();
-
-    Plaintext single_pt_a;
-    Plaintext single_pt_b;
-    Plaintext single_pt_c;
-    Plaintext single_pt_d;
-    const auto single_encode_start = Clock::now();
-    encoder.encode(msg_a, scale, single_pt_a);
-    encoder.encode(msg_b, scale, single_pt_b);
-    encoder.encode(msg_c, scale, single_pt_c);
-    encoder.encode(msg_d, scale, single_pt_d);
-    const auto single_encode_stop = Clock::now();
-    const auto single_encode_us = elapsed_us(single_encode_start, single_encode_stop);
-
-    Ciphertext single_ct_a;
-    Ciphertext single_ct_b;
-    Ciphertext single_ct_c;
-    Ciphertext single_ct_d;
-    const auto single_encrypt_start = Clock::now();
-    encryptor.encrypt(single_pt_a, single_ct_a);
-    encryptor.encrypt(single_pt_b, single_ct_b);
-    encryptor.encrypt(single_pt_c, single_ct_c);
-    encryptor.encrypt(single_pt_d, single_ct_d);
-    const auto single_encrypt_stop = Clock::now();
-    const auto single_encrypt_us = elapsed_us(single_encrypt_start, single_encrypt_stop);
-
-    Ciphertext single_result_cipher;
-    const auto single_evaluation_start = Clock::now();
-    ckks_single_thread_workload(*single_eva, relin_keys, galois_keys, scale, single_ct_a,
-                                single_ct_b, single_ct_c, single_ct_d, single_result_cipher);
-    single_eva->read(single_result_cipher);
-    const auto single_evaluation_stop = Clock::now();
-    const auto single_evaluation_us = elapsed_us(single_evaluation_start, single_evaluation_stop);
-
-    const auto single_postprocess_start = Clock::now();
-    auto single_result = decrypt_and_decode(single_result_cipher, decryptor, encoder);
-    const auto single_postprocess_stop = Clock::now();
-    const auto single_postprocess_us =
-        elapsed_us(single_postprocess_start, single_postprocess_stop);
+    const auto reference_ms = elapsed_ms(reference_start, reference_stop);
 
     Plaintext hierarchical_pt_a;
     Plaintext hierarchical_pt_b;
@@ -548,8 +444,8 @@ int main()
     encoder.encode(msg_c, scale, hierarchical_pt_c);
     encoder.encode(msg_d, scale, hierarchical_pt_d);
     const auto hierarchical_encode_stop = Clock::now();
-    const auto hierarchical_encode_us =
-        elapsed_us(hierarchical_encode_start, hierarchical_encode_stop);
+    const auto hierarchical_encode_ms =
+        elapsed_ms(hierarchical_encode_start, hierarchical_encode_stop);
 
     Ciphertext hierarchical_ct_a;
     Ciphertext hierarchical_ct_b;
@@ -561,8 +457,8 @@ int main()
     encryptor.encrypt(hierarchical_pt_c, hierarchical_ct_c);
     encryptor.encrypt(hierarchical_pt_d, hierarchical_ct_d);
     const auto hierarchical_encrypt_stop = Clock::now();
-    const auto hierarchical_encrypt_us =
-        elapsed_us(hierarchical_encrypt_start, hierarchical_encrypt_stop);
+    const auto hierarchical_encrypt_ms =
+        elapsed_ms(hierarchical_encrypt_start, hierarchical_encrypt_stop);
 
     Ciphertext hierarchical_result_cipher;
     const auto hierarchical_evaluation_start = Clock::now();
@@ -572,102 +468,48 @@ int main()
                                    hierarchical_result_cipher);
     eva_reduce->read(hierarchical_result_cipher);
     const auto hierarchical_evaluation_stop = Clock::now();
-    const auto hierarchical_evaluation_us =
-        elapsed_us(hierarchical_evaluation_start, hierarchical_evaluation_stop);
+    const auto hierarchical_evaluation_ms =
+        elapsed_ms(hierarchical_evaluation_start, hierarchical_evaluation_stop);
 
     const auto hierarchical_postprocess_start = Clock::now();
     auto hierarchical_result = decrypt_and_decode(hierarchical_result_cipher, decryptor, encoder);
     const auto hierarchical_postprocess_stop = Clock::now();
-    const auto hierarchical_postprocess_us =
-        elapsed_us(hierarchical_postprocess_start, hierarchical_postprocess_stop);
+    const auto hierarchical_postprocess_ms =
+        elapsed_ms(hierarchical_postprocess_start, hierarchical_postprocess_stop);
 
     const auto example_stop = Clock::now();
 
-    const auto shared_setup_us =
-        setup_us + keygen_us + runtime_setup_us + message_prep_us;
-    const auto legacy_full_pipeline_us =
-        shared_setup_us + legacy_encode_us + legacy_encrypt_us + legacy_evaluation_us +
-        legacy_postprocess_us;
-    const auto single_full_pipeline_us =
-        shared_setup_us + single_encode_us + single_encrypt_us + single_evaluation_us +
-        single_postprocess_us;
-    const auto hierarchical_full_pipeline_us =
-        shared_setup_us + hierarchical_encode_us + hierarchical_encrypt_us +
-        hierarchical_evaluation_us + hierarchical_postprocess_us;
-    const auto example_total_us = elapsed_us(example_start, example_stop);
+    const auto shared_setup_ms =
+        setup_ms + keygen_ms + runtime_setup_ms + message_prep_ms;
+    const auto hierarchical_full_pipeline_ms =
+        shared_setup_ms + hierarchical_encode_ms + hierarchical_encrypt_ms +
+        hierarchical_evaluation_ms + hierarchical_postprocess_ms;
+    const auto example_total_ms = elapsed_ms(example_start, example_stop);
 
-    std::cout << "CKKS setup TIME: " << setup_us << " microseconds" << std::endl;
-    std::cout << "CKKS key generation TIME: " << keygen_us << " microseconds" << std::endl;
-    std::cout << "CKKS runtime object setup TIME: " << runtime_setup_us << " microseconds"
+    std::cout << "CKKS setup TIME: " << setup_ms << " ms" << std::endl;
+    std::cout << "CKKS key generation TIME: " << keygen_ms << " ms" << std::endl;
+    std::cout << "CKKS runtime object setup TIME: " << runtime_setup_ms << " ms"
               << std::endl;
-    std::cout << "Message preparation TIME: " << message_prep_us << " microseconds" << std::endl;
-    std::cout << "Plaintext reference TIME: " << reference_us << " microseconds" << std::endl;
-    std::cout << "Legacy-compatible encode TIME: " << legacy_encode_us << " microseconds"
+    std::cout << "Message preparation TIME: " << message_prep_ms << " ms" << std::endl;
+    std::cout << "Plaintext reference TIME: " << reference_ms << " ms" << std::endl;
+    std::cout << "OMP hierarchical encode TIME: " << hierarchical_encode_ms << " ms"
               << std::endl;
-    std::cout << "Legacy-compatible encrypt TIME: " << legacy_encrypt_us << " microseconds"
+    std::cout << "OMP hierarchical encrypt TIME: " << hierarchical_encrypt_ms << " ms"
               << std::endl;
-    std::cout << "CKKS DAG legacy-compatible baseline TIME (outer-serial, inner-OMP enabled): "
-              << legacy_evaluation_us << " microseconds" << std::endl;
-    std::cout << "Legacy-compatible decrypt/decode TIME: " << legacy_postprocess_us
-              << " microseconds" << std::endl;
-    std::cout << "True-serial encode TIME: " << single_encode_us << " microseconds" << std::endl;
-    std::cout << "True-serial encrypt TIME: " << single_encrypt_us << " microseconds"
-              << std::endl;
-    std::cout << "CKKS DAG serial evaluation TIME: " << single_evaluation_us << " microseconds"
-              << std::endl;
-    std::cout << "Serial decrypt/decode TIME: " << single_postprocess_us << " microseconds"
-              << std::endl;
-    std::cout << "OMP hierarchical encode TIME: " << hierarchical_encode_us << " microseconds"
-              << std::endl;
-    std::cout << "OMP hierarchical encrypt TIME: " << hierarchical_encrypt_us << " microseconds"
-              << std::endl;
-    std::cout << "CKKS DAG OMP hierarchical evaluation TIME: " << hierarchical_evaluation_us
-              << " microseconds" << std::endl;
-    std::cout << "OMP hierarchical decrypt/decode TIME: " << hierarchical_postprocess_us
-              << " microseconds" << std::endl;
-    std::cout << "Legacy-compatible full pipeline TIME (shared setup included): "
-              << legacy_full_pipeline_us << " microseconds" << std::endl;
-    std::cout << "Serial full pipeline TIME (shared setup included): " << single_full_pipeline_us
-              << " microseconds" << std::endl;
+    std::cout << "CKKS DAG OMP hierarchical evaluation TIME: " << hierarchical_evaluation_ms
+              << " ms" << std::endl;
+    std::cout << "OMP hierarchical decrypt/decode TIME: " << hierarchical_postprocess_ms
+              << " ms" << std::endl;
     std::cout << "OMP hierarchical full pipeline TIME (shared setup included): "
-              << hierarchical_full_pipeline_us << " microseconds" << std::endl;
-    std::cout << "Example total TIME (including reference build): " << example_total_us
-              << " microseconds" << std::endl;
-    std::cout << std::fixed << std::setprecision(2)
-              << "OMP hierarchical speedup vs legacy-compatible baseline: "
-              << static_cast<double>(legacy_evaluation_us) / hierarchical_evaluation_us << "x"
-              << std::endl;
-    std::cout << "OMP hierarchical full-pipeline speedup vs legacy-compatible baseline: "
-              << static_cast<double>(legacy_full_pipeline_us) / hierarchical_full_pipeline_us << "x"
-              << std::endl;
-    std::cout
-              << "OMP hierarchical speedup vs true-serial baseline: "
-              << static_cast<double>(single_evaluation_us) / hierarchical_evaluation_us << "x"
-              << std::endl;
-    std::cout
-              << "OMP hierarchical full-pipeline speedup vs true-serial baseline: "
-              << static_cast<double>(single_full_pipeline_us) / hierarchical_full_pipeline_us << "x"
-              << std::endl;
-    std::cout << std::fixed << std::setprecision(2)
-              << "Legacy-compatible baseline vs true-serial baseline speedup: "
-              << static_cast<double>(single_evaluation_us) / legacy_evaluation_us << "x"
-              << std::endl;
+              << hierarchical_full_pipeline_ms << " ms" << std::endl;
+    std::cout << "Example total TIME (including reference build): " << example_total_ms
+              << " ms" << std::endl;
 
     print_head("Expected head:", expected);
-    print_head("Legacy-compatible baseline result head:", legacy_result);
-    print_head("Serial result head:", single_result);
     print_head("OMP hierarchical result head:", hierarchical_result);
 
-    std::cout << "Legacy-compatible baseline vs expected:" << std::endl;
-    GetPrecisionStats(legacy_result, expected);
-    std::cout << "Serial vs expected:" << std::endl;
-    GetPrecisionStats(single_result, expected);
     std::cout << "OMP hierarchical vs expected:" << std::endl;
     GetPrecisionStats(hierarchical_result, expected);
-    std::cout << "OMP hierarchical vs legacy-compatible baseline:" << std::endl;
-    GetPrecisionStats(hierarchical_result, legacy_result);
-    std::cout << "OMP hierarchical vs serial:" << std::endl;
-    GetPrecisionStats(hierarchical_result, single_result);
 
     return 0;
 }
