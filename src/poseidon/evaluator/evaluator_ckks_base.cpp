@@ -1549,21 +1549,44 @@ void EvaluatorCkksBase::rescale_inplace(const Ciphertext &ciph, Ciphertext &resu
     auto ntt_table = context_.crt_context()->small_ntt_tables();
     size_t ciph_size = ciph.size();
     size_t coeff_count = next_parms.degree();
+    size_t coeff_modulus_size = context_data.coeff_modulus().size();
     size_t next_coeff_modulus_size = next_context_data.coeff_modulus().size();
-    Ciphertext ciph_copy(pool);
-    ciph_copy = ciph;
-    POSEIDON_ITERATE(iter(ciph_copy), ciph_size,
-                     [&](auto I)
-                     { rns_tool->divide_and_round_q_last_ntt_inplace(I, ntt_table, pool); });
-    result.resize(context_, next_context_data.parms().parms_id(), ciph_size);
-    POSEIDON_ITERATE(iter(ciph_copy, result), ciph_size,
-                     [&](auto I)
-                     { set_poly(get<0>(I), coeff_count, next_coeff_modulus_size, get<1>(I)); });
+    double result_scale =
+        ciph.scale() / static_cast<double>(context_data.coeff_modulus().back().value());
+    bool result_ntt_form = ciph.is_ntt_form();
+
+    if (&ciph == &result)
+    {
+        POSEIDON_ITERATE(iter(result), ciph_size,
+                         [&](auto I)
+                         { rns_tool->divide_and_round_q_last_ntt_inplace(I, ntt_table, pool); });
+
+        const size_t old_poly_uint64_count = coeff_count * coeff_modulus_size;
+        const size_t next_poly_uint64_count = coeff_count * next_coeff_modulus_size;
+        auto *data = result.data();
+        for (size_t i = 1; i < ciph_size; ++i)
+        {
+            std::copy_n(data + i * old_poly_uint64_count, next_poly_uint64_count,
+                        data + i * next_poly_uint64_count);
+        }
+        result.resize(context_, next_context_data.parms().parms_id(), ciph_size);
+    }
+    else
+    {
+        Ciphertext ciph_copy(pool);
+        ciph_copy = ciph;
+        POSEIDON_ITERATE(iter(ciph_copy), ciph_size,
+                         [&](auto I)
+                         { rns_tool->divide_and_round_q_last_ntt_inplace(I, ntt_table, pool); });
+        result.resize(context_, next_context_data.parms().parms_id(), ciph_size);
+        POSEIDON_ITERATE(iter(ciph_copy, result), ciph_size,
+                         [&](auto I)
+                         { set_poly(get<0>(I), coeff_count, next_coeff_modulus_size, get<1>(I)); });
+    }
 
     // Set other attributes
-    result.is_ntt_form() = ciph.is_ntt_form();
-    result.scale() =
-        ciph.scale() / static_cast<double>(context_data.coeff_modulus().back().value());
+    result.is_ntt_form() = result_ntt_form;
+    result.scale() = result_scale;
 }
 
 void EvaluatorCkksBase::rescale(const Ciphertext &ciph, Ciphertext &result) const

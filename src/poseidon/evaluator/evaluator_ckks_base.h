@@ -156,6 +156,12 @@ public:
                           const CKKSEncoder &encoder, const Encryptor &enc,
                           const GaloisKeys &rot_keys) const;
 
+    void add_inplace(Ciphertext &ciph1, const Ciphertext &ciph2) const;
+    void rescale_inplace(const Ciphertext &ciph, Ciphertext &result,
+                         MemoryPoolHandle pool = MemoryManager::GetPool()) const;
+    void multiply_inplace(Ciphertext &ciph1, const Ciphertext &ciph2,
+                          MemoryPoolHandle pool = MemoryManager::GetPool()) const;
+
     // result = conv(ciph_f, ciph_g_rev)
     void conv(const Ciphertext &ciph_f, const Ciphertext &ciph_g_rev, Ciphertext &result,
               const uint size, const CKKSEncoder &encoder, const Encryptor &enc,
@@ -190,12 +196,7 @@ private:
                                               const CKKSEncoder &encoder) const;
 
     void add_plain_inplace(Ciphertext &ciph, const Plaintext &plain) const;
-    void add_inplace(Ciphertext &ciph1, const Ciphertext &ciph2) const;
-    void rescale_inplace(const Ciphertext &ciph, Ciphertext &result,
-                         MemoryPoolHandle pool = MemoryManager::GetPool()) const;
     void ckks_multiply(Ciphertext &ciph1, const Ciphertext &ciph2, MemoryPoolHandle pool) const;
-    void multiply_inplace(Ciphertext &ciph1, const Ciphertext &ciph2,
-                          MemoryPoolHandle pool = MemoryManager::GetPool()) const;
 
     std::shared_ptr<KSwitchBase> kswitch_{nullptr};
 
