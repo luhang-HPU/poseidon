@@ -2,7 +2,10 @@
 #include <chrono>
 #include <complex>
 #include <cstdint>
+#include <cmath>
+#include <iomanip>
 #include <iostream>
+#include <string>
 #include <vector>
 
 #include "poseidon/decryptor.h"
@@ -20,9 +23,97 @@ namespace
 
 using Clock = std::chrono::high_resolution_clock;
 
+struct DagTraceItem
+{
+    std::string group;
+    std::string op;
+    double ms = 0.0;
+    bool has_cipher_state = false;
+    std::size_t level_before = 0;
+    std::size_t level_after = 0;
+    double scale_before = 0.0;
+    double scale_after = 0.0;
+};
+
 double elapsed_ms(const Clock::time_point &start, const Clock::time_point &stop)
 {
     return std::chrono::duration<double, std::milli>(stop - start).count();
+}
+
+template <typename Func>
+void record_op(std::vector<DagTraceItem> *trace, const std::string &group, const std::string &op,
+               Func &&func)
+{
+    const auto start = Clock::now();
+    func();
+    const auto stop = Clock::now();
+
+    if (trace != nullptr)
+    {
+        trace->push_back({group, op, elapsed_ms(start, stop)});
+    }
+}
+
+double trace_group_total(const std::vector<DagTraceItem> &trace, const std::string &group)
+{
+    double total = 0.0;
+    for (const auto &item : trace)
+    {
+        if (item.group == group)
+        {
+            total += item.ms;
+        }
+    }
+    return total;
+}
+
+void print_dag_trace(const std::vector<DagTraceItem> &trace)
+{
+    const std::vector<std::string> groups{"fanout", "branch_add", "branch_cross", "branch_quad",
+                                          "merge_tail"};
+
+    std::cout << "CKKS DAG group timing:" << std::endl;
+    for (const auto &group : groups)
+    {
+        std::cout << "  " << group << " TIME: " << trace_group_total(trace, group) << " ms"
+                  << std::endl;
+    }
+
+    std::cout << "CKKS DAG operation timing:" << std::endl;
+    for (const auto &item : trace)
+    {
+        std::cout << "  [" << item.group << "] " << item.op << " TIME: " << item.ms << " ms"
+                  ;
+        if (item.has_cipher_state)
+        {
+            std::cout << " | level " << item.level_before << " -> " << item.level_after
+                      << ", scale " << item.scale_before << " -> " << item.scale_after
+                      << ", log2(scale) " << std::log2(item.scale_before) << " -> "
+                      << std::log2(item.scale_after);
+        }
+        std::cout << std::endl;
+    }
+}
+
+void print_modulus_chain(const ParametersLiteral &params)
+{
+    std::cout << "Default q chain (" << params.q().size() << " primes):" << std::endl;
+    for (std::size_t i = 0; i < params.q().size(); ++i)
+    {
+        const auto &mod = params.q()[i];
+        std::cout << "  q[" << i << "] = " << mod.value() << " (hex: 0x" << std::hex
+                  << mod.value() << std::dec << ", bits: " << mod.bit_count() << ")"
+                  << std::endl;
+    }
+
+    std::cout << "Default p chain (" << params.p().size() << " primes):" << std::endl;
+    for (std::size_t i = 0; i < params.p().size(); ++i)
+    {
+        const auto &mod = params.p()[i];
+        std::cout << "  p[" << i << "] = " << mod.value() << " (hex: 0x" << std::hex
+                  << mod.value() << std::dec << ", bits: " << mod.bit_count() << ")"
+                  << std::endl;
+    }
 }
 
 std::vector<std::complex<double>> rotate_left_copy(const std::vector<std::complex<double>> &input,
@@ -131,106 +222,114 @@ std::vector<std::complex<double>> build_reference(const std::vector<std::complex
     return add_ref(tail_prod, tail_rot32);
 }
 
-Ciphertext smooth_square_branch(EvaluatorCkksBase &ckks_eva, const RelinKeys &relin_keys,
+void relinearize_and_rescale_inplace(EvaluatorCkksBase &ckks_eva, Ciphertext &cipher,
+                                     const RelinKeys &relin_keys, double scale,
+                                     std::vector<DagTraceItem> *trace, const std::string &group)
+{
+    record_op(trace, group, "relinearize", [&]() { ckks_eva.relinearize(cipher, cipher, relin_keys); });
+
+    const auto level_before = cipher.level();
+    const auto scale_before = cipher.scale();
+    const auto start = Clock::now();
+    ckks_eva.rescale_dynamic(cipher, cipher, scale);
+    const auto stop = Clock::now();
+
+    if (trace != nullptr)
+    {
+        trace->push_back({group,
+                          "rescale_dynamic",
+                          elapsed_ms(start, stop),
+                          true,
+                          level_before,
+                          cipher.level(),
+                          scale_before,
+                          cipher.scale()});
+    }
+}
+
+void add_rotation_inplace(EvaluatorCkksBase &ckks_eva, Ciphertext &cipher, int step,
+                          const GaloisKeys &galois_keys, std::vector<DagTraceItem> *trace,
+                          const std::string &group)
+{
+    Ciphertext rotated;
+    record_op(trace, group, "rotate_" + std::to_string(step),
+              [&]() { ckks_eva.rotate(cipher, rotated, step, galois_keys); });
+    record_op(trace, group, "add_rot_" + std::to_string(step),
+              [&]() { ckks_eva.add_inplace(cipher, rotated); });
+}
+
+void smooth_square_branch_inplace(EvaluatorCkksBase &ckks_eva, const RelinKeys &relin_keys,
+                                  const GaloisKeys &galois_keys, double scale,
+                                  Ciphertext &branch_add, const Ciphertext &ct_b,
+                                  std::vector<DagTraceItem> *trace)
+{
+    const std::string group = "branch_add";
+    record_op(trace, group, "add_a_b", [&]() { ckks_eva.add_inplace(branch_add, ct_b); });
+    add_rotation_inplace(ckks_eva, branch_add, 1, galois_keys, trace, group);
+    record_op(trace, group, "square", [&]() { ckks_eva.square_inplace(branch_add); });
+    relinearize_and_rescale_inplace(ckks_eva, branch_add, relin_keys, scale, trace, group);
+    add_rotation_inplace(ckks_eva, branch_add, 4, galois_keys, trace, group);
+}
+
+void diff_energy_branch_inplace(EvaluatorCkksBase &ckks_eva, const RelinKeys &relin_keys,
                                 const GaloisKeys &galois_keys, double scale,
-                                const Ciphertext &ct_a, const Ciphertext &ct_b)
+                                Ciphertext &branch_quad, const Ciphertext &ct_d,
+                                std::vector<DagTraceItem> *trace)
 {
-    Ciphertext sum_ab;
-    Ciphertext rot_ab_1;
-    Ciphertext smooth_ab;
-    Ciphertext smooth_sq;
-    Ciphertext smooth_sq_relin;
-    Ciphertext smooth_sq_rot4;
-    Ciphertext branch_add;
-
-    ckks_eva.add(ct_a, ct_b, sum_ab);
-    ckks_eva.rotate(sum_ab, rot_ab_1, 1, galois_keys);
-    ckks_eva.add(sum_ab, rot_ab_1, smooth_ab);
-    ckks_eva.multiply(smooth_ab, smooth_ab, smooth_sq);
-    ckks_eva.relinearize(smooth_sq, smooth_sq_relin, relin_keys);
-    ckks_eva.rescale_dynamic(smooth_sq_relin, smooth_sq_relin, scale);
-    ckks_eva.rotate(smooth_sq_relin, smooth_sq_rot4, 4, galois_keys);
-    ckks_eva.add(smooth_sq_relin, smooth_sq_rot4, branch_add);
-    return branch_add;
+    const std::string group = "branch_quad";
+    record_op(trace, group, "sub_c_d", [&]() { ckks_eva.sub(branch_quad, ct_d, branch_quad); });
+    add_rotation_inplace(ckks_eva, branch_quad, 2, galois_keys, trace, group);
+    record_op(trace, group, "square", [&]() { ckks_eva.square_inplace(branch_quad); });
+    relinearize_and_rescale_inplace(ckks_eva, branch_quad, relin_keys, scale, trace, group);
+    add_rotation_inplace(ckks_eva, branch_quad, 8, galois_keys, trace, group);
 }
 
-Ciphertext diff_energy_branch(EvaluatorCkksBase &ckks_eva, const RelinKeys &relin_keys,
+void cross_mix_branch_inplace(EvaluatorCkksBase &ckks_eva, const RelinKeys &relin_keys,
                               const GaloisKeys &galois_keys, double scale,
-                              const Ciphertext &ct_c, const Ciphertext &ct_d)
+                              Ciphertext &branch_cross, Ciphertext &ct_b,
+                              const Ciphertext &ct_c, const Ciphertext &ct_d,
+                              std::vector<DagTraceItem> *trace)
 {
-    Ciphertext diff_cd;
-    Ciphertext diff_rot2;
-    Ciphertext diff_mix;
-    Ciphertext diff_sq;
-    Ciphertext diff_sq_relin;
-    Ciphertext diff_sq_rot8;
-    Ciphertext branch_quad;
+    const std::string group = "branch_cross";
+    record_op(trace, group, "multiply_a_c",
+              [&]() { ckks_eva.multiply_inplace(branch_cross, ct_c); });
+    relinearize_and_rescale_inplace(ckks_eva, branch_cross, relin_keys, scale, trace, group);
 
-    ckks_eva.sub(ct_c, ct_d, diff_cd);
-    ckks_eva.rotate(diff_cd, diff_rot2, 2, galois_keys);
-    ckks_eva.add(diff_cd, diff_rot2, diff_mix);
-    ckks_eva.multiply(diff_mix, diff_mix, diff_sq);
-    ckks_eva.relinearize(diff_sq, diff_sq_relin, relin_keys);
-    ckks_eva.rescale_dynamic(diff_sq_relin, diff_sq_relin, scale);
-    ckks_eva.rotate(diff_sq_relin, diff_sq_rot8, 8, galois_keys);
-    ckks_eva.add(diff_sq_relin, diff_sq_rot8, branch_quad);
-    return branch_quad;
-}
+    record_op(trace, group, "multiply_b_d", [&]() { ckks_eva.multiply_inplace(ct_b, ct_d); });
+    relinearize_and_rescale_inplace(ckks_eva, ct_b, relin_keys, scale, trace, group);
 
-Ciphertext cross_mix_branch(EvaluatorCkksBase &ckks_eva, const RelinKeys &relin_keys,
-                            const GaloisKeys &galois_keys, double scale,
-                            const Ciphertext &ct_a, const Ciphertext &ct_b,
-                            const Ciphertext &ct_c, const Ciphertext &ct_d)
-{
-    Ciphertext prod_ac;
-    Ciphertext prod_ac_relin;
-    Ciphertext prod_bd;
-    Ciphertext prod_bd_relin;
-    Ciphertext cross_sum;
-    Ciphertext cross_rot8;
-    Ciphertext cross_mix;
-    Ciphertext cross_rot16;
-    Ciphertext branch_cross;
-
-    ckks_eva.multiply(ct_a, ct_c, prod_ac);
-    ckks_eva.relinearize(prod_ac, prod_ac_relin, relin_keys);
-    ckks_eva.rescale_dynamic(prod_ac_relin, prod_ac_relin, scale);
-    ckks_eva.multiply(ct_b, ct_d, prod_bd);
-    ckks_eva.relinearize(prod_bd, prod_bd_relin, relin_keys);
-    ckks_eva.rescale_dynamic(prod_bd_relin, prod_bd_relin, scale);
-    ckks_eva.add(prod_ac_relin, prod_bd_relin, cross_sum);
-    ckks_eva.rotate(cross_sum, cross_rot8, 8, galois_keys);
-    ckks_eva.add(cross_sum, cross_rot8, cross_mix);
-    ckks_eva.rotate(cross_mix, cross_rot16, 16, galois_keys);
-    ckks_eva.add(cross_mix, cross_rot16, branch_cross);
-    return branch_cross;
+    record_op(trace, group, "add_products", [&]() { ckks_eva.add_inplace(branch_cross, ct_b); });
+    add_rotation_inplace(ckks_eva, branch_cross, 8, galois_keys, trace, group);
+    add_rotation_inplace(ckks_eva, branch_cross, 16, galois_keys, trace, group);
 }
 
 void ckks_single_thread_workload(EvaluatorCkksBase &ckks_eva, const RelinKeys &relin_keys,
                                  const GaloisKeys &galois_keys, double scale,
-                                 const Ciphertext &ct_a, const Ciphertext &ct_b,
-                                 const Ciphertext &ct_c, const Ciphertext &ct_d,
-                                 Ciphertext &result)
+                                 Ciphertext &ct_a, Ciphertext &ct_b, Ciphertext &ct_c,
+                                 Ciphertext &ct_d, Ciphertext &result,
+                                 std::vector<DagTraceItem> *trace)
 {
-    Ciphertext branch_add = smooth_square_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b);
-    Ciphertext branch_quad = diff_energy_branch(ckks_eva, relin_keys, galois_keys, scale, ct_c, ct_d);
-    Ciphertext branch_cross =
-        cross_mix_branch(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c, ct_d);
-
-    Ciphertext merged_left;
-    Ciphertext merged_all;
-    Ciphertext tail_prod;
-    Ciphertext tail_prod_relin;
     Ciphertext tail_rot32;
 
-    // Merge tree followed by one more multiply tail to make the dependency chain deeper.
-    ckks_eva.add(branch_add, branch_quad, merged_left);
-    ckks_eva.add(merged_left, branch_cross, merged_all);
-    ckks_eva.multiply(merged_all, branch_add, tail_prod);
-    ckks_eva.relinearize(tail_prod, tail_prod_relin, relin_keys);
-    ckks_eva.rescale_dynamic(tail_prod_relin, tail_prod_relin, scale);
-    ckks_eva.rotate(tail_prod_relin, tail_rot32, 32, galois_keys);
-    ckks_eva.add(tail_prod_relin, tail_rot32, result);
+    // ct_a is needed by both branch_add and branch_cross; this is the only full ciphertext
+    // fanout copy kept in this destructive schedule.
+    record_op(trace, "fanout", "copy_a_for_branch_cross", [&]() { result = ct_a; });
+
+    smooth_square_branch_inplace(ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, trace);
+    cross_mix_branch_inplace(ckks_eva, relin_keys, galois_keys, scale, result, ct_b, ct_c, ct_d,
+                             trace);
+    diff_energy_branch_inplace(ckks_eva, relin_keys, galois_keys, scale, ct_c, ct_d, trace);
+
+    // Merge tree followed by one more multiply tail to make the dependency chain
+    // deeper.
+    const std::string group = "merge_tail";
+    record_op(trace, group, "add_branch_quad", [&]() { ckks_eva.add_inplace(result, ct_c); });
+    record_op(trace, group, "add_branch_add", [&]() { ckks_eva.add_inplace(result, ct_a); });
+    record_op(trace, group, "multiply_tail", [&]() { ckks_eva.multiply_inplace(result, ct_a); });
+    relinearize_and_rescale_inplace(ckks_eva, result, relin_keys, scale, trace, group);
+    record_op(trace, group, "rotate_32",
+              [&]() { ckks_eva.rotate(result, tail_rot32, 32, galois_keys); });
+    record_op(trace, group, "add_rot_32", [&]() { ckks_eva.add_inplace(result, tail_rot32); });
 }
 
 }  // namespace
@@ -273,6 +372,9 @@ int main()
 
     const auto slot_num = ckks_param_literal.slot();
     const double scale = ckks_param_literal.scale();
+    std::cout << "Initial CKKS scale: " << scale << " (log2: " << std::log2(scale) << ")"
+              << std::endl;
+    print_modulus_chain(ckks_param_literal);
 
     const auto message_prep_start = Clock::now();
     std::vector<std::complex<double>> msg_a;
@@ -321,9 +423,10 @@ int main()
     const auto reference_stop = Clock::now();
     const auto reference_ms = elapsed_ms(reference_start, reference_stop);
 
+    std::vector<DagTraceItem> dag_trace;
     const auto evaluation_start = Clock::now();
     ckks_single_thread_workload(*ckks_eva, relin_keys, galois_keys, scale, ct_a, ct_b, ct_c,
-                                ct_d, ct_result);
+                                ct_d, ct_result, &dag_trace);
     ckks_eva->read(ct_result);
     const auto evaluation_stop = Clock::now();
     const auto evaluation_ms = elapsed_ms(evaluation_start, evaluation_stop);
@@ -349,6 +452,7 @@ int main()
     std::cout << "CKKS encrypt TIME: " << encrypt_ms << " ms" << std::endl;
     std::cout << "CKKS DAG single-thread evaluation TIME: " << evaluation_ms << " ms"
               << std::endl;
+    print_dag_trace(dag_trace);
     std::cout << "CKKS decrypt/decode TIME: " << postprocess_ms << " ms" << std::endl;
     std::cout << "Plaintext reference TIME: " << reference_ms << " ms" << std::endl;
     std::cout << "CKKS full pipeline TIME (setup -> decrypt/decode): " << ckks_full_pipeline_ms
