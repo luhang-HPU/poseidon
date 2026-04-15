@@ -190,6 +190,14 @@ inline void ThreadPool::checker_loop()
 // 析构函数：停止所有工作线程
 inline ThreadPool::~ThreadPool()
 {
+    // 停止检测线程
+    checker_stop_ = true;
+    if (checker_thread_.joinable())
+    {
+        checker_thread_.join();
+    }
+
+    // 停止工作线程
     {
         std::unique_lock<std::mutex> lock(queue_mutex_);
         stop_ = true;

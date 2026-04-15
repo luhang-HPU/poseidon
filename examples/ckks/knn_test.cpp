@@ -1,4 +1,3 @@
-
 #include "poseidon/ckks_encoder.h"
 #include "poseidon/decryptor.h"
 #include "poseidon/encryptor.h"
@@ -12,6 +11,7 @@
 #include "poseidon/util/random_sample.h"
 #include "poseidon/util/thread_pool.h"
 #include "poseidon/util/json.h"
+#include "spdlog/spdlog.h"
 
 #include <filesystem>
 #include <iostream>
@@ -48,37 +48,16 @@ std::map<int, std::vector<int>> pre_task;   // 前置任务
 poseidon::ThreadPool thread_pool(thread_num, true);
 void init_dag()
 {
-    for (auto i = 0; i <= 26; ++i)
+    for (auto i = 0; i <= 10; ++i)
     {
         is_finished[i] = false;
     }
     pre_task[0] = {};
     pre_task[1] = {};
     pre_task[2] = {};
-    pre_task[3] = {};
-    pre_task[4] = {3};
-    pre_task[5] = {1, 4};
-    pre_task[6] = {1, 5};
-    pre_task[7] = {6};
-    pre_task[8] = {7};
-    pre_task[9] = {};
-    pre_task[10] = {9};
-    pre_task[11] = {10};
-    pre_task[12] = {3, 4, 11};
-    pre_task[13] = {12};
-    pre_task[14] = {13};
-    pre_task[15] = {14};
-    pre_task[16] = {15};
-    pre_task[17] = {1, 16};
-    pre_task[18] = {15, 16, 17};
-    pre_task[19] = {};
-    pre_task[20] = {};
-    pre_task[21] = {18, 20};
-    pre_task[22] = {21};
-    pre_task[23] = {22};
-    pre_task[24] = {23};
-    pre_task[25] = {24};
-    pre_task[26] = {};
+    pre_task[3] = {0};
+    pre_task[4] = {0};
+    pre_task[5] = {0};
 }
 
 bool op_check(int i)
@@ -476,28 +455,9 @@ Ciphertext accumulate_top_n_block(const Ciphertext &ciph, int n, const CKKSEncod
     std::vector<std::complex<double>> zero = {{0.0, 0.0}};
     Plaintext plain_zero;
     Ciphertext ciph_sum;
-    auto op9 = [&] ()
-    {
-        encoder.encode(zero, ciph.parms_id(), ciph.scale(), plain_zero);
-        is_finished[9] = true;
-    };
-    auto op9_check = [] ()-> bool
-    {
-        return op_check(9);
-    };
-    thread_pool.enqueue_prepare(std::move(op9_check), std::move(op9));
 
-
-    auto op10 = [&] ()
-    {
-        enc.encrypt(plain_zero, ciph_sum);
-        is_finished[10] = true;
-    };
-    auto op10_check = [] ()-> bool
-    {
-        return op_check(10);
-    };
-    thread_pool.enqueue_prepare(std::move(op10_check), std::move(op10));
+    encoder.encode(zero, ciph.parms_id(), ciph.scale(), plain_zero);
+    enc.encrypt(plain_zero, ciph_sum);
 
     int cnt = 0;
     int bottom_nth = 0;
@@ -574,21 +534,26 @@ int main(int argc, char *argv[])
 
     // init keys
     KeyGenerator kgen(context);
-    auto op0 = [&kgen, &public_key] ()
-    {
-        kgen.create_public_key(public_key);
-        is_finished[0] = true;
-    };
-    auto op0_check = [] ()-> bool
-    {
-        return op_check(0);
-    };
-    thread_pool.enqueue_prepare(std::move(op0_check), std::move(op0));
+//    auto op0 = [&kgen, &public_key] ()
+//    {
+//        kgen.create_public_key(public_key);
+//        is_finished[0] = true;
+//        spdlog::info("op0 finished");
+//    };
+//    auto op0_check = [] ()-> bool
+//    {
+//        return op_check(0);
+//    };
+//    thread_pool.enqueue_prepare(std::move(op0_check), std::move(op0));
+
+    kgen.create_public_key(public_key);
+    is_finished[0] = true;
 
     auto op1 = [&kgen, &relin_keys] ()
     {
         kgen.create_relin_keys(relin_keys);
         is_finished[1] = true;
+        spdlog::info("op1 finished");
     };
     auto op1_check = [] ()-> bool
     {
@@ -601,6 +566,7 @@ int main(int argc, char *argv[])
     {
         kgen.create_galois_keys(step, rot_keys);
         is_finished[2] = true;
+        spdlog::info("op2 finished");
     };
     auto op2_check = [] ()-> bool
     {
@@ -664,17 +630,53 @@ int main(int argc, char *argv[])
     timer_init.end();
     timer_calculate.start();
 
-    vector<Ciphertext> ciph_query = encode_and_encrypt_mt(ckks_encoder, enc, query, scale);
-    vector<Ciphertext> ciph_data = encode_and_encrypt_mt(ckks_encoder, enc, data, scale);
-
-    // 比较数组
-    std::vector<std::complex<double>> cmp_top_k(N, {0.0, 0.0});
-    for (size_t i = 0; i < data_nums; i++)
+    vector<Ciphertext> ciph_query;
+    auto op3 = [&ciph_query, &ckks_encoder, &enc, &query, &scale] ()
     {
-        cmp_top_k[i].real(10.5);
-    }
-    Ciphertext ciph_top_k = encode_and_encrypt(ckks_encoder, enc, cmp_top_k, scale);
+        ciph_query = encode_and_encrypt_mt(ckks_encoder, enc, query, scale);
+        is_finished[3] = true;
+        spdlog::info("op3 finished");
+    };
+    auto op3_check = [] ()-> bool
+    {
+        return op_check(3);
+    };
+    thread_pool.enqueue_prepare(std::move(op3_check), std::move(op3));
 
+    vector<Ciphertext> ciph_data;
+    auto op4 = [&ciph_data, &ckks_encoder, &enc, &data, &scale] ()
+    {
+        ciph_data = encode_and_encrypt_mt(ckks_encoder, enc, data, scale);
+        is_finished[4] = true;
+        spdlog::info("op4 finished");
+    };
+    auto op4_check = [] ()-> bool
+    {
+        return op_check(4);
+    };
+    thread_pool.enqueue_prepare(std::move(op4_check), std::move(op4));
+
+    Ciphertext ciph_top_k;
+    auto op5 = [&ciph_top_k, &ckks_encoder, &enc, &scale] ()
+    {
+        // 比较数组
+        std::vector<std::complex<double>> cmp_top_k(N, {0.0, 0.0});
+        for (size_t i = 0; i < data_nums; i++)
+        {
+            cmp_top_k[i].real(10.5);
+        }
+        ciph_top_k = encode_and_encrypt(ckks_encoder, enc, cmp_top_k, scale);
+        is_finished[5] = true;
+        spdlog::info("op5 finished");
+    };
+    auto op5_check = [] ()-> bool
+    {
+        return op_check(5);
+    };
+    thread_pool.enqueue_prepare(std::move(op5_check), std::move(op5));
+
+    // TODO wait for op3 & op4
+    while (!is_finished[3] || !is_finished[4]) {}
     sub_and_square(ckks_eva, ciph_data, ciph_query, relin_keys, scale);
     Ciphertext ciph_distance_1 = ciph_data[0];
     Ciphertext ciph_distance_2 = ciph_data[dimension];
@@ -685,17 +687,7 @@ int main(int argc, char *argv[])
     }
 
     Ciphertext ciph_result;
-
-    auto op3 = [&ckks_eva, &ciph_distance_1, &ciph_distance_2, &ciph_result, &ckks_encoder] ()
-    {
-        ckks_eva->sub_dynamic(ciph_distance_1, ciph_distance_2, ciph_result, ckks_encoder);
-        is_finished[3] = true;
-    };
-    auto op3_check = [] ()-> bool
-    {
-        return op_check(3);
-    };
-    thread_pool.enqueue_prepare(std::move(op3_check), std::move(op3));
+    ckks_eva->sub_dynamic(ciph_distance_1, ciph_distance_2, ciph_result, ckks_encoder);
 
     Ciphertext ciph_tmp = sign_1(ciph_result, polys, polys_1, ckks_encoder, ckks_eva, relin_keys);
     ciph_result = accumulate_top_n_block(ciph_tmp, 100, ckks_encoder, enc, ckks_eva, rot_keys);
@@ -703,6 +695,8 @@ int main(int argc, char *argv[])
     match_param_id(ciph_result, ciph_top_k, ckks_eva);
     match_scale(ciph_result, ciph_top_k, ckks_encoder, ckks_eva, scale);
 
+    // TODO wait for op5
+    while (!is_finished[5]) {}
     ckks_eva->sub_dynamic(ciph_top_k, ciph_result, ciph_result, ckks_encoder);
 
     ckks_eva->multiply_const(ciph_result, 0.014, scale, ciph_result, ckks_encoder);
@@ -718,17 +712,7 @@ int main(int argc, char *argv[])
         vec_mask[i] = ran[i];
     }
 
-    auto op20 = [&ckks_encoder, &vec_mask, &ciph_result, &scale, &pl_mask] ()
-    {
-        ckks_encoder.encode(vec_mask, ciph_result.parms_id(), scale, pl_mask);
-        is_finished[20] = true;
-    };
-    auto op20_check = [] ()-> bool
-    {
-        return op_check(20);
-    };
-    thread_pool.enqueue_prepare(std::move(op20_check), std::move(op20));
-
+    ckks_encoder.encode(vec_mask, ciph_result.parms_id(), scale, pl_mask);
     ckks_eva->multiply_plain(ciph_result, pl_mask, ciph_result);
     ckks_eva->rescale_dynamic(ciph_result, ciph_result, scale);
     std::cout << "ciph_result.coeff_modulus_size() - 1: " << ciph_result.coeff_modulus_size() - 1 << std::endl;
