@@ -30,6 +30,16 @@ constexpr int kOuterParallelism = 3;
 
 using Clock = std::chrono::high_resolution_clock;
 
+ParametersLiteral make_ckks_dag_parameters()
+{
+    ParametersLiteral params{CKKS, 15, 14, 40, 5, 0, 0, {}, {},
+                             poseidon::sec_level_type::tc128};
+    const std::vector<std::uint32_t> log_q(15, 40);
+    const std::vector<std::uint32_t> log_p{60};
+    params.set_log_modulus(log_q, log_p);
+    return params;
+}
+
 struct DagTraceItem
 {
     std::string group;
@@ -520,7 +530,7 @@ int main()
     const auto example_start = Clock::now();
 
     const auto setup_start = Clock::now();
-    ParametersLiteralDefault ckks_param_literal(CKKS, 32768, poseidon::sec_level_type::tc128);
+    auto ckks_param_literal = make_ckks_dag_parameters();
 
     PoseidonFactory::get_instance()->set_device_type(DEVICE_SOFTWARE);
     auto context = PoseidonFactory::get_instance()->create_poseidon_context(ckks_param_literal);
