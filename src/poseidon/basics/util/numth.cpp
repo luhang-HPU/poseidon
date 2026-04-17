@@ -175,7 +175,7 @@ pair<size_t, size_t> decompose_babystep_giantstep(uint64_t modulus, uint64_t inp
             }
         }
     }
-    POSEIDON_THROW(logic_error, "failed to decompose input");
+    POSEIDON_THROW_LOGIC_ERROR("failed to decompose input");
 }
 
 bool is_prime(const Modulus &modulus, size_t num_rounds)
@@ -306,7 +306,7 @@ vector<Modulus> get_primes(uint64_t factor, int bit_size, size_t count)
     }
     if (count > 0)
     {
-        POSEIDON_THROW(logic_error, "failed to find enough qualifying primes");
+        POSEIDON_THROW_LOGIC_ERROR("failed to find enough qualifying primes");
     }
     return destination;
 }

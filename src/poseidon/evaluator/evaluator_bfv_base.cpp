@@ -134,7 +134,7 @@ void EvaluatorBfvBase::sub(const Ciphertext &ciph1, const Ciphertext &ciph2,
     // Size check
     if (!product_fits_in(max_count, coeff_count))
     {
-        POSEIDON_THROW(logic_error, "invalid parameters");
+        POSEIDON_THROW_LOGIC_ERROR("invalid parameters");
     }
 
     // Prepare result
@@ -187,7 +187,7 @@ void EvaluatorBfvBase::add_inplace(Ciphertext &ciph1, const Ciphertext &ciph2) c
     // Size check
     if (!product_fits_in(max_count, coeff_count))
     {
-        POSEIDON_THROW(logic_error, "invalid parameters");
+        POSEIDON_THROW_LOGIC_ERROR("invalid parameters");
     }
     // Prepare result
     ciph1.resize(context_, context_data.parms().parms_id(), max_count);
@@ -440,7 +440,7 @@ void EvaluatorBfvBase::multiply_inplace(Ciphertext &ciph1, const Ciphertext &cip
     // Size check
     if (!product_fits_in(dest_size, coeff_count, base_bsk_m_tilde_size))
     {
-        POSEIDON_THROW(logic_error, "invalid parameters");
+        POSEIDON_THROW_LOGIC_ERROR("invalid parameters");
     }
 
     // Set up iterators for bases
@@ -726,7 +726,7 @@ void EvaluatorBfvBase::multiply_plain_inplace(Ciphertext &ciph, const Plaintext 
     // Transparent ciph output is not allowed.
     if (ciph.is_transparent())
     {
-        POSEIDON_THROW(logic_error, "result ciph is transparent");
+        POSEIDON_THROW_LOGIC_ERROR("result ciph is transparent");
     }
 #endif
 }
@@ -757,7 +757,7 @@ void EvaluatorBfvBase::multiply_plain_ntt(Ciphertext &ciph_ntt, const Plaintext 
     // Size check
     if (!product_fits_in(ciph_ntt_size, coeff_count, coeff_modulus_size))
     {
-        POSEIDON_THROW(logic_error, "invalid parameters");
+        POSEIDON_THROW_LOGIC_ERROR("invalid parameters");
     }
 
     ConstRNSIter plain_ntt_iter(plain_ntt.data(), coeff_count);
@@ -797,7 +797,7 @@ void EvaluatorBfvBase::multiply_plain_normal(Ciphertext &ciph, const Plaintext &
     // Size check
     if (!product_fits_in(ciph_size, coeff_count, coeff_modulus_size))
     {
-        POSEIDON_THROW(logic_error, "invalid parameters");
+        POSEIDON_THROW_LOGIC_ERROR("invalid parameters");
     }
 
     /*

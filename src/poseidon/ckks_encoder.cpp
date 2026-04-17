@@ -90,7 +90,7 @@ void CKKSEncoder::encode_internal(double value, parms_id_type parms_id, double s
     // Quick sanity check
     if (!product_fits_in(coeff_modulus_size, coeff_count))
     {
-        POSEIDON_THROW(logic_error, "invalid parameters");
+        POSEIDON_THROW_LOGIC_ERROR("invalid parameters");
     }
 
     // Check that scale is positive and not too large
@@ -218,7 +218,7 @@ void CKKSEncoder::encode_internal(int64_t value, parms_id_type parms_id,
     // Quick sanity check
     if (!product_fits_in(coeff_modulus_size, coeff_count))
     {
-        POSEIDON_THROW(logic_error, "invalid parameters");
+        POSEIDON_THROW_LOGIC_ERROR("invalid parameters");
     }
 
     int coeff_bit_count = get_significant_bit_count(static_cast<uint64_t>(llabs(value))) + 2;

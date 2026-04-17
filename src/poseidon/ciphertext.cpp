@@ -143,7 +143,7 @@ void Ciphertext::expand_seed(const PoseidonContext &context,
     auto prng = prng_info.make_prng();
     if (!prng)
     {
-        POSEIDON_THROW(logic_error, "unsupported prng_type");
+        POSEIDON_THROW_LOGIC_ERROR("unsupported prng_type");
     }
 
     sample_poly_uniform(prng, context, parms_id_, data(1));
@@ -237,7 +237,7 @@ void Ciphertext::save_members(ostream &stream) const
     catch (const ios_base::failure &)
     {
         stream.exceptions(old_except_mask);
-        POSEIDON_THROW(runtime_error, "I/O error");
+        POSEIDON_THROW_RUNTIME_ERROR("I/O error");
     }
     catch (...)
     {
@@ -325,7 +325,7 @@ void Ciphertext::load_members(const PoseidonContext &context, istream &stream,
     catch (const ios_base::failure &)
     {
         stream.exceptions(old_except_mask);
-        POSEIDON_THROW(runtime_error, "I/O error");
+        POSEIDON_THROW_RUNTIME_ERROR("I/O error");
     }
     catch (...)
     {
