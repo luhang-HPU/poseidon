@@ -858,7 +858,7 @@ void EvaluatorCkksBase::evaluate_poly_from_poly_nomial_basis(
             destination.scale() = target_scale;
             if (destination.level() < target_level)
             {
-                POSEIDON_THROW(logic_error,
+                POSEIDON_THROW_LOGIC_ERROR(
                                "destination : destination level is small than target_level level!");
             }
             else if (target_level < destination.level())
@@ -1210,7 +1210,7 @@ void EvaluatorCkksBase::sub(const Ciphertext &ciph1, const Ciphertext &ciph2,
     // Size check
     if (!product_fits_in(max_count, coeff_count))
     {
-        POSEIDON_THROW(logic_error, "invalid parameters");
+        POSEIDON_THROW_LOGIC_ERROR("invalid parameters");
     }
 
     // Prepare result
@@ -1258,7 +1258,7 @@ void EvaluatorCkksBase::add_inplace(poseidon::Ciphertext &ciph1,
     // Size check
     if (!product_fits_in(max_count, coeff_count))
     {
-        POSEIDON_THROW(logic_error, "invalid parameters");
+        POSEIDON_THROW_LOGIC_ERROR("invalid parameters");
     }
     // Prepare result
     ciph1.resize(context_, context_data.parms().parms_id(), max_count);
@@ -1338,7 +1338,7 @@ void EvaluatorCkksBase::ckks_multiply(Ciphertext &ciph1, const Ciphertext &ciph2
     // Size check
     if (!product_fits_in(dest_size, coeff_count, coeff_modulus_size))
     {
-        POSEIDON_THROW(logic_error, "invalid parameters");
+        POSEIDON_THROW_LOGIC_ERROR("invalid parameters");
     }
 
     // Set up iterator for the base

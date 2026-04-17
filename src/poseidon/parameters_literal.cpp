@@ -61,7 +61,7 @@ void ParametersLiteral::save_members(std::ostream &stream) const
     catch (const std::ios_base::failure &)
     {
         stream.exceptions(old_except_mask);
-        POSEIDON_THROW(runtime_error, "I/O error");
+        POSEIDON_THROW_RUNTIME_ERROR("I/O error");
     }
     catch (...)
     {
@@ -131,7 +131,7 @@ void ParametersLiteral::load_members(std::istream &stream)
     catch (const std::ios_base::failure &)
     {
         stream.exceptions(old_except_mask);
-        POSEIDON_THROW(runtime_error, "I/O error");
+        POSEIDON_THROW_RUNTIME_ERROR("I/O error");
     }
     catch (...)
     {

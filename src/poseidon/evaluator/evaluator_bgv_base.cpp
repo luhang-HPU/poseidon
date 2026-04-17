@@ -55,7 +55,7 @@ void EvaluatorBgvBase::square_inplace(Ciphertext &ciph, MemoryPoolHandle pool) c
     // Size check
     if (!product_fits_in(dest_size, coeff_count, coeff_modulus_size))
     {
-        POSEIDON_THROW(logic_error, "invalid parameters");
+        POSEIDON_THROW_LOGIC_ERROR("invalid parameters");
     }
 
     // Set up iterator for the base
@@ -226,7 +226,7 @@ void EvaluatorBgvBase::sub(const Ciphertext &ciph1, const Ciphertext &ciph2,
     // Size check
     if (!product_fits_in(max_count, coeff_count))
     {
-        POSEIDON_THROW(logic_error, "invalid parameters");
+        POSEIDON_THROW_LOGIC_ERROR("invalid parameters");
     }
 
     // Prepare result
@@ -394,7 +394,7 @@ void EvaluatorBgvBase::add_inplace(Ciphertext &ciph1, const Ciphertext &ciph2) c
     // Size check
     if (!product_fits_in(max_count, coeff_count))
     {
-        POSEIDON_THROW(logic_error, "invalid parameters");
+        POSEIDON_THROW_LOGIC_ERROR("invalid parameters");
     }
     // Prepare result
     ciph1.resize(context_, context_data.parms().parms_id(), max_count);
@@ -655,7 +655,7 @@ void EvaluatorBgvBase::multiply_plain_inplace(Ciphertext &ciph, const Plaintext 
     // Transparent ciph output is not allowed.
     if (ciph.is_transparent())
     {
-        POSEIDON_THROW(logic_error, "result ciph is transparent");
+        POSEIDON_THROW_LOGIC_ERROR("result ciph is transparent");
     }
 #endif
 }
@@ -683,7 +683,7 @@ void EvaluatorBgvBase::multiply_plain_ntt(Ciphertext &ciph_ntt, const Plaintext 
     // Size check
     if (!product_fits_in(encrypted_ntt_size, coeff_count, coeff_modulus_size))
     {
-        POSEIDON_THROW(logic_error, "invalid parameters");
+        POSEIDON_THROW_LOGIC_ERROR("invalid parameters");
     }
 
     ConstRNSIter plain_ntt_iter(plain_ntt.data(), coeff_count);
@@ -718,7 +718,7 @@ void EvaluatorBgvBase::multiply_plain_ntt(Ciphertext &ciph_ntt, const Plaintext 
 //     // Size check
 //     if (!product_fits_in(encrypted_size, coeff_count, coeff_modulus_size))
 //     {
-//         POSEIDON_THROW(logic_error, "invalid parameters");
+//         POSEIDON_THROW_LOGIC_ERROR("invalid parameters");
 //     }
 
 //     /*
@@ -859,7 +859,7 @@ void EvaluatorBgvBase::drop_modulus_to_next(const Ciphertext &ciph, Ciphertext &
 
     if (!ciph.is_ntt_form())
     {
-        POSEIDON_THROW(config_error, "BGV ciph must be in NTT form");
+        POSEIDON_THROW_CONFIG_ERROR("BGV ciph must be in NTT form");
     }
     auto context_data_ptr = context_.crt_context()->get_context_data(ciph.parms_id());
     auto &context_data = *context_data_ptr;

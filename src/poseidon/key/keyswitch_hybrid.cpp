@@ -64,7 +64,7 @@ void KSwitchHybrid::apply_galois_inplace(Ciphertext &encrypted, uint32_t galois_
     // Size check
     if (!product_fits_in(coeff_count, coeff_modulus_size))
     {
-        POSEIDON_THROW(logic_error, "invalid parameters");
+        POSEIDON_THROW_LOGIC_ERROR("invalid parameters");
     }
 
     // Check if Galois key is generated or not.
@@ -124,7 +124,7 @@ void KSwitchHybrid::apply_galois_inplace(Ciphertext &encrypted, uint32_t galois_
     }
     else
     {
-        POSEIDON_THROW(logic_error, "scheme not implemented");
+        POSEIDON_THROW_LOGIC_ERROR("scheme not implemented");
     }
 
     // Wipe encrypted.data(1)

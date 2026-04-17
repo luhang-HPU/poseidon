@@ -16,7 +16,7 @@ void KSwitchGenBV::generate_one_kswitch_key(const SecretKey &prev_secret_key, Co
     // Size check
     if (!product_fits_in(coeff_count, decomp_mod_count))
     {
-        POSEIDON_THROW(logic_error, "invalid parameters");
+        POSEIDON_THROW_LOGIC_ERROR("invalid parameters");
     }
 
     // KSwitchKeys data allocated from pool given by MemoryManager::GetPool.
@@ -116,7 +116,7 @@ void KSwitchBV::apply_galois_inplace(Ciphertext &encrypted, uint32_t galois_elt,
     // Size check
     if (!product_fits_in(coeff_count, coeff_modulus_size))
     {
-        POSEIDON_THROW(logic_error, "invalid parameters");
+        POSEIDON_THROW_LOGIC_ERROR("invalid parameters");
     }
 
     // Check if Galois key is generated or not.
@@ -174,7 +174,7 @@ void KSwitchBV::apply_galois_inplace(Ciphertext &encrypted, uint32_t galois_elt,
     }
     else
     {
-        POSEIDON_THROW(logic_error, "scheme not implemented");
+        POSEIDON_THROW_LOGIC_ERROR("scheme not implemented");
     }
 
     // Wipe encrypted.data(1)
@@ -190,7 +190,7 @@ void KSwitchBV::apply_galois_inplace(Ciphertext &encrypted, uint32_t galois_elt,
     // Transparent ciphertext output is not allowed.
     if (encrypted.is_transparent())
     {
-        POSEIDON_THROW(logic_error, "result ciphertext is transparent");
+        POSEIDON_THROW_LOGIC_ERROR("result ciphertext is transparent");
     }
 #endif
 }
@@ -246,7 +246,7 @@ void KSwitchBV::switch_key_inplace(Ciphertext &encrypted, ConstRNSIter target_it
     // Size check
     if (!product_fits_in(coeff_count, rns_modulus_size, size_t(2)))
     {
-        POSEIDON_THROW(logic_error, "invalid parameters");
+        POSEIDON_THROW_LOGIC_ERROR("invalid parameters");
     }
 
     // Prepare input

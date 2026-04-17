@@ -25,7 +25,7 @@ CrtContext::CrtContext(const std::shared_ptr<const ParametersLiteral> &params,
     catch (const invalid_argument &)
     {
         // POSEIDON_THROW(invalid_argument_error, );
-        POSEIDON_THROW(config_error, "invalid modulus");
+        POSEIDON_THROW_CONFIG_ERROR("invalid modulus");
     }
 
     if (scheme_type == BFV || scheme_type == BGV)
@@ -37,7 +37,7 @@ CrtContext::CrtContext(const std::shared_ptr<const ParametersLiteral> &params,
         }
         catch (const invalid_argument &)
         {
-            POSEIDON_THROW(config_error, "invalid modulus");
+            POSEIDON_THROW_CONFIG_ERROR("invalid modulus");
         }
     }
 
@@ -180,14 +180,14 @@ CrtContext::ContextData CrtContext::validate(const ParametersLiteral &params,
         if (plain_modulus.value() >> POSEIDON_PLAIN_MOD_BIT_COUNT_MAX ||
             !(plain_modulus.value() >> (POSEIDON_PLAIN_MOD_BIT_COUNT_MIN - 1)))
         {
-            POSEIDON_THROW(config_error, "plain modulus is out of range");
+            POSEIDON_THROW_CONFIG_ERROR("plain modulus is out of range");
         }
 
         for (size_t i = 0; i < coeff_modulus_size; i++)
         {
             if (!are_coprime(coeff_modulus[i].value(), plain_modulus.value()))
             {
-                POSEIDON_THROW(config_error, "plain modulus and coeff_modulus are not coprime ");
+                POSEIDON_THROW_CONFIG_ERROR("plain modulus and coeff_modulus are not coprime ");
             }
         }
 
@@ -196,7 +196,7 @@ CrtContext::ContextData CrtContext::validate(const ParametersLiteral &params,
                                context_data.total_coeff_modulus_.get(), coeff_modulus_size))
         {
             // Parameters are not valid
-            POSEIDON_THROW(config_error, "plain modulus is too large ");
+            POSEIDON_THROW_CONFIG_ERROR("plain modulus is too large ");
         }
 
         context_data.using_fast_plain_lift_ = true;
@@ -351,14 +351,14 @@ CrtContext::ContextData CrtContext::validate(const ParametersLiteral &params)
         if (plain_modulus.value() >> POSEIDON_PLAIN_MOD_BIT_COUNT_MAX ||
             !(plain_modulus.value() >> (POSEIDON_PLAIN_MOD_BIT_COUNT_MIN - 1)))
         {
-            POSEIDON_THROW(config_error, "plain modulus is out of range");
+            POSEIDON_THROW_CONFIG_ERROR("plain modulus is out of range");
         }
 
         for (size_t i = 0; i < coeff_modulus_size; i++)
         {
             if (!are_coprime(coeff_modulus[i].value(), plain_modulus.value()))
             {
-                POSEIDON_THROW(config_error, "plain modulus and coeff_modulus are not coprime ");
+                POSEIDON_THROW_CONFIG_ERROR("plain modulus and coeff_modulus are not coprime ");
             }
         }
 
@@ -367,7 +367,7 @@ CrtContext::ContextData CrtContext::validate(const ParametersLiteral &params)
                                context_data.total_coeff_modulus_.get(), coeff_modulus_size))
         {
             // Parameters are not valid
-            POSEIDON_THROW(config_error, "plain modulus is too large ");
+            POSEIDON_THROW_CONFIG_ERROR("plain modulus is too large ");
         }
 
         bool using_fast_plain_lift = true;
