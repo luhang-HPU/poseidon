@@ -36,60 +36,42 @@ protected:
 class metadata_error : public poseidon_error
 {
 public:
-    metadata_error(const std::string &filename, uint32_t line_num, const std::string &what)
-        : poseidon_error(filename, line_num, what)
-    {
-    }
+    using poseidon_error::poseidon_error;
 };
 
 // Configuration-related errors
 class config_error : public poseidon_error
 {
 public:
-    config_error(const std::string &filename, uint32_t line_num, const std::string &what)
-        : poseidon_error(filename, line_num, what)
-    {
-    }
+    using poseidon_error::poseidon_error;
 };
 
 // Invalid argument errors (replaces std::invalid_argument)
 class invalid_argument_error : public poseidon_error
 {
 public:
-    invalid_argument_error(const std::string &filename, uint32_t line_num, const std::string &what)
-        : poseidon_error(filename, line_num, what)
-    {
-    }
+    using poseidon_error::poseidon_error;
 };
 
 // Logic errors (replaces std::logic_error)
-class logic_error : public poseidon_error
+class poseidon_logic_error : public poseidon_error
 {
 public:
-    logic_error(const std::string &filename, uint32_t line_num, const std::string &what)
-        : poseidon_error(filename, line_num, what)
-    {
-    }
+    using poseidon_error::poseidon_error;
 };
 
 // Runtime errors (replaces std::runtime_error)
-class runtime_error : public poseidon_error
+class poseidon_runtime_error : public poseidon_error
 {
 public:
-    runtime_error(const std::string &filename, uint32_t line_num, const std::string &what)
-        : poseidon_error(filename, line_num, what)
-    {
-    }
+    using poseidon_error::poseidon_error;
 };
 
 // Out of range errors (replaces std::out_of_range)
 class out_of_range_error : public poseidon_error
 {
 public:
-    out_of_range_error(const std::string &filename, uint32_t line_num, const std::string &what)
-        : poseidon_error(filename, line_num, what)
-    {
-    }
+    using poseidon_error::poseidon_error;
 };
 
 // Backward compatibility macros
@@ -99,9 +81,9 @@ public:
 #define POSEIDON_THROW_INVALID_ARGUMENT(expr)                                                      \
     throw invalid_argument_error(__FILE__, __LINE__, (expr))
 
-#define POSEIDON_THROW_LOGIC_ERROR(expr) throw logic_error(__FILE__, __LINE__, (expr))
+#define POSEIDON_THROW_LOGIC_ERROR(expr) throw poseidon_logic_error(__FILE__, __LINE__, (expr))
 
-#define POSEIDON_THROW_RUNTIME_ERROR(expr) throw runtime_error(__FILE__, __LINE__, (expr))
+#define POSEIDON_THROW_RUNTIME_ERROR(expr) throw poseidon_runtime_error(__FILE__, __LINE__, (expr))
 
 #define POSEIDON_THROW_OUT_OF_RANGE(expr) throw out_of_range_error(__FILE__, __LINE__, (expr))
 
