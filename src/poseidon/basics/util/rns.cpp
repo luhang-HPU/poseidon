@@ -4,6 +4,7 @@
 #include "poseidon/basics/util/polyarithsmallmod.h"
 #include "poseidon/basics/util/uintarithmod.h"
 #include "poseidon/basics/util/uintarithsmallmod.h"
+#include "poseidon/util/omp_trace.h"
 #include <algorithm>
 
 using namespace std;
@@ -910,11 +911,12 @@ void RNSTool::divide_and_round_q_last_inplace(RNSIter input, MemoryPoolHandle po
     add_poly_scalar_coeffmod(last_input, coeff_count_, half, last_modulus, last_input);
 
     // 2. 使用 OpenMP 并行化 RNS 循环
-#ifdef USING_OPENMP
+#if defined(_OPENMP) || defined(POSEIDON_USE_OPENMP) || defined(USING_OPENMP)
 #pragma omp parallel for
 #endif
     for (size_t i = 0; i < base_q_size - 1; i++)
     {
+        omp_trace::record("RNSTool::divide_and_round_q_last_inplace/base_q");
         // 关键点 A: 获取当前分量的迭代器或指针
         // 根据 POSEIDON/SEAL 惯例，input[i] 返回的是 CoeffIter
         CoeffIter current_input = input[i];
@@ -978,16 +980,18 @@ void RNSTool::divide_and_round_q_last_ntt_inplace(RNSIter input, ConstNTTTablesI
     size_t base_q_size_minus_1 = base_q_size - 1;
 
     // 开启并行区域
-#ifdef USING_OPENMP
+#if defined(_OPENMP) || defined(POSEIDON_USE_OPENMP) || defined(USING_OPENMP)
 #pragma omp parallel
 #endif
     {
+        omp_trace::record("RNSTool::divide_and_round_q_last_ntt_inplace/parallel");
         // 每个线程分配自己的临时缓冲区，coeff_count_ 是多项式的度
         POSEIDON_ALLOCATE_GET_COEFF_ITER(thread_temp, coeff_count_, pool);
 
 #pragma omp for
         for (size_t i = 0; i < base_q_size_minus_1; i++)
         {
+            omp_trace::record("RNSTool::divide_and_round_q_last_ntt_inplace/base_q");
             auto current_input_poly = input[i];                      // get<0>(I)
             uint64_t inv_q_last_val = inv_q_last_mod_q_[i].operand;  // get<1>(I)
             Modulus qi = (*base_q_)[i];                              // get<2>(I)
@@ -1430,11 +1434,12 @@ void RNSTool::mod_t_and_divide_q_last_ntt_inplace(RNSIter input, ConstNTTTablesI
     POSEIDON_ALLOCATE_GET_COEFF_ITER(delta_all, (modulus_size - 1) * coeff_count_, pool);
 
     // 2. 开启 RNS 分量级别的并行
-#ifdef USING_OPENMP
+#if defined(_OPENMP) || defined(POSEIDON_USE_OPENMP) || defined(USING_OPENMP)
 #pragma omp parallel for
 #endif
     for (size_t i = 0; i < modulus_size - 1; i++)
     {
+        omp_trace::record("RNSTool::mod_t_and_divide_q_last_ntt_inplace/base_q");
         // --- A. 提取当前分量所需的各种迭代器和参数 ---
         CoeffIter current_c_i = input[i];     // get<0>(I)
         const Modulus &qi = curr_modulus[i];  // get<1>(I)

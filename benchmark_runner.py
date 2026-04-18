@@ -4,8 +4,9 @@ Benchmark runner for CKKS DAG test programs.
 
 It preserves fine-grained DAG operation names such as:
     [branch_add] add_a_b TIME: 1.37 ms
+    [branch_add] add_a_b CORES: 3,7
 
-and also prints averaged total time for each benchmark program.
+and also prints explicit full-pipeline/example-total timing and core participation.
 """
 
 from __future__ import annotations
@@ -15,7 +16,7 @@ import subprocess
 import sys
 from collections import defaultdict
 from pathlib import Path
-from typing import DefaultDict, Dict, List, Tuple
+from typing import DefaultDict, Dict, List, Set, Tuple
 
 
 GROUP_TOTAL_KEYS = {
@@ -36,6 +37,38 @@ TOP_LEVEL_ORDER = [
     "CKKS encrypt",
     "CKKS DAG single-thread evaluation",
     "CKKS decrypt/decode",
+    "CKKS full pipeline (setup -> decrypt/decode)",
+    "Manual-parallel encode",
+    "Manual-parallel encrypt",
+    "Manual-parallel thread-pool setup",
+    "CKKS DAG manual-parallel evaluation",
+    "Manual-parallel decrypt/decode",
+    "Manual-parallel full pipeline (shared setup included)",
+    "OMP hierarchical encode",
+    "OMP hierarchical encrypt",
+    "CKKS DAG OMP hierarchical evaluation",
+    "OMP hierarchical decrypt/decode",
+    "OMP hierarchical full pipeline (shared setup included)",
+    "Example total (including reference build)",
+]
+
+EXPLICIT_TOTAL_TIME_KEYS = [
+    "Example total (including reference build)",
+    "CKKS full pipeline (setup -> decrypt/decode)",
+    "Manual-parallel full pipeline (shared setup included)",
+    "OMP hierarchical full pipeline (shared setup included)",
+]
+
+ATOMIC_STAGE_TIME_KEYS = {
+    "CKKS setup",
+    "CKKS key generation",
+    "CKKS runtime object setup",
+    "Message preparation",
+    "Plaintext reference",
+    "CKKS encode",
+    "CKKS encrypt",
+    "CKKS DAG single-thread evaluation",
+    "CKKS decrypt/decode",
     "Manual-parallel encode",
     "Manual-parallel encrypt",
     "Manual-parallel thread-pool setup",
@@ -45,59 +78,98 @@ TOP_LEVEL_ORDER = [
     "OMP hierarchical encrypt",
     "CKKS DAG OMP hierarchical evaluation",
     "OMP hierarchical decrypt/decode",
-]
+}
+
+
+ParsedRun = Tuple[Dict[str, float], Dict[str, Set[int]]]
 
 
 class BenchmarkCollector:
-    """Collects and aggregates timing data from benchmark runs."""
+    """Collects and aggregates timing and core data from benchmark runs."""
 
-    def __init__(self):
-        self.data: DefaultDict[str, DefaultDict[str, List[float]]] = defaultdict(
+    def __init__(self) -> None:
+        self.time_data: DefaultDict[str, DefaultDict[str, List[float]]] = defaultdict(
             lambda: defaultdict(list)
         )
+        self.core_data: DefaultDict[str, DefaultDict[str, Set[int]]] = defaultdict(
+            lambda: defaultdict(set)
+        )
 
-    def add_run(self, program_name: str, timing_data: Dict[str, float]) -> None:
-        for key, value in timing_data.items():
-            self.data[program_name][key].append(value)
+    def add_run(self, program_name: str, times: Dict[str, float], cores: Dict[str, Set[int]]) -> None:
+        for key, value in times.items():
+            self.time_data[program_name][key].append(value)
+        for key, cpu_set in cores.items():
+            self.core_data[program_name][key].update(cpu_set)
 
     def get_averages(self, program_name: str) -> Dict[str, float]:
         averages: Dict[str, float] = {}
-        if program_name in self.data:
-            for key, values in self.data[program_name].items():
+        if program_name in self.time_data:
+            for key, values in self.time_data[program_name].items():
                 if values:
                     averages[key] = sum(values) / len(values)
         return averages
 
+    def get_core_unions(self, program_name: str) -> Dict[str, Set[int]]:
+        unions: Dict[str, Set[int]] = {}
+        if program_name in self.core_data:
+            for key, values in self.core_data[program_name].items():
+                unions[key] = set(values)
+        return unions
+
     def get_all_programs(self) -> List[str]:
-        return list(self.data.keys())
+        return sorted(set(self.time_data.keys()) | set(self.core_data.keys()))
 
 
-def parse_timing_output(output: str) -> Dict[str, float]:
-    """
-    Parse timing data from program output line by line.
+def parse_core_list(value: str) -> Set[int]:
+    value = value.strip()
+    if not value or value == "(unavailable)":
+        return set()
 
-    Examples:
-        CKKS setup TIME: 123.45 ms
-        [branch_add] add_a_b TIME: 1.37099 ms
-    """
-    timings: Dict[str, float] = {}
-    pattern = re.compile(r"^\s*([^\n]+?)\s+TIME:\s+([0-9]+(?:\.[0-9]+)?)\s+ms\s*$")
+    cores: Set[int] = set()
+    for token in value.split(","):
+        token = token.strip()
+        if not token:
+            continue
+        try:
+            cores.add(int(token))
+        except ValueError:
+            continue
+    return cores
+
+
+def parse_benchmark_output(output: str) -> ParsedRun:
+    times: Dict[str, float] = {}
+    cores: Dict[str, Set[int]] = {}
+    time_pattern = re.compile(
+        r"^\s*(.+?)\s+TIME(?:\s+\(([^)]+)\))?:\s+([0-9]+(?:\.[0-9]+)?)\s+ms(?:\s+\|\s+cores\s+([^|]+?))?(?:\s+\|.*)?\s*$"
+    )
+    core_pattern = re.compile(r"^\s*([^\n]+?)\s+CORES:\s+(.+?)\s*$")
 
     for line in output.splitlines():
-        match = pattern.match(line)
-        if not match:
+        time_match = time_pattern.match(line)
+        if time_match:
+            key = time_match.group(1).strip()
+            qualifier = time_match.group(2)
+            if qualifier:
+                key = f"{key} ({qualifier.strip()})"
+
+            times[key] = float(time_match.group(3))
+            inline_cores = time_match.group(4)
+            if inline_cores:
+                cores[key] = parse_core_list(inline_cores)
             continue
 
-        key = match.group(1).strip()
-        value = float(match.group(2))
-        timings[key] = value
+        core_match = core_pattern.match(line)
+        if core_match:
+            key = core_match.group(1).strip()
+            cores[key] = parse_core_list(core_match.group(2))
 
-    return timings
+    return times, cores
 
 
-def run_benchmark(program_path: str, num_runs: int = 30) -> Tuple[str, List[Dict[str, float]]]:
+def run_benchmark(program_path: str, num_runs: int = 30) -> Tuple[str, List[ParsedRun]]:
     program_name = Path(program_path).name
-    results: List[Dict[str, float]] = []
+    results: List[ParsedRun] = []
 
     print(f"\n{'=' * 70}")
     print(f"Running {program_name} ({num_runs} iterations)...")
@@ -116,10 +188,13 @@ def run_benchmark(program_path: str, num_runs: int = 30) -> Tuple[str, List[Dict
                 print(f"  Run {i + 1}/{num_runs}: FAILED (exit code {result.returncode})")
                 continue
 
-            timings = parse_timing_output(result.stdout)
-            if timings:
-                results.append(timings)
-                print(f"  Run {i + 1}/{num_runs}: OK ({len(timings)} timing points)")
+            times, cores = parse_benchmark_output(result.stdout)
+            if times:
+                results.append((times, cores))
+                print(
+                    f"  Run {i + 1}/{num_runs}: OK "
+                    f"({len(times)} timing points, {len(cores)} core entries)"
+                )
             else:
                 print(f"  Run {i + 1}/{num_runs}: FAILED (no timing data found)")
 
@@ -132,7 +207,28 @@ def run_benchmark(program_path: str, num_runs: int = 30) -> Tuple[str, List[Dict
     return program_name, results
 
 
-def classify_metrics(averages: Dict[str, float]) -> Tuple[List[Tuple[str, float]], List[Tuple[str, float]], List[Tuple[str, float]], float]:
+def format_cores(cores: Set[int]) -> str:
+    if not cores:
+        return "(unavailable)"
+    return ",".join(str(cpu) for cpu in sorted(cores))
+
+
+def sort_key(name: str) -> Tuple[int, str]:
+    return (
+        TOP_LEVEL_ORDER.index(name) if name in TOP_LEVEL_ORDER else len(TOP_LEVEL_ORDER),
+        name,
+    )
+
+
+def classify_metrics(
+    averages: Dict[str, float], core_unions: Dict[str, Set[int]]
+) -> Tuple[
+    List[Tuple[str, float]],
+    List[Tuple[str, float]],
+    List[Tuple[str, float]],
+    Tuple[str, float] | None,
+    Set[int],
+]:
     top_level: List[Tuple[str, float]] = []
     group_totals: List[Tuple[str, float]] = []
     operations: List[Tuple[str, float]] = []
@@ -145,17 +241,32 @@ def classify_metrics(averages: Dict[str, float]) -> Tuple[List[Tuple[str, float]
         else:
             top_level.append((key, value))
 
-    top_level.sort(key=lambda item: (TOP_LEVEL_ORDER.index(item[0]) if item[0] in TOP_LEVEL_ORDER else len(TOP_LEVEL_ORDER), item[0]))
+    top_level.sort(key=lambda item: sort_key(item[0]))
     group_totals.sort(key=lambda item: item[0])
     operations.sort(key=lambda item: item[0])
 
-    total_time = sum(value for _, value in top_level)
-    return top_level, group_totals, operations, total_time
+    explicit_total: Tuple[str, float] | None = None
+    for key in EXPLICIT_TOTAL_TIME_KEYS:
+        if key in averages:
+            explicit_total = (key, averages[key])
+            break
+
+    if explicit_total is not None:
+        total_cores = core_unions.get(explicit_total[0], set())
+    else:
+        total_cores: Set[int] = set()
+        for key in ATOMIC_STAGE_TIME_KEYS:
+            total_cores.update(core_unions.get(key, set()))
+
+    return top_level, group_totals, operations, explicit_total, total_cores
 
 
-def print_metric_rows(rows: List[Tuple[str, float]]) -> None:
+def print_metric_rows(rows: List[Tuple[str, float]], core_unions: Dict[str, Set[int]]) -> None:
     for key, value in rows:
-        print(f"    {key:.<60} {value:>10.2f} ms")
+        print(
+            f"    {key:.<60} {value:>10.2f} ms"
+            f" | cores: {format_cores(core_unions.get(key, set()))}"
+        )
 
 
 def print_results(collector: BenchmarkCollector) -> None:
@@ -165,6 +276,7 @@ def print_results(collector: BenchmarkCollector) -> None:
 
     for program_name in collector.get_all_programs():
         averages = collector.get_averages(program_name)
+        core_unions = collector.get_core_unions(program_name)
 
         print(f"\n{program_name}")
         print("-" * 70)
@@ -173,22 +285,37 @@ def print_results(collector: BenchmarkCollector) -> None:
             print("  No data collected")
             continue
 
-        top_level, group_totals, operations, total_time = classify_metrics(averages)
+        top_level, group_totals, operations, explicit_total, total_cores = classify_metrics(
+            averages, core_unions
+        )
 
         print("\n  Program Total:")
-        print(f"    {'TOTAL'.ljust(60, '.')} {total_time:>10.2f} ms")
+        if explicit_total is not None:
+            total_name, total_value = explicit_total
+            print(
+                f"    {total_name:.<60} {total_value:>10.2f} ms"
+                f" | cores: {format_cores(total_cores)}"
+            )
+        else:
+            fallback_total = sum(
+                value for key, value in top_level if key in ATOMIC_STAGE_TIME_KEYS
+            )
+            print(
+                f"    {'TOTAL (derived from atomic stages)'.ljust(60, '.')} "
+                f"{fallback_total:>10.2f} ms | cores: {format_cores(total_cores)}"
+            )
 
         if top_level:
             print("\n  Program-Level Timings:")
-            print_metric_rows(top_level)
+            print_metric_rows(top_level, core_unions)
 
         if group_totals:
             print("\n  DAG Group Totals:")
-            print_metric_rows(group_totals)
+            print_metric_rows(group_totals, core_unions)
 
         if operations:
             print("\n  DAG Operation Timings:")
-            print_metric_rows(operations)
+            print_metric_rows(operations, core_unions)
 
 
 def main() -> None:
@@ -208,7 +335,7 @@ def main() -> None:
         print("\nPlease build the project first.")
         sys.exit(1)
 
-    num_runs = 30
+    num_runs = 10
     collector = BenchmarkCollector()
 
     print("\nBenchmark Configuration:")
@@ -218,9 +345,8 @@ def main() -> None:
 
     for program in programs:
         program_name, results = run_benchmark(str(program), num_runs)
-        if results:
-            for timing_data in results:
-                collector.add_run(program_name, timing_data)
+        for times, cores in results:
+            collector.add_run(program_name, times, cores)
 
     print_results(collector)
     print(f"\n{'=' * 70}\n")

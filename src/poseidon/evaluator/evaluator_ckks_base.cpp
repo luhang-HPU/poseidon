@@ -1,4 +1,5 @@
 #include "evaluator_ckks_base.h"
+#include "poseidon/util/omp_trace.h"
 #include "poseidon/advance/homomorphic_dft.h"
 #include "poseidon/encryptor.h"
 #include "poseidon/util/debug.h"
@@ -1406,6 +1407,7 @@ void EvaluatorCkksBase::ckks_multiply(Ciphertext &ciph1, const Ciphertext &ciph2
             #pragma omp parallel for
             for (size_t i = 0; i < coeff_modulus_size; i++) 
             {
+                omp_trace::record("EvaluatorCkksBase::ckks_multiply/rns_modulus");
                 auto &modulus = coeff_modulus[i];
 
                 // 为每个线程准备独立的临时缓冲区

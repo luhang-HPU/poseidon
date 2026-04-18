@@ -6,8 +6,14 @@
 #include <cstdint>
 #include <cmath>
 #include <iostream>
+#include <set>
+#include <sstream>
 #include <string>
 #include <vector>
+
+#ifdef __linux__
+#include <sched.h>
+#endif
 
 #ifdef _OPENMP
 #include <omp.h>
@@ -18,6 +24,7 @@
 #include "poseidon/factory/poseidon_factory.h"
 #include "poseidon/keygenerator.h"
 #include "poseidon/util/debug.h"
+#include "poseidon/util/omp_trace.h"
 #include "poseidon/util/random_sample.h"
 
 using namespace poseidon;
@@ -29,6 +36,7 @@ namespace
 constexpr int kOuterParallelism = 3;
 
 using Clock = std::chrono::high_resolution_clock;
+using CoreSet = std::set<int>;
 
 ParametersLiteral make_ckks_dag_parameters()
 {
@@ -45,6 +53,7 @@ struct DagTraceItem
     std::string group;
     std::string op;
     double ms = 0.0;
+    CoreSet cores;
     bool has_cipher_state = false;
     std::size_t level_before = 0;
     std::size_t level_after = 0;
@@ -57,17 +66,68 @@ double elapsed_ms(const Clock::time_point &start, const Clock::time_point &stop)
     return std::chrono::duration<double, std::milli>(stop - start).count();
 }
 
+int current_cpu_id()
+{
+#ifdef __linux__
+    return sched_getcpu();
+#else
+    return -1;
+#endif
+}
+
+void add_cpu(CoreSet &cores, int cpu)
+{
+    if (cpu >= 0)
+    {
+        cores.insert(cpu);
+    }
+}
+
+void add_current_cpu(CoreSet &cores)
+{
+    add_cpu(cores, current_cpu_id());
+}
+
+void merge_cores(CoreSet &dst, const CoreSet &src)
+{
+    dst.insert(src.begin(), src.end());
+}
+
+std::string format_cores(const CoreSet &cores)
+{
+    if (cores.empty())
+    {
+        return "(unavailable)";
+    }
+
+    std::ostringstream oss;
+    bool first = true;
+    for (int cpu : cores)
+    {
+        if (!first)
+        {
+            oss << ",";
+        }
+        oss << cpu;
+        first = false;
+    }
+    return oss.str();
+}
+
 template <typename Func>
 void record_op(std::vector<DagTraceItem> *trace, const std::string &group, const std::string &op,
                Func &&func)
 {
+    CoreSet cores;
+    add_current_cpu(cores);
     const auto start = Clock::now();
     func();
     const auto stop = Clock::now();
+    add_current_cpu(cores);
 
     if (trace != nullptr)
     {
-        trace->push_back({group, op, elapsed_ms(start, stop)});
+        trace->push_back({group, op, elapsed_ms(start, stop), cores});
     }
 }
 
@@ -76,15 +136,19 @@ void record_rescale_dynamic(EvaluatorCkksBase &ckks_eva, Ciphertext &cipher, dou
 {
     const auto level_before = cipher.level();
     const auto scale_before = cipher.scale();
+    CoreSet cores;
+    add_current_cpu(cores);
     const auto start = Clock::now();
     ckks_eva.rescale_dynamic(cipher, cipher, scale);
     const auto stop = Clock::now();
+    add_current_cpu(cores);
 
     if (trace != nullptr)
     {
         trace->push_back({group,
                           "rescale_dynamic",
                           elapsed_ms(start, stop),
+                          cores,
                           true,
                           level_before,
                           cipher.level(),
@@ -106,6 +170,29 @@ double trace_group_total(const std::vector<DagTraceItem> &trace, const std::stri
     return total;
 }
 
+CoreSet trace_group_cores(const std::vector<DagTraceItem> &trace, const std::string &group)
+{
+    CoreSet cores;
+    for (const auto &item : trace)
+    {
+        if (item.group == group)
+        {
+            merge_cores(cores, item.cores);
+        }
+    }
+    return cores;
+}
+
+CoreSet trace_all_cores(const std::vector<DagTraceItem> &trace)
+{
+    CoreSet cores;
+    for (const auto &item : trace)
+    {
+        merge_cores(cores, item.cores);
+    }
+    return cores;
+}
+
 void append_trace(std::vector<DagTraceItem> &trace, const std::vector<DagTraceItem> &items)
 {
     trace.insert(trace.end(), items.begin(), items.end());
@@ -121,12 +208,15 @@ void print_dag_trace(const std::vector<DagTraceItem> &trace)
     {
         std::cout << "  " << group << " TIME: " << trace_group_total(trace, group) << " ms"
                   << std::endl;
+        std::cout << "  " << group << " CORES: " << format_cores(trace_group_cores(trace, group))
+                  << std::endl;
     }
 
     std::cout << "CKKS DAG operation timing:" << std::endl;
     for (const auto &item : trace)
     {
         std::cout << "  [" << item.group << "] " << item.op << " TIME: " << item.ms << " ms";
+        std::cout << " | cores " << format_cores(item.cores);
         if (item.has_cipher_state)
         {
             std::cout << " | level " << item.level_before << " -> " << item.level_after
@@ -136,6 +226,21 @@ void print_dag_trace(const std::vector<DagTraceItem> &trace)
         }
         std::cout << std::endl;
     }
+}
+
+void print_stage_cores(const std::string &name, const CoreSet &cores)
+{
+    std::cout << name << " CORES: " << format_cores(cores) << std::endl;
+}
+
+void print_internal_omp_stage_report(const std::string &stage)
+{
+    if (!omp_trace::enabled())
+    {
+        return;
+    }
+
+    omp_trace::print_report(std::cout, "Internal OMP core usage during " + stage + ":");
 }
 
 int read_positive_env(const char *name, int default_value)
@@ -529,14 +634,20 @@ int main()
 
     const auto example_start = Clock::now();
 
+    CoreSet setup_cores;
+    add_current_cpu(setup_cores);
     const auto setup_start = Clock::now();
     auto ckks_param_literal = make_ckks_dag_parameters();
 
     PoseidonFactory::get_instance()->set_device_type(DEVICE_SOFTWARE);
     auto context = PoseidonFactory::get_instance()->create_poseidon_context(ckks_param_literal);
     const auto setup_stop = Clock::now();
+    add_current_cpu(setup_cores);
     const auto setup_ms = elapsed_ms(setup_start, setup_stop);
 
+    omp_trace::clear();
+    CoreSet keygen_cores;
+    add_current_cpu(keygen_cores);
     const auto keygen_start = Clock::now();
     PublicKey public_key;
     RelinKeys relin_keys;
@@ -547,8 +658,12 @@ int main()
     const std::vector<int> dag_rotation_steps{1, 2, 4, 8, 16, 32};
     keygen.create_galois_keys(dag_rotation_steps, galois_keys);
     const auto keygen_stop = Clock::now();
+    add_current_cpu(keygen_cores);
     const auto keygen_ms = elapsed_ms(keygen_start, keygen_stop);
+    print_internal_omp_stage_report("key generation");
 
+    CoreSet runtime_setup_cores;
+    add_current_cpu(runtime_setup_cores);
     const auto runtime_setup_start = Clock::now();
     auto eva_add = PoseidonFactory::get_instance()->create_ckks_evaluator(context);
     auto eva_quad = PoseidonFactory::get_instance()->create_ckks_evaluator(context);
@@ -558,6 +673,7 @@ int main()
     Encryptor encryptor(context, public_key);
     Decryptor decryptor(context, keygen.secret_key());
     const auto runtime_setup_stop = Clock::now();
+    add_current_cpu(runtime_setup_cores);
     const auto runtime_setup_ms = elapsed_ms(runtime_setup_start, runtime_setup_stop);
 
     const auto slot_num = ckks_param_literal.slot();
@@ -571,6 +687,8 @@ int main()
 
     print_omp_configuration(outer_threads, inner_threads);
 
+    CoreSet message_prep_cores;
+    add_current_cpu(message_prep_cores);
     const auto message_prep_start = Clock::now();
     std::vector<std::complex<double>> msg_a;
     std::vector<std::complex<double>> msg_b;
@@ -585,39 +703,54 @@ int main()
     shrink_message(msg_c);
     shrink_message(msg_d);
     const auto message_prep_stop = Clock::now();
+    add_current_cpu(message_prep_cores);
     const auto message_prep_ms = elapsed_ms(message_prep_start, message_prep_stop);
 
+    CoreSet reference_cores;
+    add_current_cpu(reference_cores);
     const auto reference_start = Clock::now();
     auto expected = build_reference(msg_a, msg_b, msg_c, msg_d);
     const auto reference_stop = Clock::now();
+    add_current_cpu(reference_cores);
     const auto reference_ms = elapsed_ms(reference_start, reference_stop);
 
     Plaintext hierarchical_pt_a;
     Plaintext hierarchical_pt_b;
     Plaintext hierarchical_pt_c;
     Plaintext hierarchical_pt_d;
+    omp_trace::clear();
+    CoreSet hierarchical_encode_cores;
+    add_current_cpu(hierarchical_encode_cores);
     const auto hierarchical_encode_start = Clock::now();
     encoder.encode(msg_a, scale, hierarchical_pt_a);
     encoder.encode(msg_b, scale, hierarchical_pt_b);
     encoder.encode(msg_c, scale, hierarchical_pt_c);
     encoder.encode(msg_d, scale, hierarchical_pt_d);
     const auto hierarchical_encode_stop = Clock::now();
+    add_current_cpu(hierarchical_encode_cores);
     const auto hierarchical_encode_ms =
         elapsed_ms(hierarchical_encode_start, hierarchical_encode_stop);
+    print_internal_omp_stage_report("omp hierarchical encode");
 
     Ciphertext hierarchical_ct_a;
     Ciphertext hierarchical_ct_b;
     Ciphertext hierarchical_ct_c;
     Ciphertext hierarchical_ct_d;
+    omp_trace::clear();
+    CoreSet hierarchical_encrypt_cores;
+    add_current_cpu(hierarchical_encrypt_cores);
     const auto hierarchical_encrypt_start = Clock::now();
     encryptor.encrypt(hierarchical_pt_a, hierarchical_ct_a);
     encryptor.encrypt(hierarchical_pt_b, hierarchical_ct_b);
     encryptor.encrypt(hierarchical_pt_c, hierarchical_ct_c);
     encryptor.encrypt(hierarchical_pt_d, hierarchical_ct_d);
     const auto hierarchical_encrypt_stop = Clock::now();
+    add_current_cpu(hierarchical_encrypt_cores);
     const auto hierarchical_encrypt_ms =
         elapsed_ms(hierarchical_encrypt_start, hierarchical_encrypt_stop);
+    print_internal_omp_stage_report("omp hierarchical encrypt");
 
+    omp_trace::clear();
     Ciphertext hierarchical_result_cipher;
     std::vector<DagTraceItem> dag_trace;
     const auto hierarchical_evaluation_start = Clock::now();
@@ -629,12 +762,19 @@ int main()
     const auto hierarchical_evaluation_stop = Clock::now();
     const auto hierarchical_evaluation_ms =
         elapsed_ms(hierarchical_evaluation_start, hierarchical_evaluation_stop);
+    const auto hierarchical_evaluation_cores = trace_all_cores(dag_trace);
+    print_internal_omp_stage_report("omp hierarchical evaluation");
 
+    omp_trace::clear();
+    CoreSet hierarchical_postprocess_cores;
+    add_current_cpu(hierarchical_postprocess_cores);
     const auto hierarchical_postprocess_start = Clock::now();
     auto hierarchical_result = decrypt_and_decode(hierarchical_result_cipher, decryptor, encoder);
     const auto hierarchical_postprocess_stop = Clock::now();
+    add_current_cpu(hierarchical_postprocess_cores);
     const auto hierarchical_postprocess_ms =
         elapsed_ms(hierarchical_postprocess_start, hierarchical_postprocess_stop);
+    print_internal_omp_stage_report("omp hierarchical decrypt/decode");
 
     const auto example_stop = Clock::now();
 
@@ -644,26 +784,48 @@ int main()
         shared_setup_ms + hierarchical_encode_ms + hierarchical_encrypt_ms +
         hierarchical_evaluation_ms + hierarchical_postprocess_ms;
     const auto example_total_ms = elapsed_ms(example_start, example_stop);
+    CoreSet hierarchical_full_pipeline_cores = setup_cores;
+    merge_cores(hierarchical_full_pipeline_cores, keygen_cores);
+    merge_cores(hierarchical_full_pipeline_cores, runtime_setup_cores);
+    merge_cores(hierarchical_full_pipeline_cores, message_prep_cores);
+    merge_cores(hierarchical_full_pipeline_cores, hierarchical_encode_cores);
+    merge_cores(hierarchical_full_pipeline_cores, hierarchical_encrypt_cores);
+    merge_cores(hierarchical_full_pipeline_cores, hierarchical_evaluation_cores);
+    merge_cores(hierarchical_full_pipeline_cores, hierarchical_postprocess_cores);
+    CoreSet example_total_cores = hierarchical_full_pipeline_cores;
+    merge_cores(example_total_cores, reference_cores);
 
     std::cout << "CKKS setup TIME: " << setup_ms << " ms" << std::endl;
+    print_stage_cores("CKKS setup", setup_cores);
     std::cout << "CKKS key generation TIME: " << keygen_ms << " ms" << std::endl;
+    print_stage_cores("CKKS key generation", keygen_cores);
     std::cout << "CKKS runtime object setup TIME: " << runtime_setup_ms << " ms"
               << std::endl;
+    print_stage_cores("CKKS runtime object setup", runtime_setup_cores);
     std::cout << "Message preparation TIME: " << message_prep_ms << " ms" << std::endl;
+    print_stage_cores("Message preparation", message_prep_cores);
     std::cout << "Plaintext reference TIME: " << reference_ms << " ms" << std::endl;
+    print_stage_cores("Plaintext reference", reference_cores);
     std::cout << "OMP hierarchical encode TIME: " << hierarchical_encode_ms << " ms"
               << std::endl;
+    print_stage_cores("OMP hierarchical encode", hierarchical_encode_cores);
     std::cout << "OMP hierarchical encrypt TIME: " << hierarchical_encrypt_ms << " ms"
               << std::endl;
+    print_stage_cores("OMP hierarchical encrypt", hierarchical_encrypt_cores);
     std::cout << "CKKS DAG OMP hierarchical evaluation TIME: " << hierarchical_evaluation_ms
               << " ms" << std::endl;
+    print_stage_cores("CKKS DAG OMP hierarchical evaluation", hierarchical_evaluation_cores);
     print_dag_trace(dag_trace);
     std::cout << "OMP hierarchical decrypt/decode TIME: " << hierarchical_postprocess_ms
               << " ms" << std::endl;
+    print_stage_cores("OMP hierarchical decrypt/decode", hierarchical_postprocess_cores);
     std::cout << "OMP hierarchical full pipeline TIME (shared setup included): "
               << hierarchical_full_pipeline_ms << " ms" << std::endl;
+    print_stage_cores("OMP hierarchical full pipeline (shared setup included)",
+                      hierarchical_full_pipeline_cores);
     std::cout << "Example total TIME (including reference build): " << example_total_ms
               << " ms" << std::endl;
+    print_stage_cores("Example total (including reference build)", example_total_cores);
 
     print_head("Expected head:", expected);
     print_head("OMP hierarchical result head:", hierarchical_result);

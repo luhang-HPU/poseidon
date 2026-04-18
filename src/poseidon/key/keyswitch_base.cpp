@@ -1,4 +1,5 @@
 #include "keyswitch_base.h"
+#include "poseidon/util/omp_trace.h"
 #include "poseidon/factory/poseidon_factory.h"
 #include "poseidon/util/thread_pool.h"
 #ifdef USING_HARDWARE
@@ -205,6 +206,7 @@ GaloisKeys KSwitchGenBase::create_galois_keys(const std::vector<uint32_t> &galoi
 #pragma omp parallel for
     for (size_t i = 0; i < galois_elts.size(); i++)
     {
+        omp_trace::record("KSwitchGenBase::create_galois_keys/galois_elts");
         uint32_t galois_elt = galois_elts[i];
         // Verify coprime conditions.
         if (!(galois_elt & 1) || (galois_elt >= coeff_count << 1))

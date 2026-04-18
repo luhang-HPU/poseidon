@@ -1,4 +1,5 @@
 #include "keyswitch_bv.h"
+#include "poseidon/util/omp_trace.h"
 
 using namespace poseidon::util;
 
@@ -267,11 +268,12 @@ void KSwitchBV::switch_key_inplace(Ciphertext &encrypted, ConstRNSIter target_it
     auto t_poly_prod(
         allocate_zero_poly_array(key_component_count, coeff_count, rns_modulus_size, pool));
 
-#ifdef USING_OPENMP
+#if defined(_OPENMP) || defined(POSEIDON_USE_OPENMP) || defined(USING_OPENMP)
 #pragma omp parallel for if (rns_modulus_size > 4) schedule(dynamic, 2)
 #endif
     for (size_t I = 0; I < rns_modulus_size; ++I)
     {
+        omp_trace::record("KSwitchBV::switch_key_inplace/rns_modulus");
         size_t key_index = (I == decomp_modulus_size ? key_modulus_size - 1 : I);
 
         // Product of two numbers is up to 60 + 60 = 120 bits, so we can sum up to 256 of them
