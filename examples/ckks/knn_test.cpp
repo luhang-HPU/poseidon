@@ -266,7 +266,7 @@ std::vector<Ciphertext> encode_and_encrypt_mt(const CKKSEncoder &encoder, const 
 }
 
 
-void sub_and_square(const std::shared_ptr<EvaluatorCkksBase> &ckks_eva,
+void sub_and_square_2(const std::shared_ptr<EvaluatorCkksBase> &ckks_eva,
                     std::vector<Ciphertext> &ciph_data, const std::vector<Ciphertext> &ciph_query, const poseidon::RelinKeys &relin_keys, const double scale)
 {
     std::vector<Ciphertext> vec_ciph;
@@ -302,32 +302,32 @@ void sub_and_square(const std::shared_ptr<EvaluatorCkksBase> &ckks_eva,
     }
 }
 
-// void sub_and_square(const std::shared_ptr<EvaluatorCkksBase> &ckks_eva,
-//                     std::vector<Ciphertext> &ciph_data, 
-//                     const std::vector<Ciphertext> &ciph_query, 
-//                     const poseidon::RelinKeys &relin_keys, 
-//                     const double scale)
-// {
-//     // 获取需要迭代的次数（基于查询向量的大小）
-//     int query_size = static_cast<int>(ciph_query.size());
+ void sub_and_square(const std::shared_ptr<EvaluatorCkksBase> &ckks_eva,
+                     std::vector<Ciphertext> &ciph_data,
+                     const std::vector<Ciphertext> &ciph_query,
+                     const poseidon::RelinKeys &relin_keys,
+                     const double scale)
+ {
+     // 获取需要迭代的次数（基于查询向量的大小）
+     int query_size = static_cast<int>(ciph_query.size());
 
-//     // 使用 OpenMP 并行化循环
-//     // num_threads 为您之前定义的线程数变量
-//     #pragma omp parallel for num_threads(num_threads)
-//     for (int i = 0; i < query_size; ++i)
-//     {
-//         // 计算 ciph_data[i] 部分
-//         ckks_eva->sub(ciph_data[i], ciph_query[i], ciph_data[i]);
-//         ckks_eva->multiply_relin(ciph_data[i], ciph_data[i], ciph_data[i], relin_keys);
-//         ckks_eva->rescale_dynamic(ciph_data[i], ciph_data[i], scale);
+     // 使用 OpenMP 并行化循环
+     // num_threads 为您之前定义的线程数变量
+     #pragma omp parallel for num_threads(num_threads)
+     for (int i = 0; i < query_size; ++i)
+     {
+         // 计算 ciph_data[i] 部分
+         ckks_eva->sub(ciph_data[i], ciph_query[i], ciph_data[i]);
+         ckks_eva->multiply_relin(ciph_data[i], ciph_data[i], ciph_data[i], relin_keys);
+         ckks_eva->rescale_dynamic(ciph_data[i], ciph_data[i], scale);
 
-//         // 计算 ciph_data[i + 10] 部分
-//         // 注意：需确保 ciph_data 的长度至少为 ciph_query.size() + 10
-//         ckks_eva->sub(ciph_data[i + 10], ciph_query[i], ciph_data[i + 10]);
-//         ckks_eva->multiply_relin(ciph_data[i + 10], ciph_data[i + 10], ciph_data[i + 10], relin_keys);
-//         ckks_eva->rescale_dynamic(ciph_data[i + 10], ciph_data[i + 10], scale);
-//     }
-// }
+         // 计算 ciph_data[i + 10] 部分
+         // 注意：需确保 ciph_data 的长度至少为 ciph_query.size() + 10
+         ckks_eva->sub(ciph_data[i + 10], ciph_query[i], ciph_data[i + 10]);
+         ckks_eva->multiply_relin(ciph_data[i + 10], ciph_data[i + 10], ciph_data[i + 10], relin_keys);
+         ckks_eva->rescale_dynamic(ciph_data[i + 10], ciph_data[i + 10], scale);
+     }
+ }
 
 
 void match_param_id(Ciphertext &ciph1, Ciphertext &ciph2,
@@ -676,7 +676,7 @@ int main(int argc, char *argv[])
     thread_pool.enqueue_prepare(std::move(op5_check), std::move(op5));
 
     // TODO wait for op3 & op4
-    while (!is_finished[3] || !is_finished[4]) {}
+    while (!is_finished[1] || !is_finished[3] || !is_finished[4]) {}
     sub_and_square(ckks_eva, ciph_data, ciph_query, relin_keys, scale);
     Ciphertext ciph_distance_1 = ciph_data[0];
     Ciphertext ciph_distance_2 = ciph_data[dimension];
@@ -690,6 +690,7 @@ int main(int argc, char *argv[])
     ckks_eva->sub_dynamic(ciph_distance_1, ciph_distance_2, ciph_result, ckks_encoder);
 
     Ciphertext ciph_tmp = sign_1(ciph_result, polys, polys_1, ckks_encoder, ckks_eva, relin_keys);
+    while (!is_finished[2]) {}
     ciph_result = accumulate_top_n_block(ciph_tmp, 100, ckks_encoder, enc, ckks_eva, rot_keys);
 
     match_param_id(ciph_result, ciph_top_k, ckks_eva);
