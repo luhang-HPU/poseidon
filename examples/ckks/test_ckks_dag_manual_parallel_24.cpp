@@ -103,6 +103,23 @@ std::string branch_group_name(int index) {
   return oss.str();
 }
 
+int runtime_worker_count() {
+  const char *value = std::getenv("POSEIDON_DAG_WORKERS");
+  if (!value || value[0] == '\0') {
+    return kManualParallelism;
+  }
+
+  char *end = nullptr;
+  const long parsed = std::strtol(value, &end, 10);
+  if (end == value || parsed <= 0) {
+    std::cerr << "Ignoring invalid POSEIDON_DAG_WORKERS='" << value
+              << "'; using " << kManualParallelism << std::endl;
+    return kManualParallelism;
+  }
+
+  return std::max(1, std::min(kParallelBranchCount, static_cast<int>(parsed)));
+}
+
 bool trace_omp_per_op_enabled() {
   const char *value = std::getenv("POSEIDON_TRACE_OMP_PER_OP");
   if (!value) {
@@ -636,7 +653,8 @@ int main() {
             << ")" << std::endl;
   std::cout << "CKKS DAG independent branch count: " << kParallelBranchCount
             << std::endl;
-  std::cout << "Manual thread-pool workers: " << kManualParallelism
+  const int thread_pool_workers = runtime_worker_count();
+  std::cout << "Manual thread-pool workers: " << thread_pool_workers
             << std::endl;
 
   CoreSet message_prep_cores;
@@ -706,7 +724,7 @@ int main() {
   CoreSet thread_pool_setup_cores;
   add_current_cpu(thread_pool_setup_cores);
   const auto thread_pool_setup_start = Clock::now();
-  ThreadPool thread_pool(kManualParallelism);
+  ThreadPool thread_pool(thread_pool_workers);
   const auto thread_pool_setup_stop = Clock::now();
   add_current_cpu(thread_pool_setup_cores);
   const auto thread_pool_setup_ms =
