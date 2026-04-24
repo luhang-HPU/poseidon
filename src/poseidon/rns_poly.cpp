@@ -1,5 +1,6 @@
 #include "rns_poly.h"
 #include "basics/util/rlwe.h"
+#include "util/thread_pool.h"
 
 namespace poseidon
 {
@@ -125,72 +126,108 @@ void RNSPoly::set_random(const PoseidonContext &context, PolyType random_type,
 void RNSPoly::coeff_to_dot()
 {
     auto ntt_table = crt_context_->small_ntt_tables();
-#ifdef USING_OPENMP
-#pragma omp parallel for
-#endif
-    for (auto i = 0; i < rns_num_q_; ++i)
+    auto &pool = ThreadPool::get_instance();
+    std::vector<std::future<void>> futures;
+    futures.reserve(rns_num_q_ + rns_num_p_);
+    for (int i = 0; i < rns_num_q_; ++i)
     {
-        ntt_negacyclic_harvey(data_ + i * poly_degree_, ntt_table[i]);
+        futures.push_back(pool.enqueue([this, i, &ntt_table]()
+                     { ntt_negacyclic_harvey(data_ + i * poly_degree_, ntt_table[i]); }));
     }
 
     for (auto i = 0; i < rns_num_p_; ++i)
     {
-        ntt_negacyclic_harvey(data_ + (i + rns_num_q_) * poly_degree_,
-                              ntt_table[i + rns_p_offset_]);
+        futures.push_back(pool.enqueue(
+            [this, i, &ntt_table]()
+            {
+                ntt_negacyclic_harvey(data_ + (i + rns_num_q_) * poly_degree_,
+                                      ntt_table[i + rns_p_offset_]);
+            }));
+    }
+    for (auto &f : futures)
+    {
+        f.get();
     }
 }
 
 void RNSPoly::coeff_to_dot_lazy()
 {
     auto ntt_table = crt_context_->small_ntt_tables();
-#ifdef USING_OPENMP
-#pragma omp parallel for
-#endif
-    for (auto i = 0; i < rns_num_q_; ++i)
+    auto &pool = ThreadPool::get_instance();
+    std::vector<std::future<void>> futures;
+    futures.reserve(rns_num_q_ + rns_num_p_);
+    for (int i = 0; i < rns_num_q_; ++i)
     {
-        ntt_negacyclic_harvey_lazy(data_ + i * poly_degree_, ntt_table[i]);
+        futures.push_back(pool.enqueue([this, i, &ntt_table]()
+                     { ntt_negacyclic_harvey_lazy(data_ + i * poly_degree_, ntt_table[i]); }));
     }
 
     for (auto i = 0; i < rns_num_p_; ++i)
     {
-        ntt_negacyclic_harvey_lazy(data_ + (i + rns_num_q_) * poly_degree_,
-                                   ntt_table[i + rns_p_offset_]);
+        futures.push_back(pool.enqueue(
+            [this, i, &ntt_table]()
+            {
+                ntt_negacyclic_harvey_lazy(data_ + (i + rns_num_q_) * poly_degree_,
+                                           ntt_table[i + rns_p_offset_]);
+            }));
+    }
+    for (auto &f : futures)
+    {
+        f.get();
     }
 }
 
 void RNSPoly::dot_to_coeff()
 {
     auto ntt_table = crt_context_->small_ntt_tables();
-#ifdef USING_OPENMP
-#pragma omp parallel for
-#endif
-    for (auto i = 0; i < rns_num_q_; ++i)
+    auto &pool = ThreadPool::get_instance();
+    std::vector<std::future<void>> futures;
+    futures.reserve(rns_num_q_ + rns_num_p_);
+    for (int i = 0; i < rns_num_q_; ++i)
     {
-        inverse_ntt_negacyclic_harvey(data_ + i * poly_degree_, ntt_table[i]);
+        futures.push_back(pool.enqueue([this, i, &ntt_table]()
+                     { inverse_ntt_negacyclic_harvey(data_ + i * poly_degree_, ntt_table[i]); }));
     }
 
     for (auto i = 0; i < rns_num_p_; ++i)
     {
-        inverse_ntt_negacyclic_harvey(data_ + (i + rns_num_q_) * poly_degree_,
-                                      ntt_table[i + rns_p_offset_]);
+        futures.push_back(pool.enqueue(
+            [this, i, &ntt_table]()
+            {
+                inverse_ntt_negacyclic_harvey(data_ + (i + rns_num_q_) * poly_degree_,
+                                              ntt_table[i + rns_p_offset_]);
+            }));
+    }
+    for (auto &f : futures)
+    {
+        f.get();
     }
 }
 
 void RNSPoly::dot_to_coeff_lazy()
 {
     auto ntt_table = crt_context_->small_ntt_tables();
-#ifdef USING_OPENMP
-#pragma omp parallel for
-#endif
-    for (auto i = 0; i < rns_num_q_; ++i)
+    auto &pool = ThreadPool::get_instance();
+    std::vector<std::future<void>> futures;
+    futures.reserve(rns_num_q_ + rns_num_p_);
+    for (int i = 0; i < rns_num_q_; ++i)
     {
-        inverse_ntt_negacyclic_harvey_lazy(data_ + i * poly_degree_, ntt_table[i]);
+        futures.push_back(pool.enqueue(
+            [this, i, &ntt_table]()
+            { inverse_ntt_negacyclic_harvey_lazy(data_ + i * poly_degree_, ntt_table[i]); }));
     }
-
     for (auto i = 0; i < rns_num_p_; ++i)
     {
-        inverse_ntt_negacyclic_harvey_lazy(data_ + (i + rns_num_q_) * poly_degree_,
-                                           ntt_table[i + rns_p_offset_]);
+        futures.push_back(pool.enqueue(
+            [this, i, &ntt_table]()
+            {
+                inverse_ntt_negacyclic_harvey_lazy(data_ + (i + rns_num_q_) * poly_degree_,
+                                                   ntt_table[i + rns_p_offset_]);
+            }));
+    }
+    for (auto &f : futures)
+    {
+        f.get();
     }
 }
 
@@ -327,19 +364,31 @@ void RNSPoly::negate()
 {
     auto &modulus_q = context_data->parms().q();
     auto &modulus_p = key_context_data->parms().p();
-
-#ifdef USING_OPENMP
-#pragma omp parallel for
-#endif
-    for (auto i = 0; i < rns_num_q_; ++i)
+    auto &pool = ThreadPool::get_instance();
+    std::vector<std::future<void>> futures;
+    futures.reserve(rns_num_q_ + rns_num_p_);
+    for (int i = 0; i < rns_num_q_; ++i)
     {
-        negate_poly_coeffmod(data_ + i * poly_degree_, poly_degree_, modulus_q[i],
-                             data_ + i * poly_degree_);
+        futures.push_back(pool.enqueue(
+            [this, i, &modulus_q]()
+            {
+                negate_poly_coeffmod(data_ + i * poly_degree_, poly_degree_, modulus_q[i],
+                                     data_ + i * poly_degree_);
+            }));
     }
+
     for (auto i = rns_num_q_; i < rns_num_q_ + rns_num_p_; ++i)
     {
-        negate_poly_coeffmod(data_ + i * poly_degree_, poly_degree_, modulus_p[i - rns_num_q_],
-                             data_ + i * poly_degree_);
+        futures.push_back(pool.enqueue(
+            [this, i, &modulus_p]()
+            {
+                negate_poly_coeffmod(data_ + i * poly_degree_, poly_degree_, modulus_p[i - rns_num_q_],
+                                     data_ + i * poly_degree_);
+            }));
+    }
+    for (auto &f : futures)
+    {
+        f.get();
     }
 }
 
@@ -354,14 +403,22 @@ void RNSPoly::add(const RNSPoly &operand, RNSPoly &result) const
         {
             auto &modulus_q = context_data->parms().q();
             auto &modulus_p = key_context_data->parms().p();
-
-#ifdef USING_OPENMP
-#pragma omp parallel for
-#endif
+            auto &pool = ThreadPool::get_instance();
+            std::vector<std::future<void>> futures;
+            futures.reserve(rns_num_q_);
             for (int i = 0; i < rns_num_q_; ++i)
             {
-                add_poly_coeffmod(data_ + i * poly_degree_, operand.data_ + i * poly_degree_,
-                                  poly_degree_, modulus_q[i], result.data_ + i * poly_degree_);
+                futures.push_back(pool.enqueue(
+                    [&, i]()
+                    {
+                        add_poly_coeffmod(data_ + i * poly_degree_,
+                                          operand.data_ + i * poly_degree_, poly_degree_,
+                                          modulus_q[i], result.data_ + i * poly_degree_);
+                    }));
+            }
+            for (auto &f : futures)
+            {
+                f.get();
             }
 
             if (rns_num_p_ == operand.rns_num_p_ && rns_num_p_ == result.rns_num_p_)
@@ -389,19 +446,31 @@ void RNSPoly::add(const RNSPoly &operand, RNSPoly &result) const
 
     auto &modulus_q = context_data->parms().q();
     auto &modulus_p = key_context_data->parms().p();
-
-#ifdef USING_OPENMP
-#pragma omp parallel for
-#endif
-    for (auto i = 0; i < rns_num_q_; ++i)
+    auto &pool = ThreadPool::get_instance();
+    std::vector<std::future<void>> futures;
+    futures.reserve(rns_num_q_ + rns_num_p_);
+    for (int i = 0; i < rns_num_q_; ++i)
     {
-        add_poly_coeffmod(data_ + i * poly_degree_, operand.data_ + i * poly_degree_, poly_degree_,
-                          modulus_q[i], result.data_ + i * poly_degree_);
+        futures.push_back(pool.enqueue(
+            [&, i]()
+            {
+                add_poly_coeffmod(data_ + i * poly_degree_, operand.data_ + i * poly_degree_,
+                                  poly_degree_, modulus_q[i], result.data_ + i * poly_degree_);
+            }));
     }
+
     for (auto i = rns_num_q_; i < rns_num_q_ + rns_num_p_; ++i)
     {
-        add_poly_coeffmod(data_ + i * poly_degree_, operand.data_ + i * poly_degree_, poly_degree_,
-                          modulus_p[i - rns_num_q_], result.data_ + i * poly_degree_);
+        futures.push_back(pool.enqueue(
+            [&, i]()
+            {
+                add_poly_coeffmod(data_ + i * poly_degree_, operand.data_ + i * poly_degree_, poly_degree_,
+                                  modulus_p[i - rns_num_q_], result.data_ + i * poly_degree_);
+            }));
+    }
+    for (auto &f : futures)
+    {
+        f.get();
     }
 }
 void RNSPoly::sub(const RNSPoly &operand, RNSPoly &result) const
@@ -447,19 +516,31 @@ void RNSPoly::sub(const RNSPoly &operand, RNSPoly &result) const
 
     auto &modulus_q = context_data->parms().q();
     auto &modulus_p = key_context_data->parms().p();
-
-#ifdef USING_OPENMP
-#pragma omp parallel for
-#endif
-    for (auto i = 0; i < rns_num_q_; ++i)
+    auto &pool = ThreadPool::get_instance();
+    std::vector<std::future<void>> futures;
+    futures.reserve(rns_num_q_ + rns_num_p_);
+    for (int i = 0; i < rns_num_q_; ++i)
     {
-        sub_poly_coeffmod(data_ + i * poly_degree_, operand.data_ + i * poly_degree_, poly_degree_,
-                          modulus_q[i], result.data_ + i * poly_degree_);
+        futures.push_back(pool.enqueue(
+            [&, i]()
+            {
+                sub_poly_coeffmod(data_ + i * poly_degree_, operand.data_ + i * poly_degree_,
+                                  poly_degree_, modulus_q[i], result.data_ + i * poly_degree_);
+            }));
     }
+
     for (auto i = rns_num_q_; i < rns_num_q_ + rns_num_p_; ++i)
     {
-        sub_poly_coeffmod(data_ + i * poly_degree_, operand.data_ + i * poly_degree_, poly_degree_,
-                          modulus_p[i - rns_num_q_], result.data_ + i * poly_degree_);
+        futures.push_back(pool.enqueue(
+            [&, i]()
+            {
+                sub_poly_coeffmod(data_ + i * poly_degree_, operand.data_ + i * poly_degree_, poly_degree_,
+                                  modulus_p[i - rns_num_q_], result.data_ + i * poly_degree_);
+            }));
+    }
+    for (auto &f : futures)
+    {
+        f.get();
     }
 }
 void RNSPoly::multiply(const RNSPoly &operand, RNSPoly &result) const
@@ -475,14 +556,23 @@ void RNSPoly::multiply(const RNSPoly &operand, RNSPoly &result) const
             auto &modulus_q = context_data->parms().q();
             auto &modulus_p = key_context_data->parms().p();
 
-#ifdef USING_OPENMP
-#pragma omp parallel for
-#endif
+            auto &pool = ThreadPool::get_instance();
+            std::vector<std::future<void>> futures;
+            futures.reserve(rns_num_q_);
+
             for (int i = 0; i < rns_num_q_; ++i)
             {
-                dyadic_product_coeffmod(data_ + i * poly_degree_, operand.data_ + i * poly_degree_,
-                                        poly_degree_, modulus_q[i],
-                                        result.data_ + i * poly_degree_);
+                futures.push_back(pool.enqueue(
+                    [&, i]()
+                    {
+                        dyadic_product_coeffmod(data_ + i * poly_degree_,
+                                                operand.data_ + i * poly_degree_, poly_degree_,
+                                                modulus_q[i], result.data_ + i * poly_degree_);
+                    }));
+            }
+            for (auto &f : futures)
+            {
+                f.get();
             }
 
             if (rns_num_p_ == operand.rns_num_p_ && rns_num_p_ == result.rns_num_p_)
@@ -510,19 +600,33 @@ void RNSPoly::multiply(const RNSPoly &operand, RNSPoly &result) const
     auto &modulus_q = context_data->parms().q();
     auto &modulus_p = key_context_data->parms().p();
 
-#ifdef USING_OPENMP
-#pragma omp parallel for
-#endif
-    for (auto i = 0; i < rns_num_q_; ++i)
+    auto &pool = ThreadPool::get_instance();
+    std::vector<std::future<void>> futures;
+    futures.reserve(rns_num_q_ + rns_num_p_);
+
+    for (int i = 0; i < rns_num_q_; ++i)
     {
-        dyadic_product_coeffmod(data_ + i * poly_degree_, operand.data_ + i * poly_degree_,
-                                poly_degree_, modulus_q[i], result.data_ + i * poly_degree_);
+        futures.push_back(pool.enqueue(
+            [&, i]()
+            {
+                dyadic_product_coeffmod(data_ + i * poly_degree_, operand.data_ + i * poly_degree_,
+                                        poly_degree_, modulus_q[i],
+                                        result.data_ + i * poly_degree_);
+            }));
     }
     for (auto i = rns_num_q_; i < rns_num_q_ + rns_num_p_; ++i)
     {
-        dyadic_product_coeffmod(data_ + i * poly_degree_, operand.data_ + i * poly_degree_,
-                                poly_degree_, modulus_p[i - rns_num_q_],
-                                result.data_ + i * poly_degree_);
+        futures.push_back(pool.enqueue(
+            [&, i]()
+            {
+                dyadic_product_coeffmod(data_ + i * poly_degree_, operand.data_ + i * poly_degree_,
+                                        poly_degree_, modulus_p[i - rns_num_q_],
+                                        result.data_ + i * poly_degree_);
+            }));
+    }
+    for (auto &f : futures)
+    {
+        f.get();
     }
 }
 void RNSPoly::add_scalar(uint64_t scalar, RNSPoly &result) const
@@ -539,18 +643,31 @@ void RNSPoly::add_scalar(uint64_t scalar, RNSPoly &result) const
     auto &modulus_q = context_data->parms().q();
     auto &modulus_p = key_context_data->parms().p();
 
-#ifdef USING_OPENMP
-#pragma omp parallel for
-#endif
-    for (auto i = 0; i < rns_num_q_; ++i)
+    auto &pool = ThreadPool::get_instance();
+    std::vector<std::future<void>> futures;
+    futures.reserve(rns_num_q_ + rns_num_p_);
+    for (int i = 0; i < rns_num_q_; ++i)
     {
-        add_poly_scalar_coeffmod(data_ + i * poly_degree_, poly_degree_, scalar, modulus_q[i],
-                                 result.data_ + i * poly_degree_);
+        futures.push_back(pool.enqueue(
+            [&, i]()
+            {
+                add_poly_scalar_coeffmod(data_ + i * poly_degree_, poly_degree_, scalar,
+                                         modulus_q[i], result.data_ + i * poly_degree_);
+            }));
     }
+
     for (auto i = rns_num_q_; i < rns_num_q_ + rns_num_p_; ++i)
     {
-        add_poly_scalar_coeffmod(data_ + i * poly_degree_, poly_degree_, scalar,
-                                 modulus_p[i - rns_num_q_], result.data_ + i * poly_degree_);
+        futures.push_back(pool.enqueue(
+            [&, i]()
+            {
+                add_poly_scalar_coeffmod(data_ + i * poly_degree_, poly_degree_, scalar,
+                                         modulus_p[i - rns_num_q_], result.data_ + i * poly_degree_);
+            }));
+    }
+    for (auto &f : futures)
+    {
+        f.get();
     }
 }
 void RNSPoly::multiply_scalar(uint64_t scalar, RNSPoly &result) const
@@ -567,18 +684,31 @@ void RNSPoly::multiply_scalar(uint64_t scalar, RNSPoly &result) const
     auto &modulus_q = context_data->parms().q();
     auto &modulus_p = key_context_data->parms().p();
 
-#ifdef USING_OPENMP
-#pragma omp parallel for
-#endif
-    for (auto i = 0; i < rns_num_q_; ++i)
+    auto &pool = ThreadPool::get_instance();
+    std::vector<std::future<void>> futures;
+    futures.reserve(rns_num_q_ + rns_num_p_);
+    for (int i = 0; i < rns_num_q_; ++i)
     {
-        multiply_poly_scalar_coeffmod(data_ + i * poly_degree_, poly_degree_, scalar, modulus_q[i],
-                                      result.data_ + i * poly_degree_);
+        futures.push_back(pool.enqueue(
+            [&, i]()
+            {
+                multiply_poly_scalar_coeffmod(data_ + i * poly_degree_, poly_degree_, scalar,
+                                              modulus_q[i], result.data_ + i * poly_degree_);
+            }));
     }
+
     for (auto i = rns_num_q_; i < rns_num_q_ + rns_num_p_; ++i)
     {
-        multiply_poly_scalar_coeffmod(data_ + i * poly_degree_, poly_degree_, scalar,
-                                      modulus_p[i - rns_num_q_], result.data_ + i * poly_degree_);
+        futures.push_back(pool.enqueue(
+            [&, i]()
+            {
+                multiply_poly_scalar_coeffmod(data_ + i * poly_degree_, poly_degree_, scalar,
+                                              modulus_p[i - rns_num_q_], result.data_ + i * poly_degree_);
+            }));
+    }
+    for (auto &f : futures)
+    {
+        f.get();
     }
 }
 

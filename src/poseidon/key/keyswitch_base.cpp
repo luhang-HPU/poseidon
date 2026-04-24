@@ -268,51 +268,41 @@ GaloisKeys KSwitchGenBase::create_galois_keys_mt(const std::vector<uint32_t> &ga
     // The max number of keys is equal to number of coefficients
     galois_keys.data().resize(coeff_count);
 
-    int num_threads = 8;
-    ThreadPool thread_pool(num_threads);
-    std::mutex mtx;  // 如果需要保护共享资源才用
+    auto &thread_pool = poseidon::ThreadPool::get_instance();
+    std::vector<std::future<void>> futures;
+    futures.reserve(galois_elts.size());
 
-    const int work_load = (galois_elts.size() + num_threads - 1) / num_threads;
-
-    for (int t = 0; t < num_threads; ++t)
+    for (int i = 0; i < galois_elts.size(); ++ i)
     {
-        int s = t * work_load;
-        int e = std::min<int>(galois_elts.size(), s + work_load);
-
-        thread_pool.enqueue(
-            [&, s, e]()
+        futures.push_back(thread_pool.enqueue(
+            [&, i]()
             {
-                for (int i = s; i < e; ++i)
+                auto galois_elt = galois_elts[i];
+
+                // Verify coprime conditions.
+                if (!(galois_elt & 1) || (galois_elt >= (coeff_count << 1)))
                 {
-                    auto galois_elt = galois_elts[i];
-
-                    // Verify coprime conditions.
-                    if (!(galois_elt & 1) || (galois_elt >= (coeff_count << 1)))
-                    {
-                        POSEIDON_THROW(invalid_argument_error, "Galois element is not valid");
-                    }
-
-                    // Do we already have the key?
-                    if (galois_keys.has_key(galois_elt))
-                    {
-                        continue;
-                    }
-
-                    // Rotate secret key for each coeff_modulus
-                    POSEIDON_ALLOCATE_GET_RNS_ITER(rotated_secret_key, coeff_count,
-                                                   coeff_modulus_size, pool_);
-                    ConstRNSIter secret_key(prev_secret_key.data().data(), coeff_count);
-                    galois_tool->apply_galois_ntt(secret_key, coeff_modulus_size, galois_elt,
-                                                  rotated_secret_key);
-
-                    // Initialize Galois key
-                    size_t index = GaloisKeys::get_index(galois_elt);
-
-                    // 如果每个 index 都是唯一的，可以不用锁
-                    generate_one_kswitch_key(prev_secret_key, rotated_secret_key,
-                                             galois_keys.data()[index]);
+                    POSEIDON_THROW(invalid_argument_error, "Galois element is not valid");
                 }
-            });
+
+                // Do we already have the key?
+                if (galois_keys.has_key(galois_elt))
+                {
+                    return;
+                }
+
+                // Rotate secret key for each coeff_modulus
+                POSEIDON_ALLOCATE_GET_RNS_ITER(rotated_secret_key, coeff_count, coeff_modulus_size,
+                                               pool_);
+                ConstRNSIter secret_key(prev_secret_key.data().data(), coeff_count);
+                galois_tool->apply_galois_ntt(secret_key, coeff_modulus_size, galois_elt,
+                                              rotated_secret_key);
+
+                // Initialize Galois key
+                size_t index = GaloisKeys::get_index(galois_elt);
+                generate_one_kswitch_key(prev_secret_key, rotated_secret_key,
+                                         galois_keys.data()[index]);
+            }));
     }
 
     // Set the parms_id

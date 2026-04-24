@@ -4,6 +4,7 @@
 #include "poseidon/factory/poseidon_factory.h"
 #include "poseidon/keygenerator.h"
 #include "poseidon/util/debug.h"
+#include "poseidon/util/thread_pool.h"
 
 using namespace poseidon;
 using namespace poseidon::util;
@@ -20,7 +21,8 @@ int main()
         PoseidonFactory::get_instance()->create_poseidon_context(bfv_param_literal);
     std::shared_ptr<EvaluatorBfvBase> bfv_eva =
         PoseidonFactory::get_instance()->create_bfv_evaluator(context);
-
+    
+    
     BatchEncoder encoder(context);
     KeyGenerator keygen(context);
     PublicKey public_key;

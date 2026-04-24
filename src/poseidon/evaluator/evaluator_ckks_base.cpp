@@ -2,6 +2,7 @@
 #include "poseidon/advance/homomorphic_dft.h"
 #include "poseidon/encryptor.h"
 #include "poseidon/util/debug.h"
+#include "poseidon/util/thread_pool.h"
 
 namespace poseidon
 {
@@ -1402,42 +1403,56 @@ void EvaluatorCkksBase::ckks_multiply(Ciphertext &ciph1, const Ciphertext &ciph2
             // x = (x[0] * y[0], x[0] * y[1] + x[1] * y[0], x[1] * y[1])
             // with appropriate modular reduction
 
-            // 开启 OpenMP 并行化 (作用于最外层模数循环)，每个线程需要处理不同的模数，互不干扰
-            #pragma omp parallel for
+            auto &thread_pool = ThreadPool::get_instance();
+            std::vector<std::future<void>> futures;
+            futures.reserve(coeff_modulus_size);
             for (size_t i = 0; i < coeff_modulus_size; i++) 
             {
-                auto &modulus = coeff_modulus[i];
+                futures.emplace_back(thread_pool.enqueue(
+                    [&, i]()
+                    {
+                        auto &modulus = coeff_modulus[i];
 
-                // 为每个线程准备独立的临时缓冲区
-                POSEIDON_ALLOCATE_GET_COEFF_ITER(local_temp, tile_size, pool);
+                        // 为每个线程准备独立的临时缓冲区
+                        POSEIDON_ALLOCATE_GET_COEFF_ITER(local_temp, tile_size, pool);
 
-                // 获取第 i 个模数对应的 RNS 迭代器
-                // ciph1_iter[0] 指向第 0 个多项式，ciph1_iter[0][i] 指向该多项式的第 i 个 RNS 分量
-                RNSIter it_x0(ciph1_iter[0][i], tile_size);
-                RNSIter it_x1(ciph1_iter[1][i], tile_size);
-                RNSIter it_x2(ciph1_iter[2][i], tile_size);
-                ConstRNSIter it_y0(ciph2_iter[0][i], tile_size);
-                ConstRNSIter it_y1(ciph2_iter[1][i], tile_size);
+                        // 获取第 i 个模数对应的 RNS 迭代器
+                        // ciph1_iter[0] 指向第 0 个多项式，ciph1_iter[0][i] 指向该多项式的第 i 个
+                        // RNS 分量
+                        RNSIter it_x0(ciph1_iter[0][i], tile_size);
+                        RNSIter it_x1(ciph1_iter[1][i], tile_size);
+                        RNSIter it_x2(ciph1_iter[2][i], tile_size);
+                        ConstRNSIter it_y0(ciph2_iter[0][i], tile_size);
+                        ConstRNSIter it_y1(ciph2_iter[1][i], tile_size);
 
-                // 中层循环：遍历 Tile
-                for (size_t j = 0; j < num_tiles; j++) 
-                {
-                    // 逻辑：x[2] = x[1] * y[1]，这里 it_x1[0] 返回的是当前 Tile 的 CoeffIter（即双重解引用后的指针）
-                    dyadic_product_coeffmod(it_x1[0], it_y1[0], tile_size, modulus, it_x2[0]);
-                    // 逻辑：temp = x[1] * y[0]
-                    dyadic_product_coeffmod(it_x1[0], it_y0[0], tile_size, modulus, local_temp);
+                        // 中层循环：遍历 Tile
+                        for (size_t j = 0; j < num_tiles; j++)
+                        {
+                            // 逻辑：x[2] = x[1] * y[1]，这里 it_x1[0] 返回的是当前 Tile 的
+                            // CoeffIter（即双重解引用后的指针）
+                            dyadic_product_coeffmod(it_x1[0], it_y1[0], tile_size, modulus,
+                                                    it_x2[0]);
+                            // 逻辑：temp = x[1] * y[0]
+                            dyadic_product_coeffmod(it_x1[0], it_y0[0], tile_size, modulus,
+                                                    local_temp);
 
-                    // 逻辑：x[1] = x[0] * y[1]
-                    dyadic_product_coeffmod(it_x0[0], it_y1[0], tile_size, modulus, it_x1[0]);
+                            // 逻辑：x[1] = x[0] * y[1]
+                            dyadic_product_coeffmod(it_x0[0], it_y1[0], tile_size, modulus,
+                                                    it_x1[0]);
 
-                    // 逻辑：x[1] += temp
-                    add_poly_coeffmod(it_x1[0], local_temp, tile_size, modulus, it_x1[0]);
-                    // 逻辑：x[0] = x[0] * y[0]
-                    dyadic_product_coeffmod(it_x0[0], it_y0[0], tile_size, modulus, it_x0[0]);
-                    // 指针自增（跳向下一个 Tile）
-                    it_x0++; it_x1++; it_x2++;
-                    it_y0++; it_y1++;
-                }
+                            // 逻辑：x[1] += temp
+                            add_poly_coeffmod(it_x1[0], local_temp, tile_size, modulus, it_x1[0]);
+                            // 逻辑：x[0] = x[0] * y[0]
+                            dyadic_product_coeffmod(it_x0[0], it_y0[0], tile_size, modulus,
+                                                    it_x0[0]);
+                            // 指针自增（跳向下一个 Tile）
+                            it_x0++;
+                            it_x1++;
+                            it_x2++;
+                            it_y0++;
+                            it_y1++;
+                        }
+                    }));
             }
         }
     }

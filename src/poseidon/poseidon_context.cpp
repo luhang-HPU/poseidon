@@ -1,4 +1,5 @@
 #include "poseidon_context.h"
+#include "poseidon/util/thread_pool.h"
 
 #ifdef USING_HARDWARE
 #include "poseidon_hardware/hardware_drive/hardware_api.h"
@@ -48,5 +49,6 @@ PoseidonContext::PoseidonContext(const ParametersLiteral &param_literal, bool us
 
     auto rng = make_shared<Blake2xbPRNGFactory>(Blake2xbPRNGFactory());
     set_random_generator(rng);
+    poseidon::ThreadPool::get_instance();
 }
 }  // namespace poseidon

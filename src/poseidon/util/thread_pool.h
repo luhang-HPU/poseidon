@@ -14,36 +14,39 @@ namespace poseidon
 class ThreadPool
 {
 public:
-    // 构造函数，指定线程数量
-    ThreadPool(size_t threads);
+    static ThreadPool &get_instance();
 
-    // 禁止拷贝构造和赋值操作
     ThreadPool(const ThreadPool &) = delete;
     ThreadPool &operator=(const ThreadPool &) = delete;
-
-    // 析构函数，关闭线程池
     ~ThreadPool();
+    size_t get_thread_count() const { return workers.size(); }
 
-    // 添加任务到线程池，返回future以便获取结果
     template <class F, class... Args>
     auto enqueue(F &&f, Args &&...args) -> std::future<typename std::result_of<F(Args...)>::type>;
-
-    // 等待所有任务完成
     void wait_all();
-
 private:
-    // 工作线程
+    ThreadPool(size_t threads);
     std::vector<std::thread> workers;
-    // 任务队列
     std::queue<std::function<void()>> tasks;
 
-    // 同步机制
     std::mutex queue_mutex_;
     std::condition_variable condition_;
     std::condition_variable complete_condition_;
     bool stop_;
     size_t active_tasks_;
 };
+
+inline ThreadPool &ThreadPool::get_instance()
+{
+    static ThreadPool instance(
+        []()
+        {
+            unsigned int hardware_threads = std::thread::hardware_concurrency();
+            return (hardware_threads > 0) ? hardware_threads : 4;
+        }());
+    return instance;
+}
+
 
 // 构造函数：创建指定数量的工作线程
 inline ThreadPool::ThreadPool(size_t threads) : stop_(false), active_tasks_(0)
@@ -58,8 +61,7 @@ inline ThreadPool::ThreadPool(size_t threads) : stop_(false), active_tasks_(0)
 
                     {
                         std::unique_lock<std::mutex> lock(queue_mutex_);
-                        condition_.wait(lock,
-                                             [this] { return stop_ || !tasks.empty(); });
+                        condition_.wait(lock, [this] { return stop_ || !tasks.empty(); });
 
                         if (stop_ && tasks.empty())
                             return;
@@ -71,14 +73,12 @@ inline ThreadPool::ThreadPool(size_t threads) : stop_(false), active_tasks_(0)
 
                     // 执行任务
                     task();
-
                     {
                         std::unique_lock<std::mutex> lock(queue_mutex_);
                         active_tasks_--;
-                        // 如果所有任务都完成了，通知wait_all
                         if (tasks.empty() && active_tasks_ == 0)
                         {
-                            complete_condition_.notify_one();
+                            complete_condition_.notify_all();
                         }
                     }
                 }
