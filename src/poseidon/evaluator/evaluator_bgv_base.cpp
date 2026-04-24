@@ -1,5 +1,6 @@
 #include "evaluator_bgv_base.h"
 #include "poseidon/basics/util/scalingvariant.h"
+#include "poseidon/util/thread_pool.h"
 
 namespace poseidon
 {
@@ -476,23 +477,82 @@ void EvaluatorBgvBase::bgv_multiply(Ciphertext &ciph1, const Ciphertext &ciph2,
         // Given input tuples of polynomials x = (x[0], x[1], x[2]), y = (y[0], y[1]), computes
         // x = (x[0] * y[0], x[0] * y[1] + x[1] * y[0], x[1] * y[1])
         // with appropriate modular reduction
-        // Optimized OpenMP parallelization with collapse(2)
-#ifdef USING_OPENMP
-#pragma omp parallel if (coeff_modulus_size * num_tiles > 16)
-        {
-            std::vector<uint64_t> thread_local_temp_tile(tile_size);
-            uint64_t *thread_local_temp = thread_local_temp_tile.data();
 
-#pragma omp for collapse(2) schedule(dynamic, 4)
-#else
-        std::vector<uint64_t> local_temp_tile(tile_size);
-        uint64_t *local_temp = local_temp_tile.data();
-#endif
+        auto &pool = poseidon::ThreadPool::get_instance();
+        // 1. 计算降维后的总迭代次数
+        size_t total_iterations = coeff_modulus_size * num_tiles;
+        if (total_iterations > 16)
+        {
+            // 对应 schedule(dynamic, 4)
+            size_t chunk_size = 4;
+            std::vector<std::future<void>> futures;
+            futures.reserve((total_iterations + chunk_size - 1) / chunk_size);
+
+            // 3. 对一维大循环进行切块
+            for (size_t start = 0; start < total_iterations; start += chunk_size)
+            {
+                size_t end = std::min(start + chunk_size, total_iterations);
+
+                futures.push_back(pool.enqueue(
+                    [&, start, end]()
+                    {
+                        std::vector<uint64_t> thread_local_temp_tile(tile_size);
+                        uint64_t *thread_local_temp = thread_local_temp_tile.data();
+
+                        // 4. Worker 线程执行分配到的任务块
+                        for (size_t idx = start; idx < end; ++idx)
+                        {
+                            // 🚨 关键数学映射：将一维的 idx 还原为二维的 i 和 j
+                            size_t i = idx / num_tiles;
+                            size_t j = idx % num_tiles;
+
+                            // ==========================================
+                            // 原有的内部核心计算逻辑完全保持不变
+                            // ==========================================
+                            auto &I = coeff_modulus[i];
+
+                            RNSIter ciph1_0_tile_iter(ciph1_iter[0][i], tile_size);
+                            RNSIter ciph1_1_tile_iter(ciph1_iter[1][i], tile_size);
+                            RNSIter ciph1_2_tile_iter(ciph1_iter[2][i], tile_size);
+                            ConstRNSIter ciph2_0_tile_iter(ciph2_iter[0][i], tile_size);
+                            ConstRNSIter ciph2_1_tile_iter(ciph2_iter[1][i], tile_size);
+
+                            ciph1_0_tile_iter += j;
+                            ciph1_1_tile_iter += j;
+                            ciph1_2_tile_iter += j;
+                            ciph2_0_tile_iter += j;
+                            ciph2_1_tile_iter += j;
+
+                            dyadic_product_coeffmod(ciph1_1_tile_iter[0], ciph2_1_tile_iter[0],
+                                                    tile_size, I, ciph1_2_tile_iter[0]);
+                            dyadic_product_coeffmod(ciph1_1_tile_iter[0], ciph2_0_tile_iter[0],
+                                                    tile_size, I, thread_local_temp);
+                            dyadic_product_coeffmod(ciph1_0_tile_iter[0], ciph2_1_tile_iter[0],
+                                                    tile_size, I, ciph1_1_tile_iter[0]);
+                            add_poly_coeffmod(ciph1_1_tile_iter[0], thread_local_temp, tile_size, I,
+                                              ciph1_1_tile_iter[0]);
+                            dyadic_product_coeffmod(ciph1_0_tile_iter[0], ciph2_0_tile_iter[0],
+                                                    tile_size, I, ciph1_0_tile_iter[0]);
+                        }
+                    }));
+            }
+
+            // 5. 局部屏障同步
+            for (auto &f : futures)
+            {
+                f.get();
+            }
+        }
+        else
+        {
+            // 6. 降级：总任务数 <= 16 时，直接走单线程原始逻辑
+            std::vector<uint64_t> local_temp_tile(tile_size);
+            uint64_t *local_temp = local_temp_tile.data();
+
             for (size_t i = 0; i < coeff_modulus_size; i++)
             {
                 for (size_t j = 0; j < num_tiles; j++)
                 {
-#ifdef USING_OPENMP
                     auto &I = coeff_modulus[i];
 
                     RNSIter ciph1_0_tile_iter(ciph1_iter[0][i], tile_size);
@@ -510,94 +570,16 @@ void EvaluatorBgvBase::bgv_multiply(Ciphertext &ciph1, const Ciphertext &ciph2,
                     dyadic_product_coeffmod(ciph1_1_tile_iter[0], ciph2_1_tile_iter[0], tile_size,
                                             I, ciph1_2_tile_iter[0]);
                     dyadic_product_coeffmod(ciph1_1_tile_iter[0], ciph2_0_tile_iter[0], tile_size,
-                                            I, thread_local_temp);
+                                            I, local_temp);
                     dyadic_product_coeffmod(ciph1_0_tile_iter[0], ciph2_1_tile_iter[0], tile_size,
                                             I, ciph1_1_tile_iter[0]);
-                    add_poly_coeffmod(ciph1_1_tile_iter[0], thread_local_temp, tile_size, I,
+                    add_poly_coeffmod(ciph1_1_tile_iter[0], local_temp, tile_size, I,
                                       ciph1_1_tile_iter[0]);
                     dyadic_product_coeffmod(ciph1_0_tile_iter[0], ciph2_0_tile_iter[0], tile_size,
                                             I, ciph1_0_tile_iter[0]);
-#else
-                auto &I = coeff_modulus[i];
-
-                RNSIter ciph1_0_tile_iter(ciph1_iter[0][i], tile_size);
-                RNSIter ciph1_1_tile_iter(ciph1_iter[1][i], tile_size);
-                RNSIter ciph1_2_tile_iter(ciph1_iter[2][i], tile_size);
-                ConstRNSIter ciph2_0_tile_iter(ciph2_iter[0][i], tile_size);
-                ConstRNSIter ciph2_1_tile_iter(ciph2_iter[1][i], tile_size);
-
-                ciph1_0_tile_iter += j;
-                ciph1_1_tile_iter += j;
-                ciph1_2_tile_iter += j;
-                ciph2_0_tile_iter += j;
-                ciph2_1_tile_iter += j;
-
-                dyadic_product_coeffmod(ciph1_1_tile_iter[0], ciph2_1_tile_iter[0], tile_size, I,
-                                        ciph1_2_tile_iter[0]);
-                dyadic_product_coeffmod(ciph1_1_tile_iter[0], ciph2_0_tile_iter[0], tile_size, I,
-                                        local_temp);
-                dyadic_product_coeffmod(ciph1_0_tile_iter[0], ciph2_1_tile_iter[0], tile_size, I,
-                                        ciph1_1_tile_iter[0]);
-                add_poly_coeffmod(ciph1_1_tile_iter[0], local_temp, tile_size, I,
-                                  ciph1_1_tile_iter[0]);
-                dyadic_product_coeffmod(ciph1_0_tile_iter[0], ciph2_0_tile_iter[0], tile_size, I,
-                                        ciph1_0_tile_iter[0]);
-#endif
                 }
             }
-#ifdef USING_OPENMP
         }
-#endif
-    }
-    else
-    {
-        // Allocate temporary space for the result
-        POSEIDON_ALLOCATE_ZERO_GET_POLY_ITER(temp, dest_size, coeff_count, coeff_modulus_size,
-                                             pool);
-
-        POSEIDON_ITERATE(
-            iter(size_t(0)), dest_size,
-            [&](auto I)
-            {
-                // We iterate over relevant components of ciph1 and ciph2 in increasing
-                // order for ciph1 and reversed (decreasing) order for ciph2. The bounds
-                // for the indices of the relevant terms are obtained as follows.
-                size_t curr_ciph1_last = min<size_t>(I, ciph1_size - 1);
-                size_t curr_ciph2_first = min<size_t>(I, ciph2_size - 1);
-                size_t curr_ciph1_first = I - curr_ciph2_first;
-                // size_t curr_ciph2_last = secret_power_index - curr_ciph1_last;
-
-                // The total number of dyadic products is now easy to compute
-                size_t steps = curr_ciph1_last - curr_ciph1_first + 1;
-
-                // Create a shifted iterator for the first input
-                auto shifted_ciph1_iter = ciph1_iter + curr_ciph1_first;
-
-                // Create a shifted reverse iterator for the second input
-                auto shifted_reversed_ciph2_iter = reverse_iter(ciph2_iter + curr_ciph2_first);
-
-                POSEIDON_ITERATE(iter(shifted_ciph1_iter, shifted_reversed_ciph2_iter), steps,
-                                 [&](auto J)
-                                 {
-                                     // Extra care needed here:
-                                     // temp_iter must be dereferenced once to produce an
-                                     // appropriate RNSIter
-                                     POSEIDON_ITERATE(
-                                         iter(J, coeff_modulus, temp[I]), coeff_modulus_size,
-                                         [&](auto K)
-                                         {
-                                             POSEIDON_ALLOCATE_GET_COEFF_ITER(prod, coeff_count,
-                                                                              pool);
-                                             dyadic_product_coeffmod(get<0, 0>(K), get<0, 1>(K),
-                                                                     coeff_count, get<1>(K), prod);
-                                             add_poly_coeffmod(prod, get<2>(K), coeff_count,
-                                                               get<1>(K), get<2>(K));
-                                         });
-                                 });
-            });
-
-        // Set the final result
-        set_poly_array(temp, dest_size, coeff_count, coeff_modulus_size, ciph1.data());
     }
 
     // Set the correction factor

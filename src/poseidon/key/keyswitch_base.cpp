@@ -202,38 +202,47 @@ GaloisKeys KSwitchGenBase::create_galois_keys(const std::vector<uint32_t> &galoi
     // The max number of keys is equal to number of coefficients
     galois_keys.data().resize(coeff_count);
 
-#pragma omp parallel for
+    auto &global_pool = poseidon::ThreadPool::get_instance();
+
+    std::vector<std::future<void>> futures;
+    futures.reserve(galois_elts.size());
+    std::mutex critical_mutex;
+
     for (size_t i = 0; i < galois_elts.size(); i++)
     {
-        uint32_t galois_elt = galois_elts[i];
-        // Verify coprime conditions.
-        if (!(galois_elt & 1) || (galois_elt >= coeff_count << 1))
-        {
-            POSEIDON_THROW(invalid_argument_error, "Galois element is not valid");
-        }
+        futures.push_back(global_pool.enqueue(
+            [&, i]()
+            {
+                uint32_t galois_elt = galois_elts[i];
+                if (!(galois_elt & 1) || (galois_elt >= coeff_count << 1))
+                {
+                    POSEIDON_THROW(invalid_argument_error, "Galois element is not valid");
+                }
 
-        // Do we already have the key?
-        if (galois_keys.has_key(galois_elt))
-        {
-            continue;
-        }
+                if (galois_keys.has_key(galois_elt))
+                {
+                    return;
+                }
 
-        // Rotate secret key for each coeff_modulus
-        POSEIDON_ALLOCATE_GET_RNS_ITER(rotated_secret_key, coeff_count, coeff_modulus_size, pool_);
-        ConstRNSIter secret_key(prev_secret_key.data().data(), coeff_count);
-        galois_tool->apply_galois_ntt(secret_key, coeff_modulus_size, galois_elt,
-                                      rotated_secret_key);
+                POSEIDON_ALLOCATE_GET_RNS_ITER(rotated_secret_key, coeff_count, coeff_modulus_size,
+                                               pool_);
+                ConstRNSIter secret_key(prev_secret_key.data().data(), coeff_count);
+                galois_tool->apply_galois_ntt(secret_key, coeff_modulus_size, galois_elt,
+                                              rotated_secret_key);
 
-        // Initialize Galois key
-        // This is the location in the galois_keys vector
-        size_t index = GaloisKeys::get_index(galois_elt);
+                size_t index = GaloisKeys::get_index(galois_elt);
 
-// Create Galois keys.
-#pragma omp critical
-        {
-            generate_one_kswitch_key(prev_secret_key, rotated_secret_key,
-                                     galois_keys.data()[index]);
-        }
+                {
+                    std::lock_guard<std::mutex> lock(critical_mutex);
+                    generate_one_kswitch_key(prev_secret_key, rotated_secret_key,
+                                             galois_keys.data()[index]);
+                }
+            }));
+    }
+
+    for (auto &f : futures)
+    {
+        f.get();
     }
 
     // Set the parms_id
@@ -304,7 +313,10 @@ GaloisKeys KSwitchGenBase::create_galois_keys_mt(const std::vector<uint32_t> &ga
                                          galois_keys.data()[index]);
             }));
     }
-
+    for (auto &f : futures)
+    {
+        f.get();
+    }
     // Set the parms_id
     galois_keys.parms_id() = context_data.parms().parms_id();
 

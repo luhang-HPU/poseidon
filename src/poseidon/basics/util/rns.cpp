@@ -987,63 +987,67 @@ void RNSTool::divide_and_round_q_last_ntt_inplace(RNSIter input, ConstNTTTablesI
     POSEIDON_ALLOCATE_GET_COEFF_ITER(temp, coeff_count_, pool);
     size_t base_q_size_minus_1 = base_q_size - 1;
 
-    // 开启并行区域
-#ifdef USING_OPENMP
-#pragma omp parallel
-#endif
+    auto &thread_pool = poseidon::ThreadPool::get_instance();
+    std::vector<std::future<void>> futures;
+    futures.reserve(base_q_size_minus_1);
+
+    for (size_t i = 0; i < base_q_size_minus_1; i++)
     {
-        // 每个线程分配自己的临时缓冲区，coeff_count_ 是多项式的度
-        POSEIDON_ALLOCATE_GET_COEFF_ITER(thread_temp, coeff_count_, pool);
-
-#pragma omp for
-        for (size_t i = 0; i < base_q_size_minus_1; i++)
-        {
-            auto current_input_poly = input[i];                      // get<0>(I)
-            uint64_t inv_q_last_val = inv_q_last_mod_q_[i].operand;  // get<1>(I)
-            Modulus qi = (*base_q_)[i];                              // get<2>(I)
-            const auto &current_ntt_table = rns_ntt_tables[i];       // get<3>(I)
-
-            // 1. (ct mod qk) mod qi
-            if (qi.value() < last_modulus.value())
+        futures.push_back(thread_pool.enqueue(
+            [&, i]()
             {
-                modulo_poly_coeffs(last_input, coeff_count_, qi, thread_temp);
-            }
-            else
-            {
-                set_uint(last_input, coeff_count_, thread_temp);
-            }
+                POSEIDON_ALLOCATE_GET_COEFF_ITER(thread_temp, coeff_count_, pool);
+                auto current_input_poly = input[i];                      // get<0>(I)
+                uint64_t inv_q_last_val = inv_q_last_mod_q_[i].operand;  // get<1>(I)
+                Modulus qi = (*base_q_)[i];                              // get<2>(I)
+                const auto &current_ntt_table = rns_ntt_tables[i];       // get<3>(I)
 
-            // 准备修正项
-            uint64_t neg_half_mod = qi.value() - barrett_reduce_64(half, qi);
+                // 1. (ct mod qk) mod qi
+                if (qi.value() < last_modulus.value())
+                {
+                    modulo_poly_coeffs(last_input, coeff_count_, qi, thread_temp);
+                }
+                else
+                {
+                    set_uint(last_input, coeff_count_, thread_temp);
+                }
 
-            // 处理 thread_temp 上的每一个系数
-            for (size_t j = 0; j < coeff_count_; j++)
-            {
-                thread_temp[j] += neg_half_mod;
-            }
+                // 准备修正项
+                uint64_t neg_half_mod = qi.value() - barrett_reduce_64(half, qi);
+
+                // 处理 thread_temp 上的每一个系数
+                for (size_t j = 0; j < coeff_count_; j++)
+                {
+                    thread_temp[j] += neg_half_mod;
+                }
 
 #if POSEIDON_USER_MOD_BIT_COUNT_MAX <= 60
-            uint64_t qi_lazy = qi.value() << 2;
-            ntt_negacyclic_harvey_lazy(thread_temp, current_ntt_table);
+                uint64_t qi_lazy = qi.value() << 2;
+                ntt_negacyclic_harvey_lazy(thread_temp, current_ntt_table);
 #else
-            uint64_t qi_lazy = qi.value() << 1;
-            ntt_negacyclic_harvey_lazy(thread_temp, current_ntt_table);
+                uint64_t qi_lazy = qi.value() << 1;
+                ntt_negacyclic_harvey_lazy(thread_temp, current_ntt_table);
 
-            for (size_t j = 0; j < coeff_count_; j++)
-            {
-                thread_temp[j] -= (qi_lazy & static_cast<uint64_t>(
-                                                 -static_cast<int64_t>(thread_temp[j] >= qi_lazy)));
-            }
+                for (size_t j = 0; j < coeff_count_; j++)
+                {
+                    thread_temp[j] -=
+                        (qi_lazy &
+                         static_cast<uint64_t>(-static_cast<int64_t>(thread_temp[j] >= qi_lazy)));
+                }
 #endif
-            // 执行减法：(ct mod qi) - (ct mod qk)
-            for (size_t j = 0; j < coeff_count_; j++)
-            {
-                current_input_poly[j] += qi_lazy - thread_temp[j];
-            }
-            // 乘上 qk^(-1) mod qi
-            multiply_poly_scalar_coeffmod(current_input_poly, coeff_count_, inv_q_last_val, qi,
-                                          current_input_poly);
-        }
+                // 执行减法：(ct mod qi) - (ct mod qk)
+                for (size_t j = 0; j < coeff_count_; j++)
+                {
+                    current_input_poly[j] += qi_lazy - thread_temp[j];
+                }
+                // 乘上 qk^(-1) mod qi
+                multiply_poly_scalar_coeffmod(current_input_poly, coeff_count_, inv_q_last_val, qi,
+                                              current_input_poly);
+            }));
+    }
+    for (auto &f : futures)
+    {
+        f.get();
     }
 }
 

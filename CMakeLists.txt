@@ -23,13 +23,21 @@ endif ()
 
 project(Poseidon VERSION 1.0.0 LANGUAGES CXX C)
 
-# 根据ASAN的值来设置编译器标志  
-option(ASAN "Enable AddressSanitizer" OFF)  
+option(ASAN "Enable AddressSanitizer (Memory leaks & Out-of-bounds)" OFF)
+option(TSAN "Enable ThreadSanitizer (Data races & Deadlocks)" OFF)
+
+if(ASAN AND TSAN)
+    message(FATAL_ERROR "ASAN and TSAN cannot be enabled at the same time! Please turn off one of them.")
+endif()
+
 if(ASAN)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fsanitize-recover=address -fno-stack-protector -fno-omit-frame-pointer")
-    message(STATUS "AddressSanitizer enabled.") 
+    message(STATUS "🕵️‍♂️ AddressSanitizer (ASAN) enabled.")
+elseif(TSAN)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -fsanitize-recover=address -fno-stack-protector -fno-omit-frame-pointer")
+    message(STATUS "🕵️‍♂️ ThreadSanitizer (TSAN) enabled.")
 else()
-    message(STATUS "AddressSanitizer disabled.")
+    message(STATUS "Sanitizers disabled.")
 endif()
 
 # [option] CMAKE_BUILD_TYPE (default: "Release")

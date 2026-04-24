@@ -1454,6 +1454,10 @@ void EvaluatorCkksBase::ckks_multiply(Ciphertext &ciph1, const Ciphertext &ciph2
                         }
                     }));
             }
+            for (auto &f : futures) 
+            {
+                f.get();
+            }
         }
     }
     else

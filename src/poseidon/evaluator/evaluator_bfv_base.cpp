@@ -1,6 +1,7 @@
 #include "evaluator_bfv_base.h"
 #include "poseidon/basics/util/scalingvariant.h"
 #include "poseidon/util/debug.h"
+#include "poseidon/util/thread_pool.h"
 
 namespace poseidon
 {
@@ -611,50 +612,79 @@ void EvaluatorBfvBase::multiply_inplace(Ciphertext &ciph1, const Ciphertext &cip
                     // Create a shifted iterator for the output
                     auto shifted_out_iter = out_iter[I];
 
-                    POSEIDON_ITERATE(iter(shifted_in1_iter, shifted_reversed_in2_iter), steps,
-                                     [&](auto J)
-                                     {
-                // 优化：创建并行区域，避免每次循环迭代都分配内存
-#ifdef USING_OPENMP
-#pragma omp parallel if (base_size > 4)
-                                         {
-                                             // 每个线程分配一次临时缓冲区
-                                             POSEIDON_ALLOCATE_GET_COEFF_ITER(thread_local_temp,
-                                                                              coeff_count, pool);
+                    POSEIDON_ITERATE(
+                        iter(shifted_in1_iter, shifted_reversed_in2_iter), steps,
+                        [&](auto J)
+                        {
+                            auto &global_pool = poseidon::ThreadPool::get_instance();
 
-#pragma omp for schedule(dynamic, 2)
-#else
-                            POSEIDON_ALLOCATE_GET_COEFF_ITER(local_temp, coeff_count, pool);
-#endif
-                                             for (size_t k = 0; k < base_size; k++)
-                                             {
-#ifdef USING_OPENMP
-                                                 auto poly1_at_k = get<0>(J)[k];
-                                                 auto poly2_at_k = get<1>(J)[k];
-                                                 auto mod_k = base_iter[k];
-                                                 auto out_poly_k = shifted_out_iter[k];
+                            // 1. 对应 if (base_size > 4)
+                            if (base_size > 4)
+                            {
+                                // 2. 对应 schedule(dynamic, 2)
+                                size_t chunk_size = 2;
+                                std::vector<std::future<void>> futures;
+                                futures.reserve((base_size + chunk_size - 1) / chunk_size);
 
-                                                 // 使用线程本地临时缓冲区
-                                                 dyadic_product_coeffmod(poly1_at_k, poly2_at_k,
-                                                                         coeff_count, mod_k,
-                                                                         thread_local_temp);
-                                                 add_poly_coeffmod(thread_local_temp, out_poly_k,
-                                                                   coeff_count, mod_k, out_poly_k);
-#else
+                                // 3. 将 base_size 次循环按 chunk_size 进行切块
+                                for (size_t start = 0; start < base_size; start += chunk_size)
+                                {
+                                    size_t end = std::min(start + chunk_size, base_size);
+
+                                    // 必须按值捕获切块边界 start 和 end
+                                    // 根据原代码上下文，J, base_iter, shifted_out_iter
+                                    // 可能是局部变量/迭代器， 确保使用 [&]
+                                    // 捕获时它们的生命周期是安全的（因为有 wait_all 屏障）
+                                    futures.push_back(global_pool.enqueue(
+                                        [&, start, end]()
+                                        {
+                                            // 关键：将每个线程“分配一次临时缓冲区”的逻辑移到任务
+                                            // Lambda 内 因为 chunk_size=2，Worker 线程每执行 2
+                                            // 次循环，只需分配这 1 次内存
+                                            POSEIDON_ALLOCATE_GET_COEFF_ITER(thread_local_temp,
+                                                                             coeff_count, pool);
+
+                                            // 4. Worker 线程执行自己分配到的这几个 k
+                                            for (size_t k = start; k < end; ++k)
+                                            {
+                                                auto poly1_at_k = get<0>(J)[k];
+                                                auto poly2_at_k = get<1>(J)[k];
+                                                auto mod_k = base_iter[k];
+                                                auto out_poly_k = shifted_out_iter[k];
+
+                                                // 使用刚才分配的 thread_local_temp
+                                                dyadic_product_coeffmod(poly1_at_k, poly2_at_k,
+                                                                        coeff_count, mod_k,
+                                                                        thread_local_temp);
+                                                add_poly_coeffmod(thread_local_temp, out_poly_k,
+                                                                  coeff_count, mod_k, out_poly_k);
+                                            }
+                                        }));
+                                }
+                                for (auto &f : futures)
+                                {
+                                    f.get();
+                                }
+                            }
+                            else
+                            {
+                                // 6. 降级：任务量太小时，串行执行，避免线程池调度开销
+                                POSEIDON_ALLOCATE_GET_COEFF_ITER(local_temp, coeff_count, pool);
+
+                                for (size_t k = 0; k < base_size; k++)
+                                {
                                     auto poly1_at_k = get<0>(J)[k];
                                     auto poly2_at_k = get<1>(J)[k];
                                     auto mod_k = base_iter[k];
                                     auto out_poly_k = shifted_out_iter[k];
-                                    
-                                    // 非OpenMP模式：使用局部临时缓冲区
-                                    dyadic_product_coeffmod(poly1_at_k, poly2_at_k, coeff_count, mod_k, local_temp);
-                                    add_poly_coeffmod(local_temp, out_poly_k, coeff_count, mod_k, out_poly_k);
-#endif
-                                             }
-#ifdef USING_OPENMP
-                                         }
-#endif
-                                     });
+
+                                    dyadic_product_coeffmod(poly1_at_k, poly2_at_k, coeff_count,
+                                                            mod_k, local_temp);
+                                    add_poly_coeffmod(local_temp, out_poly_k, coeff_count, mod_k,
+                                                      out_poly_k);
+                                }
+                            }
+                        });
                 };
 
                 // Perform the BEHZ ciph product both for base q and base Bsk
