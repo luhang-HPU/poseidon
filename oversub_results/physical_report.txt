@@ -1,0 +1,371 @@
+POSEIDON CKKS DAG OUTER+INNER THREAD BREAKPOINT REPORT
+================================================================================
+machine_id: sthl_Intel(R)_Xeon(R)_Platinum_8375C_CPU_@_2.90GHz_64c128t
+hostname: sthl
+model: Intel(R) Xeon(R) Platinum 8375C CPU @ 2.90GHz
+cpu: physical=64, logical=128, sockets=2, threads_per_core=2
+core_budget: 64
+core_demand model: outer_workers * inner_RNS/OpenMP_threads
+
+GLOBAL RECOMMENDATION branch_count=24
+--------------------------------------------------------------------------------
+fastest_tested=workers=12, inner=12, demand=144/64, oversubscribed=True, eval=346.130 ms
+fastest_within_budget=workers=16, inner=4, demand=64/64, util=1.000, eval=372.353 ms
+recommended_full_core_config=workers=16, inner=4, demand=64/64, util=1.000, eval=372.353 ms
+
+GLOBAL RECOMMENDATION branch_count=48
+--------------------------------------------------------------------------------
+fastest_tested=workers=3, inner=2, demand=6/64, oversubscribed=False, eval=597.430 ms
+fastest_within_budget=workers=3, inner=2, demand=6/64, util=0.094, eval=597.430 ms
+recommended_full_core_config=workers=32, inner=2, demand=64/64, util=1.000, eval=648.998 ms
+
+DETAIL branch_count=24, inner_RNS/OpenMP_threads=1
+--------------------------------------------------------------------------------
+recommended_workers=24 (saturation, eval 459.051 ms, speedup 10.859x)
+best_workers=24 (eval 459.051 ms, speedup 10.859x)
+regression_start_workers=(none in tested range)
+
+workers | demand | oversub | eval_avg_ms | speedup | avg_branch_ms | max_branch_ms | merge_tail_ms
+      1 |      1 |   False |    5226.423 |   0.954 |       211.014 |       235.419 |       161.264
+      2 |      2 |   False |    2661.997 |   1.873 |       206.606 |       234.207 |       146.099
+      3 |      3 |   False |    1833.927 |   2.718 |       205.786 |       231.390 |       153.519
+      4 |      4 |   False |    1451.963 |   3.433 |       213.312 |       269.951 |       150.497
+      6 |      6 |   False |     997.349 |   4.998 |       214.617 |       236.540 |       138.209
+      8 |      8 |   False |     810.715 |   6.149 |       223.736 |       243.120 |       137.505
+     12 |     12 |   False |     625.396 |   7.970 |       242.289 |       256.474 |       138.906
+     16 |     16 |   False |     618.752 |   8.056 |       250.094 |       271.635 |       138.633
+     24 |     24 |   False |     459.051 |  10.859 |       317.062 |       320.394 |       138.240
+
+DETAIL branch_count=24, inner_RNS/OpenMP_threads=12
+--------------------------------------------------------------------------------
+recommended_workers=12 (saturation, eval 346.130 ms, speedup 4.656x)
+best_workers=12 (eval 346.130 ms, speedup 4.656x)
+regression_start_workers=16 (eval 400.386 ms)
+
+workers | demand | oversub | eval_avg_ms | speedup | avg_branch_ms | max_branch_ms | merge_tail_ms
+      1 |     12 |   False |    1641.380 |   0.982 |        65.975 |        91.910 |        57.031
+      2 |     24 |   False |     868.489 |   1.856 |        67.958 |        94.244 |        45.187
+      3 |     36 |   False |     636.806 |   2.531 |        72.869 |        99.579 |        45.587
+      4 |     48 |   False |     522.446 |   3.085 |        78.258 |       109.307 |        45.437
+      6 |     72 |    True |     420.936 |   3.829 |        90.055 |       120.763 |        45.827
+      8 |     96 |    True |     389.123 |   4.142 |       108.049 |       151.427 |        46.419
+     12 |    144 |    True |     346.130 |   4.656 |       142.626 |       189.930 |        46.058
+     16 |    192 |    True |     400.386 |   4.025 |       198.147 |       262.053 |        48.675
+     24 |    288 |    True |    1494.288 |   1.079 |      1436.996 |      1446.328 |        47.620
+
+DETAIL branch_count=24, inner_RNS/OpenMP_threads=15
+--------------------------------------------------------------------------------
+recommended_workers=12 (saturation, eval 360.566 ms, speedup 4.912x)
+best_workers=12 (eval 360.566 ms, speedup 4.912x)
+regression_start_workers=24 (eval 1165.606 ms)
+
+workers | demand | oversub | eval_avg_ms | speedup | avg_branch_ms | max_branch_ms | merge_tail_ms
+      1 |     15 |   False |    1572.353 |   1.126 |        63.377 |        86.730 |        50.496
+      2 |     30 |   False |     873.002 |   2.029 |        69.166 |        94.400 |        42.409
+      3 |     45 |   False |     648.274 |   2.732 |        74.274 |       101.554 |        44.988
+      4 |     60 |   False |     531.618 |   3.331 |        79.808 |       106.999 |        46.248
+      6 |     90 |    True |     435.229 |   4.069 |        94.260 |       128.172 |        48.849
+      8 |    120 |    True |     394.469 |   4.490 |       111.926 |       154.109 |        46.030
+     12 |    180 |    True |     360.566 |   4.912 |       148.065 |       196.257 |        46.853
+     16 |    240 |    True |     370.290 |   4.783 |       185.797 |       249.231 |        44.544
+     24 |    360 |    True |    1165.606 |   1.519 |      1106.466 |      1118.618 |        46.573
+
+DETAIL branch_count=24, inner_RNS/OpenMP_threads=2
+--------------------------------------------------------------------------------
+recommended_workers=24 (saturation, eval 378.734 ms, speedup 8.335x)
+best_workers=24 (eval 378.734 ms, speedup 8.335x)
+regression_start_workers=(none in tested range)
+
+workers | demand | oversub | eval_avg_ms | speedup | avg_branch_ms | max_branch_ms | merge_tail_ms
+      1 |      2 |   False |    3093.077 |   1.021 |       125.219 |       148.064 |        87.065
+      2 |      4 |   False |    1657.797 |   1.904 |       130.334 |       168.018 |        89.621
+      3 |      6 |   False |    1273.010 |   2.480 |       140.230 |       188.724 |        89.534
+      4 |      8 |   False |     982.608 |   3.213 |       142.677 |       193.179 |        95.222
+      6 |     12 |   False |     692.172 |   4.561 |       145.734 |       188.664 |        90.017
+      8 |     16 |   False |     575.655 |   5.484 |       154.062 |       214.264 |        91.605
+     12 |     24 |   False |     462.768 |   6.821 |       176.497 |       224.411 |        88.466
+     16 |     32 |   False |     452.573 |   6.975 |       196.811 |       247.565 |        86.856
+     24 |     48 |   False |     378.734 |   8.335 |       264.624 |       290.622 |        87.692
+
+DETAIL branch_count=24, inner_RNS/OpenMP_threads=3
+--------------------------------------------------------------------------------
+recommended_workers=24 (saturation, eval 363.445 ms, speedup 7.123x)
+best_workers=24 (eval 363.445 ms, speedup 7.123x)
+regression_start_workers=(none in tested range)
+
+workers | demand | oversub | eval_avg_ms | speedup | avg_branch_ms | max_branch_ms | merge_tail_ms
+      1 |      3 |   False |    2536.677 |   1.020 |       102.347 |       125.132 |        79.569
+      2 |      6 |   False |    1351.983 |   1.915 |       104.993 |       129.287 |        81.288
+      3 |      9 |   False |     947.115 |   2.733 |       107.715 |       139.356 |        75.160
+      4 |     12 |   False |     754.215 |   3.432 |       111.383 |       144.993 |        75.982
+      6 |     18 |   False |     562.747 |   4.600 |       120.798 |       148.388 |        74.964
+      8 |     24 |   False |     482.892 |   5.361 |       130.911 |       162.147 |        75.243
+     12 |     36 |   False |     416.539 |   6.215 |       155.258 |       209.988 |        78.739
+     16 |     48 |   False |     385.630 |   6.713 |       170.700 |       225.088 |        73.716
+     24 |     72 |    True |     363.445 |   7.123 |       259.836 |       289.096 |        73.942
+
+DETAIL branch_count=24, inner_RNS/OpenMP_threads=32
+--------------------------------------------------------------------------------
+recommended_workers=12 (saturation, eval 388.614 ms, speedup 4.165x)
+best_workers=12 (eval 388.614 ms, speedup 4.165x)
+regression_start_workers=16 (eval 455.868 ms)
+
+workers | demand | oversub | eval_avg_ms | speedup | avg_branch_ms | max_branch_ms | merge_tail_ms
+      1 |     32 |   False |    1632.740 |   0.991 |        65.690 |        90.561 |        55.377
+      2 |     64 |   False |     937.981 |   1.725 |        73.275 |        98.181 |        51.251
+      3 |     96 |    True |     722.389 |   2.240 |        82.512 |       113.486 |        55.171
+      4 |    128 |    True |     559.942 |   2.890 |        83.770 |       122.312 |        45.034
+      6 |    192 |    True |     441.762 |   3.664 |        95.763 |       128.326 |        47.846
+      8 |    256 |    True |     411.581 |   3.932 |       115.109 |       157.946 |        46.398
+     12 |    384 |    True |     388.614 |   4.165 |       163.841 |       217.729 |        46.536
+     16 |    512 |    True |     455.868 |   3.550 |       236.828 |       318.675 |        47.048
+     24 |    768 |    True |    1794.367 |   0.902 |      1722.440 |      1747.003 |        46.893
+
+DETAIL branch_count=24, inner_RNS/OpenMP_threads=4
+--------------------------------------------------------------------------------
+recommended_workers=12 (saturation, eval 379.192 ms, speedup 5.559x)
+best_workers=24 (eval 361.714 ms, speedup 5.828x)
+regression_start_workers=(none in tested range)
+
+workers | demand | oversub | eval_avg_ms | speedup | avg_branch_ms | max_branch_ms | merge_tail_ms
+      1 |      4 |   False |    2143.657 |   0.983 |        86.380 |       118.479 |        69.671
+      2 |      8 |   False |    1103.307 |   1.911 |        85.885 |       111.471 |        69.579
+      3 |     12 |   False |     786.654 |   2.680 |        89.499 |       119.633 |        62.229
+      4 |     16 |   False |     648.149 |   3.252 |        96.363 |       126.904 |        62.499
+      6 |     24 |   False |     519.705 |   4.056 |       108.429 |       155.145 |        62.301
+      8 |     32 |   False |     448.570 |   4.699 |       119.514 |       165.449 |        61.792
+     12 |     48 |   False |     379.192 |   5.559 |       145.892 |       198.532 |        62.914
+     16 |     64 |   False |     372.353 |   5.661 |       168.974 |       225.207 |        65.071
+     24 |     96 |    True |     361.714 |   5.828 |       273.522 |       298.190 |        63.047
+
+DETAIL branch_count=24, inner_RNS/OpenMP_threads=6
+--------------------------------------------------------------------------------
+recommended_workers=12 (saturation, eval 365.586 ms, speedup 5.655x)
+best_workers=12 (eval 365.586 ms, speedup 5.655x)
+regression_start_workers=24 (eval 513.505 ms)
+
+workers | demand | oversub | eval_avg_ms | speedup | avg_branch_ms | max_branch_ms | merge_tail_ms
+      1 |      6 |   False |    2079.683 |   0.994 |        84.029 |       105.550 |        62.074
+      2 |     12 |   False |    1077.673 |   1.918 |        85.001 |       111.256 |        56.670
+      3 |     18 |   False |     777.099 |   2.660 |        89.574 |       116.005 |        60.039
+      4 |     24 |   False |     633.445 |   3.264 |        94.892 |       121.623 |        57.472
+      6 |     36 |   False |     490.402 |   4.216 |       104.960 |       135.141 |        60.302
+      8 |     48 |   False |     428.059 |   4.830 |       114.858 |       160.908 |        57.475
+     12 |     72 |    True |     365.586 |   5.655 |       142.439 |       189.462 |        58.225
+     16 |     96 |    True |     371.731 |   5.562 |       172.989 |       225.731 |        60.640
+     24 |    144 |    True |     513.505 |   4.026 |       444.768 |       453.926 |        59.197
+
+DETAIL branch_count=24, inner_RNS/OpenMP_threads=64
+--------------------------------------------------------------------------------
+recommended_workers=6 (saturation, eval 466.954 ms, speedup 3.912x)
+best_workers=6 (eval 466.954 ms, speedup 3.912x)
+regression_start_workers=8 (eval 651.074 ms)
+
+workers | demand | oversub | eval_avg_ms | speedup | avg_branch_ms | max_branch_ms | merge_tail_ms
+      1 |     64 |   False |    1809.403 |   1.009 |        72.648 |        95.472 |        64.863
+      2 |    128 |    True |     944.040 |   1.935 |        74.103 |       109.266 |        47.028
+      3 |    192 |    True |     706.345 |   2.586 |        80.806 |       117.646 |        49.053
+      4 |    256 |    True |     597.631 |   3.056 |        89.528 |       142.686 |        49.080
+      6 |    384 |    True |     466.954 |   3.912 |       100.195 |       147.099 |        50.386
+      8 |    512 |    True |     651.074 |   2.805 |       193.007 |       393.947 |        48.674
+     12 |    768 |    True |     495.660 |   3.685 |       217.600 |       318.981 |        49.137
+     16 |   1024 |    True |     776.242 |   2.353 |       446.197 |       632.361 |        50.865
+     24 |   1536 |    True |    2782.903 |   0.656 |      2709.163 |      2731.320 |        51.098
+
+DETAIL branch_count=24, inner_RNS/OpenMP_threads=8
+--------------------------------------------------------------------------------
+recommended_workers=12 (saturation, eval 357.596 ms, speedup 5.002x)
+best_workers=12 (eval 357.596 ms, speedup 5.002x)
+regression_start_workers=16 (eval 399.396 ms)
+
+workers | demand | oversub | eval_avg_ms | speedup | avg_branch_ms | max_branch_ms | merge_tail_ms
+      1 |      8 |   False |    1681.710 |   1.064 |        67.444 |        92.953 |        62.128
+      2 |     16 |   False |     873.970 |   2.047 |        67.865 |        94.438 |        46.973
+      3 |     24 |   False |     664.204 |   2.693 |        74.024 |       111.894 |        52.336
+      4 |     32 |   False |     546.182 |   3.275 |        79.471 |       115.320 |        52.336
+      6 |     48 |   False |     430.482 |   4.155 |        90.503 |       131.088 |        50.247
+      8 |     64 |   False |     388.358 |   4.606 |       105.847 |       150.171 |        49.885
+     12 |     96 |    True |     357.596 |   5.002 |       143.847 |       199.695 |        48.113
+     16 |    128 |    True |     399.396 |   4.478 |       200.458 |       270.394 |        45.386
+     24 |    192 |    True |    1165.503 |   1.535 |      1106.455 |      1117.740 |        47.343
+
+DETAIL branch_count=48, inner_RNS/OpenMP_threads=1
+--------------------------------------------------------------------------------
+recommended_workers=1 (saturation, eval 738.605 ms, speedup 13.428x)
+best_workers=32 (eval 730.667 ms, speedup 13.574x)
+regression_start_workers=(none in tested range)
+
+workers | demand | oversub | eval_avg_ms | speedup | avg_branch_ms | max_branch_ms | merge_tail_ms
+      1 |      1 |   False |     738.605 |  13.428 |       500.639 |       583.588 |       154.225
+      2 |      2 |   False |     737.307 |  13.451 |       499.826 |       582.809 |       153.805
+      3 |      3 |   False |     738.099 |  13.437 |       497.469 |       582.512 |       154.838
+      4 |      4 |   False |     741.487 |  13.376 |       503.047 |       584.561 |       156.102
+      6 |      6 |   False |     764.384 |  12.975 |       533.708 |       607.967 |       155.598
+      8 |      8 |   False |     731.590 |  13.557 |       490.544 |       577.284 |       153.739
+     12 |     12 |   False |     748.050 |  13.258 |       499.029 |       586.978 |       160.089
+     16 |     16 |   False |     735.267 |  13.489 |       495.029 |       582.623 |       151.989
+     32 |     32 |   False |     730.667 |  13.574 |       498.952 |       575.042 |       154.597
+     48 |     48 |   False |     747.438 |  13.269 |       496.790 |       591.366 |       155.336
+
+DETAIL branch_count=48, inner_RNS/OpenMP_threads=12
+--------------------------------------------------------------------------------
+recommended_workers=6 (saturation, eval 4630.897 ms, speedup 0.797x)
+best_workers=16 (eval 4515.707 ms, speedup 0.817x)
+regression_start_workers=32 (eval 5615.397 ms)
+
+workers | demand | oversub | eval_avg_ms | speedup | avg_branch_ms | max_branch_ms | merge_tail_ms
+      1 |     12 |   False |    6575.590 |   0.561 |      6464.374 |      6520.647 |        54.259
+      2 |     24 |   False |    5857.193 |   0.630 |      5778.135 |      5802.583 |        53.457
+      3 |     36 |   False |    5104.513 |   0.723 |      5030.026 |      5049.793 |        53.945
+      4 |     48 |   False |    4840.720 |   0.762 |      4751.723 |      4787.857 |        51.977
+      6 |     72 |    True |    4630.897 |   0.797 |      4541.414 |      4573.567 |        56.501
+      8 |     96 |    True |    4815.467 |   0.766 |      4719.096 |      4762.260 |        52.548
+     12 |    144 |    True |    5019.940 |   0.735 |      4923.394 |      4966.897 |        52.363
+     16 |    192 |    True |    4515.707 |   0.817 |      4416.172 |      4460.767 |        54.207
+     32 |    384 |    True |    5615.397 |   0.657 |      5520.366 |      5563.263 |        51.207
+     48 |    576 |    True |    5739.217 |   0.643 |      5619.841 |      5686.283 |        52.172
+
+DETAIL branch_count=48, inner_RNS/OpenMP_threads=15
+--------------------------------------------------------------------------------
+recommended_workers=12 (saturation, eval 4573.853 ms, speedup 0.759x)
+best_workers=12 (eval 4573.853 ms, speedup 0.759x)
+regression_start_workers=16 (eval 5216.337 ms)
+
+workers | demand | oversub | eval_avg_ms | speedup | avg_branch_ms | max_branch_ms | merge_tail_ms
+      1 |     15 |   False |    5841.463 |   0.594 |      5699.903 |      5786.150 |        54.270
+      2 |     30 |   False |    6289.550 |   0.552 |      6142.602 |      6236.477 |        52.389
+      3 |     45 |   False |    5539.100 |   0.626 |      5459.008 |      5489.950 |        48.364
+      4 |     60 |   False |    5332.203 |   0.651 |      5251.921 |      5283.867 |        47.678
+      6 |     90 |    True |    5235.040 |   0.663 |      5145.098 |      5183.663 |        50.599
+      8 |    120 |    True |    5435.857 |   0.638 |      5320.673 |      5382.083 |        52.847
+     12 |    180 |    True |    4573.853 |   0.759 |      4474.888 |      4522.987 |        49.323
+     16 |    240 |    True |    5216.337 |   0.665 |      5058.645 |      5165.323 |        49.758
+     32 |    480 |    True |    4894.420 |   0.709 |      4770.314 |      4840.417 |        52.943
+     48 |    720 |    True |    7061.773 |   0.491 |      6924.947 |      7010.603 |        50.349
+
+DETAIL branch_count=48, inner_RNS/OpenMP_threads=2
+--------------------------------------------------------------------------------
+recommended_workers=3 (saturation, eval 597.430 ms, speedup 10.372x)
+best_workers=3 (eval 597.430 ms, speedup 10.372x)
+regression_start_workers=4 (eval 642.980 ms)
+
+workers | demand | oversub | eval_avg_ms | speedup | avg_branch_ms | max_branch_ms | merge_tail_ms
+      1 |      2 |   False |     646.378 |   9.586 |       507.178 |       547.003 |        98.630
+      2 |      4 |   False |     647.262 |   9.573 |       505.783 |       548.295 |        98.198
+      3 |      6 |   False |     597.430 |  10.372 |       446.147 |       495.427 |       101.152
+      4 |      8 |   False |     642.980 |   9.637 |       497.958 |       542.614 |        99.504
+      6 |     12 |   False |     630.831 |   9.822 |       486.661 |       527.266 |       102.372
+      8 |     16 |   False |     642.457 |   9.645 |       494.010 |       543.417 |        97.136
+     12 |     24 |   False |     636.669 |   9.732 |       489.711 |       538.065 |        97.914
+     16 |     32 |   False |     628.406 |   9.860 |       483.106 |       522.263 |       105.079
+     32 |     64 |   False |     648.998 |   9.547 |       503.201 |       548.701 |        99.562
+     48 |     96 |    True |     658.096 |   9.415 |       514.651 |       558.206 |        99.110
+
+DETAIL branch_count=48, inner_RNS/OpenMP_threads=3
+--------------------------------------------------------------------------------
+recommended_workers=1 (saturation, eval 777.376 ms, speedup 6.690x)
+best_workers=6 (eval 747.308 ms, speedup 6.959x)
+regression_start_workers=12 (eval 808.154 ms)
+
+workers | demand | oversub | eval_avg_ms | speedup | avg_branch_ms | max_branch_ms | merge_tail_ms
+      1 |      3 |   False |     777.376 |   6.690 |       645.004 |       680.435 |        96.054
+      2 |      6 |   False |     812.784 |   6.399 |       693.970 |       720.966 |        91.163
+      3 |      9 |   False |     862.359 |   6.031 |       739.579 |       774.537 |        87.000
+      4 |     12 |   False |     838.849 |   6.200 |       712.340 |       745.205 |        92.946
+      6 |     18 |   False |     747.308 |   6.959 |       613.086 |       652.571 |        94.122
+      8 |     24 |   False |     769.260 |   6.761 |       638.526 |       676.865 |        91.657
+     12 |     36 |   False |     808.154 |   6.435 |       692.298 |       720.774 |        86.679
+     16 |     48 |   False |     904.770 |   5.748 |       780.497 |       809.051 |        94.902
+     32 |     96 |    True |     949.436 |   5.478 |       831.962 |       858.968 |        89.785
+     48 |    144 |    True |     884.332 |   5.881 |       768.003 |       794.748 |        89.022
+
+DETAIL branch_count=48, inner_RNS/OpenMP_threads=32
+--------------------------------------------------------------------------------
+recommended_workers=4 (saturation, eval 4858.237 ms, speedup 0.656x)
+best_workers=4 (eval 4858.237 ms, speedup 0.656x)
+regression_start_workers=6 (eval 5120.487 ms)
+
+workers | demand | oversub | eval_avg_ms | speedup | avg_branch_ms | max_branch_ms | merge_tail_ms
+      1 |     32 |   False |    7136.297 |   0.447 |      7047.206 |      7085.997 |        49.387
+      2 |     64 |   False |    8237.330 |   0.387 |      8022.303 |      8186.637 |        49.272
+      3 |     96 |    True |    5727.987 |   0.557 |      5477.504 |      5676.173 |        50.804
+      4 |    128 |    True |    4858.237 |   0.656 |      4741.357 |      4806.980 |        50.360
+      6 |    192 |    True |    5120.487 |   0.623 |      5020.449 |      5068.127 |        51.622
+      8 |    256 |    True |    6708.727 |   0.475 |      6561.408 |      6659.717 |        48.163
+     12 |    384 |    True |    6136.157 |   0.520 |      5954.635 |      6084.267 |        50.932
+     16 |    512 |    True |    7300.503 |   0.437 |      7176.384 |      7246.473 |        52.955
+     32 |   1024 |    True |    8038.050 |   0.397 |      7946.902 |      7987.097 |        50.058
+     48 |   1536 |    True |   10411.750 |   0.306 |     10021.785 |     10361.157 |        49.083
+
+DETAIL branch_count=48, inner_RNS/OpenMP_threads=4
+--------------------------------------------------------------------------------
+recommended_workers=32 (saturation, eval 927.051 ms, speedup 4.392x)
+best_workers=32 (eval 927.051 ms, speedup 4.392x)
+regression_start_workers=48 (eval 1286.060 ms)
+
+workers | demand | oversub | eval_avg_ms | speedup | avg_branch_ms | max_branch_ms | merge_tail_ms
+      1 |      4 |   False |    1300.737 |   3.131 |      1192.026 |      1229.140 |        70.853
+      2 |      8 |   False |    1064.275 |   3.826 |       950.484 |       989.888 |        73.616
+      3 |     12 |   False |    1178.002 |   3.457 |      1070.205 |      1105.903 |        71.184
+      4 |     16 |   False |    1133.077 |   3.594 |      1018.873 |      1052.714 |        79.368
+      6 |     24 |   False |    1648.663 |   2.470 |      1545.163 |      1575.157 |        72.875
+      8 |     32 |   False |    2001.240 |   2.035 |      1900.518 |      1923.470 |        76.696
+     12 |     48 |   False |     990.363 |   4.112 |       873.494 |       911.983 |        77.405
+     16 |     64 |   False |     982.544 |   4.144 |       864.975 |       902.191 |        79.692
+     32 |    128 |    True |     927.051 |   4.392 |       812.775 |       849.543 |        76.529
+     48 |    192 |    True |    1286.060 |   3.166 |      1179.993 |      1215.630 |        69.423
+
+DETAIL branch_count=48, inner_RNS/OpenMP_threads=6
+--------------------------------------------------------------------------------
+recommended_workers=3 (saturation, eval 2931.750 ms, speedup 1.467x)
+best_workers=12 (eval 2844.870 ms, speedup 1.512x)
+regression_start_workers=16 (eval 3101.637 ms)
+
+workers | demand | oversub | eval_avg_ms | speedup | avg_branch_ms | max_branch_ms | merge_tail_ms
+      1 |      6 |   False |    3339.027 |   1.288 |      3246.349 |      3273.510 |        64.878
+      2 |     12 |   False |    4310.093 |   0.998 |      4226.281 |      4242.920 |        66.319
+      3 |     18 |   False |    2931.750 |   1.467 |      2825.767 |      2862.683 |        68.379
+      4 |     24 |   False |    2979.207 |   1.443 |      2876.251 |      2909.643 |        68.666
+      6 |     36 |   False |    3031.700 |   1.418 |      2946.500 |      2963.470 |        67.467
+      8 |     48 |   False |    4859.510 |   0.885 |      4770.148 |      4789.813 |        68.900
+     12 |     72 |    True |    2844.870 |   1.512 |      2743.272 |      2776.840 |        66.757
+     16 |     96 |    True |    3101.637 |   1.386 |      3009.463 |      3036.497 |        63.767
+     32 |    192 |    True |    2866.670 |   1.500 |      2774.934 |      2800.500 |        65.467
+     48 |    288 |    True |    2922.793 |   1.471 |      2831.281 |      2855.407 |        66.680
+
+DETAIL branch_count=48, inner_RNS/OpenMP_threads=64
+--------------------------------------------------------------------------------
+recommended_workers=6 (saturation, eval 7638.363 ms, speedup 0.514x)
+best_workers=6 (eval 7638.363 ms, speedup 0.514x)
+regression_start_workers=8 (eval 11120.933 ms)
+
+workers | demand | oversub | eval_avg_ms | speedup | avg_branch_ms | max_branch_ms | merge_tail_ms
+      1 |     64 |   False |   12700.980 |   0.309 |     12599.166 |     12645.983 |        54.027
+      2 |    128 |    True |   12021.200 |   0.326 |     11855.105 |     11963.587 |        56.458
+      3 |    192 |    True |    8402.980 |   0.467 |      7952.923 |      8344.937 |        57.091
+      4 |    256 |    True |    9713.103 |   0.404 |      9424.038 |      9654.377 |        57.979
+      6 |    384 |    True |    7638.363 |   0.514 |      7269.283 |      7580.043 |        57.263
+      8 |    512 |    True |   11120.933 |   0.353 |     10882.486 |     11064.567 |        55.222
+     12 |    768 |    True |   10228.443 |   0.384 |      9987.678 |     10175.340 |        52.270
+     16 |   1024 |    True |   12707.867 |   0.309 |     12434.019 |     12651.567 |        55.284
+     32 |   2048 |    True |   10894.373 |   0.360 |     10686.877 |     10838.007 |        55.467
+     48 |   3072 |    True |   12211.813 |   0.321 |     11668.688 |     12155.440 |        55.512
+
+DETAIL branch_count=48, inner_RNS/OpenMP_threads=8
+--------------------------------------------------------------------------------
+recommended_workers=4 (saturation, eval 4206.847 ms, speedup 0.829x)
+best_workers=4 (eval 4206.847 ms, speedup 0.829x)
+regression_start_workers=6 (eval 5137.603 ms)
+
+workers | demand | oversub | eval_avg_ms | speedup | avg_branch_ms | max_branch_ms | merge_tail_ms
+      1 |      8 |   False |    5042.103 |   0.692 |      4954.094 |      4982.967 |        58.277
+      2 |     16 |   False |    5793.093 |   0.602 |      5716.457 |      5737.640 |        54.713
+      3 |     24 |   False |    5175.317 |   0.674 |      5076.756 |      5118.217 |        56.188
+      4 |     32 |   False |    4206.847 |   0.829 |      4115.334 |      4153.760 |        52.200
+      6 |     48 |   False |    5137.603 |   0.679 |      5063.527 |      5083.207 |        53.486
+      8 |     64 |   False |    5114.373 |   0.682 |      5035.151 |      5061.123 |        52.316
+     12 |     96 |    True |    5510.260 |   0.633 |      5431.588 |      5455.650 |        53.919
+     16 |    128 |    True |    5989.403 |   0.583 |      5894.172 |      5935.647 |        52.795
+     32 |    256 |    True |    4377.497 |   0.797 |      4294.357 |      4322.423 |        54.158
+     48 |    384 |    True |    4967.500 |   0.702 |      4890.689 |      4914.767 |        51.817
+
