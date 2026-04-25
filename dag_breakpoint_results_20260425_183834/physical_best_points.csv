@@ -1,0 +1,5 @@
+machine_id,budget_mode,branch_count,recommendation_class,workers,inner_threads,core_budget,core_demand,core_utilization,oversubscribed,eval_median_ms,eval_mean_ms,eval_stddev_ms,speedup_vs_single_thread_median,rns_width
+sthl_Intel(R)_Xeon(R)_Platinum_8375C_CPU_@_2.90GHz_64c128t,physical,24,absolute_best,14,9,64,126,1.96875,True,338.833,366.575,48.316667134644106,4.892734769045518,16
+sthl_Intel(R)_Xeon(R)_Platinum_8375C_CPU_@_2.90GHz_64c128t,physical,24,best_within_physical_budget,12,5,64,60,0.9375,False,362.951,368.01866666666666,8.81472145523233,6.159261167485418,16
+sthl_Intel(R)_Xeon(R)_Platinum_8375C_CPU_@_2.90GHz_64c128t,physical,48,absolute_best,19,5,64,95,1.484375,True,581.449,594.8726666666666,76.31316810572949,7.009969919975785,16
+sthl_Intel(R)_Xeon(R)_Platinum_8375C_CPU_@_2.90GHz_64c128t,physical,48,best_within_physical_budget,18,2,64,36,0.5625,False,664.032,668.0153333333334,10.096599889731827,9.205475037347597,16
