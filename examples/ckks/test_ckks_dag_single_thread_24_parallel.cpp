@@ -94,6 +94,11 @@ std::string format_cores(const CoreSet &cores) {
   return format_int_set(cores, "(unavailable)");
 }
 
+std::string env_or_unset(const char *name) {
+  const char *value = std::getenv(name);
+  return (value && value[0] != '\0') ? std::string(value) : "unset";
+}
+
 std::string branch_group_name(int index) {
   std::ostringstream oss;
   oss << "branch_" << std::setw(2) << std::setfill('0') << index;
@@ -573,6 +578,11 @@ int main() {
             << ")" << std::endl;
   std::cout << "CKKS DAG independent branch count: " << kParallelBranchCount
             << std::endl;
+  std::cout << "Requested OMP_NUM_THREADS: " << env_or_unset("OMP_NUM_THREADS")
+            << std::endl;
+  std::cout << "CKKS coeff_modulus_size (RNS width): "
+            << ckks_param_literal.coeff_modulus().size() << std::endl;
+  std::cout << "Effective DAG workers: 1" << std::endl;
 
   CoreSet message_prep_cores;
   add_current_cpu(message_prep_cores);

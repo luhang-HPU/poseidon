@@ -109,10 +109,32 @@ std::string format_cores(const CoreSet &cores) {
   return format_int_set(cores, "(unavailable)");
 }
 
+std::string env_or_unset(const char *name) {
+  const char *value = std::getenv(name);
+  return (value && value[0] != '\0') ? std::string(value) : "unset";
+}
+
 std::string branch_group_name(int index) {
   std::ostringstream oss;
   oss << "branch_" << std::setw(2) << std::setfill('0') << index;
   return oss.str();
+}
+
+int runtime_worker_count() {
+  const char *value = std::getenv("POSEIDON_DAG_WORKERS");
+  if (!value || value[0] == '\0') {
+    return kManualParallelism;
+  }
+
+  char *end = nullptr;
+  const long parsed = std::strtol(value, &end, 10);
+  if (end == value || parsed <= 0) {
+    std::cerr << "Ignoring invalid POSEIDON_DAG_WORKERS='" << value
+              << "'; using " << kManualParallelism << std::endl;
+    return kManualParallelism;
+  }
+
+  return std::max(1, std::min(kParallelBranchCount, static_cast<int>(parsed)));
 }
 
 template <typename Func>
@@ -543,8 +565,15 @@ void run_example(ExecutionMode mode) {
             << ")" << std::endl;
   std::cout << "CKKS DAG independent branch count: " << kParallelBranchCount
             << std::endl;
+  std::cout << "Requested OMP_NUM_THREADS: " << env_or_unset("OMP_NUM_THREADS")
+            << std::endl;
+  std::cout << "CKKS coeff_modulus_size (RNS width): "
+            << ckks_param_literal.coeff_modulus().size() << std::endl;
+  const int thread_pool_workers =
+      manual_parallel ? runtime_worker_count() : 1;
+  std::cout << "Effective DAG workers: " << thread_pool_workers << std::endl;
   if (manual_parallel) {
-    std::cout << "Manual thread-pool workers: " << kManualParallelism
+    std::cout << "Manual thread-pool workers: " << thread_pool_workers
               << std::endl;
   }
 
@@ -618,7 +647,7 @@ void run_example(ExecutionMode mode) {
   if (manual_parallel) {
     add_current_cpu(thread_pool_setup_cores);
     const auto thread_pool_setup_start = Clock::now();
-    thread_pool.reset(new ThreadPool(kManualParallelism));
+    thread_pool.reset(new ThreadPool(thread_pool_workers));
     const auto thread_pool_setup_stop = Clock::now();
     add_current_cpu(thread_pool_setup_cores);
     thread_pool_setup_ms =

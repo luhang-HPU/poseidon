@@ -35,10 +35,13 @@ Examples:
 Outputs:
   <out-dir>/physical_report.txt
   <out-dir>/logical_report.txt
+  <out-dir>/physical_best_points.csv
+  <out-dir>/logical_best_points.csv
   <out-dir>/physical_summary.csv
   <out-dir>/logical_summary.csv
   <out-dir>/physical_raw.csv
   <out-dir>/logical_raw.csv
+  <out-dir>/plots/*.png
   <out-dir>/run.log
 EOF
 }
@@ -131,9 +134,9 @@ run_logged() {
     QUICK_FLAG=(--quick)
   fi
 
-  CORE_FIT_FLAG=(--fit-core-budget)
+  OVERSUB_FLAG=()
   if [[ "$ALLOW_OVERSUBSCRIBE" == "1" ]]; then
-    CORE_FIT_FLAG=()
+    OVERSUB_FLAG=(--allow-oversubscribe)
   fi
 
   COMMON_ARGS=(
@@ -141,28 +144,25 @@ run_logged() {
     --branch-counts $BRANCH_COUNTS
     --rns-threads $RNS_THREADS
     --build-dir "$BUILD_DIR"
-    "${CORE_FIT_FLAG[@]}"
     "${NO_BUILD_FLAG[@]}"
     "${QUICK_FLAG[@]}"
+    "${OVERSUB_FLAG[@]}"
   )
 
-  run_logged ./benchmark_runner_dag_breakpoint.py \
+  run_logged python3 ./benchmark_runner_dag_breakpoint.py \
     "${COMMON_ARGS[@]}" \
-    --core-budget physical \
-    --raw-csv "$OUT_DIR/physical_raw.csv" \
-    --summary-csv "$OUT_DIR/physical_summary.csv" \
-    --report "$OUT_DIR/physical_report.txt"
-
-  run_logged ./benchmark_runner_dag_breakpoint.py \
-    "${COMMON_ARGS[@]}" \
-    --core-budget logical \
-    --raw-csv "$OUT_DIR/logical_raw.csv" \
-    --summary-csv "$OUT_DIR/logical_summary.csv" \
-    --report "$OUT_DIR/logical_report.txt"
+    --budget-mode both \
+    --output-dir "$OUT_DIR" \
+    --plot-format png
 
   echo
   echo "Finished at: $(date)"
   echo "Reports:"
   echo "  $OUT_DIR/physical_report.txt"
   echo "  $OUT_DIR/logical_report.txt"
+  echo "Best points:"
+  echo "  $OUT_DIR/physical_best_points.csv"
+  echo "  $OUT_DIR/logical_best_points.csv"
+  echo "Plots:"
+  echo "  $OUT_DIR/plots/"
 } 2>&1 | tee "$LOG_FILE"
