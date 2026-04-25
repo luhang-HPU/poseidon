@@ -239,12 +239,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--allow-oversubscribe",
         action="store_true",
-        help="Include configs whose demand exceeds the selected maximum budget.",
+        help="Deprecated; oversubscribed configs are included by default.",
     )
     parser.add_argument(
         "--fit-core-budget",
         action="store_true",
-        help="Deprecated inverse of --allow-oversubscribe.",
+        help="Only test configs whose demand stays within the selected budget.",
     )
     parser.add_argument(
         "--build-dir",
@@ -690,11 +690,11 @@ def core_budget_limit(
     allow_oversubscribe: bool,
     fit_core_budget: bool,
 ) -> Optional[int]:
-    if allow_oversubscribe:
+    if allow_oversubscribe and fit_core_budget:
+        raise ValueError("--allow-oversubscribe and --fit-core-budget cannot be used together")
+    if not fit_core_budget:
         return None
-    if fit_core_budget:
-        return min(budgets[mode] for mode in budget_modes)
-    return max(budgets[mode] for mode in budget_modes)
+    return min(budgets[mode] for mode in budget_modes)
 
 
 def raw_row(
