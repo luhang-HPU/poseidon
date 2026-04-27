@@ -1,0 +1,17 @@
+nohup: ignoring input
+Benchmark root: /home/guoshuai/github/poseidon
+Build dir: /home/guoshuai/github/poseidon/build
+Bin dir: /home/guoshuai/github/poseidon/build/bin
+Repeats: 5
+Warmup: 1
+Task counts: 24 48
+Worker counts: 4 8 12 16 24 32 48
+
+tasks    workers  runs     avg_eval_ms    min_eval_ms    max_eval_ms   
+run tasks=24 workers=4 iter=1 eval_ms=2668.66
+run tasks=24 workers=4 iter=2 eval_ms=2765.58
+run tasks=24 workers=4 iter=3 eval_ms=2795.97
+run tasks=24 workers=4 iter=4 eval_ms=2800.09
+run tasks=24 workers=4 iter=5 eval_ms=2793.93
+24       4        5        2764.846000    2668.660000    2800.090000   
+run tasks=24 workers=8 iter=1 eval_ms=1732.36

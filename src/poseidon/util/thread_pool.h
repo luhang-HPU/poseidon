@@ -15,6 +15,7 @@ class ThreadPool
 {
 public:
     static ThreadPool &get_instance();
+    explicit ThreadPool(size_t threads);
 
     ThreadPool(const ThreadPool &) = delete;
     ThreadPool &operator=(const ThreadPool &) = delete;
@@ -25,7 +26,6 @@ public:
     auto enqueue(F &&f, Args &&...args) -> std::future<typename std::result_of<F(Args...)>::type>;
     void wait_all();
 private:
-    ThreadPool(size_t threads);
     std::vector<std::thread> workers;
     std::queue<std::function<void()>> tasks;
 
@@ -34,6 +34,31 @@ private:
     std::condition_variable complete_condition_;
     bool stop_;
     size_t active_tasks_;
+};
+
+class ParallelGroup
+{
+public:
+    explicit ParallelGroup(ThreadPool &thread_pool) : thread_pool_(thread_pool) {}
+
+    template <class F, class... Args>
+    void go(F &&f, Args &&...args)
+    {
+        futures_.emplace_back(thread_pool_.enqueue(std::forward<F>(f), std::forward<Args>(args)...));
+    }
+
+    void wait()
+    {
+        for (auto &future : futures_)
+        {
+            future.get();
+        }
+        futures_.clear();
+    }
+
+private:
+    ThreadPool &thread_pool_;
+    std::vector<std::future<void>> futures_;
 };
 
 inline ThreadPool &ThreadPool::get_instance()
