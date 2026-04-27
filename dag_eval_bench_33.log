@@ -1,0 +1,94 @@
+nohup: ignoring input
+Benchmark root: /home/guoshuai/github/poseidon
+Build dir: /home/guoshuai/github/poseidon/build
+Bin dir: /home/guoshuai/github/poseidon/build/bin
+Repeats: 5
+Warmup: 1
+Task counts: 24 48
+Worker counts: 4 8 12 16 24 32 48
+
+tasks    workers  runs     avg_eval_ms    min_eval_ms    max_eval_ms   
+run tasks=24 workers=4 iter=1 eval_ms=621.209
+run tasks=24 workers=4 iter=2 eval_ms=641.962
+run tasks=24 workers=4 iter=3 eval_ms=625.45
+run tasks=24 workers=4 iter=4 eval_ms=621.26
+run tasks=24 workers=4 iter=5 eval_ms=586.571
+24       4        5        619.290400     586.571000     641.962000    
+run tasks=24 workers=8 iter=1 eval_ms=438.56
+run tasks=24 workers=8 iter=2 eval_ms=456.679
+run tasks=24 workers=8 iter=3 eval_ms=500.715
+run tasks=24 workers=8 iter=4 eval_ms=501.661
+run tasks=24 workers=8 iter=5 eval_ms=479.653
+24       8        5        475.453600     438.560000     501.661000    
+run tasks=24 workers=12 iter=1 eval_ms=438.029
+run tasks=24 workers=12 iter=2 eval_ms=493.876
+run tasks=24 workers=12 iter=3 eval_ms=477.814
+run tasks=24 workers=12 iter=4 eval_ms=461.344
+run tasks=24 workers=12 iter=5 eval_ms=459.688
+24       12       5        466.150200     438.029000     493.876000    
+run tasks=24 workers=16 iter=1 eval_ms=458.629
+run tasks=24 workers=16 iter=2 eval_ms=492.15
+run tasks=24 workers=16 iter=3 eval_ms=438.618
+run tasks=24 workers=16 iter=4 eval_ms=479.266
+run tasks=24 workers=16 iter=5 eval_ms=484.051
+24       16       5        470.542800     438.618000     492.150000    
+run tasks=24 workers=24 iter=1 eval_ms=467.45
+run tasks=24 workers=24 iter=2 eval_ms=479.642
+run tasks=24 workers=24 iter=3 eval_ms=463.091
+run tasks=24 workers=24 iter=4 eval_ms=465.318
+run tasks=24 workers=24 iter=5 eval_ms=449.085
+24       24       5        464.917200     449.085000     479.642000    
+run tasks=24 workers=32 iter=1 eval_ms=423.563
+run tasks=24 workers=32 iter=2 eval_ms=446.927
+run tasks=24 workers=32 iter=3 eval_ms=432.997
+run tasks=24 workers=32 iter=4 eval_ms=410.456
+run tasks=24 workers=32 iter=5 eval_ms=449.252
+24       32       5        432.639000     410.456000     449.252000    
+run tasks=24 workers=48 iter=1 eval_ms=437.473
+run tasks=24 workers=48 iter=2 eval_ms=470.897
+run tasks=24 workers=48 iter=3 eval_ms=486.673
+run tasks=24 workers=48 iter=4 eval_ms=514.172
+run tasks=24 workers=48 iter=5 eval_ms=415.4
+24       48       5        464.923000     415.400000     514.172000    
+run tasks=48 workers=4 iter=1 eval_ms=1116.66
+run tasks=48 workers=4 iter=2 eval_ms=1129.97
+run tasks=48 workers=4 iter=3 eval_ms=1198.1
+run tasks=48 workers=4 iter=4 eval_ms=1189.82
+run tasks=48 workers=4 iter=5 eval_ms=1207.19
+48       4        5        1168.348000    1116.660000    1207.190000   
+run tasks=48 workers=8 iter=1 eval_ms=852.912
+run tasks=48 workers=8 iter=2 eval_ms=933.804
+run tasks=48 workers=8 iter=3 eval_ms=928.964
+run tasks=48 workers=8 iter=4 eval_ms=851.972
+run tasks=48 workers=8 iter=5 eval_ms=868.539
+48       8        5        887.238200     851.972000     933.804000    
+run tasks=48 workers=12 iter=1 eval_ms=835.995
+run tasks=48 workers=12 iter=2 eval_ms=846.327
+run tasks=48 workers=12 iter=3 eval_ms=796.377
+run tasks=48 workers=12 iter=4 eval_ms=775.371
+run tasks=48 workers=12 iter=5 eval_ms=750.838
+48       12       5        800.981600     750.838000     846.327000    
+run tasks=48 workers=16 iter=1 eval_ms=744.538
+run tasks=48 workers=16 iter=2 eval_ms=808.616
+run tasks=48 workers=16 iter=3 eval_ms=750.202
+run tasks=48 workers=16 iter=4 eval_ms=749.766
+run tasks=48 workers=16 iter=5 eval_ms=816.328
+48       16       5        773.890000     744.538000     816.328000    
+run tasks=48 workers=24 iter=1 eval_ms=846.124
+run tasks=48 workers=24 iter=2 eval_ms=836.392
+run tasks=48 workers=24 iter=3 eval_ms=776.255
+run tasks=48 workers=24 iter=4 eval_ms=742.933
+run tasks=48 workers=24 iter=5 eval_ms=784.11
+48       24       5        797.162800     742.933000     846.124000    
+run tasks=48 workers=32 iter=1 eval_ms=754.849
+run tasks=48 workers=32 iter=2 eval_ms=780.226
+run tasks=48 workers=32 iter=3 eval_ms=749.801
+run tasks=48 workers=32 iter=4 eval_ms=806.14
+run tasks=48 workers=32 iter=5 eval_ms=790.549
+48       32       5        776.313000     749.801000     806.140000    
+run tasks=48 workers=48 iter=1 eval_ms=819.998
+run tasks=48 workers=48 iter=2 eval_ms=886.898
+run tasks=48 workers=48 iter=3 eval_ms=1007.44
+run tasks=48 workers=48 iter=4 eval_ms=811.754
+run tasks=48 workers=48 iter=5 eval_ms=825.872
+48       48       5        870.392400     811.754000     1007.440000   
