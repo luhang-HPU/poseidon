@@ -1,0 +1,2 @@
+target_key,binary_name,branch_count,mode,runs,outer_workers,inner_threads,evaluation_mean_ms,evaluation_min_ms,evaluation_max_ms,evaluation_stddev_ms,full_pipeline_mean_ms,example_total_mean_ms
+24_single,test_ckks_dag_single_thread_24_parallel,24,single-thread,1,1,1,16112.500000,16112.500000,16112.500000,0.000000,,

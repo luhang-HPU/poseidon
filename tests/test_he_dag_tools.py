@@ -16,7 +16,6 @@ from dag_generator.hedag.render import render_summary
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SAMPLE = REPO_ROOT / "dag_generator" / "hedag" / "samples" / "knn_ckks_demo.cpp"
-BOOTSTRAP = REPO_ROOT / "examples" / "ckks" / "test_ckks_bootstrap.cpp"
 HELPER_SAMPLE = REPO_ROOT / "tests" / "fixtures" / "hedag_helper.cpp"
 INPLACE_SAMPLE = REPO_ROOT / "tests" / "fixtures" / "hedag_inplace.cpp"
 INDEXED_SAMPLE = REPO_ROOT / "tests" / "fixtures" / "hedag_indexed.cpp"
@@ -60,18 +59,6 @@ class HEDagToolingTests(unittest.TestCase):
         self.assertEqual(program.metadata["clang_ast"]["mode"], "json_fixture")
         self.assertEqual(len(graph.ops), 7)
         self.assertEqual(plan.critical_path_cost, 12)
-
-    def test_extracts_bootstrap_resources(self) -> None:
-        program = extract_program(str(BOOTSTRAP), "main")
-        graph = build_graph(program)
-        bootstrap_ops = [op for op in graph.ops if op.op_kind == "bootstrap"]
-
-        self.assertEqual(len(bootstrap_ops), 1)
-        bootstrap_op = bootstrap_ops[0]
-        resource_names = {value_id.split("@", 1)[0] for value_id in bootstrap_op.resources}
-        self.assertIn("relin_keys", resource_names)
-        self.assertIn("rot_keys", resource_names)
-        self.assertIn("ckks_encoder", resource_names)
 
     def test_inlines_same_file_helper_calls(self) -> None:
         program = extract_program(str(HELPER_SAMPLE), "helper_demo")

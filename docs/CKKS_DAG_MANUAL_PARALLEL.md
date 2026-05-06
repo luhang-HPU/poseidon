@@ -1,6 +1,6 @@
 # CKKS 手工并行样例说明
 
-本文档说明文件 `examples/ckks/test_ckks_dag_manual_parallel.cpp` 的设计目的、计算流程、并行策略，以及如何用它观察性能优化效果。
+本文档说明文件 `examples/ckks/test_ckks_dag_manual_parallel_24.cpp` 的设计目的、计算流程、并行策略，以及如何用它观察性能优化效果。
 
 ## 1. 这个文件是做什么的
 
@@ -289,19 +289,19 @@ final_reduce(...);
 编译：
 
 ```bash
-cmake --build build --target test_ckks_dag_manual_parallel -j2
+cmake --build build --target test_ckks_dag_manual_parallel_24 -j2
 ```
 
 运行：
 
 ```bash
-./build/bin/test_ckks_dag_manual_parallel
+./build/bin/test_ckks_dag_manual_parallel_24
 ```
 
 如果想单独生成这个多线程函数的 DAG：
 
 ```bash
-./hedag_pipeline examples/ckks/test_ckks_dag_manual_parallel.cpp \
+./hedag_pipeline examples/ckks/test_ckks_dag_manual_parallel_24.cpp \
   --function ckks_manual_parallel_workload \
   --case-name ckks_manual_parallel_graph
 ```
@@ -309,7 +309,7 @@ cmake --build build --target test_ckks_dag_manual_parallel -j2
 如果想生成单线程版本的 DAG：
 
 ```bash
-./hedag_pipeline examples/ckks/test_ckks_dag_single_thread.cpp \
+./hedag_pipeline examples/ckks/test_ckks_dag_single_thread_24_parallel.cpp \
   --function ckks_single_thread_workload \
   --case-name ckks_single_thread_graph
 ```
@@ -328,6 +328,6 @@ cmake --build build --target test_ckks_dag_manual_parallel -j2
 
 ## 15. 一句话总结
 
-`test_ckks_dag_manual_parallel.cpp` 做的事情是：
+`test_ckks_dag_manual_parallel_24.cpp` 做的事情是：
 
 “在同一个程序里，对同一条 CKKS 计算链同时提供单线程和手工并行两种执行方式，并用时间和精度结果去验证并行化是否值得、是否正确。”
