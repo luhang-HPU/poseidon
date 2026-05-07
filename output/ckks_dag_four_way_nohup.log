@@ -1,0 +1,50 @@
+nohup: ignoring input
+
+================================================================================================
+Running 24_single: binary=test_ckks_dag_single_thread_24_parallel, runs=5, outer_workers=1, inner_threads=16
+================================================================================================
+  Run 1/5 ... OK (evaluation=1795.210000 ms)
+  Run 2/5 ... OK (evaluation=1617.590000 ms)
+  Run 3/5 ... OK (evaluation=1616.180000 ms)
+  Run 4/5 ... OK (evaluation=1761.330000 ms)
+  Run 5/5 ... OK (evaluation=1782.980000 ms)
+
+================================================================================================
+Running 24_manual: binary=test_ckks_dag_manual_parallel_24, runs=5, outer_workers=16, inner_threads=8
+================================================================================================
+  Run 1/5 ... OK (evaluation=382.636000 ms)
+  Run 2/5 ... OK (evaluation=435.859000 ms)
+  Run 3/5 ... OK (evaluation=387.042000 ms)
+  Run 4/5 ... OK (evaluation=440.473000 ms)
+  Run 5/5 ... OK (evaluation=431.090000 ms)
+
+================================================================================================
+Running 48_single: binary=test_ckks_dag_single_thread_48_parallel, runs=5, outer_workers=1, inner_threads=16
+================================================================================================
+  Run 1/5 ... OK (evaluation=3668.470000 ms)
+  Run 2/5 ... OK (evaluation=3700.660000 ms)
+  Run 3/5 ... OK (evaluation=3199.030000 ms)
+  Run 4/5 ... OK (evaluation=3491.150000 ms)
+  Run 5/5 ... OK (evaluation=3202.670000 ms)
+
+================================================================================================
+Running 48_manual: binary=test_ckks_dag_manual_parallel_48, runs=5, outer_workers=16, inner_threads=8
+================================================================================================
+  Run 1/5 ... OK (evaluation=658.478000 ms)
+  Run 2/5 ... OK (evaluation=650.895000 ms)
+  Run 3/5 ... OK (evaluation=706.888000 ms)
+  Run 4/5 ... OK (evaluation=626.414000 ms)
+  Run 5/5 ... OK (evaluation=642.993000 ms)
+
+================================================================================================
+CKKS DAG FOUR-WAY SUMMARY
+================================================================================================
+target           outer   inner  runs     eval_avg_ms   eval_std_ms   full_avg_ms
+--------------------------------------------------------------------------------
+24_single            1      16     5     1714.658000     90.076230           nan
+24_manual           16       8     5      415.420000     28.156065           nan
+48_single            1      16     5     3452.396000    243.095796           nan
+48_manual           16       8     5      657.133600     30.248464           nan
+
+Raw CSV written to: /home/guoshuai/github/poseidon/output/ckks_dag_four_way_20260507_001323/raw_runs.csv
+Summary CSV written to: /home/guoshuai/github/poseidon/output/ckks_dag_four_way_20260507_001323/summary.csv
