@@ -192,14 +192,10 @@ endif()
 option(POSEIDON_USE_OPENMP "Enable OpenMP for POSEIDON" OFF)
 message(STATUS "POSEIDON_USE_OPENMP: ${POSEIDON_USE_OPENMP}")
 if(POSEIDON_USE_OPENMP)
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
     find_package(OpenMP REQUIRED)
     if(OpenMP_CXX_FOUND)
-        if(TARGET poseidon_shared)
-            target_link_libraries(poseidon_shared PUBLIC OpenMP::OpenMP_CXX)
-            target_compile_definitions(poseidon_shared PUBLIC POSEIDON_USE_OPENMP)
-        endif()
-    else()
-        message(WARNING "OpenMP requested but not found. Building without OpenMP.")
+        set(USING_OPENMP ON)
     endif()
 endif()
 
@@ -296,6 +292,11 @@ if(POSEIDON_USE_INTEL_HEXL)
             DESTINATION ${CMAKE_INSTALL_PREFIX}/${CMAKE_LIBRARY_PREFIX}
             FILES_MATCHING PATTERN "*hexl*"
     )
+endif()
+
+if(POSEIDON_USE_OPENMP)
+    target_link_libraries(poseidon_shared PRIVATE OpenMP::OpenMP_CXX)
+    target_compile_definitions(poseidon_shared PRIVATE POSEIDON_USE_OPENMP)
 endif()
 
 if(POSEIDON_USE_SPDLOG)
