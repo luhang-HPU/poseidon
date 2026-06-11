@@ -22,7 +22,7 @@ int bit_len(uint n)
 std::pair<int, int> split_degree(int n)
 {
     int a, b;
-    if (n & (n-1) == 0)
+    if ((n & (n-1)) == 0)
     {
         a = n/2;
         b = n/2;
@@ -423,7 +423,9 @@ void EvaluatorCkksBase::gen_power(map<uint32_t, Ciphertext> &monomial_basis, uin
                                   bool is_chev, double min_scale, const RelinKeys &relin_keys,
                                   const CKKSEncoder &encoder) const
 {
+    std::cout << "gen_power, n = " << n  << " begin" << std::endl;
     gen_power_optimized(monomial_basis, n, lazy, is_chev, min_scale, relin_keys, encoder);
+    std::cout << "gen_power, n = " << n  << " end" << std::endl;
     /*gen_power_inner(monomial_basis, n, lazy, is_chev, min_scale, relin_keys, encoder);
     rescale_dynamic(monomial_basis[n], monomial_basis[n], min_scale);*/
 }
@@ -1029,7 +1031,7 @@ void EvaluatorCkksBase::eval_mod(const Ciphertext &ciph, Ciphertext &result,
     set_min_scale(eva_poly.scaling_factor());
     auto target_scale = eva_poly.scaling_factor();
     vector<Polynomial> poly_sin{eva_poly.sine_poly()};
-    vector<Polynomial> poly_asin{eva_poly.arcsine_poly()};
+//  vector<Polynomial> poly_asin{eva_poly.arcsine_poly()};
 
     vector<int> idx(slot_num);
     for (int i = 0; i < slot_num; i++)
