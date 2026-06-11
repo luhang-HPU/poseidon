@@ -172,6 +172,17 @@ private:
                          bool is_chev, double min_scale, const RelinKeys &relin_keys,
                          const CKKSEncoder &encoder) const;
 
+    // Optimized gen_power with lazy relinearization and rescale tracking.
+    // When lazy=true, the result is NOT relinearized (caller must handle).
+    // Non-relinearized sub-powers are automatically relinearized before reuse.
+    void gen_power_optimized(map<uint32_t, Ciphertext> &monomial_basis, uint32_t n, bool lazy,
+                             bool is_chev, double min_scale, const RelinKeys &relin_keys,
+                             const CKKSEncoder &encoder) const;
+    // Returns true if the caller should rescale monomial_basis[n].
+    bool gen_power_optimized_inner(map<uint32_t, Ciphertext> &monomial_basis, uint32_t n, bool lazy,
+                                   bool is_chev, double min_scale, const RelinKeys &relin_keys,
+                                   const CKKSEncoder &encoder) const;
+
     void recurse(const map<uint32_t, Ciphertext> &monomial_basis, const RelinKeys &relin_keys,
                  uint32_t target_level, double target_scale, const PolynomialVector &pol,
                  uint32_t log_split, uint32_t log_degree, Ciphertext &destination,

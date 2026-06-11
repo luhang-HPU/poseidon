@@ -6,6 +6,38 @@
 namespace poseidon
 {
 
+namespace
+{
+int bit_len(uint n)
+{
+    int len = 0;
+    while (n)
+    {
+        n = n >> 1;
+        len++;
+    }
+    return len;
+}
+
+std::pair<int, int> split_degree(int n)
+{
+    int a, b;
+    if (n & (n-1) == 0)
+    {
+        a = n/2;
+        b = n/2;
+    }
+    else
+    {
+        int k = bit_len(n) - 1;
+        a = (1 << k) - 1;
+        b = n + 1 - (1 << k);
+    }
+    return {a, b};
+}
+
+}
+
 EvaluatorCkksBase::EvaluatorCkksBase(const PoseidonContext &context)
     : min_scale_(std::pow(2.0, context.parameters_literal()->log_scale())), Base(context)
 {
@@ -339,6 +371,7 @@ void EvaluatorCkksBase::evaluate_poly_vector(const Ciphertext &ciph, Ciphertext 
 
     int log_degree = ceil(log2(polys.polys()[0].degree()));
     int log_split = optimal_split(log_degree);
+    std::cout << "log_degree = " << log_degree << "  log_split = " << log_split << std::endl;
 
     bool odd = true;
     bool even = true;
@@ -390,8 +423,9 @@ void EvaluatorCkksBase::gen_power(map<uint32_t, Ciphertext> &monomial_basis, uin
                                   bool is_chev, double min_scale, const RelinKeys &relin_keys,
                                   const CKKSEncoder &encoder) const
 {
-    gen_power_inner(monomial_basis, n, lazy, is_chev, min_scale, relin_keys, encoder);
-    rescale_dynamic(monomial_basis[n], monomial_basis[n], min_scale);
+    gen_power_optimized(monomial_basis, n, lazy, is_chev, min_scale, relin_keys, encoder);
+    /*gen_power_inner(monomial_basis, n, lazy, is_chev, min_scale, relin_keys, encoder);
+    rescale_dynamic(monomial_basis[n], monomial_basis[n], min_scale);*/
 }
 
 void EvaluatorCkksBase::gen_power_inner(map<uint32_t, Ciphertext> &monomial_basis, uint32_t n,
@@ -399,8 +433,8 @@ void EvaluatorCkksBase::gen_power_inner(map<uint32_t, Ciphertext> &monomial_basi
                                         const RelinKeys &relin_keys,
                                         const CKKSEncoder &encoder) const
 {
-
-    if (!monomial_basis[n].is_valid())
+    gen_power_optimized_inner(monomial_basis, n, lazy, is_chev, min_scale, relin_keys, encoder);
+    /*if (!monomial_basis[n].is_valid())
     {
         bool is_pow2 = ((n & (n - 1)) == 0);
         int a, b, c = 0;
@@ -456,7 +490,102 @@ void EvaluatorCkksBase::gen_power_inner(map<uint32_t, Ciphertext> &monomial_basi
                 sub_dynamic(monomial_basis[n], ciph_tmp, monomial_basis[n], encoder);
             }
         }
+    }*/
+}
+
+void EvaluatorCkksBase::gen_power_optimized(map<uint32_t, Ciphertext> &monomial_basis, uint32_t n,
+                                            bool lazy, bool is_chev, double min_scale,
+                                            const RelinKeys &relin_keys,
+                                            const CKKSEncoder &encoder) const
+{
+    if (!monomial_basis[n].is_valid())
+    {
+        bool need_rescale =
+            gen_power_optimized_inner(monomial_basis, n, lazy, is_chev, min_scale, relin_keys, encoder);
+        if (need_rescale)
+        {
+            rescale_dynamic(monomial_basis[n], monomial_basis[n], min_scale);
+        }
     }
+}
+
+bool EvaluatorCkksBase::gen_power_optimized_inner(
+    map<uint32_t, Ciphertext> &monomial_basis, uint32_t n, bool lazy, bool is_chev, double min_scale,
+    const RelinKeys &relin_keys, const CKKSEncoder &encoder) const
+{
+    if (monomial_basis[n].is_valid())
+    {
+        return false;
+    }
+
+    bool is_pow2 = ((n & (n - 1)) == 0);
+    auto [a, b] = split_degree(n);
+
+    std::cout << "n = " << n << "  a = " << a << "  b = " << b << std::endl;
+
+    bool need_rescale_a =
+        gen_power_optimized_inner(monomial_basis, a, lazy && !is_pow2, is_chev, min_scale, relin_keys,
+                                  encoder);
+    bool need_rescale_b =
+        gen_power_optimized_inner(monomial_basis, b, lazy && !is_pow2, is_chev, min_scale, relin_keys,
+                                  encoder);
+
+    std::cout << "lazy = " << lazy << "  min_scale = " << min_scale << std::endl;
+    if (lazy)
+    {
+        if (monomial_basis[a].size() > 2)
+        {
+            relinearize(monomial_basis[a], monomial_basis[a], relin_keys);
+        }
+        if (monomial_basis[b].size() > 2)
+        {
+            relinearize(monomial_basis[b], monomial_basis[b], relin_keys);
+        }
+
+        if (need_rescale_a)
+        {
+            rescale_dynamic(monomial_basis[a], monomial_basis[a], min_scale);
+        }
+        if (need_rescale_b)
+        {
+            rescale_dynamic(monomial_basis[b], monomial_basis[b], min_scale);
+        }
+
+        multiply(monomial_basis[a], monomial_basis[b], monomial_basis[n]);
+    }
+    else
+    {
+        if (need_rescale_a)
+        {
+            rescale_dynamic(monomial_basis[a], monomial_basis[a], min_scale);
+        }
+        if (need_rescale_b)
+        {
+            rescale_dynamic(monomial_basis[b], monomial_basis[b], min_scale);
+        }
+
+        multiply_relin_dynamic(monomial_basis[a], monomial_basis[b], monomial_basis[n], relin_keys);
+    }
+
+    if (is_chev)
+    {
+        int c = std::abs(a - b);
+
+        add(monomial_basis[n], monomial_basis[n], monomial_basis[n]);
+
+        if (c == 0)
+        {
+            add_const(monomial_basis[n], -1.0, monomial_basis[n], encoder);
+        }
+        else
+        {
+            gen_power_optimized(monomial_basis, c, false, is_chev, min_scale, relin_keys, encoder);
+
+            sub_dynamic(monomial_basis[n], monomial_basis[c], monomial_basis[n], encoder);
+        }
+    }
+
+    return true;
 }
 
 void EvaluatorCkksBase::recurse(const map<uint32_t, Ciphertext> &monomial_basis,
