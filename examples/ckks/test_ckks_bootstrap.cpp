@@ -15,12 +15,12 @@ int main()
     std::cout << "POSEIDON SOFTWARE VERSION:" << POSEIDON_VERSION << std::endl;
     std::cout << "" << std::endl;
 
-    ParametersLiteral ckks_param_literal{CKKS, 15, 15 - 1, 32, 1, 1, 0, {}, {}};
-    vector<uint32_t> log_q_tmp{32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32,
+    ParametersLiteral ckks_param_literal{CKKS, 15, 15 - 1, 40, 1, 1, 0, {}, {}};
+    /*vector<uint32_t> log_q_tmp{32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32,
                                32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32};
-    vector<uint32_t> log_p_tmp{32};
+    vector<uint32_t> log_p_tmp{32};*/
 
-    ckks_param_literal.set_log_modulus(log_q_tmp, log_p_tmp);
+    ckks_param_literal.set_log_modulus(std::vector<uint32_t>(30, 40), std::vector<uint32_t>{40});
 
     PoseidonFactory::get_instance()->set_device_type(DEVICE_SOFTWARE);
     auto context = PoseidonFactory::get_instance()->create_poseidon_context(ckks_param_literal);
@@ -60,13 +60,17 @@ int main()
     // evaluate
     auto start = chrono::high_resolution_clock::now();
     ckks_eva->multiply_relin(cipher, cipher, cipher, relin_keys);
-    ckks_eva->rescale_dynamic(cipher, cipher, (int64_t)1 << 45);
+    ckks_eva->rescale_dynamic(cipher, cipher, (int64_t)1 << 40);
+
+    std::cout << "before bootstrap, level = " << cipher.level() << std::endl;
 
     EvalModPoly eval_mod_poly(context, CosDiscrete, (uint64_t)1 << 40, 1, 9, 3, 16, 0, 30);
     ckks_eva->bootstrap(cipher, cipher, relin_keys, rot_keys, ckks_encoder, eval_mod_poly);
     auto stop = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
     std::cout << "Bootstrap TIME: " << duration.count() << " microseconds" << std::endl;
+
+    std::cout << "after bootstrap, level = " << cipher.level() << std::endl;
 
     // decode && decrypt
     dec.decrypt(cipher, plain_res);
