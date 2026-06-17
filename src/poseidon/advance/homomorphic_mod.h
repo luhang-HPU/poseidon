@@ -10,6 +10,7 @@
 namespace poseidon
 {
 int optimal_split(int log_degree);
+int optimal_split_optimized(int log_degree);
 bool is_not_negligible(complex<double> c);
 pair<bool, bool> is_odd_or_even_polynomial(Polynomial &coeffs);
 
@@ -20,7 +21,7 @@ public:
                 uint32_t level_start, uint32_t log_message_ratio, uint32_t double_angle, uint32_t k,
                 uint32_t arcsine_degree, uint32_t sine_degree);
 
-    inline static complex<double> sin2pi2pi(const complex<double> &x)
+    inline static complex<double> sin_2pi_x(const complex<double> &x)
     {
         return sin(6.283185307179586 * x);
     }
@@ -64,11 +65,12 @@ private:
     double q_diff_;
     double sc_fac_;
     double sqrt_2pi_;
+
     Polynomial sine_poly_;
+    Polynomial arcsine_poly_;
+
     int32_t sine_poly_a_;
     int32_t sine_poly_b_;
-
-    Polynomial arcsine_poly_;
 };
 
 }  // namespace poseidon

@@ -378,9 +378,8 @@ void EvaluatorCkksBase::evaluate_poly_vector(const Ciphertext &ciph, Ciphertext 
 
     for (auto p : polys.polys())
     {
-        auto [tmp0, tmp1] = is_odd_or_even_polynomial(p);
-        odd = odd && tmp0;
-        even = even && tmp1;
+        odd = odd && p.is_odd();
+        even = even && p.is_even();
     }
 
     bool is_chebyshev = false;
@@ -423,11 +422,8 @@ void EvaluatorCkksBase::gen_power(map<uint32_t, Ciphertext> &monomial_basis, uin
                                   bool is_chev, double min_scale, const RelinKeys &relin_keys,
                                   const CKKSEncoder &encoder) const
 {
-    std::cout << "gen_power, n = " << n  << " begin" << std::endl;
-    gen_power_optimized(monomial_basis, n, lazy, is_chev, min_scale, relin_keys, encoder);
-    std::cout << "gen_power, n = " << n  << " end" << std::endl;
-    /*gen_power_inner(monomial_basis, n, lazy, is_chev, min_scale, relin_keys, encoder);
-    rescale_dynamic(monomial_basis[n], monomial_basis[n], min_scale);*/
+    gen_power_inner(monomial_basis, n, lazy, is_chev, min_scale, relin_keys, encoder);
+    rescale_dynamic(monomial_basis[n], monomial_basis[n], min_scale);
 }
 
 void EvaluatorCkksBase::gen_power_inner(map<uint32_t, Ciphertext> &monomial_basis, uint32_t n,
@@ -435,8 +431,7 @@ void EvaluatorCkksBase::gen_power_inner(map<uint32_t, Ciphertext> &monomial_basi
                                         const RelinKeys &relin_keys,
                                         const CKKSEncoder &encoder) const
 {
-    gen_power_optimized_inner(monomial_basis, n, lazy, is_chev, min_scale, relin_keys, encoder);
-    /*if (!monomial_basis[n].is_valid())
+    if (!monomial_basis[n].is_valid())
     {
         bool is_pow2 = ((n & (n - 1)) == 0);
         int a, b, c = 0;
@@ -492,103 +487,10 @@ void EvaluatorCkksBase::gen_power_inner(map<uint32_t, Ciphertext> &monomial_basi
                 sub_dynamic(monomial_basis[n], ciph_tmp, monomial_basis[n], encoder);
             }
         }
-    }*/
-}
-
-void EvaluatorCkksBase::gen_power_optimized(map<uint32_t, Ciphertext> &monomial_basis, uint32_t n,
-                                            bool lazy, bool is_chev, double min_scale,
-                                            const RelinKeys &relin_keys,
-                                            const CKKSEncoder &encoder) const
-{
-    if (!monomial_basis[n].is_valid())
-    {
-        bool need_rescale =
-            gen_power_optimized_inner(monomial_basis, n, lazy, is_chev, min_scale, relin_keys, encoder);
-        if (need_rescale)
-        {
-            rescale_dynamic(monomial_basis[n], monomial_basis[n], min_scale);
-        }
     }
 }
 
-bool EvaluatorCkksBase::gen_power_optimized_inner(
-    map<uint32_t, Ciphertext> &monomial_basis, uint32_t n, bool lazy, bool is_chev, double min_scale,
-    const RelinKeys &relin_keys, const CKKSEncoder &encoder) const
-{
-    if (monomial_basis[n].is_valid())
-    {
-        return false;
-    }
 
-    bool is_pow2 = ((n & (n - 1)) == 0);
-    auto [a, b] = split_degree(n);
-
-    std::cout << "n = " << n << "  a = " << a << "  b = " << b << std::endl;
-
-    bool need_rescale_a =
-        gen_power_optimized_inner(monomial_basis, a, lazy && !is_pow2, is_chev, min_scale, relin_keys,
-                                  encoder);
-    bool need_rescale_b =
-        gen_power_optimized_inner(monomial_basis, b, lazy && !is_pow2, is_chev, min_scale, relin_keys,
-                                  encoder);
-
-    std::cout << "lazy = " << lazy << "  min_scale = " << min_scale << std::endl;
-    if (lazy)
-    {
-        if (monomial_basis[a].size() > 2)
-        {
-            relinearize(monomial_basis[a], monomial_basis[a], relin_keys);
-        }
-        if (monomial_basis[b].size() > 2)
-        {
-            relinearize(monomial_basis[b], monomial_basis[b], relin_keys);
-        }
-
-        if (need_rescale_a)
-        {
-            rescale_dynamic(monomial_basis[a], monomial_basis[a], min_scale);
-        }
-        if (need_rescale_b)
-        {
-            rescale_dynamic(monomial_basis[b], monomial_basis[b], min_scale);
-        }
-
-        multiply(monomial_basis[a], monomial_basis[b], monomial_basis[n]);
-    }
-    else
-    {
-        if (need_rescale_a)
-        {
-            rescale_dynamic(monomial_basis[a], monomial_basis[a], min_scale);
-        }
-        if (need_rescale_b)
-        {
-            rescale_dynamic(monomial_basis[b], monomial_basis[b], min_scale);
-        }
-
-        multiply_relin_dynamic(monomial_basis[a], monomial_basis[b], monomial_basis[n], relin_keys);
-    }
-
-    if (is_chev)
-    {
-        int c = std::abs(a - b);
-
-        add(monomial_basis[n], monomial_basis[n], monomial_basis[n]);
-
-        if (c == 0)
-        {
-            add_const(monomial_basis[n], -1.0, monomial_basis[n], encoder);
-        }
-        else
-        {
-            gen_power_optimized(monomial_basis, c, false, is_chev, min_scale, relin_keys, encoder);
-
-            sub_dynamic(monomial_basis[n], monomial_basis[c], monomial_basis[n], encoder);
-        }
-    }
-
-    return true;
-}
 
 void EvaluatorCkksBase::recurse(const map<uint32_t, Ciphertext> &monomial_basis,
                                 const RelinKeys &relin_keys, uint32_t target_level,
@@ -755,7 +657,7 @@ tuple<uint32_t, double> EvaluatorCkksBase::pre_scalar_level(
     auto &modulus = params->q();
     auto degree = params->degree();
     auto slots = degree >> 1;
-    if (is_even)
+    if (is_even && !is_odd)
         minimum_degree_non_zero_coefficient--;
 
     size_t maximum_ciphertext_degree = 0;
@@ -763,7 +665,7 @@ tuple<uint32_t, double> EvaluatorCkksBase::pre_scalar_level(
     {
         if (x.count(i))
         {
-            maximum_ciphertext_degree = max(maximum_ciphertext_degree, x.at(i).level());
+            maximum_ciphertext_degree = max(maximum_ciphertext_degree, x.at(i).size() - 1);
         }
     }
     // If an index slot is given (either multiply polynomials or masking)
@@ -835,6 +737,358 @@ tuple<uint32_t, double> EvaluatorCkksBase::pre_scalar_level(
     return make_tuple(target_level, target_scale);
 }
 
+void EvaluatorCkksBase::evaluate_polynomial(const PolynomialVector& poly_vec, const Ciphertext& ct_basis, Ciphertext& ct_res,
+    bool is_chev, bool is_lazy, double min_scale, const RelinKeys& relin_key, const CKKSEncoder& encoder)
+{
+    map<uint32_t, Ciphertext> power_basis;
+    power_basis[1] = ct_basis;
+
+    auto log_degree = bit_len(poly_vec[0].degree());
+    auto log_split = optimal_split_optimized(log_degree);
+
+    bool is_odd = false;
+    bool is_even = false;
+    for (auto i = 0; i < poly_vec.polys().size(); i++)
+    {
+        const auto& poly = poly_vec.polys()[i];
+        is_odd = is_odd || poly.is_odd();
+        is_even = is_even || poly.is_even();
+    }
+
+    gen_power_optimized(power_basis, 1 << (log_degree - 1), is_lazy, is_chev, min_scale, relin_key, encoder);
+
+    for (auto i = (1 << log_split) - 1; i > 2; i--)
+    {
+        if (!(is_even || is_odd) || (((i&1) == 0) && is_even) || (((i&1) == 1) && is_odd))
+        {
+            gen_power_optimized(power_basis, i, is_lazy, is_chev, min_scale, relin_key, encoder);
+        }
+    }
+
+    PatersonStockmeyerPolynomialVector ps_polys_vec;
+    int input_level = ct_basis.level();
+    double input_scale = ct_basis.scale();
+    get_paterson_stockmeyer_polynomial_vector(poly_vec, input_level - log_degree + 1, input_scale, ps_polys_vec);
+
+    evaluate_paterson_stockmeyer_polynomial_vector(ps_polys_vec, power_basis, ct_res, relin_key, encoder);
+}
+
+void EvaluatorCkksBase::get_paterson_stockmeyer_polynomial(const Polynomial& poly, int input_level, double input_scale, PatersonStockmeyerPolynomial& ps_polys)
+{
+    auto log_degree = bit_len(poly.degree());
+    auto log_split = optimal_split_optimized(log_degree);
+
+    std::map<uint32_t, SimPower> power_basis_sim;
+    power_basis_sim[1] = {input_level, input_scale};
+
+    gen_power_sim(power_basis_sim, 1 << log_degree);
+    for (auto i = (1 << log_split) - 1; i > 2; i--)
+    {
+        gen_power_sim(power_basis_sim, i);
+    }
+
+    // TODO !!!!
+    // recursePS(ps_polys)
+}
+
+void EvaluatorCkksBase::get_paterson_stockmeyer_polynomial_vector(const PolynomialVector& poly_vec,
+    int input_level, double intput_scale, PatersonStockmeyerPolynomialVector& ps_poly_vec)
+{
+    ps_poly_vec.polys_.clear();
+    ps_poly_vec.polys_.resize(poly_vec.size());
+
+    for (auto i = 0; i < poly_vec.size(); ++i)
+    {
+        get_paterson_stockmeyer_polynomial(poly_vec[i], input_level, intput_scale, ps_poly_vec.polys_[i]);
+    }
+}
+
+void EvaluatorCkksBase::evaluate_paterson_stockmeyer_polynomial_vector(const PatersonStockmeyerPolynomialVector &ps_polys_vec,
+    const map<uint32_t, Ciphertext> &power_basis, Ciphertext& ct_res, const RelinKeys& relin_key, const CKKSEncoder& encoder) const
+{
+    auto split = ps_polys_vec.polys_[0].polys_.size();
+
+    std::vector<BabyStep> baby_steps(split);
+    for (auto i = 0; i < baby_steps.size(); i++)
+    {
+        evaluate_baby_step(ps_polys_vec, power_basis, i, baby_steps[split-i-1].value, encoder);
+    }
+
+    while (baby_steps.size() != 1)
+    {
+        std::vector<int> giant_steps(baby_steps.size());
+        for (auto i = 0; i < baby_steps.size(); i++)
+        {
+            if (i == baby_steps.size() - 1)
+            {
+                giant_steps[i] = 2;
+            }
+            else if (baby_steps[i].degree == baby_steps[i+1].degree)
+            {
+                giant_steps[i] = 1;
+                ++i;
+            }
+        }
+
+        for (auto i = 0; i < baby_steps.size(); i++)
+        {
+            evaluate_giant_step(i, giant_steps, baby_steps, power_basis, relin_key);
+        }
+
+        for (auto iter = baby_steps.begin(); iter != baby_steps.end();)
+        {
+            // TODO 使用is_valid()来判断baby_steps[i]已经被合并，是否可行？
+            if (!iter->value.is_valid())
+            {
+                iter = baby_steps.erase(iter);
+            }
+            else
+            {
+                ++iter;
+            }
+        }
+    }
+
+    if (baby_steps[0].value.size() == 3)
+    {
+        relinearize(baby_steps[0].value, baby_steps[0].value, relin_key);
+    }
+
+    // TODO rescale or rescale_dynamic
+    rescale(baby_steps[0].value, baby_steps[0].value);
+
+    ct_res = baby_steps[0].value;
+}
+
+void EvaluatorCkksBase::evaluate_polynomial_vector_from_power_basis_optimized(const PolynomialVector &poly_vec,
+    const map<uint32_t, Ciphertext> &power_basis, Ciphertext &ciph_res, int target_level, int target_scale, const CKKSEncoder &encoder) const
+{
+    auto is_even = poly_vec.is_even();
+    auto is_odd = poly_vec.is_odd();
+
+    auto minimum_degree_non_zero_coefficient = poly_vec.polys()[0].data().size() - 1;
+    if (is_even && !is_odd)
+    {
+        minimum_degree_non_zero_coefficient--;
+    }
+
+    auto maximum_ciphertext_degree = 0;
+    for (auto i = poly_vec.polys()[0].degree(); i > 0; i--)
+    {
+        if (power_basis.count(i))
+        {
+            maximum_ciphertext_degree = max(maximum_ciphertext_degree, (int)power_basis.at(i).size() - 1);
+        }
+    }
+
+    if (poly_vec.index().size() > 0)
+    {
+        // TODO 暂时不存在通过slot来计算的情况，可暂时忽略该if分支
+    }
+    else
+    {
+        if (minimum_degree_non_zero_coefficient == 0)
+        {
+            if (!ciph_res.is_valid())
+            {
+                ciph_res.resize(context_, context_.crt_context()->parms_id_map().at(target_level), 2);
+                ciph_res.is_ntt_form() = true;
+                ciph_res.scale() = target_scale;
+            }
+
+            if (is_even)
+            {
+                add_const(ciph_res, poly_vec.polys()[0].data()[0], ciph_res, encoder);
+                return;
+            }
+
+            for (auto key = poly_vec.polys()[0].data().size(); key > 0; key--)
+            {
+                if ((key != 0) && (!(is_even || is_odd)) || ((key & 1) == 0 && is_even) || ((key & 1) == 1 && is_odd))
+                {
+                    Ciphertext ciph_tmp;
+                    multiply_const(power_basis.at(key), poly_vec.polys()[0].data()[0], 1.0, ciph_tmp, encoder);
+                    add(ciph_res, ciph_tmp, ciph_res);
+                }
+            }
+        }
+    }
+}
+
+void EvaluatorCkksBase::evaluate_monomial(const Ciphertext& a, Ciphertext& b, const Ciphertext& xpow, const RelinKeys& relin_key) const
+{
+    if (b.size() == 3)
+    {
+        relinearize(b, b, relin_key);
+    }
+
+    rescale(b, b);
+    multiply(b, xpow, b);
+
+    // TODO  特殊条件判断
+    // if (a.scale())
+
+    add(a, b, b);
+}
+
+void EvaluatorCkksBase::evaluate_baby_step(const PatersonStockmeyerPolynomialVector &ps_poly_vec,
+                                            const map<uint32_t, Ciphertext> &power_basis,
+                                            int j, Ciphertext& ct_res, const CKKSEncoder &encoder) const
+{
+    auto num_poly = ps_poly_vec.polys_.size();
+
+    PolynomialVector poly_vec_tmp;
+    // PatersonStockmeyerPolynomialVector可能有多组PatersonStockmeyerPolynomial
+    // 只选取PatersonStockmeyerPolynomialVector[][j]
+    for (auto i = 0; i < num_poly; i++)
+    {
+        poly_vec_tmp[i] = ps_poly_vec.polys_[i].polys_[j];
+    }
+
+    // TODO
+    auto level = ps_poly_vec.polys_[0].polys_[j].level();
+    auto scale = ps_poly_vec.polys_[0].polys_[j].scale();
+
+    evaluate_polynomial_vector_from_power_basis_optimized(poly_vec_tmp, power_basis, ct_res, level, scale, encoder);
+}
+
+void EvaluatorCkksBase::evaluate_giant_step(int i, const vector<int> &giant_steps, vector<BabyStep> &baby_steps,
+                                             const map<uint32_t, Ciphertext> &power_basis, const RelinKeys &relin_keys) const
+{
+    // giant_step
+    // = 0: no operation
+    // = 1: merge
+    // = 2: last element, do not merge, rescale to the same degree
+    if (giant_steps[i] == 2)
+    {
+        baby_steps[i].degree = baby_steps[i - 1].degree;
+    }
+    else if (giant_steps[i] == 1)
+    {
+        BabyStep &even = baby_steps[i];
+        BabyStep &odd = baby_steps[i + 1];
+
+        int deg = 1 << bit_len(baby_steps[i].degree);
+
+        evaluate_monomial(even.value, odd.value, power_basis.at(deg), relin_keys);
+
+        odd.degree = 2 * deg - 1;
+        // TODO even reset to invalid value
+        even = BabyStep{};
+    }
+}
+
+void EvaluatorCkksBase::gen_power_sim(std::map<uint32_t, SimPower> &power_basis_sim, int n)
+{
+    if (n < 2)
+    {
+        return;
+    }
+
+    auto [a, b] = split_degree(n);
+    gen_power_sim(power_basis_sim, a);
+    gen_power_sim(power_basis_sim, b);
+
+    power_basis_sim[n].level_ =
+        power_basis_sim[a].level_ < power_basis_sim[b].level_ ? power_basis_sim[a].level_ : power_basis_sim[b].level_;
+    power_basis_sim[n].scale_ = power_basis_sim[a].scale_ * power_basis_sim[b].scale_;
+}
+
+void EvaluatorCkksBase::gen_power_optimized(map<uint32_t, Ciphertext> &monomial_basis, uint32_t n,
+                                            bool lazy, bool is_chev, double min_scale,
+                                            const RelinKeys &relin_keys,
+                                            const CKKSEncoder &encoder) const
+{
+    if (!monomial_basis[n].is_valid())
+    {
+        bool need_rescale =
+            gen_power_optimized_inner(monomial_basis, n, lazy, is_chev, min_scale, relin_keys, encoder);
+        if (need_rescale)
+        {
+            rescale_dynamic(monomial_basis[n], monomial_basis[n], min_scale);
+        }
+    }
+}
+
+bool EvaluatorCkksBase::gen_power_optimized_inner(
+    map<uint32_t, Ciphertext> &monomial_basis, uint32_t n, bool lazy, bool is_chev, double min_scale,
+    const RelinKeys &relin_keys, const CKKSEncoder &encoder) const
+{
+    if (monomial_basis[n].is_valid())
+    {
+        return false;
+    }
+
+    bool is_pow2 = ((n & (n - 1)) == 0);
+    auto [a, b] = split_degree(n);
+
+    std::cout << "n = " << n << "  a = " << a << "  b = " << b << std::endl;
+
+    bool need_rescale_a =
+        gen_power_optimized_inner(monomial_basis, a, lazy && !is_pow2, is_chev, min_scale, relin_keys,
+                                  encoder);
+    bool need_rescale_b =
+        gen_power_optimized_inner(monomial_basis, b, lazy && !is_pow2, is_chev, min_scale, relin_keys,
+                                  encoder);
+
+    std::cout << "lazy = " << lazy << "  min_scale = " << min_scale << std::endl;
+    if (lazy)
+    {
+        if (monomial_basis[a].size() > 2)
+        {
+            relinearize(monomial_basis[a], monomial_basis[a], relin_keys);
+        }
+        if (monomial_basis[b].size() > 2)
+        {
+            relinearize(monomial_basis[b], monomial_basis[b], relin_keys);
+        }
+
+        if (need_rescale_a)
+        {
+            rescale_dynamic(monomial_basis[a], monomial_basis[a], min_scale);
+        }
+        if (need_rescale_b)
+        {
+            rescale_dynamic(monomial_basis[b], monomial_basis[b], min_scale);
+        }
+
+        multiply(monomial_basis[a], monomial_basis[b], monomial_basis[n]);
+    }
+    else
+    {
+        if (need_rescale_a)
+        {
+            rescale_dynamic(monomial_basis[a], monomial_basis[a], min_scale);
+        }
+        if (need_rescale_b)
+        {
+            rescale_dynamic(monomial_basis[b], monomial_basis[b], min_scale);
+        }
+
+        multiply_relin_dynamic(monomial_basis[a], monomial_basis[b], monomial_basis[n], relin_keys);
+    }
+
+    if (is_chev)
+    {
+        int c = std::abs(a - b);
+
+        add(monomial_basis[n], monomial_basis[n], monomial_basis[n]);
+
+        if (c == 0)
+        {
+            add_const(monomial_basis[n], -1.0, monomial_basis[n], encoder);
+        }
+        else
+        {
+            gen_power_optimized(monomial_basis, c, false, is_chev, min_scale, relin_keys, encoder);
+
+            sub_dynamic(monomial_basis[n], monomial_basis[c], monomial_basis[n], encoder);
+        }
+    }
+
+    return true;
+}
+
 void EvaluatorCkksBase::evaluate_poly_from_poly_nomial_basis(
     bool is_even, bool is_odd, const map<uint32_t, Ciphertext> &monomial_basis,
     const RelinKeys &relin_keys, uint32_t target_level, double target_scale,
@@ -851,7 +1105,7 @@ void EvaluatorCkksBase::evaluate_poly_from_poly_nomial_basis(
     auto slots = context_.parameters_literal()->slot();
     vector<complex<double>> values(slots);
 
-    if (is_even)
+    if (is_even && !is_odd)
     {
         minimum_degree_non_zero_coefficient--;
     }
@@ -861,7 +1115,7 @@ void EvaluatorCkksBase::evaluate_poly_from_poly_nomial_basis(
     {
         if (x.count(i))
         {
-            maximum_ciphertext_degree = max(maximum_ciphertext_degree, x.at(i).level());
+            maximum_ciphertext_degree = max(maximum_ciphertext_degree, x.at(i).size() - 1);
         }
     }
 
@@ -981,6 +1235,7 @@ void EvaluatorCkksBase::evaluate_poly_from_poly_nomial_basis(
                 Plaintext tmp;
                 auto level = destination.level();
 
+                std::cout << "level = " << level << std::endl;
                 auto &parms_id_tmp = id_level_map.at(level);
                 encoder.encode(values, parms_id_tmp, target_scale, tmp);
                 add_plain(destination, tmp, destination);
@@ -1051,6 +1306,10 @@ void EvaluatorCkksBase::eval_mod(const Ciphertext &ciph, Ciphertext &result,
     PolynomialVector polys_sin(poly_sin, slots_index);
     Ciphertext tmp = result;
     evaluate_poly_vector(tmp, result, polys_sin, target_scale, relin_keys, encoder);
+    // TODO substitute
+    // evaluate_polynomial(polys_sin, tmp, result, polys_sin.polys()[0].basis_type() == Chebyshev, false, target_scale, relin_keys, encoder);
+
+
     // Double angle
     auto sqrt2pi = eva_poly.sqrt_2pi();
     for (auto i = 0; i < eva_poly.double_angle(); i++)
