@@ -2,6 +2,8 @@
 #include "poseidon/advance/homomorphic_dft.h"
 #include "poseidon/encryptor.h"
 #include "poseidon/util/debug.h"
+#include <algorithm>
+#include <cmath>
 
 namespace poseidon
 {
@@ -34,6 +36,133 @@ std::pair<int, int> split_degree(int n)
         b = n + 1 - (1 << k);
     }
     return {a, b};
+}
+
+tuple<Polynomial, Polynomial> factorize_lattigo(const Polynomial &coeffs, int split)
+{
+    // 对应 Lattigo utils/bignum/polynomial.go:257-314。
+    //     func (p Polynomial) Factorize(n int) (pq, pr Polynomial)
+    // Lattigo 在 n < Degree()/2 时 panic；这里保持同样的前置条件。
+    if (split < (coeffs.degree() >> 1))
+    {
+        POSEIDON_THROW(invalid_argument_error, "factorize_lattigo: split < degree/2");
+    }
+
+    // 对应 Lattigo polynomial.go:267-272：
+    //     pr.Coeffs = make([]*Complex, n)
+    //     for i := 0; i < n; i++ { ... Clone() }
+    // Poseidon 的系数不是 nil 指针，零系数也有显式 complex<double> 值，
+    // 所以这里直接复制前 split 项。
+    vector<complex<double>> coeffsr_buffer(split, complex<double>(0.0, 0.0));
+    for (int i = 0; i < split; i++)
+    {
+        coeffsr_buffer[i] = coeffs.data()[i];
+    }
+
+    // 对应 Lattigo polynomial.go:274-280：
+    //     pq.Coeffs = make([]*Complex, p.Degree()-n+1)
+    //     pq.Coeffs[0] = p.Coeffs[n].Clone()
+    vector<complex<double>> coeffsq_buffer(coeffs.degree() - split + 1,
+                                           complex<double>(0.0, 0.0));
+    coeffsq_buffer[0] = coeffs.data()[split];
+
+    // 对应 Lattigo polynomial.go:282-283。
+    // 合并后的 Poseidon Polynomial 已经有 is_odd/is_even 元数据，因此这里使用
+    // 元数据，不重新扫系数推断；这与 Lattigo 的 p.IsOdd/p.IsEven 行为一致。
+    auto odd = coeffs.is_odd();
+    auto even = coeffs.is_even();
+
+    // 对应 Lattigo polynomial.go:285-307。
+    // Monomial 分支只把满足奇偶过滤的高次项搬到 pq；
+    // Chebyshev 分支还要做 C_i = 2*C_{i-n}*C_n - C_{n-(i-n)}
+    // 对应的余项修正，即 pr[n-j] -= p.Coeffs[i]。
+    switch (coeffs.basis_type())
+    {
+    case Monomial:
+        for (auto i = split + 1; i < coeffs.degree() + 1; i++)
+        {
+            if (is_not_negligible(coeffs.data()[i]) &&
+                (!(even || odd) || ((i & 1) == 0 && even) || ((i & 1) == 1 && odd)))
+            {
+                coeffsq_buffer[i - split] = coeffs.data()[i];
+            }
+        }
+        break;
+    case Chebyshev:
+        for (auto i = split + 1, j = 1; i < coeffs.degree() + 1; i++, j++)
+        {
+            if (is_not_negligible(coeffs.data()[i]) &&
+                (!(even || odd) || ((i & 1) == 0 && even) || ((i & 1) == 1 && odd)))
+            {
+                coeffsq_buffer[i - split] = complex<double>(2.0, 0.0) * coeffs.data()[i];
+                coeffsr_buffer[split - j] -= coeffs.data()[i];
+            }
+        }
+        break;
+    }
+
+    // 对应 Lattigo circuits/common/polynomial/polynomial.go:45-53。
+    // bignum.Polynomial.Factorize 只处理系数；外层 Polynomial.Factorize 会恢复
+    // MaxDeg/Lead 这些评估元数据。
+    auto coeffsq_max_degree = coeffs.max_degree();
+    auto coeffsr_max_degree = coeffs.max_degree();
+    if (coeffs.max_degree() == coeffs.degree())
+    {
+        coeffsr_max_degree = split - 1;
+    }
+    else
+    {
+        coeffsr_max_degree = coeffs.max_degree() - (coeffs.degree() - split + 1);
+    }
+
+    Polynomial coeffsq(coeffsq_buffer, coeffs.a(), coeffs.b(), coeffsq_max_degree,
+                       coeffs.basis_type(), coeffs.lead());
+    Polynomial coeffsr(coeffsr_buffer, coeffs.a(), coeffs.b(), coeffsr_max_degree,
+                       coeffs.basis_type(), false);
+
+    // 对应 Lattigo utils/bignum/polynomial.go:310-312。
+    // Poseidon 没有 Interval 字段，所以只同步 Basis/isOdd/isEven；a/b 已经在
+    // 构造函数里带过去。
+    coeffsq.is_odd() = coeffs.is_odd();
+    coeffsq.is_even() = coeffs.is_even();
+    coeffsr.is_odd() = coeffs.is_odd();
+    coeffsr.is_even() = coeffs.is_even();
+
+    return make_tuple(coeffsq, coeffsr);
+}
+
+void factorize_lattigo_poly_vector(const PolynomialVector &polys, PolynomialVector &coeffsq,
+                                   PolynomialVector &coeffsr, int split)
+{
+    // 对应 Lattigo circuits/common/polynomial/polynomial.go:218-228。
+    // PolynomialVector.Factorize 逐个调用 Polynomial.Factorize，并原样保留 Mapping。
+    coeffsq.index() = polys.index();
+    coeffsr.index() = polys.index();
+
+    for (const auto &poly : polys.polys())
+    {
+        auto [q, r] = factorize_lattigo(poly, split);
+        coeffsq.polys().push_back(q);
+        coeffsr.polys().push_back(r);
+    }
+}
+
+bool scale_in_delta_lattigo(double scale0, double scale1, double log2_delta)
+{
+    // 对应 Lattigo core/rlwe/scale.go:135-148。
+    // Scale.InDelta 判断的是相对误差的 -log2 是否达到阈值，不等价于
+    // Poseidon util::are_approximate 的默认近似判断。
+    auto diff = std::fabs(scale0 - scale1);
+    auto scale_max = std::max(scale0, scale1);
+    if (diff == 0)
+    {
+        return true;
+    }
+    if (scale_max <= 0)
+    {
+        return false;
+    }
+    return -std::log2(diff / scale_max) >= log2_delta;
 }
 
 }
@@ -638,6 +767,145 @@ void EvaluatorCkksBase::recurse(const map<uint32_t, Ciphertext> &monomial_basis,
     gmp_printf("5:tmp level: %d,  target scale: %0.7lf\n", tmp.level(), tmp.scale());
     gmp_printf("5:res level: %d,  target scale: %0.7lf\n", res.level(), res.scale());
 #endif
+    add_dynamic(res, tmp, destination, encoder);
+}
+
+void EvaluatorCkksBase::recursePS(const map<uint32_t, Ciphertext> &monomial_basis,
+                                  const RelinKeys &relin_keys, uint32_t target_level,
+                                  double target_scale, const PolynomialVector &pol,
+                                  uint32_t log_split, uint32_t log_degree,
+                                  Ciphertext &destination, const CKKSEncoder &encoder,
+                                  bool is_odd, bool is_even, uint32_t &num) const
+{
+    // 对应 Lattigo circuits/common/polynomial/polynomial.go:108-153。
+    //
+    // 无法一行一行完全对上的地方：
+    // - Lattigo line 109 返回 ([]Polynomial, *SimOperand)。Poseidon 这里必须
+    //   保持和原 recurse 相同的接口，所以只把 ciphertext 结果写入 destination。
+    // - Lattigo 显式传入 params/eval/pb。Poseidon 从 context_ 取参数，
+    //   用 monomial_basis 作为 PowerBasis，并调用本地 rescale/multiply/add。
+    // - relin_keys/is_odd/is_even/num 是 Poseidon recurse 接口遗留参数。
+    //   Lattigo recursePS 不使用它们；这里保留形参但逻辑按 Lattigo 元数据
+    //   pol.is_odd()/pol.is_even() 走。
+    (void)relin_keys;
+    (void)is_odd;
+    (void)is_even;
+    (void)num;
+
+    auto pol_deg = static_cast<uint32_t>(pol.polys()[0].degree());
+    auto &modulus = context_.parameters_literal()->q();
+
+    // 对应 Lattigo polynomial.go:111。
+    //     if p.Degree() < (1 << logSplit) { ... }
+    // 这是 Paterson-Stockmeyer 的 baby-step/base-case 分支。
+    if (pol_deg < (static_cast<uint32_t>(1) << log_split))
+    {
+        // 对应 Lattigo polynomial.go:113-120。
+        //     if p.Lead && logSplit > 1 && p.MaxDeg > ... { ... }
+        // Lattigo 用 bits.Len64(uint64(p.MaxDeg)) 计算有效位数；
+        // 合并后的新代码已有 bit_len，这里复用它。
+        if (pol.polys()[0].lead() && log_split > 1)
+        {
+            auto max_deg = static_cast<int64_t>(pol.polys()[0].max_degree());
+            auto max_deg_bit_len = bit_len(static_cast<uint>(max_deg));
+            auto max_deg_bound = (static_cast<int64_t>(1) << max_deg_bit_len) -
+                                 (static_cast<int64_t>(1) << (log_split - 1));
+            if (max_deg > max_deg_bound)
+            {
+                log_degree = bit_len(pol_deg);
+                log_split = static_cast<uint32_t>(optimal_split(static_cast<int>(log_degree)));
+                recursePS(monomial_basis, relin_keys, target_level, target_scale, pol, log_split,
+                          log_degree, destination, encoder, is_odd, is_even, num);
+                return;
+            }
+        }
+
+        // 对应 Lattigo polynomial.go:123。
+        //     p.Level, p.Scale = eval.UpdateLevelAndScaleBabyStep(...)
+        // 深入到 ckks/polynomial/polynomial_evaluator_sim.go:57-69 后可知：
+        // lead=true 时 scale 乘以当前 rescale 会消耗的 qi，level 不变；
+        // lead=false 时 level/scale 保持传入值。Poseidon 当前路径按一次
+        // rescale 消耗一个 modulus 处理。
+        auto tag_level = target_level;
+        auto tag_scale = target_scale;
+        if (pol.polys()[0].lead())
+        {
+            tag_scale *= safe_cast<double>(modulus[tag_level].value());
+        }
+
+        // 对应 Lattigo polynomial.go:125。
+        //     return []Polynomial{p}, &SimOperand{Level: p.Level, Scale: p.Scale}
+        // Poseidon 不返回 BSGS polynomial list，所以这里直接按 Lattigo
+        // EvaluatePolynomialVectorFromPowerBasis 的逻辑计算 baby-step ciphertext。
+        evaluate_polynomial_vector_from_power_basis_lattigo(
+            monomial_basis, tag_level, tag_scale, pol, destination, encoder);
+        return;
+    }
+
+    // 对应 Lattigo polynomial.go:128-131。
+    //     nextPower := 1 << logSplit
+    //     for nextPower < (p.Degree()>>1)+1 { nextPower <<= 1 }
+    auto next_power = static_cast<uint32_t>(1) << log_split;
+    while (next_power < ((pol_deg >> 1) + 1))
+    {
+        next_power <<= 1;
+    }
+
+    // 对应 Lattigo polynomial.go:133。
+    //     XPow := pb[nextPower]
+    auto x_pow = monomial_basis.at(next_power);
+
+    // 对应 Lattigo polynomial.go:135。
+    //     coeffsq, coeffsr := p.Factorize(nextPower)
+    // 这里必须使用新增的 factorize_lattigo_poly_vector；原
+    // split_coeffs_poly_vector 的 Chebyshev 和奇偶过滤逻辑与 Lattigo Factorize
+    // 不完全一致，所以保留旧函数但不在 recursePS 中使用。
+    PolynomialVector coeffsq, coeffsr;
+    factorize_lattigo_poly_vector(pol, coeffsq, coeffsr, static_cast<int>(next_power));
+
+    // 对应 Lattigo polynomial.go:137。
+    //     tLevelNew, tScaleNew := eval.UpdateLevelAndScaleGiantStep(...)
+    // 深入到 ckks/polynomial/polynomial_evaluator_sim.go:72-89：
+    // lead=true 用 q[targetLevel]，lead=false 用 q[targetLevel+levelsConsumed]；
+    // tScaleNew = targetScale * qi / XPow.Scale。
+    // Poseidon 这里按 levelsConsumedPerRescaling == 1 翻译。
+    auto t_level_new = target_level + 1;
+    auto qi_index = pol.polys()[0].lead() ? target_level : t_level_new;
+    auto t_scale_new = target_scale * safe_cast<double>(modulus[qi_index].value()) / x_pow.scale();
+
+    // 对应 Lattigo polynomial.go:139。
+    //     bsgsQ, res := recursePS(... coeffsq ..., tScaleNew, ...)
+    Ciphertext res;
+    recursePS(monomial_basis, relin_keys, t_level_new, t_scale_new, coeffsq, log_split,
+              log_degree, res, encoder, is_odd, is_even, num);
+
+    // 对应 Lattigo polynomial.go:141-142。
+    //     eval.Rescale(res)
+    //     res = eval.MulNew(res, XPow)
+    // 深入到 schemes/ckks/evaluator.go:596-625 可知 MulNew/Mul 是
+    // without relinearization，因此这里用 multiply_dynamic，不用
+    // multiply_relin_dynamic。
+    rescale(res, res);
+    multiply_dynamic(res, x_pow, res);
+
+    // 对应 Lattigo polynomial.go:144。
+    //     bsgsR, tmp := recursePS(... coeffsr ..., res.Scale, ...)
+    Ciphertext tmp;
+    recursePS(monomial_basis, relin_keys, target_level, res.scale(), coeffsr, log_split,
+              log_degree, tmp, encoder, is_odd, is_even, num);
+
+    // 对应 Lattigo polynomial.go:146-150。
+    //     tmp.Scale.InDelta(res.Scale, float64(rlwe.ScalePrecision-12))
+    // ScalePrecision 是 128，所以这里使用 116，并且按 Lattigo Scale.InDelta
+    // 的相对误差规则检查。
+    if (!scale_in_delta_lattigo(tmp.scale(), res.scale(), 116.0))
+    {
+        POSEIDON_THROW(invalid_argument_error, "recursePS: res.Scale != tmp.Scale");
+    }
+
+    // 对应 Lattigo polynomial.go:152。
+    //     return append(bsgsQ, bsgsR...), res
+    // Poseidon 的可见输出只有 ciphertext，所以将左/右递归结果相加写入 destination。
     add_dynamic(res, tmp, destination, encoder);
 }
 
@@ -1256,6 +1524,218 @@ void EvaluatorCkksBase::evaluate_poly_from_poly_nomial_basis(
     else
     {
         POSEIDON_THROW(invalid_argument_error, "slots_index is zero");
+    }
+}
+
+void EvaluatorCkksBase::evaluate_polynomial_vector_from_power_basis_lattigo(
+    const map<uint32_t, Ciphertext> &monomial_basis, uint32_t target_level,
+    double target_scale, const PolynomialVector &pol, Ciphertext &destination,
+    const CKKSEncoder &encoder) const
+{
+    // 对应 Lattigo circuits/common/polynomial/polynomial_evaluator.go:253-360。
+    //     EvaluatePolynomialVectorFromPowerBasis(...)
+    // 这个 helper 只给 recursePS 使用，不替换原 evaluate_poly_from_poly_nomial_basis。
+    auto &slots_index = pol.index();
+    auto even = pol.is_even();
+    auto odd = pol.is_odd();
+
+    // 对应 Lattigo polynomial_evaluator.go:266-270。
+    //     minimumDegreeNonZeroCoefficient := len(pol.Value[0].Coeffs) - 1
+    //     if even && !odd { minimumDegreeNonZeroCoefficient-- }
+    auto minimum_degree_non_zero_coefficient = pol.polys()[0].data().size() - 1;
+    if (even && !odd)
+    {
+        minimum_degree_non_zero_coefficient--;
+    }
+
+    // 对应 Lattigo polynomial_evaluator.go:272-279。
+    // Lattigo 记录的是 ciphertext degree；Poseidon resize 需要 size，
+    // 且最小合法 ciphertext size 是 2，所以这里用 max(2, power.size())。
+    size_t maximum_ciphertext_size = 2;
+    for (int i = pol.polys()[0].degree(); i > 0; i--)
+    {
+        if (monomial_basis.count(i))
+        {
+            maximum_ciphertext_size = max(maximum_ciphertext_size, monomial_basis.at(i).size());
+        }
+    }
+
+    auto allocate_destination = [&](size_t size)
+    {
+        if (!destination.is_valid())
+        {
+            auto parms_id = context_.crt_context()->parms_id_map().at(target_level);
+            destination.resize(context_, parms_id, size);
+            destination.is_ntt_form() = true;
+            destination.scale() = target_scale;
+        }
+    };
+
+    auto add_vector_coefficient = [&](int key, double scale)
+    {
+        // 对应 Lattigo ckks/polynomial/polynomial_evaluator.go:89-108。
+        //     GetVectorCoefficient(...)
+        // Lattigo 每次都会把 values 全部置 nil，再按 Mapping 填当前 key。
+        // Poseidon 用显式 0 表示 nil，因此每次 key 都必须重新清零。
+        vector<complex<double>> values(context_.parameters_literal()->slot(),
+                                       complex<double>(0.0, 0.0));
+        bool to_encode = false;
+        for (int i = 0; i < pol.polys().size(); i++)
+        {
+            auto coeff = pol.polys()[i].data()[key];
+            if (is_not_negligible(coeff))
+            {
+                to_encode = true;
+                for (auto j : slots_index[i])
+                {
+                    values[j] = coeff;
+                }
+            }
+        }
+
+        if (!to_encode)
+        {
+            return;
+        }
+
+        Plaintext tmp;
+        auto &parms_id_tmp = context_.crt_context()->parms_id_map().at(destination.level());
+        encoder.encode(values, parms_id_tmp, scale, tmp);
+        add_plain(destination, tmp, destination);
+    };
+
+    auto mul_then_add_vector_coefficient = [&](int key)
+    {
+        // 对应 Lattigo polynomial_evaluator.go:315。
+        //     eval.MulThenAdd(X[key], eval.GetVectorCoefficient(pol, key), res)
+        // 深入 schemes/ckks/evaluator.go:909-1024 后，vector/scalar 分支会把
+        // 明文 scale 设置成 opOut.Scale / op0.Scale。这里直接编码为
+        // target_scale / X[key].scale()，再 multiply_plain + add_dynamic。
+        vector<complex<double>> values(context_.parameters_literal()->slot(),
+                                       complex<double>(0.0, 0.0));
+        bool to_encode = false;
+        for (int i = 0; i < pol.polys().size(); i++)
+        {
+            auto coeff = pol.polys()[i].data()[key];
+            if (is_not_negligible(coeff))
+            {
+                to_encode = true;
+                for (auto j : slots_index[i])
+                {
+                    values[j] = coeff;
+                }
+            }
+        }
+
+        if (!to_encode)
+        {
+            return;
+        }
+
+        Plaintext tmp;
+        auto level = monomial_basis.at(key).level();
+        auto &parms_id_tmp = context_.crt_context()->parms_id_map().at(level);
+        auto scale = target_scale / monomial_basis.at(key).scale();
+        encoder.encode(values, parms_id_tmp, scale, tmp);
+
+        Ciphertext ciph;
+        multiply_plain(monomial_basis.at(key), tmp, ciph);
+        add_dynamic(ciph, destination, destination, encoder);
+    };
+
+    auto add_single_coefficient = [&](int key, double scale)
+    {
+        // 对应 Lattigo polynomial_evaluator.go:330-342 中 mapping == nil 的
+        // GetSingleCoefficient/Add 分支。Poseidon 没有 nil mapping 类型，
+        // 空 index 在这里按 Lattigo 的 nil mapping 分支处理。
+        auto coeff = pol.polys()[0].data()[key];
+        if (is_not_negligible(coeff))
+        {
+            Plaintext tmp;
+            auto &parms_id_tmp = context_.crt_context()->parms_id_map().at(destination.level());
+            encoder.encode(coeff, parms_id_tmp, scale, tmp);
+            add_plain(destination, tmp, destination);
+        }
+    };
+
+    auto mul_then_add_single_coefficient = [&](int key)
+    {
+        // 对应 Lattigo polynomial_evaluator.go:351。
+        //     eval.MulThenAdd(X[key], eval.GetSingleCoefficient(...), res)
+        auto coeff = pol.polys()[0].data()[key];
+        if (!is_not_negligible(coeff))
+        {
+            return;
+        }
+
+        Ciphertext ciph;
+        auto scale = target_scale / monomial_basis.at(key).scale();
+        multiply_const(monomial_basis.at(key), coeff, scale, ciph, encoder);
+        add_dynamic(ciph, destination, destination, encoder);
+    };
+
+    if (!slots_index.empty())
+    {
+        // 对应 Lattigo polynomial_evaluator.go:282-321，mapping != nil。
+        if (minimum_degree_non_zero_coefficient == 0)
+        {
+            allocate_destination(2);
+            if (even)
+            {
+                add_vector_coefficient(0, target_scale);
+            }
+            return;
+        }
+
+        allocate_destination(maximum_ciphertext_size);
+        if (even)
+        {
+            add_vector_coefficient(0, target_scale);
+        }
+
+        for (int key = pol.polys()[0].degree(); key > 0; key--)
+        {
+            if (!(even || odd) || ((key & 1) == 0 && even) || ((key & 1) == 1 && odd))
+            {
+                mul_then_add_vector_coefficient(key);
+            }
+        }
+    }
+    else
+    {
+        // 对应 Lattigo polynomial_evaluator.go:323-356，mapping == nil。
+        // Poseidon 的老函数遇到空 index 会报错；这里为了贴近 Lattigo，按单个
+        // polynomial 的 nil mapping 分支计算。
+        if (minimum_degree_non_zero_coefficient == 0)
+        {
+            allocate_destination(2);
+            if (even)
+            {
+                add_single_coefficient(0, target_scale);
+            }
+            return;
+        }
+
+        allocate_destination(maximum_ciphertext_size);
+        if (even)
+        {
+            add_single_coefficient(0, target_scale);
+        }
+
+        for (int key = pol.polys()[0].degree(); key > 0; key--)
+        {
+            if (!(even || odd) || ((key & 1) == 0 && even) || ((key & 1) == 1 && odd))
+            {
+                mul_then_add_single_coefficient(key);
+            }
+        }
+    }
+
+    destination.scale() = target_scale;
+    if (destination.level() > target_level)
+    {
+        auto parms_id = context_.crt_context()->parms_id_map().at(target_level);
+        drop_modulus(destination, destination, parms_id);
     }
 }
 
