@@ -909,6 +909,110 @@ void EvaluatorCkksBase::recursePS(const map<uint32_t, Ciphertext> &monomial_basi
     add_dynamic(res, tmp, destination, encoder);
 }
 
+EvaluatorCkksBase::SimPower EvaluatorCkksBase::recursePS2(
+    const map<uint32_t, SimPower> &power_basis_sim, uint32_t log_split, uint32_t target_level,
+    double target_scale, const Polynomial &poly, vector<Polynomial> &ps_polys) const
+{
+    // 对应新版 Lattigo he/polynomial.go:107-147。
+    // 这个版本不直接计算 ciphertext，只生成 PatersonStockmeyerPolynomial.Value
+    // 对应的 baby-step Polynomial 列表，并返回模拟的 SimOperand{Level, Scale}。
+    auto pol_deg = static_cast<uint32_t>(poly.degree());
+    auto &modulus = context_.parameters_literal()->q();
+
+    // 对应 Lattigo he/polynomial.go:109。
+    //     if p.Degree() < (1 << logSplit) { ... }
+    if (pol_deg < (static_cast<uint32_t>(1) << log_split))
+    {
+        Polynomial p = poly;
+
+        // 对应 Lattigo he/polynomial.go:111-117。
+        //     if p.Lead && logSplit > 1 && p.MaxDeg > ... { ... }
+        if (p.lead() && log_split > 1)
+        {
+            auto max_deg = static_cast<int64_t>(p.max_degree());
+            auto max_deg_bound = (static_cast<int64_t>(1) << bit_len(static_cast<uint>(max_deg))) -
+                                 (static_cast<int64_t>(1) << (log_split - 1));
+            if (max_deg > max_deg_bound)
+            {
+                auto log_degree_new = static_cast<uint32_t>(bit_len(pol_deg));
+                auto log_split_new =
+                    static_cast<uint32_t>(optimal_split_optimized(static_cast<int>(log_degree_new)));
+                return recursePS2(power_basis_sim, log_split_new, target_level, target_scale, p,
+                                  ps_polys);
+            }
+        }
+
+        // 对应 Lattigo he/polynomial.go:119。
+        //     p.Level, p.Scale = eval.UpdateLevelAndScaleBabyStep(...)
+        // Poseidon 同事这套 SimPower 假设一次 rescale 消耗一个 modulus；
+        // 因此 lead=true 时 scale 乘 q[targetLevel]，level 不变。
+        p.level() = static_cast<int>(target_level);
+        p.scale() = target_scale;
+        if (p.lead())
+        {
+            p.scale() *= safe_cast<double>(modulus[target_level].value());
+        }
+
+        // 对应 Lattigo he/polynomial.go:121。
+        //     return []Polynomial{p}, &SimOperand{Level: p.Level, Scale: p.Scale}
+        ps_polys.push_back(p);
+        return {p.level(), p.scale()};
+    }
+
+    // 对应 Lattigo he/polynomial.go:124-127。
+    //     nextPower := 1 << logSplit
+    //     for nextPower < (p.Degree()>>1)+1 { nextPower <<= 1 }
+    auto next_power = static_cast<uint32_t>(1) << log_split;
+    while (next_power < ((pol_deg >> 1) + 1))
+    {
+        next_power <<= 1;
+    }
+
+    // 对应 Lattigo he/polynomial.go:129。
+    //     XPow := pb[nextPower]
+    auto x_pow = power_basis_sim.at(next_power);
+
+    // 对应 Lattigo he/polynomial.go:131。
+    //     coeffsq, coeffsr := p.Factorize(nextPower)
+    auto [coeffsq, coeffsr] = factorize_lattigo(poly, static_cast<int>(next_power));
+
+    // 对应 Lattigo he/polynomial.go:133。
+    //     tLevelNew, tScaleNew := eval.UpdateLevelAndScaleGiantStep(...)
+    auto t_level_new = target_level + 1;
+    auto qi_index = poly.lead() ? target_level : t_level_new;
+    auto t_scale_new =
+        target_scale * safe_cast<double>(modulus[qi_index].value()) / x_pow.scale_;
+
+    // 对应 Lattigo he/polynomial.go:135。
+    //     bsgsQ, res := recursePS(... coeffsq ..., tScaleNew, ...)
+    auto res =
+        recursePS2(power_basis_sim, log_split, t_level_new, t_scale_new, coeffsq, ps_polys);
+
+    // 对应 Lattigo he/polynomial.go:137-138。
+    //     eval.Rescale(res)
+    //     res = eval.MulNew(res, XPow)
+    res.scale_ /= safe_cast<double>(modulus[res.level_].value());
+    res.level_ -= 1;
+    res.level_ = std::min(res.level_, x_pow.level_);
+    res.scale_ *= x_pow.scale_;
+
+    // 对应 Lattigo he/polynomial.go:140。
+    //     bsgsR, tmp := recursePS(... coeffsr ..., res.Scale, ...)
+    auto tmp = recursePS2(power_basis_sim, log_split, target_level, res.scale_, coeffsr, ps_polys);
+
+    // 对应 Lattigo he/polynomial.go:144-146。
+    // ScalePrecision 仍是 128，因此阈值为 116。
+    if (!scale_in_delta_lattigo(tmp.scale_, res.scale_, 116.0))
+    {
+        POSEIDON_THROW(invalid_argument_error, "recursePS2: res.Scale != tmp.Scale");
+    }
+
+    // 对应 Lattigo he/polynomial.go:148。
+    // Lattigo 返回 append(bsgsQ, bsgsR...)；这里通过递归 push_back 顺序
+    // 直接写入 ps_polys，所以只需返回模拟 res。
+    return res;
+}
+
 tuple<uint32_t, double> EvaluatorCkksBase::pre_scalar_level(
     bool is_even, bool is_odd, const map<uint32_t, Ciphertext> &monomial_basis,
     double current_scale, uint32_t current_level, const PolynomialVector &pol, uint32_t log_split,
@@ -1057,6 +1161,14 @@ void EvaluatorCkksBase::get_paterson_stockmeyer_polynomial(const Polynomial& pol
 
     // TODO !!!!
     // recursePS(ps_polys)
+    ps_polys.degree_ = poly.degree();
+    ps_polys.base_ = 1 << log_split;
+    ps_polys.level_ = input_level;
+    ps_polys.scale_ = input_scale;
+    ps_polys.polys_.clear();
+
+    auto target_level = input_level - (bit_len(poly.degree()) - 1);
+    recursePS2(power_basis_sim, log_split, target_level, input_scale, poly, ps_polys.polys_);
 }
 
 void EvaluatorCkksBase::get_paterson_stockmeyer_polynomial_vector(const PolynomialVector& poly_vec,
@@ -1785,9 +1897,9 @@ void EvaluatorCkksBase::eval_mod(const Ciphertext &ciph, Ciphertext &result,
 
     PolynomialVector polys_sin(poly_sin, slots_index);
     Ciphertext tmp = result;
-    evaluate_poly_vector(tmp, result, polys_sin, target_scale, relin_keys, encoder);
+    // evaluate_poly_vector(tmp, result, polys_sin, target_scale, relin_keys, encoder);
     // TODO substitute
-    // evaluate_polynomial(polys_sin, tmp, result, polys_sin.polys()[0].basis_type() == Chebyshev, false, target_scale, relin_keys, encoder);
+    evaluate_polynomial(polys_sin, tmp, result, polys_sin.polys()[0].basis_type() == Chebyshev, false, target_scale, relin_keys, encoder);
 
 
     // Double angle

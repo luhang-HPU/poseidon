@@ -269,6 +269,10 @@ public:
     void get_paterson_stockmeyer_polynomial_vector(const PolynomialVector& poly_vec,
         int input_level, double intput_scale, PatersonStockmeyerPolynomialVector& ps_poly_vec);
 
+    SimPower recursePS2(const map<uint32_t, SimPower> &power_basis_sim, uint32_t log_split,
+                        uint32_t target_level, double target_scale, const Polynomial &poly,
+                        vector<Polynomial> &ps_polys) const;
+
     void evaluate_paterson_stockmeyer_polynomial_vector(const PatersonStockmeyerPolynomialVector &ps_polys_vec,
         const map<uint32_t, Ciphertext> &power_basis, Ciphertext& ct_res, const RelinKeys& relin_key, const CKKSEncoder& encoder) const;
 

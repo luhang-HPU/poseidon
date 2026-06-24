@@ -6,10 +6,46 @@
 #include "poseidon/keygenerator.h"
 #include "poseidon/util/debug.h"
 #include "poseidon/util/random_sample.h"
+#include <csignal>
+#include <cstdlib>
+#include <exception>
+#include <execinfo.h>
+#include <unistd.h>
 
 using namespace poseidon;
 
-int main()
+namespace
+{
+void print_stacktrace()
+{
+    void *frames[128];
+    auto size = backtrace(frames, 128);
+
+    std::cerr << "\n========== STACKTRACE ==========\n";
+    backtrace_symbols_fd(frames, size, STDERR_FILENO);
+    std::cerr << "================================\n";
+}
+
+void crash_handler(int sig)
+{
+    std::cerr << "\nCaught signal: " << sig << std::endl;
+    print_stacktrace();
+
+    std::signal(sig, SIG_DFL);
+    std::raise(sig);
+}
+
+void install_crash_handler()
+{
+    std::signal(SIGSEGV, crash_handler);
+    std::signal(SIGABRT, crash_handler);
+    std::signal(SIGFPE, crash_handler);
+    std::signal(SIGILL, crash_handler);
+    std::signal(SIGBUS, crash_handler);
+}
+}  // namespace
+
+int run_bootstrap_test()
 {
     std::cout << BANNER << std::endl;
     std::cout << "POSEIDON SOFTWARE VERSION:" << POSEIDON_VERSION << std::endl;
@@ -84,4 +120,26 @@ int main()
     }
     GetPrecisionStats(vec_result, message1);
     return 0;
+}
+
+int main()
+{
+    install_crash_handler();
+
+    try
+    {
+        return run_bootstrap_test();
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << "\nUncaught exception: " << e.what() << std::endl;
+        print_stacktrace();
+        throw;
+    }
+    catch (...)
+    {
+        std::cerr << "\nUncaught unknown exception" << std::endl;
+        print_stacktrace();
+        throw;
+    }
 }

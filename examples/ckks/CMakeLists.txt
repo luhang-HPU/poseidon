@@ -9,6 +9,9 @@ target_link_libraries(test_ckks_bootstrap poseidon_shared)
 add_executable(test_ckks_evaluate_poly_vector test_ckks_evaluate_poly_vector.cpp)
 target_link_libraries(test_ckks_evaluate_poly_vector poseidon_shared)
 
+add_executable(test_ckks_evalmod_poly_probe test_ckks_evalmod_poly_probe.cpp)
+target_link_libraries(test_ckks_evalmod_poly_probe poseidon_shared)
+
 add_executable(test_ckks_heartstudy test_ckks_heartstudy.cpp)
 target_link_libraries(test_ckks_heartstudy poseidon_shared)
 
