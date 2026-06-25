@@ -22,7 +22,7 @@ public:
     inline Polynomial(const vector<complex<double>> &data, int a, int b, int max_deg,
                       PolynomialBasisType basis_type, bool lead = false)
         : data_(std::move(data)), a_(a), b_(b), max_deg_(max_deg), basis_type_(basis_type),
-          lead_(lead){};
+          lead_(lead), is_data_valid_(data_.size(), 1) {};
 
     Polynomial(const Polynomial &copy) = default;
     Polynomial(Polynomial &&source) = default;
@@ -59,8 +59,23 @@ public:
     inline double& scale() noexcept { return scale_; }
     inline const double scale() const noexcept { return scale_; }
 
+    inline char& is_valid(int n) noexcept
+    {
+        if (n < 0 || n >= data_.size())
+            throw std::out_of_range("invalid index");
+        return is_data_valid_[n];
+    }
+    inline const bool is_valid(int n) const noexcept
+    {
+        if (n < 0 || n >= data_.size())
+            throw std::out_of_range("invalid index");
+        return is_data_valid_[n];
+    }
+
+
 private:
     vector<complex<double>> data_{};
+    vector<char> is_data_valid_;
     int a_ = 0;
     int b_ = 0;
     int max_deg_ = 0;

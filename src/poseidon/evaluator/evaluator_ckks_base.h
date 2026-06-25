@@ -261,13 +261,13 @@ public:
 
 
     void evaluate_polynomial(const PolynomialVector& poly_vec, const Ciphertext& ct_basis, Ciphertext& ct_res,
-        bool is_chev, bool is_lazy, double min_scale, const RelinKeys& relin_key, const CKKSEncoder& encoder);
+        bool is_chev, bool is_lazy, double target_scale, double min_scale, const RelinKeys& relin_key, const CKKSEncoder& encoder);
 
     void get_paterson_stockmeyer_polynomial(const Polynomial& poly, int input_level,
-        double input_scale, PatersonStockmeyerPolynomial& ps_polys);
+        double input_scale, double output_scale, PatersonStockmeyerPolynomial& ps_polys);
 
     void get_paterson_stockmeyer_polynomial_vector(const PolynomialVector& poly_vec,
-        int input_level, double intput_scale, PatersonStockmeyerPolynomialVector& ps_poly_vec);
+        int input_level, double intput_scale, double output_scale, PatersonStockmeyerPolynomialVector& ps_poly_vec);
 
     SimPower recursePS2(const map<uint32_t, SimPower> &power_basis_sim, uint32_t log_split,
                         uint32_t target_level, double target_scale, const Polynomial &poly,
@@ -295,7 +295,7 @@ public:
                                                                 int target_level, int target_scale, const CKKSEncoder &encoder) const;
 
 
-    void gen_power_sim(std::map<uint32_t, SimPower> &power_basis_sim, int n);
+    void gen_power_sim(std::map<int, SimPower> &power_basis_sim, int n);
 
     // Optimized gen_power with lazy relinearization and rescale tracking.
     // When lazy=true, the result is NOT relinearized (caller must handle).
@@ -307,6 +307,20 @@ public:
     bool gen_power_optimized_inner(map<uint32_t, Ciphertext> &monomial_basis, uint32_t n, bool lazy,
                                    bool is_chev, double min_scale, const RelinKeys &relin_keys,
                                    const CKKSEncoder &encoder) const;
+
+    void recurse_ps(Polynomial poly, int log_split, int target_level, double output_scale,
+        std::map<int, SimPower> pb, std::vector<Polynomial>& poly_vec_res, SimPower& op_res);
+
+    void update_level_and_scale_baby_step(bool lead, int level_old,
+        double scale_old, int& level_new, double& scale_new, int level_consumed_per_rescale = 1);
+
+    void update_level_and_scale_giant_step(bool lead, int level_old, double scale_old,
+        double x_pow_scale, int& level_new, double& scale_new, int level_consumed_per_rescale = 1);
+
+    void factorize(const Polynomial& poly, int n, Polynomial& pq, Polynomial& pr);
+
+    void factorize_inner(const Polynomial& poly, int n, Polynomial& pq, Polynomial& pr);
+
 protected:
     double min_scale_;
 };

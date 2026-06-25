@@ -1110,7 +1110,7 @@ tuple<uint32_t, double> EvaluatorCkksBase::pre_scalar_level(
 }
 
 void EvaluatorCkksBase::evaluate_polynomial(const PolynomialVector& poly_vec, const Ciphertext& ct_basis, Ciphertext& ct_res,
-    bool is_chev, bool is_lazy, double min_scale, const RelinKeys& relin_key, const CKKSEncoder& encoder)
+    bool is_chev, bool is_lazy, double target_scale, double min_scale, const RelinKeys& relin_key, const CKKSEncoder& encoder)
 {
     map<uint32_t, Ciphertext> power_basis;
     power_basis[1] = ct_basis;
@@ -1140,17 +1140,18 @@ void EvaluatorCkksBase::evaluate_polynomial(const PolynomialVector& poly_vec, co
     PatersonStockmeyerPolynomialVector ps_polys_vec;
     int input_level = ct_basis.level();
     double input_scale = ct_basis.scale();
-    get_paterson_stockmeyer_polynomial_vector(poly_vec, input_level - log_degree + 1, input_scale, ps_polys_vec);
+    get_paterson_stockmeyer_polynomial_vector(poly_vec, input_level - log_degree + 1, input_scale, target_scale, ps_polys_vec);
 
     evaluate_paterson_stockmeyer_polynomial_vector(ps_polys_vec, power_basis, ct_res, relin_key, encoder);
 }
 
-void EvaluatorCkksBase::get_paterson_stockmeyer_polynomial(const Polynomial& poly, int input_level, double input_scale, PatersonStockmeyerPolynomial& ps_polys)
+void EvaluatorCkksBase::get_paterson_stockmeyer_polynomial(const Polynomial& poly, int input_level,
+    double input_scale, double output_scale, PatersonStockmeyerPolynomial& ps_polys)
 {
     auto log_degree = bit_len(poly.degree());
     auto log_split = optimal_split_optimized(log_degree);
 
-    std::map<uint32_t, SimPower> power_basis_sim;
+    std::map<int, SimPower> power_basis_sim;
     power_basis_sim[1] = {input_level, input_scale};
 
     gen_power_sim(power_basis_sim, 1 << log_degree);
@@ -1159,27 +1160,28 @@ void EvaluatorCkksBase::get_paterson_stockmeyer_polynomial(const Polynomial& pol
         gen_power_sim(power_basis_sim, i);
     }
 
-    // TODO !!!!
-    // recursePS(ps_polys)
+    SimPower sim_op;
+    auto level_consumed_per_rescale = 1;
+    std::vector<Polynomial> ps_res;
+    recurse_ps(poly, log_split, input_level - bit_len(level_consumed_per_rescale * (poly.degree()-1)),
+        output_scale, power_basis_sim, ps_res, sim_op);
+
     ps_polys.degree_ = poly.degree();
     ps_polys.base_ = 1 << log_split;
     ps_polys.level_ = input_level;
-    ps_polys.scale_ = input_scale;
-    ps_polys.polys_.clear();
-
-    auto target_level = input_level - (bit_len(poly.degree()) - 1);
-    recursePS2(power_basis_sim, log_split, target_level, input_scale, poly, ps_polys.polys_);
+    ps_polys.scale_ = output_scale;
+    ps_polys.polys_ = ps_res;
 }
 
 void EvaluatorCkksBase::get_paterson_stockmeyer_polynomial_vector(const PolynomialVector& poly_vec,
-    int input_level, double intput_scale, PatersonStockmeyerPolynomialVector& ps_poly_vec)
+    int input_level, double intput_scale, double output_scale, PatersonStockmeyerPolynomialVector& ps_poly_vec)
 {
     ps_poly_vec.polys_.clear();
     ps_poly_vec.polys_.resize(poly_vec.size());
 
     for (auto i = 0; i < poly_vec.size(); ++i)
     {
-        get_paterson_stockmeyer_polynomial(poly_vec[i], input_level, intput_scale, ps_poly_vec.polys_[i]);
+        get_paterson_stockmeyer_polynomial(poly_vec[i], input_level, intput_scale, output_scale, ps_poly_vec.polys_[i]);
     }
 }
 
@@ -1326,8 +1328,10 @@ void EvaluatorCkksBase::evaluate_baby_step(const PatersonStockmeyerPolynomialVec
     }
 
     // TODO
+    std::cout << "xxxxxxxx" << std::endl;
     auto level = ps_poly_vec.polys_[0].polys_[j].level();
     auto scale = ps_poly_vec.polys_[0].polys_[j].scale();
+    std::cout << "yyyyyyyy" << std::endl;
 
     evaluate_polynomial_vector_from_power_basis_optimized(poly_vec_tmp, power_basis, ct_res, level, scale, encoder);
 }
@@ -1358,7 +1362,216 @@ void EvaluatorCkksBase::evaluate_giant_step(int i, const vector<int> &giant_step
     }
 }
 
-void EvaluatorCkksBase::gen_power_sim(std::map<uint32_t, SimPower> &power_basis_sim, int n)
+void EvaluatorCkksBase::update_level_and_scale_baby_step(bool lead, int level_old,
+    double scale_old, int& level_new, double& scale_new, int level_consumed_per_rescale)
+{
+    level_new = level_old;
+    scale_new = scale_old;
+
+    if (lead)
+    {
+        for (auto i = 0; i < level_consumed_per_rescale; i++)
+        {
+            scale_new = scale_new * context_.parameters_literal()->q().at(level_new - i).value();
+        }
+    }
+}
+
+void EvaluatorCkksBase::update_level_and_scale_giant_step(bool lead, int level_old, double scale_old,
+    double x_pow_scale, int& level_new, double& scale_new, int level_consumed_per_rescale)
+{
+    auto q = context_.parameters_literal()->q();
+
+    uint128_t qi;
+    if (lead)
+    {
+        qi = q.at(level_old).value();
+        for (auto i = 1; i < level_consumed_per_rescale; ++i)
+        {
+            qi = qi * q[level_old-i].value();
+        }
+    }
+    else
+    {
+        qi = q.at(level_old + level_consumed_per_rescale).value();
+        for (auto i = 1; i < level_consumed_per_rescale; ++i)
+        {
+            qi = qi * q[level_old+level_consumed_per_rescale-i].value();
+        }
+    }
+
+    level_new = level_old + level_consumed_per_rescale;
+    scale_new = scale_old * qi / x_pow_scale;
+}
+
+void EvaluatorCkksBase::factorize(const Polynomial& poly, int n, Polynomial& pq, Polynomial& pr)
+{
+    factorize_inner(poly, n, pq, pr);
+    pq.max_degree() = poly.max_degree();
+
+    if (poly.max_degree() == poly.degree())
+    {
+        pr.max_degree() = n - 1;
+    }
+    else
+    {
+        pr.max_degree() = poly.max_degree() - (poly.degree() - n + 1);
+    }
+
+    if (poly.lead())
+    {
+        pq.lead() = true;
+    }
+}
+
+void EvaluatorCkksBase::factorize_inner(const Polynomial& poly, int n, Polynomial& pq, Polynomial& pr)
+{
+    if (n < (poly.degree() >> 1))
+    {
+        POSEIDON_THROW_LOGIC_ERROR("error");
+    }
+
+    pr.data().resize(n);
+    for (auto i = 0; i < n; ++i)
+    {
+        if (poly.is_valid(i))
+        {
+            pr.data()[i] = poly.data()[i];
+        }
+        else
+        {
+            pr.is_valid(i) = false;
+        }
+    }
+
+    pq.data().resize(poly.degree()-n+1);
+    if (poly.is_valid(n))
+    {
+        pq.data()[0] = poly.data()[n];
+    }
+
+    bool is_odd = poly.is_odd();
+    bool is_even = poly.is_even();
+
+    switch (poly.basis_type())
+    {
+    case Monomial:
+        for (auto i = n + 1; i < poly.degree()+1; i++)
+        {
+            if (poly.is_valid(i) && (!(is_even || is_odd)) || (((i&1) == 0) && is_even) || (((i&1) == 1) && is_odd))
+            {
+                pq.data()[i-n] = poly.data()[i];
+            }
+        }
+        break;
+    case Chebyshev:
+        for (int i = n + 1, j = 1; i < poly.degree() + 1; i++, j++)
+        {
+            if (poly.is_valid(i) && (!(is_even || is_odd)) || (((i&1) == 0) && is_even) || (((i&1) == 1) && is_odd))
+            {
+                pq.data()[i-n] = poly.data()[i];
+                pq.data()[i-n] = pq.data()[i-n] + pq.data()[i-n];
+                if (pr.is_valid(n-j))
+                {
+                    pr.data()[n-j] = pr.data()[n-j] - poly.data()[i];
+                }
+                else
+                {
+                    pr.data()[n-j] = poly.data()[i];
+                    pr.data()[n-j].real(-pr.data()[n-j].real());
+                    pr.data()[n-j].imag(-pr.data()[n-j].imag());
+                }
+            }
+        }
+        break;
+    default:
+        break;
+    }
+
+    pq.basis_type() = poly.basis_type();
+    pr.basis_type() = poly.basis_type();
+    pq.is_odd() = poly.is_odd();
+    pr.is_odd() = poly.is_odd();
+    pq.is_even() = poly.is_even();
+    pr.is_even() = poly.is_even();
+    pq.a() = poly.a();
+    pq.b() = poly.b();
+    pr.a() = poly.a();
+    pr.b() = poly.b();
+}
+
+void sim_rescale()
+{
+
+}
+
+void EvaluatorCkksBase::recurse_ps(Polynomial poly, int log_split, int target_level,
+    double output_scale, std::map<int, SimPower> pb, std::vector<Polynomial>& poly_vec_res, SimPower& op_res)
+{
+    if (poly.degree() < (1 << log_split))
+    {
+        if (poly.lead() && log_split > 1 && poly.max_degree() > (1 << bit_len(poly.max_degree())) - (1 << (log_split - 1)))
+        {
+            auto log_degree = bit_len(poly.degree());
+            log_split = optimal_split(log_degree);
+            recurse_ps(poly, log_split, target_level, output_scale, pb, poly_vec_res, op_res);
+            return;
+        }
+
+        update_level_and_scale_baby_step(poly.lead(), target_level, output_scale, poly.level(), poly.scale());
+        poly_vec_res.push_back(poly);
+        op_res.level_ = poly.level();
+        op_res.scale_ = poly.scale();
+        return;
+    }
+
+    auto next_power = 1 << log_split;
+    while (next_power < (poly.degree() >> 1) + 1)
+    {
+        next_power <<= 1;
+    }
+
+    auto x_pow = pb[next_power];
+
+    Polynomial coeffsq, coeffsr;
+    factorize(poly, next_power, coeffsq, coeffsr);
+
+    int level_new;
+    double scale_new;
+    update_level_and_scale_giant_step(poly.lead(), target_level, output_scale, x_pow.scale_, level_new, scale_new);
+
+    SimPower op_res_recurse_sq{};
+    SimPower op_res_recurse_sr{};
+    std::vector<Polynomial> poly_vec_res_recurse_sq, poly_vec_res_recurse_sr;
+    recurse_ps(coeffsq, log_split, level_new, scale_new, pb, poly_vec_res_recurse_sq, op_res_recurse_sq);
+
+    // rescale simulation
+    {
+        auto level_consumed_per_rescale = 1;
+        for (auto i = 0; i < level_consumed_per_rescale; i++)
+        {
+            op_res_recurse_sq.scale_ = op_res_recurse_sq.scale_ / context_.parameters_literal()->q()[op_res_recurse_sq.level_].value();
+            op_res_recurse_sq.level_--;
+        }
+    }
+    // multiply simulation
+    {
+        op_res_recurse_sq.level_ = op_res_recurse_sq.level_ < x_pow.level_ ? op_res_recurse_sq.level_ : x_pow.level_;
+        op_res_recurse_sq.scale_ = op_res_recurse_sq.scale_ * x_pow.scale_;
+    }
+
+    recurse_ps(coeffsr, log_split, target_level, op_res_recurse_sq.scale_, pb, poly_vec_res_recurse_sr, op_res_recurse_sr);
+
+    if (!scale_in_delta_lattigo(op_res_recurse_sr.scale_, op_res_recurse_sq.scale_, 116.0))
+    {
+        POSEIDON_THROW(invalid_argument_error, "recursePS: res.Scale != tmp.Scale");
+    }
+
+    poly_vec_res.insert(poly_vec_res.end(), poly_vec_res_recurse_sq.begin(), poly_vec_res_recurse_sq.end());
+    poly_vec_res.insert(poly_vec_res.end(), poly_vec_res_recurse_sr.begin(), poly_vec_res_recurse_sr.end());
+    op_res = op_res_recurse_sq;
+}
+void EvaluatorCkksBase::gen_power_sim(std::map<int, SimPower> &power_basis_sim, int n)
 {
     if (n < 2)
     {
@@ -1899,7 +2112,9 @@ void EvaluatorCkksBase::eval_mod(const Ciphertext &ciph, Ciphertext &result,
     Ciphertext tmp = result;
     // evaluate_poly_vector(tmp, result, polys_sin, target_scale, relin_keys, encoder);
     // TODO substitute
-    evaluate_polynomial(polys_sin, tmp, result, polys_sin.polys()[0].basis_type() == Chebyshev, false, target_scale, relin_keys, encoder);
+    evaluate_polynomial(polys_sin, tmp, result,
+        polys_sin.polys()[0].basis_type() == Chebyshev, false, target_scale,
+        min_scale_, relin_keys, encoder);
 
 
     // Double angle
