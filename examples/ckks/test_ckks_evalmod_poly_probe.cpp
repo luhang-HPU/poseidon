@@ -293,7 +293,7 @@ int main()
     Ciphertext poseidon_result;
     eval.clear_events();
     eval.set_stage("1+2.poseidon.evaluate_poly_vector");
-    eval.evaluate_poly_vector(ct, poseidon_result, polys, evalmod_scale, relin_keys, encoder);
+    eval.evaluate_polynomial(polys, ct, poseidon_result, polys[0].basis_type() == Chebyshev, false, evalmod_scale, std::pow(2.0, 32),relin_keys, encoder);
     print_ct("\nPoseidon evaluate_poly_vector output", poseidon_result);
     print_events(eval.events(), "Poseidon evaluate_poly_vector events");
 

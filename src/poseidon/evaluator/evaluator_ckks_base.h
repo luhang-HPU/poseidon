@@ -221,6 +221,21 @@ private:
 public:
     struct PatersonStockmeyerPolynomial
     {
+        size_t size() const
+        {
+            return polys_.size();
+        }
+
+        Polynomial& operator[](size_t idx)
+        {
+            return polys_[idx];
+        }
+
+        const Polynomial& operator[](size_t idx) const
+        {
+            return polys_[idx];
+        }
+
         int degree_;
         int base_;
         int level_;
@@ -230,6 +245,21 @@ public:
 
     struct PatersonStockmeyerPolynomialVector
     {
+        size_t size() const
+        {
+            return polys_.size();
+        }
+
+        PatersonStockmeyerPolynomial& operator[](size_t idx)
+        {
+            return polys_[idx];
+        }
+
+        const PatersonStockmeyerPolynomial& operator[](size_t idx) const
+        {
+            return polys_[idx];
+        }
+
         std::vector<PatersonStockmeyerPolynomial> polys_;
     };
 
@@ -292,10 +322,10 @@ public:
     void evaluate_monomial(const Ciphertext& a, Ciphertext& b, const Ciphertext& power_basis, const RelinKeys& relin_key) const;
 
     void evaluate_polynomial_vector_from_power_basis_optimized(const PolynomialVector &poly_vec, const map<uint32_t, Ciphertext> &power_basis, Ciphertext &ciph_res,
-                                                                int target_level, int target_scale, const CKKSEncoder &encoder) const;
+                                                                int target_level, double target_scale, const CKKSEncoder &encoder) const;
 
 
-    void gen_power_sim(std::map<int, SimPower> &power_basis_sim, int n);
+    void gen_power_sim(std::map<int, SimPower> &power_basis_sim, int n, int level_consumed_per_rescale);
 
     // Optimized gen_power with lazy relinearization and rescale tracking.
     // When lazy=true, the result is NOT relinearized (caller must handle).

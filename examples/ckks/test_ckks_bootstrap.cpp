@@ -12,6 +12,8 @@
 #include <execinfo.h>
 #include <unistd.h>
 
+#include "spdlog/spdlog.h"
+
 using namespace poseidon;
 
 namespace
@@ -47,6 +49,8 @@ void install_crash_handler()
 
 int run_bootstrap_test()
 {
+    spdlog::set_level(spdlog::level::debug);
+
     std::cout << BANNER << std::endl;
     std::cout << "POSEIDON SOFTWARE VERSION:" << POSEIDON_VERSION << std::endl;
     std::cout << "" << std::endl;
@@ -98,7 +102,7 @@ int run_bootstrap_test()
     ckks_eva->multiply_relin(cipher, cipher, cipher, relin_keys);
     ckks_eva->rescale_dynamic(cipher, cipher, (int64_t)1 << 40);
 
-    std::cout << "before bootstrap, level = " << cipher.level() << std::endl;
+    spdlog::debug("bootstrap start, level = {}", cipher.level());
 
     EvalModPoly eval_mod_poly(context, CosDiscrete, (uint64_t)1 << 40, 1, 9, 3, 16, 0, 30);
     ckks_eva->bootstrap(cipher, cipher, relin_keys, rot_keys, ckks_encoder, eval_mod_poly);
@@ -106,7 +110,7 @@ int run_bootstrap_test()
     auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
     std::cout << "Bootstrap TIME: " << duration.count() << " microseconds" << std::endl;
 
-    std::cout << "after bootstrap, level = " << cipher.level() << std::endl;
+    spdlog::debug("bootstrap end, level = {}", cipher.level());
 
     // decode && decrypt
     dec.decrypt(cipher, plain_res);
