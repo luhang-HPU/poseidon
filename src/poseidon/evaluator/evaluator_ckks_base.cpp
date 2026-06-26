@@ -5,6 +5,10 @@
 #include <algorithm>
 #include <cmath>
 
+// debug
+#include "spdlog/logger.h"
+#include "spdlog/spdlog.h"
+
 namespace poseidon
 {
 
@@ -1112,6 +1116,7 @@ tuple<uint32_t, double> EvaluatorCkksBase::pre_scalar_level(
 void EvaluatorCkksBase::evaluate_polynomial(const PolynomialVector& poly_vec, const Ciphertext& ct_basis, Ciphertext& ct_res,
     bool is_chev, bool is_lazy, double target_scale, double min_scale, const RelinKeys& relin_key, const CKKSEncoder& encoder)
 {
+    spdlog::debug("----------  evaluate_polynomial begin  ----------");
     map<uint32_t, Ciphertext> power_basis;
     power_basis[1] = ct_basis;
 
@@ -1137,12 +1142,35 @@ void EvaluatorCkksBase::evaluate_polynomial(const PolynomialVector& poly_vec, co
         }
     }
 
+    spdlog::debug("----------  evaluate_polynomial--gen power end  ----------");
+
     PatersonStockmeyerPolynomialVector ps_polys_vec;
     int input_level = ct_basis.level();
     double input_scale = ct_basis.scale();
+    spdlog::debug("----------  evaluate_polynomial--get_paterson_stockmeyer_polynomial_vector begin  ----------");
     get_paterson_stockmeyer_polynomial_vector(poly_vec, input_level - log_degree + 1, input_scale, target_scale, ps_polys_vec);
+    spdlog::debug("----------  evaluate_polynomial--get_paterson_stockmeyer_polynomial_vector end  ----------");
 
+    for (auto i = 0; i < ps_polys_vec.polys_.size(); i++)
+    {
+        for (auto j = 0; j < ps_polys_vec.polys_[i].polys_.size(); j++)
+        {
+            auto& tmp = ps_polys_vec.polys_[i].polys_[j];
+            spdlog::debug("-------  ps_polys_vec[{}][{}]  -------", i, j);
+            for (auto k = 0; k < tmp.size(); k++)
+            {
+                if (tmp.is_valid(k))
+                {
+                    spdlog::debug("coeff[{}] = {}", k, tmp.data()[k].real());
+                }
+            }
+        }
+    }
+
+    spdlog::debug("----------  evaluate_polynomial--evaluate_paterson_stockmeyer_polynomial_vector begin  ----------");
     evaluate_paterson_stockmeyer_polynomial_vector(ps_polys_vec, power_basis, ct_res, relin_key, encoder);
+    spdlog::debug("----------  evaluate_polynomial--evaluate_paterson_stockmeyer_polynomial_vector end  ----------");
+    spdlog::debug("----------  evaluate_polynomial end  ----------");
 }
 
 void EvaluatorCkksBase::get_paterson_stockmeyer_polynomial(const Polynomial& poly, int input_level,
@@ -1320,6 +1348,7 @@ void EvaluatorCkksBase::evaluate_baby_step(const PatersonStockmeyerPolynomialVec
     auto num_poly = ps_poly_vec.polys_.size();
 
     PolynomialVector poly_vec_tmp;
+    poly_vec_tmp.resize(num_poly);
     // PatersonStockmeyerPolynomialVector可能有多组PatersonStockmeyerPolynomial
     // 只选取PatersonStockmeyerPolynomialVector[][j]
     for (auto i = 0; i < num_poly; i++)
@@ -1328,10 +1357,8 @@ void EvaluatorCkksBase::evaluate_baby_step(const PatersonStockmeyerPolynomialVec
     }
 
     // TODO
-    std::cout << "xxxxxxxx" << std::endl;
     auto level = ps_poly_vec.polys_[0].polys_[j].level();
     auto scale = ps_poly_vec.polys_[0].polys_[j].scale();
-    std::cout << "yyyyyyyy" << std::endl;
 
     evaluate_polynomial_vector_from_power_basis_optimized(poly_vec_tmp, power_basis, ct_res, level, scale, encoder);
 }

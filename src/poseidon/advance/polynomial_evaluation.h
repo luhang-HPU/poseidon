@@ -17,7 +17,8 @@ enum PolynomialBasisType
 class Polynomial
 {
 public:
-    Polynomial() = default;
+    Polynomial() : data_{}, is_data_valid_(128, true), a_(0), b_(0), max_deg_(0), basis_type_(Chebyshev),
+        lead_(false), is_even_(true), is_odd_(true), level_(-1), scale_(-1.0) {}
 
     inline Polynomial(const vector<complex<double>> &data, int a, int b, int max_deg,
                       PolynomialBasisType basis_type, bool lead = false)
@@ -61,33 +62,34 @@ public:
 
     inline char& is_valid(int n) noexcept
     {
-        if (n < 0 || n >= data_.size())
+        if (n < 0 || n >= is_data_valid_.size())
             throw std::out_of_range("invalid index");
         return is_data_valid_[n];
     }
     inline const bool is_valid(int n) const noexcept
     {
-        if (n < 0 || n >= data_.size())
+        if (n < 0 || n >= is_data_valid_.size())
             throw std::out_of_range("invalid index");
         return is_data_valid_[n];
     }
 
+    inline auto size() const noexcept { return data_.size(); }
 
 private:
-    vector<complex<double>> data_{};
+    vector<complex<double>> data_;
     vector<char> is_data_valid_;
-    int a_ = 0;
-    int b_ = 0;
-    int max_deg_ = 0;
-    PolynomialBasisType basis_type_ = Monomial;
-    bool lead_ = false;
+    int a_;
+    int b_;
+    int max_deg_;
+    PolynomialBasisType basis_type_;
+    bool lead_;
 
-    bool is_even_ = true;
-    bool is_odd_ = true;
+    bool is_even_;
+    bool is_odd_;
 
     // member level_ / scale_ used for simulation
-    int level_ = -1;
-    double scale_ = -1.0;
+    int level_;
+    double scale_;
 };
 
 class PolynomialVector
@@ -98,8 +100,7 @@ public:
     PolynomialVector(const vector<Polynomial> &polys, const vector<vector<int>> &indexs,
                      bool lead = true)
         : poly_vector_(polys), poly_index_(indexs)
-    {
-    }
+    {}
     PolynomialVector(const PolynomialVector &copy) = default;
     PolynomialVector(PolynomialVector &&source) = default;
     PolynomialVector &operator=(const PolynomialVector &assign) = default;
@@ -136,6 +137,7 @@ public:
     }
 
     inline int size() const noexcept { return poly_vector_.size(); }
+    inline void resize(size_t size) noexcept { poly_vector_.resize(size); }
 
 
 private:
