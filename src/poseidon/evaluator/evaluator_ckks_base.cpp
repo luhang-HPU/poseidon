@@ -5,8 +5,6 @@
 #include <algorithm>
 #include <cmath>
 
-// debug
-#include "spdlog/logger.h"
 #include "spdlog/spdlog.h"
 
 namespace poseidon
@@ -1261,7 +1259,7 @@ void EvaluatorCkksBase::evaluate_paterson_stockmeyer_polynomial_vector(const Pat
 
         for (auto i = 0; i < baby_steps.size(); i++)
         {
-            evaluate_giant_step(i, giant_steps, baby_steps, power_basis, relin_key);
+            evaluate_giant_step(i, giant_steps, baby_steps, power_basis, encoder, relin_key);
         }
 
         for (auto iter = baby_steps.begin(); iter != baby_steps.end();)
@@ -1285,7 +1283,6 @@ void EvaluatorCkksBase::evaluate_paterson_stockmeyer_polynomial_vector(const Pat
         relinearize(baby_steps[0].value, baby_steps[0].value, relin_key);
     }
 
-    // TODO rescale or rescale_dynamic
     rescale(baby_steps[0].value, baby_steps[0].value);
 
     ct_res = baby_steps[0].value;
@@ -1354,30 +1351,31 @@ void EvaluatorCkksBase::evaluate_polynomial_vector_from_power_basis_optimized(co
                 multiply_const(power_basis.at(key), poly_vec.polys()[0].data()[0], 1.0, ciph_tmp, encoder);
                 spdlog::debug("target_level = {}, ciph_res.level = {}, ciph_tmp.level = {}, ciph_res.scale = {}, ciph_tmp.scale = {}",
                     target_level, ciph_res.level(), ciph_tmp.level(), ciph_res.scale(), ciph_tmp.scale());
-                if (ciph_tmp.level() > target_level)
-                {
-                    drop_modulus(ciph_tmp, ciph_tmp, target_level);
-                }
-                add(ciph_res, ciph_tmp, ciph_res);
+                add_dynamic(ciph_res, ciph_tmp, ciph_res, encoder);
             }
         }
     }
 }
 
-void EvaluatorCkksBase::evaluate_monomial(const Ciphertext& a, Ciphertext& b, const Ciphertext& xpow, const RelinKeys& relin_key) const
+void EvaluatorCkksBase::evaluate_monomial(const Ciphertext& a, Ciphertext& b, const Ciphertext& xpow,
+    const CKKSEncoder& encoder, const RelinKeys& relin_key) const
 {
     if (b.size() == 3)
     {
         relinearize(b, b, relin_key);
     }
-
+    spdlog::debug("----------  EvaluatorCkksBase::evaluate_monomial multiply begin  ------------");
     rescale(b, b);
-    multiply(b, xpow, b);
+    spdlog::debug("b.level = {}, xpow.level = {}", b.level(), xpow.level());
+    multiply_dynamic(b, xpow, b);
+    spdlog::debug("----------  EvaluatorCkksBase::evaluate_monomial multiply end  ------------");
 
     // TODO  特殊条件判断
     // if (a.scale())
 
-    add(a, b, b);
+    spdlog::debug("----------  EvaluatorCkksBase::evaluate_monomial add begin  ------------");
+    add_dynamic(a, b, b, encoder);
+    spdlog::debug("----------  EvaluatorCkksBase::evaluate_monomial add end  ------------");
 }
 
 void EvaluatorCkksBase::evaluate_baby_step(const PatersonStockmeyerPolynomialVector &ps_poly_vec,
@@ -1403,7 +1401,7 @@ void EvaluatorCkksBase::evaluate_baby_step(const PatersonStockmeyerPolynomialVec
 }
 
 void EvaluatorCkksBase::evaluate_giant_step(int i, const vector<int> &giant_steps, vector<BabyStep> &baby_steps,
-                                             const map<uint32_t, Ciphertext> &power_basis, const RelinKeys &relin_keys) const
+    const map<uint32_t, Ciphertext> &power_basis, const CKKSEncoder& encoder, const RelinKeys &relin_keys) const
 {
     // giant_step
     // = 0: no operation
@@ -1420,7 +1418,7 @@ void EvaluatorCkksBase::evaluate_giant_step(int i, const vector<int> &giant_step
 
         int deg = 1 << bit_len(baby_steps[i].degree);
 
-        evaluate_monomial(even.value, odd.value, power_basis.at(deg), relin_keys);
+        evaluate_monomial(even.value, odd.value, power_basis.at(deg), encoder, relin_keys);
 
         odd.degree = 2 * deg - 1;
         // TODO even reset to invalid value
@@ -1564,11 +1562,6 @@ void EvaluatorCkksBase::factorize_inner(const Polynomial& poly, int n, Polynomia
     pq.b() = poly.b();
     pr.a() = poly.a();
     pr.b() = poly.b();
-}
-
-void sim_rescale()
-{
-
 }
 
 void EvaluatorCkksBase::recurse_ps(Polynomial poly, int log_split, int target_level,
@@ -3137,8 +3130,9 @@ void EvaluatorCkksBase::add_dynamic(const Ciphertext &ciph1, const Ciphertext &c
         scaling_factor_ratio = ciph1.scale() / ciph2.scale();
 
         scaling_factor_ratio += 0.5;
-        if (scaling_factor_ratio < min_scale_)
+        if ((scaling_factor_ratio < min_scale_) && !util::are_approximate<double>(scaling_factor_ratio, min_scale_))
         {
+            spdlog::error("scaling_factor_ratio = {}, min_scale_ = {}", scaling_factor_ratio, min_scale_);
             POSEIDON_THROW(invalid_argument_error, "add_dynamic : ciph scale don't support! ");
         }
         multiply_const(ciph2, scaling_factor_ratio, 1.0, tmp_scale, encoder);
@@ -3149,15 +3143,17 @@ void EvaluatorCkksBase::add_dynamic(const Ciphertext &ciph1, const Ciphertext &c
     {
         scaling_factor_ratio = ciph2.scale() / ciph1.scale();
         scaling_factor_ratio += 0.5;
-        if (scaling_factor_ratio < min_scale_)
+        if ((scaling_factor_ratio < min_scale_) && !util::are_approximate<double>(scaling_factor_ratio, min_scale_))
         {
+            spdlog::error("scaling_factor_ratio = {}, min_scale_ = {}", scaling_factor_ratio, min_scale_);
             POSEIDON_THROW(invalid_argument_error, "add_dynamic : ciph scale don't support! ");
         }
-        multiply_const(ciph2, scaling_factor_ratio, 1.0, tmp_scale, encoder);
+        multiply_const(ciph1, scaling_factor_ratio, 1.0, tmp_scale, encoder);
         tmp_scale.scale() = ciph2.scale();
 
         has_tmp_scale_ciph1 = true;
     }
+
     if (level1 > level2)
     {
         Ciphertext tmp;

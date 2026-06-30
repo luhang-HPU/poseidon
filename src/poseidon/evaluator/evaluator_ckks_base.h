@@ -317,9 +317,10 @@ public:
     // giant_steps[i] == 1: baby_steps[i+1] = baby_steps[i] * monomial_basis[deg] + baby_steps[i+1],
     // then clears baby_steps[i].
     void evaluate_giant_step(int i, const vector<int> &giant_steps, vector<BabyStep> &baby_steps,
-        const map<uint32_t, Ciphertext> &power_basis, const RelinKeys &relin_keys) const;
+        const map<uint32_t, Ciphertext> &power_basis, const CKKSEncoder& encoder, const RelinKeys &relin_keys) const;
 
-    void evaluate_monomial(const Ciphertext& a, Ciphertext& b, const Ciphertext& power_basis, const RelinKeys& relin_key) const;
+    void evaluate_monomial(const Ciphertext& a, Ciphertext& b, const Ciphertext& power_basis,
+        const CKKSEncoder& encoder, const RelinKeys& relin_key) const;
 
     void evaluate_polynomial_vector_from_power_basis_optimized(const PolynomialVector &poly_vec, const map<uint32_t, Ciphertext> &power_basis, Ciphertext &ciph_res,
                                                                 int target_level, double target_scale, const CKKSEncoder &encoder) const;
