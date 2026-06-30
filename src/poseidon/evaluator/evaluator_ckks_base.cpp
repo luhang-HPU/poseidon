@@ -1865,7 +1865,7 @@ void EvaluatorCkksBase::add_dynamic(const Ciphertext &ciph1, const Ciphertext &c
         scaling_factor_ratio = ciph1.scale() / ciph2.scale();
 
         scaling_factor_ratio += 0.5;
-        if (scaling_factor_ratio < min_scale_)
+        if ((scaling_factor_ratio < min_scale_) && !util::are_approximate<double>(scaling_factor_ratio, min_scale_))
         {
             POSEIDON_THROW(invalid_argument_error, "add_dynamic : ciph scale don't support! ");
         }
@@ -1877,15 +1877,16 @@ void EvaluatorCkksBase::add_dynamic(const Ciphertext &ciph1, const Ciphertext &c
     {
         scaling_factor_ratio = ciph2.scale() / ciph1.scale();
         scaling_factor_ratio += 0.5;
-        if (scaling_factor_ratio < min_scale_)
+        if ((scaling_factor_ratio < min_scale_) && !util::are_approximate<double>(scaling_factor_ratio, min_scale_))
         {
             POSEIDON_THROW(invalid_argument_error, "add_dynamic : ciph scale don't support! ");
         }
-        multiply_const(ciph2, scaling_factor_ratio, 1.0, tmp_scale, encoder);
+        multiply_const(ciph1, scaling_factor_ratio, 1.0, tmp_scale, encoder);
         tmp_scale.scale() = ciph2.scale();
 
         has_tmp_scale_ciph1 = true;
     }
+
     if (level1 > level2)
     {
         Ciphertext tmp;
