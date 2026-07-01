@@ -1240,6 +1240,11 @@ void EvaluatorCkksBase::evaluate_paterson_stockmeyer_polynomial_vector(const Pat
         spdlog::debug("----------  evaluate_paterson_stockmeyer_polynomial_vector::evaluate_baby_step[{}] end  ------------", i);
     }
 
+    for (auto i = 0; i < baby_steps.size(); i++)
+    {
+        spdlog::debug("baby_step[{}].level = {}", i, baby_steps[i].value.level());
+    }
+
     spdlog::debug("----------  evaluate_paterson_stockmeyer_polynomial_vector::evaluate_giant_step begin  ------------");
     while (baby_steps.size() != 1)
     {
@@ -1284,8 +1289,8 @@ void EvaluatorCkksBase::evaluate_paterson_stockmeyer_polynomial_vector(const Pat
     }
 
     rescale(baby_steps[0].value, baby_steps[0].value);
-
     ct_res = baby_steps[0].value;
+    spdlog::debug("baby_steps[0].value.level = {}", baby_steps[0].value.level());
 }
 
 void EvaluatorCkksBase::evaluate_polynomial_vector_from_power_basis_optimized(const PolynomialVector &poly_vec,
@@ -1367,7 +1372,7 @@ void EvaluatorCkksBase::evaluate_monomial(const Ciphertext& a, Ciphertext& b, co
     spdlog::debug("----------  EvaluatorCkksBase::evaluate_monomial multiply begin  ------------");
     rescale(b, b);
     spdlog::debug("b.level = {}, xpow.level = {}", b.level(), xpow.level());
-    multiply_dynamic(b, xpow, b);
+    multiply_relin_dynamic(b, xpow, b, relin_key);
     spdlog::debug("----------  EvaluatorCkksBase::evaluate_monomial multiply end  ------------");
 
     // TODO  特殊条件判断
@@ -1711,7 +1716,7 @@ bool EvaluatorCkksBase::gen_power_optimized_inner(
             rescale_dynamic(monomial_basis[b], monomial_basis[b], min_scale);
         }
 
-        multiply(monomial_basis[a], monomial_basis[b], monomial_basis[n]);
+        multiply_relin(monomial_basis[a], monomial_basis[b], monomial_basis[n], relin_keys);
     }
     else
     {
@@ -2178,10 +2183,11 @@ void EvaluatorCkksBase::eval_mod(const Ciphertext &ciph, Ciphertext &result,
     Ciphertext tmp = result;
     // evaluate_poly_vector(tmp, result, polys_sin, target_scale, relin_keys, encoder);
     // TODO substitute
-    spdlog::debug("target_scale = {}", target_scale);
+    spdlog::debug("before evaluate_polynomial level = {}", tmp.level());
     evaluate_polynomial(polys_sin, tmp, result,
         polys_sin.polys()[0].basis_type() == Chebyshev, false, target_scale,
         min_scale_, relin_keys, encoder);
+    spdlog::debug("before evaluate_polynomial level = {}", result.level());
 
 
     // Double angle
