@@ -6,6 +6,9 @@ target_link_libraries(test_ckks_basic poseidon_shared)
 add_executable(test_ckks_bootstrap test_ckks_bootstrap.cpp)
 target_link_libraries(test_ckks_bootstrap poseidon_shared)
 
+add_executable(test_ckks_recryption test_ckks_recryption.cpp)
+target_link_libraries(test_ckks_recryption poseidon_shared)
+
 add_executable(test_ckks_evaluate_poly_vector test_ckks_evaluate_poly_vector.cpp)
 target_link_libraries(test_ckks_evaluate_poly_vector poseidon_shared)
 
