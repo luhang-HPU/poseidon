@@ -56,7 +56,7 @@ int main()
 
     RecryptionData recryption_data(context);
     recryption_data.set_auxiliary_exponents(2, 1);
-    Recryptor recryptor(context, *bfv_eva, recryption_data);
+    Recryptor recryptor(context, *bfv_eva, recryption_data, enc, dec);
 
     std::cout << "before recryption, level = " << cipher.level() << std::endl;
 

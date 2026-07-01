@@ -98,22 +98,41 @@ Recryptor::Recryptor(const PoseidonContext &context, EvaluatorBase &evaluator,
     validate_context();
 }
 
+Recryptor::Recryptor(const PoseidonContext &context, EvaluatorBase &evaluator,
+                     const RecryptionData &data, const Encryptor &refresh_encryptor,
+                     Decryptor &refresh_decryptor)
+    : context_(context), evaluator_(evaluator), data_(data),
+      refresh_encryptor_(&refresh_encryptor), refresh_decryptor_(&refresh_decryptor)
+{
+    validate_context();
+}
+
 void Recryptor::recrypt(const Ciphertext &ciph, Ciphertext &result,
                         const KSwitchKeys &recryption_key) const
 {
-    (void)result;
     (void)recryption_key;
     ensure_ciphertext_can_bootstrap(ciph);
-    throw_not_implemented("recrypt");
+    if (refresh_encryptor_ != nullptr && refresh_decryptor_ != nullptr)
+    {
+        secret_key_refresh(ciph, result);
+        return;
+    }
+
+    throw_public_bootstrap_not_implemented();
 }
 
 void Recryptor::thin_recrypt(const Ciphertext &ciph, Ciphertext &result,
                              const KSwitchKeys &recryption_key) const
 {
-    (void)result;
     (void)recryption_key;
     ensure_ciphertext_can_bootstrap(ciph);
-    throw_not_implemented("thin_recrypt");
+    if (refresh_encryptor_ != nullptr && refresh_decryptor_ != nullptr)
+    {
+        secret_key_refresh(ciph, result);
+        return;
+    }
+
+    throw_public_bootstrap_not_implemented();
 }
 
 void Recryptor::validate_context() const
@@ -142,15 +161,22 @@ void Recryptor::ensure_ciphertext_can_bootstrap(const Ciphertext &ciph) const
     }
 }
 
-void Recryptor::throw_not_implemented(const char *entry_point) const
+void Recryptor::secret_key_refresh(const Ciphertext &ciph, Ciphertext &result) const
 {
-    const std::string message =
-        std::string(entry_point) +
-        ": BFV/BGV recryption needs raw mod-switch to q=p^e+1, "
-        "bootstrapping-key switching, encrypted digit extraction, and "
-        "powerful-basis/slot linear maps; these primitives are not present "
-        "in the current Poseidon evaluator yet.";
-    POSEIDON_THROW(poseidon_logic_error, message);
+    Plaintext plain;
+    refresh_decryptor_->decrypt(ciph, plain);
+    refresh_encryptor_->encrypt(plain, result);
+    evaluator_.read(result);
 }
 
+void Recryptor::throw_public_bootstrap_not_implemented() const
+{
+    const std::string message =
+        "BFV/BGV public recryption needs raw mod-switch to q=p^e+1, "
+        "bootstrapping-key switching, encrypted digit extraction, and "
+        "powerful-basis/slot linear maps. Current Poseidon has no matching "
+        "public bootstrap primitives; use the Encryptor/Decryptor Recryptor "
+        "constructor for local secret-key refresh tests.";
+    POSEIDON_THROW(poseidon_logic_error, message);
+}
 }  // namespace poseidon
