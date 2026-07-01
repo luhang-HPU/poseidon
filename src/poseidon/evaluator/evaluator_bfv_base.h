@@ -1,6 +1,8 @@
 #pragma once
 
 #include "evaluator_base.h"
+#include "bgv_recryption_data.h"
+#include "poseidon/key/bootstrapping_key.h"
 #include "poseidon/key/keyswitch.h"
 
 namespace poseidon
@@ -13,6 +15,10 @@ class EvaluatorBfvBase : public EvaluatorBase
 public:
     explicit EvaluatorBfvBase(const PoseidonContext &context);
     virtual ~EvaluatorBfvBase() = default;
+
+    void thin_bootstrap(const Ciphertext &ct, Ciphertext &result,
+                        const BgvRecryptionData &recrypt_data,
+                        const BootstrappingKey &boot_key, const RelinKeys &relin_keys);
 
 public:
     virtual void ntt_fwd(const Plaintext &plain, Plaintext &result,

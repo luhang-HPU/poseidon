@@ -4,6 +4,7 @@
 #include "basics/serializable.h"
 #include "basics/util/defines.h"
 #include "basics/util/iterator.h"
+#include "key/bootstrapping_key.h"
 #include "key/galoiskeys.h"
 #include "key/keyswitch_bv.h"
 #include "key/publickey.h"
@@ -119,6 +120,9 @@ public:
     {
         return kswitch_gen_->create_switch_key(prev_key, new_key);
     }
+
+    POSEIDON_NODISCARD BootstrappingKey
+    create_bootstrapping_key(const SecretKey &boot_secret_key) const;
 
     /**
     Generates Galois keys and stores the result in destination. Every time

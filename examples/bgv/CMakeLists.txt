@@ -6,3 +6,6 @@ target_link_libraries(test_bgv_basic poseidon_shared)
 
 add_executable(test_bgv_load test_bgv_load.cpp)
 target_link_libraries(test_bgv_load poseidon_shared)
+
+add_executable(test_bgv_bootstrap test_bgv_bootstrap.cpp)
+target_link_libraries(test_bgv_bootstrap poseidon_shared)
