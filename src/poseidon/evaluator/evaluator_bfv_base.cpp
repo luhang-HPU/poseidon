@@ -138,7 +138,7 @@ void EvaluatorBfvBase::sub(const Ciphertext &ciph1, const Ciphertext &ciph2,
     }
 
     // Prepare result
-    result.resize(context_, ciph1.parms_id(), ciph1.size());
+    result.resize(context_, ciph1.parms_id(), max_count);
     result.is_ntt_form() = ciph1.is_ntt_form();
     for (auto i = 0; i < min_count; i++)
     {
@@ -150,6 +150,14 @@ void EvaluatorBfvBase::sub(const Ciphertext &ciph1, const Ciphertext &ciph2,
         for (auto i = min_count; i < max_count; ++i)
         {
             result[i].copy(ciph2[i]);
+            result[i].negate();
+        }
+    }
+    else if (ciph2_size < ciph1_size)
+    {
+        for (auto i = min_count; i < max_count; ++i)
+        {
+            result[i].copy(ciph1[i]);
         }
     }
 }
@@ -917,17 +925,50 @@ void EvaluatorBfvBase::multiply_by_diag_matrix_bsgs(const Ciphertext &ciph,
 {
     auto poly_modulus_degree = ciph.poly_modulus_degree();
     auto poly_modulus_degree_div2 = poly_modulus_degree >> 1;
+    auto slot_mask = (1 << plain_mat.log_slots) - 1;
     auto [index, _, rot_n2] =
         bsgs_index(plain_mat.plain_vec, 1 << plain_mat.log_slots, plain_mat.n1);
     map<int, Ciphertext> rot_ciph;
     Ciphertext ciph_inner_sum, ciph_inner, ciph_inner_tmp;
     Ciphertext ciph_rrr;
     int z = 0;
+    auto rotate_full_slot = [&](const Ciphertext &src, Ciphertext &dst, int step)
+    {
+        if (step == 0)
+        {
+            dst = src;
+        }
+        else if (step == static_cast<int>(poly_modulus_degree_div2))
+        {
+            rotate_col(src, dst, rot_key);
+        }
+        else if (step > static_cast<int>(poly_modulus_degree_div2))
+        {
+            Ciphertext tmp;
+            rotate_col(src, tmp, rot_key);
+            rotate_row(tmp, dst, step - static_cast<int>(poly_modulus_degree_div2), rot_key);
+        }
+        else
+        {
+            rotate_row(src, dst, step, rot_key);
+        }
+    };
+    auto plain_at = [&](int index) -> const Plaintext &
+    {
+        index &= slot_mask;
+        auto found = plain_mat.plain_vec.find(index);
+        if (found == plain_mat.plain_vec.end())
+        {
+            POSEIDON_THROW(invalid_argument_error,
+                           "BFV BSGS diagonal plaintext is missing");
+        }
+        return found->second;
+    };
     for (auto j : rot_n2)
     {
         if (j != 0)
         {
-            rotate_row(ciph, rot_ciph[j], j, rot_key);
+            rotate_full_slot(ciph, rot_ciph[j], j);
         }
     }
 
@@ -943,16 +984,16 @@ void EvaluatorBfvBase::multiply_by_diag_matrix_bsgs(const Ciphertext &ciph,
                 {
                     if (cnt0 == 0)
                     {
-                        multiply_plain(ciph, plain_mat.plain_vec.at(j.first), result);
+                        multiply_plain(ciph, plain_at(j.first), result);
                     }
                     else
                     {
-                        multiply_plain(ciph, plain_mat.plain_vec.at(j.first), ciph_inner_sum);
+                        multiply_plain(ciph, plain_at(j.first), ciph_inner_sum);
                     }
                 }
                 else
                 {
-                    multiply_plain(ciph, plain_mat.plain_vec.at(j.first), ciph_inner);
+                    multiply_plain(ciph, plain_at(j.first), ciph_inner);
                     if (cnt0 == 0)
                     {
                         add(result, ciph_inner, result);
@@ -969,18 +1010,17 @@ void EvaluatorBfvBase::multiply_by_diag_matrix_bsgs(const Ciphertext &ciph,
                 {
                     if (cnt0 == 0)
                     {
-                        multiply_plain(rot_ciph[i], plain_mat.plain_vec.at(i + j.first), result);
+                        multiply_plain(rot_ciph[i], plain_at(i + j.first), result);
                     }
                     else
                     {
-                        multiply_plain(rot_ciph[i], plain_mat.plain_vec.at(i + j.first),
-                                       ciph_inner_sum);
+                        multiply_plain(rot_ciph[i], plain_at(i + j.first), ciph_inner_sum);
                     }
                 }
                 else
                 {
 
-                    multiply_plain(rot_ciph[i], plain_mat.plain_vec.at(i + j.first), ciph_inner);
+                    multiply_plain(rot_ciph[i], plain_at(i + j.first), ciph_inner);
                     if (cnt0 == 0)
                     {
                         add(result, ciph_inner, result);
@@ -995,21 +1035,7 @@ void EvaluatorBfvBase::multiply_by_diag_matrix_bsgs(const Ciphertext &ciph,
         }
         if (cnt0 != 0)
         {
-            auto step_src = j.first;
-            if (j.first == (poly_modulus_degree_div2))
-            {
-                rotate_col(ciph_inner_sum, ciph_inner, rot_key);
-            }
-            else if (j.first > poly_modulus_degree_div2)
-            {
-                rotate_col(ciph_inner_sum, ciph_inner_tmp, rot_key);
-                auto step = j.first - poly_modulus_degree_div2;
-                rotate_row(ciph_inner_tmp, ciph_inner, step, rot_key);
-            }
-            else
-            {
-                rotate_row(ciph_inner_sum, ciph_inner, step_src, rot_key);
-            }
+            rotate_full_slot(ciph_inner_sum, ciph_inner, j.first);
             add(result, ciph_inner, result);
         }
         cnt0++;

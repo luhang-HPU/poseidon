@@ -31,6 +31,8 @@ public:
                                   const SecretKey &prev_secret_key) const;
     void generate_kswitch_keys(const SecretKey &prev_secret_key, ConstPolyIter new_keys,
                                size_t num_keys, KSwitchKeys &destination) const;
+    void generate_kswitch_keys(const PublicKey &new_public_key, ConstPolyIter keys_to_switch,
+                               size_t num_keys, KSwitchKeys &destination) const;
     secret_key_array_type compute_secret_key_array(const SecretKey &init_secret_key,
                                                    size_t max_power) const;
     GaloisKeys create_galois_keys_mt(const std::vector<uint32_t> &galois_elts,
@@ -38,6 +40,9 @@ public:
 
 protected:
     virtual void generate_one_kswitch_key(const SecretKey &prev_secret_key, ConstRNSIter new_key,
+                                          vector<PublicKey> &destination) const = 0;
+    virtual void generate_one_kswitch_key(const PublicKey &new_public_key,
+                                          ConstRNSIter key_to_switch,
                                           vector<PublicKey> &destination) const = 0;
 
 protected:
@@ -54,7 +59,7 @@ public:
         : context_(context), pool_(std::move(pool))
     {
     }
-    ~KSwitchBase() = default;
+    virtual ~KSwitchBase() = default;
 
 public:
     void switch_key(const Ciphertext &encrypted, const KSwitchKeys &switch_keys,
@@ -76,6 +81,8 @@ protected:
     virtual void apply_galois_inplace(Ciphertext &encrypted, uint32_t galois_elt,
                                       const GaloisKeys &galois_keys,
                                       MemoryPoolHandle pool) const = 0;
+    virtual void switch_key_internal(Ciphertext &encrypted, const KSwitchKeys &switch_keys,
+                                     MemoryPoolHandle pool) const = 0;
 
     PoseidonContext context_;
     MemoryPoolHandle pool_;

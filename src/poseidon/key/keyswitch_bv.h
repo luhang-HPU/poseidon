@@ -23,6 +23,8 @@ public:
 protected:
     void generate_one_kswitch_key(const SecretKey &prev_secret_key, ConstRNSIter new_key,
                                   vector<PublicKey> &destination) const override;
+    void generate_one_kswitch_key(const PublicKey &new_public_key, ConstRNSIter key_to_switch,
+                                  vector<PublicKey> &destination) const override;
 };
 
 class KSwitchBV : public KSwitchBase
@@ -34,6 +36,8 @@ public:
                               size_t destination_size, MemoryPoolHandle pool) const override;
     void apply_galois_inplace(Ciphertext &encrypted, uint32_t galois_elt,
                               const GaloisKeys &galois_keys, MemoryPoolHandle pool) const override;
+    void switch_key_internal(Ciphertext &encrypted, const KSwitchKeys &switch_keys,
+                             MemoryPoolHandle pool) const override;
 
 private:
     void switch_key_inplace(Ciphertext &encrypted, util::ConstRNSIter target_iter,
