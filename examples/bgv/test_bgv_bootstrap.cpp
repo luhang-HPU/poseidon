@@ -5,11 +5,14 @@
 #include "poseidon/keygenerator.h"
 #include "poseidon/util/debug.h"
 
+#include <spdlog/spdlog.h>
+
 using namespace poseidon;
 using namespace poseidon::util;
 
 int main()
 {
+    spdlog::set_level(spdlog::level::debug);
     std::cout << BANNER << std::endl;
     std::cout << "POSEIDON SOFTWARE VERSION:" << POSEIDON_VERSION << std::endl;
     std::cout << "" << std::endl;
@@ -33,12 +36,14 @@ int main()
     data_keygen.create_galois_keys(galois_keys);
     data_keygen.create_relin_keys(relin_keys);
 
-    // Boot secret key: create a second key generator for a different secret key
-    KeyGenerator boot_keygen(context);
-    BootstrappingKey boot_key = data_keygen.create_bootstrapping_key(boot_keygen.secret_key());
-
     Encryptor encryptor(context, public_key);
     Decryptor decryptor(context, data_keygen.secret_key());
+
+    // Boot secret key: create a second key generator for a different secret key
+    KeyGenerator boot_keygen(context);
+    spdlog::debug("------------ bootstrap key start ------------");
+    BootstrappingKey boot_key = data_keygen.create_bootstrapping_key(boot_keygen.secret_key(), bgv_eva);
+    spdlog::debug("------------ bootstrap key start ------------");
 
     // Initialize recryption data for bootstrapping with plaintext prime p=2
     // r=1: working mod 2; m=2*degree: cyclotomic order

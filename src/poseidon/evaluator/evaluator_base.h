@@ -69,6 +69,8 @@ public:
     virtual void drop_modulus_to_next(const Ciphertext &ciph, Ciphertext &result) const;
     void transform_to_ntt_inplace(Plaintext &plain, parms_id_type parms_id,
                                   MemoryPoolHandle pool = MemoryManager::GetPool()) const;
+    void transform_from_ntt_inplace(Plaintext &plain, parms_id_type parms_id,
+                                             MemoryPoolHandle pool = MemoryManager::GetPool()) const;
     void transform_to_ntt_inplace(Ciphertext &ciph) const;
     void transform_from_ntt_inplace(Ciphertext &ciph) const;
 

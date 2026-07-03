@@ -11,7 +11,6 @@
 #include "key/relinkeys.h"
 #include "key/secretkey.h"
 #include "poseidon_context.h"
-#include <random>
 
 namespace poseidon
 {
@@ -26,6 +25,8 @@ Constructing a KeyGenerator requires only a PoseidonContext.
 @see RelinKeys for more details on relinearization keys.
 @see GaloisKeys for more details on Galois keys.
 */
+class EvaluatorBgvBase;
+
 class KeyGenerator
 {
 public:
@@ -122,7 +123,7 @@ public:
     }
 
     POSEIDON_NODISCARD BootstrappingKey
-    create_bootstrapping_key(const SecretKey &boot_secret_key) const;
+    create_bootstrapping_key(const SecretKey &boot_secret_key, const std::shared_ptr<EvaluatorBgvBase> bgv_eva) const;
 
     /**
     Generates Galois keys and stores the result in destination. Every time

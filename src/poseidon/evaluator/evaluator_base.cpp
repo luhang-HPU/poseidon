@@ -180,6 +180,56 @@ void EvaluatorBase::transform_to_ntt_inplace(Plaintext &plain, parms_id_type par
     plain.parms_id() = parms_id;
 }
 
+void EvaluatorBase::transform_from_ntt_inplace(Plaintext &plain, parms_id_type parms_id,
+                                               MemoryPoolHandle pool) const
+{
+#ifdef DEBUG
+    poseidon::util::LocalTimer timer("INTT");
+#endif
+    // Verify parameters.
+    auto context_data_ptr = context_.crt_context()->get_context_data(parms_id);
+    if (!context_data_ptr)
+    {
+        POSEIDON_THROW(invalid_argument_error, "parms_id is not valid for the current context");
+    }
+    if (!plain.is_ntt_form())
+    {
+        return;
+    }
+    if (!pool)
+    {
+        POSEIDON_THROW(invalid_argument_error, "pool is uninitialized");
+    }
+
+    // Extract encryption parameters.
+    auto &context_data = *context_data_ptr;
+    auto &parms = context_data.parms();
+    size_t coeff_count = parms.degree();
+    size_t coeff_modulus_size = context_data.coeff_modulus().size();
+    auto ntt_tables = iter(context_.crt_context()->small_ntt_tables());
+
+    // Size check
+    if (!product_fits_in(coeff_count, coeff_modulus_size))
+    {
+        POSEIDON_THROW_LOGIC_ERROR("invalid parameters");
+    }
+
+    // 1. Inverse NTT: transform from NTT domain back to coefficient domain (in-place)
+    RNSIter plain_iter(plain.data(), coeff_count);
+    inverse_ntt_negacyclic_harvey(plain_iter, coeff_modulus_size, ntt_tables);
+
+    // 2. Convert from full RNS representation to single coefficients modulo plain_modulus
+    POSEIDON_ALLOCATE_GET_COEFF_ITER(temp, coeff_count, pool);
+    context_data.rns_tool()->decrypt_modt(plain_iter, temp, pool);
+
+    // 3. Resize plaintext back to coefficient form
+    plain.resize(coeff_count);
+    std::copy_n(temp, coeff_count, plain.data());
+
+    // 4. Mark as non-NTT form
+    plain.parms_id() = parms_id_zero;
+}
+
 void EvaluatorBase::transform_to_ntt_inplace(Ciphertext &ciph) const
 {
 #ifdef DEBUG

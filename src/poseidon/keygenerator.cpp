@@ -1,17 +1,14 @@
 #include "keygenerator.h"
+#include "decryptor.h"
+#include "encryptor.h"
 #include "basics/randomtostd.h"
 #include "basics/util/common.h"
 #include "basics/util/galois.h"
 #include "basics/util/ntt.h"
-#include "basics/util/polyarithsmallmod.h"
 #include "basics/util/polycore.h"
 #include "basics/util/rlwe.h"
-#include "basics/util/uintarithsmallmod.h"
-#include "basics/util/uintcore.h"
-#include "encryptor.h"
 #include "key/keyswitch.h"
 #include "poseidon/factory/poseidon_factory.h"
-#include <algorithm>
 #ifdef USING_HARDWARE
 #include "poseidon_hardware/hardware_drive/ckks_hardware_api.h"
 #endif
@@ -219,7 +216,7 @@ GaloisKeys KeyGenerator::create_galois_keys(const vector<int> &step, bool save_s
 }
 
 BootstrappingKey
-KeyGenerator::create_bootstrapping_key(const SecretKey &boot_secret_key) const
+KeyGenerator::create_bootstrapping_key(const SecretKey &boot_secret_key, const std::shared_ptr<EvaluatorBgvBase> bgv_eva) const
 {
     BootstrappingKey result;
 
@@ -253,6 +250,8 @@ KeyGenerator::create_bootstrapping_key(const SecretKey &boot_secret_key) const
     {
         plain[i] = boot_poly[i];
     }
+
+    bgv_eva->transform_from_ntt_inplace(plain, boot_poly.parms_id());
 
     encryptor.encrypt_symmetric(plain, result.recrypt_ekey());
 

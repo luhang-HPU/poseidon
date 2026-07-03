@@ -291,14 +291,13 @@ void EvaluatorBgvBase::thin_bootstrap(const Ciphertext &ct, Ciphertext &result,
     size_t poly_degree = result.poly_modulus_degree();
     mpz_class ptxt_modulus = pow_p(p, r);
 
-    // Multiply by zzParts[1]
+    // Multiply by zzParts[1] (plaintext is in coefficient form, multiply_plain_inplace
+    // will convert to NTT form internally)
     Plaintext p1 = coeffsToPlaintext(zzParts[1], ptxt_modulus);
-    p1.parms_id() = result.parms_id();
     multiply_plain_inplace(result, p1);
 
     // Add zzParts[0]
     Plaintext p0 = coeffsToPlaintext(zzParts[0], ptxt_modulus);
-    p0.parms_id() = result.parms_id();
     add_plain_inplace(result, p0);
 
     // 7. Extract digits
@@ -366,11 +365,9 @@ void EvaluatorBfvBase::thin_bootstrap(const Ciphertext &ct, Ciphertext &result,
     mpz_class ptxt_modulus = pow_p(p, r);
 
     Plaintext p1 = coeffsToPlaintext(zzParts[1], ptxt_modulus);
-    p1.parms_id() = result.parms_id();
     multiply_plain_inplace(result, p1);
 
     Plaintext p0 = coeffsToPlaintext(zzParts[0], ptxt_modulus);
-    p0.parms_id() = result.parms_id();
     add_plain_inplace(result, p0);
 
     // 7. Extract digits
