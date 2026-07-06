@@ -5,6 +5,9 @@
 
 namespace poseidon
 {
+class RecryptionData;
+struct RecryptionKey;
+
 class EvaluatorBgvBase : public EvaluatorBase
 {
     using Base = EvaluatorBase;
@@ -40,6 +43,8 @@ public:
                           Ciphertext &result) const override;
     virtual void relinearize(const Ciphertext &ciph1, Ciphertext &result,
                              const RelinKeys &relin_keys) const override;
+    virtual void switch_key(const Ciphertext &ciph, Ciphertext &result,
+                            const KSwitchKeys &switch_keys) const override;
     virtual void multiply_relin(const Ciphertext &ciph1, const Ciphertext &ciph2,
                                 Ciphertext &result, const RelinKeys &relin_keys) const override;
     virtual void rotate(const Ciphertext &ciph, Ciphertext &result, int step,
@@ -66,6 +71,17 @@ public:
     multiply_plain_inplace(Ciphertext &ciph, const Plaintext &plain,
                            MemoryPoolHandle pool = MemoryManager::GetPool()) const override;
     void multiply_plain_ntt(Ciphertext &ciph_ntt, const Plaintext &plain_ntt) const;
+
+    void bootstrap(const Ciphertext &ciph, Ciphertext &result,
+                   const RecryptionKey &recryption_key);
+    void bootstrap(const Ciphertext &ciph, Ciphertext &result,
+                   const RecryptionKey &recryption_key,
+                   const RecryptionData &recryption_data);
+    void recrypt(const Ciphertext &ciph, Ciphertext &result,
+                 const RecryptionKey &recryption_key);
+    void recrypt(const Ciphertext &ciph, Ciphertext &result,
+                 const RecryptionKey &recryption_key,
+                 const RecryptionData &recryption_data);
 
     // void multiply_plain_normal(Ciphertext &ciph, const Plaintext &plain,
     //                            MemoryPoolHandle pool) const;

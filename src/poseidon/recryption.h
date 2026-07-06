@@ -155,13 +155,7 @@ public:
               const RecryptionData &data);
 
     void recrypt(const Ciphertext &ciph, Ciphertext &result,
-                 const KSwitchKeys &recryption_key) const;
-    void recrypt(const Ciphertext &ciph, Ciphertext &result,
                  const RecryptionKey &recryption_key) const;
-    void thin_recrypt(const Ciphertext &ciph, Ciphertext &result,
-                      const KSwitchKeys &recryption_key) const;
-    void thin_recrypt(const Ciphertext &ciph, Ciphertext &result,
-                      const RecryptionKey &recryption_key) const;
 
     POSEIDON_NODISCARD RecryptionPreprocessResult
     preprocess(const Ciphertext &ciph, const KSwitchKeys &recryption_key) const;
@@ -188,7 +182,6 @@ private:
     void thin_digit_extract_after_compose(const Ciphertext &composed,
                                           const RelinKeys &relin_keys,
                                           Ciphertext &result) const;
-    [[noreturn]] void throw_public_bootstrap_not_implemented() const;
 
     const PoseidonContext &context_;
     EvaluatorBase &evaluator_;

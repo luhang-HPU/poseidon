@@ -7,9 +7,6 @@
 #include "poseidon/basics/util/uintarith.h"
 #include "poseidon/basics/util/uintcore.h"
 #include "poseidon/basics/memorymanager.h"
-#include "poseidon/key/keyswitch_bv.h"
-#include "poseidon/key/keyswitch_ghs.h"
-#include "poseidon/key/keyswitch_hybrid.h"
 #include "poseidon/keygenerator.h"
 #include "poseidon/encryptor.h"
 #include "poseidon/util/exception.h"
@@ -22,6 +19,7 @@
 #include <numeric>
 #include <sstream>
 #include <string>
+#include <tuple>
 
 namespace poseidon
 {
@@ -111,21 +109,6 @@ std::uint64_t checked_power_u64(std::uint64_t base, std::uint32_t exponent)
     return result;
 }
 
-std::unique_ptr<KSwitchBase> create_switcher(const PoseidonContext &context)
-{
-    switch (context.key_switch_variant())
-    {
-    case BV:
-        return std::make_unique<KSwitchBV>(context);
-    case GHS:
-        return std::make_unique<KSwitchGHS>(context);
-    case HYBRID:
-        return std::make_unique<KSwitchHybrid>(context);
-    default:
-        POSEIDON_THROW(invalid_argument_error, "recryption requires a key-switch variant");
-    }
-}
-
 void add_bfv_full_slot_galois_steps(std::vector<int> &steps, int full_step, int slots)
 {
     auto add_unique = [&steps](int step)
@@ -184,46 +167,6 @@ std::vector<std::size_t> batch_encoder_matrix_index_map(std::size_t slots)
     return index_map;
 }
 
-std::uint64_t positive_uint_mod(std::int64_t value, const Modulus &modulus)
-{
-    auto result = value % static_cast<std::int64_t>(modulus.value());
-    if (result < 0)
-    {
-        result += static_cast<std::int64_t>(modulus.value());
-    }
-    return static_cast<std::uint64_t>(result);
-}
-
-void add_bfv_diag(std::map<int, std::vector<std::uint64_t>> &diag_matrix, int diag,
-                  std::size_t slots, std::size_t row, std::uint64_t value,
-                  const Modulus &plain_modulus)
-{
-    diag &= static_cast<int>(slots - 1);
-    auto &values = diag_matrix[diag];
-    if (values.empty())
-    {
-        values.assign(slots, 0);
-    }
-    values[row] = util::add_uint_mod(values[row], value, plain_modulus);
-}
-
-void add_bfv_diag_entry(std::map<int, std::vector<std::uint64_t>> &diag_matrix,
-                        std::size_t out_slot, std::size_t in_slot, std::size_t slots,
-                        std::uint64_t value, const Modulus &plain_modulus)
-{
-    const auto half_slots = slots >> 1;
-    const auto out_half = out_slot >= half_slots;
-    const auto in_half = in_slot >= half_slots;
-    const auto out_index = out_slot & (half_slots - 1);
-    const auto in_index = in_slot & (half_slots - 1);
-    auto diag = static_cast<int>((in_index + half_slots - out_index) & (half_slots - 1));
-    if (out_half != in_half)
-    {
-        diag += static_cast<int>(half_slots);
-    }
-    add_bfv_diag(diag_matrix, diag, slots, out_slot, value, plain_modulus);
-}
-
 void add_bfv_rotated_matrix_entry(std::map<int, std::vector<std::uint64_t>> &rotated_rows,
                                   std::size_t row, std::size_t col, std::size_t slots,
                                   std::uint64_t value, const Modulus &plain_modulus)
@@ -269,7 +212,8 @@ void encode_bfv_rotated_rows_matrix(const BatchEncoder &encoder,
 
     add_matrix_rot_to_list(rotated_rows, rotate_index, n1, static_cast<int>(slots), false);
     add_matrix_rot_to_list(rotated_rows, plain_mat.rot_index, n1, static_cast<int>(slots), false);
-    auto [index_map, _, __] = bsgs_index(rotated_rows, static_cast<int>(slots), n1);
+    auto bsgs = bsgs_index(rotated_rows, static_cast<int>(slots), n1);
+    const auto &index_map = std::get<0>(bsgs);
     std::vector<std::uint64_t> values(slots);
     const auto slot_mask = static_cast<int>(slots - 1);
     for (const auto &j : index_map)
@@ -284,335 +228,9 @@ void encode_bfv_rotated_rows_matrix(const BatchEncoder &encoder,
     }
 }
 
-void encode_bfv_diag_matrix(const BatchEncoder &encoder,
-                            const std::map<int, std::vector<std::uint64_t>> &diag_matrix,
-                            std::uint32_t level, std::uint32_t log_bsgs_ratio,
-                            MatrixPlain &plain_mat, std::vector<int> &rotate_index)
-{
-    auto parms_id_map = encoder.context().crt_context()->parms_id_map();
-    auto parms_id_iter = parms_id_map.find(level);
-    if (parms_id_iter == parms_id_map.end())
-    {
-        POSEIDON_THROW(invalid_argument_error, "invalid recryption linear-map level");
-    }
-
-    const auto slots = encoder.slot_count();
-    const auto log_slots = util::get_power_of_two(slots);
-    const auto n1 =
-        find_best_bsgs_ratio(diag_matrix, static_cast<int>(slots),
-                             static_cast<int>(log_bsgs_ratio));
-    plain_mat.n1 = static_cast<std::uint32_t>(n1);
-    plain_mat.log_slots = static_cast<std::uint32_t>(log_slots);
-    plain_mat.level = level;
-    plain_mat.scale = 1.0;
-
-    add_matrix_rot_to_list(diag_matrix, rotate_index, n1, static_cast<int>(slots), false);
-    add_matrix_rot_to_list(diag_matrix, plain_mat.rot_index, n1, static_cast<int>(slots), false);
-    auto [index_map, _, __] = bsgs_index(diag_matrix, static_cast<int>(slots), n1);
-    std::vector<std::uint64_t> encoded_values(slots);
-    const auto slot_mask = static_cast<int>(slots - 1);
-    for (const auto &j : index_map)
-    {
-        const auto rot = j.first;
-        for (auto i : j.second)
-        {
-            const auto diag_index = (j.first + i) & slot_mask;
-            encoded_values = matrix_operations::rotate_slots_vec(diag_matrix.at(diag_index), -rot);
-            encoder.encode(encoded_values, plain_mat.plain_vec[diag_index]);
-        }
-    }
-}
-
-void build_batch_encoder_decode_diag(const PoseidonContext &context,
-                                     std::map<int, std::vector<std::uint64_t>> &diag_matrix)
-{
-    const auto &plain_modulus = context.parameters_literal()->plain_modulus();
-    const auto slots = context.parameters_literal()->degree();
-    const auto index_map = batch_encoder_matrix_index_map(slots);
-    const auto root = context.crt_context()->plain_ntt_tables()->get_root();
-
-    diag_matrix.clear();
-    for (std::size_t in_coeff = 0; in_coeff < slots; ++in_coeff)
-    {
-        std::uint64_t power = 1;
-        for (std::size_t out_slot = 0; out_slot < slots; ++out_slot)
-        {
-            const auto slot_index = index_map[out_slot];
-            const auto exponent = (in_coeff * ((2 * slot_index + 1) % (2 * slots))) %
-                                  (2 * slots);
-            const auto value = util::exponentiate_uint_mod(root, exponent, plain_modulus);
-            add_bfv_diag_entry(diag_matrix, out_slot, in_coeff, slots, value, plain_modulus);
-            (void)power;
-        }
-    }
-}
-
-void build_batch_encoder_encode_diag(const PoseidonContext &context,
-                                     std::map<int, std::vector<std::uint64_t>> &diag_matrix)
-{
-    const auto &plain_modulus = context.parameters_literal()->plain_modulus();
-    const auto slots = context.parameters_literal()->degree();
-    const auto index_map = batch_encoder_matrix_index_map(slots);
-    const auto root = context.crt_context()->plain_ntt_tables()->get_root();
-    std::uint64_t inv_slots = 0;
-    if (!util::try_invert_uint_mod(slots % plain_modulus.value(), plain_modulus, inv_slots))
-    {
-        POSEIDON_THROW(invalid_argument_error, "slot count is not invertible modulo plaintext");
-    }
-
-    diag_matrix.clear();
-    for (std::size_t in_slot = 0; in_slot < slots; ++in_slot)
-    {
-        const auto slot_index = index_map[in_slot];
-        const auto root_power = (2 * slot_index + 1) % (2 * slots);
-        for (std::size_t out_coeff = 0; out_coeff < slots; ++out_coeff)
-        {
-            const auto exponent =
-                ((2 * slots) - (out_coeff * root_power) % (2 * slots)) % (2 * slots);
-            auto value = util::exponentiate_uint_mod(root, exponent, plain_modulus);
-            value = util::multiply_uint_mod(value, inv_slots, plain_modulus);
-            add_bfv_diag_entry(diag_matrix, out_coeff, in_slot, slots, value, plain_modulus);
-        }
-    }
-}
-
-std::vector<std::uint64_t> get_roots_mod(std::size_t nth_root, const Modulus &plain_modulus)
-{
-    std::uint64_t root = 0;
-    if (!util::try_minimal_primitive_root(nth_root, plain_modulus, root))
-    {
-        POSEIDON_THROW(invalid_argument_error,
-                       "plaintext modulus does not contain required recryption roots");
-    }
-
-    std::vector<std::uint64_t> roots(nth_root + 1, 1);
-    for (std::size_t i = 1; i <= nth_root; ++i)
-    {
-        roots[i] = util::multiply_uint_mod(roots[i - 1], root, plain_modulus);
-    }
-    return roots;
-}
-
 std::uint64_t negate_mod(std::uint64_t value, const Modulus &plain_modulus)
 {
     return value == 0 ? 0 : plain_modulus.value() - value;
-}
-
-std::vector<std::uint64_t> add_vec_mod(const std::vector<std::uint64_t> &a,
-                                       const std::vector<std::uint64_t> &b,
-                                       const Modulus &plain_modulus)
-{
-    std::vector<std::uint64_t> result(a.size(), 0);
-    for (std::size_t i = 0; i < a.size(); ++i)
-    {
-        result[i] = util::add_uint_mod(a[i], b[i], plain_modulus);
-    }
-    return result;
-}
-
-std::vector<std::uint64_t> mul_vec_mod(const std::vector<std::uint64_t> &a,
-                                       const std::vector<std::uint64_t> &b,
-                                       const Modulus &plain_modulus)
-{
-    std::vector<std::uint64_t> result(a.size(), 0);
-    for (std::size_t i = 0; i < a.size(); ++i)
-    {
-        result[i] = util::multiply_uint_mod(a[i], b[i], plain_modulus);
-    }
-    return result;
-}
-
-std::vector<std::uint64_t> rotate_vec_mod(const std::vector<std::uint64_t> &values, int rot)
-{
-    std::vector<std::uint64_t> result(values.size(), 0);
-    const auto mask = static_cast<int>(values.size() - 1);
-    for (std::size_t i = 0; i < values.size(); ++i)
-    {
-        result[i] = values[(static_cast<int>(i) + rot) & mask];
-    }
-    return result;
-}
-
-void slice_bit_reverse_in_place_mod(std::vector<std::uint64_t> &slice, int n)
-{
-    int bit = 0;
-    int j = 0;
-    for (int i = 1; i < n; ++i)
-    {
-        bit = n >> 1;
-        while (j >= bit)
-        {
-            j -= bit;
-            bit >>= 1;
-        }
-        j += bit;
-        if (i < j)
-        {
-            std::swap(slice[static_cast<std::size_t>(i)],
-                      slice[static_cast<std::size_t>(j)]);
-        }
-    }
-}
-
-void add_to_diag_matrix_mod(std::map<int, std::vector<std::uint64_t>> &diag_matrix, int index,
-                            const std::vector<std::uint64_t> &values,
-                            const Modulus &plain_modulus)
-{
-    if (diag_matrix.find(index) == diag_matrix.end())
-    {
-        diag_matrix[index] = values;
-    }
-    else
-    {
-        diag_matrix[index] = add_vec_mod(diag_matrix[index], values, plain_modulus);
-    }
-}
-
-std::tuple<std::vector<std::vector<std::uint64_t>>,
-           std::vector<std::vector<std::uint64_t>>,
-           std::vector<std::vector<std::uint64_t>>>
-fft_plain_vec_mod(std::uint32_t log_n, std::uint32_t dslots,
-                  const std::vector<std::uint64_t> &roots, const std::vector<int> &pow5,
-                  const Modulus &plain_modulus, bool inverse)
-{
-    const int n = 1 << log_n;
-    std::vector<std::vector<std::uint64_t>> a(log_n, std::vector<std::uint64_t>(dslots, 0));
-    std::vector<std::vector<std::uint64_t>> b(log_n, std::vector<std::uint64_t>(dslots, 0));
-    std::vector<std::vector<std::uint64_t>> c(log_n, std::vector<std::uint64_t>(dslots, 0));
-    const int size = (2 * n == static_cast<int>(dslots)) ? 2 : 1;
-
-    int index = 0;
-    if (inverse)
-    {
-        for (int m = n; m >= 2; m >>= 1)
-        {
-            const int tt = m >> 1;
-            for (int i = 0; i < n; i += m)
-            {
-                const int gap = n / m;
-                const int mask = (m << 2) - 1;
-                for (int j = 0; j < (m >> 1); ++j)
-                {
-                    const int k = ((m << 2) - (pow5[j] & mask)) * gap;
-                    const int idx1 = i + j;
-                    const int idx2 = i + j + tt;
-                    for (int u = 0; u < size; ++u)
-                    {
-                        a[index][idx1 + u * n] = 1;
-                        a[index][idx2 + u * n] = negate_mod(roots[k], plain_modulus);
-                        b[index][idx1 + u * n] = 1;
-                        c[index][idx2 + u * n] = roots[k];
-                    }
-                }
-            }
-            ++index;
-        }
-    }
-    else
-    {
-        for (int m = 2; m <= n; m <<= 1)
-        {
-            const int tt = m >> 1;
-            for (int i = 0; i < n; i += m)
-            {
-                const int gap = n / m;
-                const int mask = (m << 2) - 1;
-                for (int j = 0; j < (m >> 1); ++j)
-                {
-                    const int k = (pow5[j] & mask) * gap;
-                    const int idx1 = i + j;
-                    const int idx2 = i + j + tt;
-                    for (int u = 0; u < size; ++u)
-                    {
-                        a[index][idx1 + u * n] = 1;
-                        a[index][idx2 + u * n] = negate_mod(roots[k], plain_modulus);
-                        b[index][idx1 + u * n] = roots[k];
-                        c[index][idx2 + u * n] = 1;
-                    }
-                }
-            }
-            ++index;
-        }
-    }
-
-    return {a, b, c};
-}
-
-std::map<int, std::vector<std::uint64_t>>
-gen_fft_diag_matrix_mod(std::uint32_t log_l, std::uint32_t fft_level,
-                        std::vector<std::uint64_t> a,
-                        std::vector<std::uint64_t> b,
-                        std::vector<std::uint64_t> c,
-                        const Modulus &plain_modulus, bool inverse, bool bit_reversed)
-{
-    int rot = 0;
-    if ((inverse && !bit_reversed) || (!inverse && bit_reversed))
-    {
-        rot = 1 << (fft_level - 1);
-    }
-    else
-    {
-        rot = 1 << (log_l - fft_level);
-    }
-
-    if (bit_reversed)
-    {
-        slice_bit_reverse_in_place_mod(a, 1 << log_l);
-        slice_bit_reverse_in_place_mod(b, 1 << log_l);
-        slice_bit_reverse_in_place_mod(c, 1 << log_l);
-    }
-
-    std::map<int, std::vector<std::uint64_t>> result;
-    add_to_diag_matrix_mod(result, 0, a, plain_modulus);
-    add_to_diag_matrix_mod(result, rot, b, plain_modulus);
-    add_to_diag_matrix_mod(result, (1 << log_l) - rot, c, plain_modulus);
-    return result;
-}
-
-void build_bfv_fft_group(const PoseidonContext &context, const BatchEncoder &encoder,
-                         std::uint32_t level, bool inverse, bool bit_reversed,
-                         std::uint32_t log_bsgs_ratio, LinearMatrixGroup &group)
-{
-    const auto log_slots = context.parameters_literal()->log_slots();
-    const auto slots = static_cast<std::size_t>(1) << log_slots;
-    const auto &plain_modulus = context.parameters_literal()->plain_modulus();
-    auto roots = get_roots_mod(slots << 2, plain_modulus);
-    std::vector<int> pow5((slots << 1) + 1, 1);
-    for (std::size_t i = 1; i < pow5.size(); ++i)
-    {
-        pow5[i] = (pow5[i - 1] * 5) & static_cast<int>((slots << 2) - 1);
-    }
-
-    auto [a, b, c] = fft_plain_vec_mod(log_slots, static_cast<std::uint32_t>(slots), roots,
-                                       pow5, plain_modulus, inverse);
-    group.data().clear();
-    group.rot_index().clear();
-    group.data().resize(log_slots);
-    group.set_step(0);
-    for (std::uint32_t i = 0; i < log_slots; ++i)
-    {
-        const auto fft_level = inverse ? (log_slots - i) : (i + 1);
-        auto diag = gen_fft_diag_matrix_mod(log_slots, fft_level, a[i], b[i], c[i],
-                                            plain_modulus, inverse, bit_reversed);
-        encode_bfv_diag_matrix(encoder, diag, level, log_bsgs_ratio, group.data()[i],
-                               group.rot_index());
-    }
-
-    if (inverse)
-    {
-        std::uint64_t inv_slots = 0;
-        if (!util::try_invert_uint_mod(slots % plain_modulus.value(), plain_modulus, inv_slots))
-        {
-            POSEIDON_THROW(invalid_argument_error,
-                           "slot count is not invertible modulo plaintext");
-        }
-        std::map<int, std::vector<std::uint64_t>> scale_diag;
-        scale_diag[0] = std::vector<std::uint64_t>(slots, inv_slots);
-        MatrixPlain scale_matrix;
-        encode_bfv_diag_matrix(encoder, scale_diag, level, log_bsgs_ratio, scale_matrix,
-                               group.rot_index());
-        group.data().push_back(scale_matrix);
-    }
 }
 
 std::vector<std::uint64_t> ntt_root_powers(std::size_t slots, const Modulus &plain_modulus,
@@ -650,44 +268,6 @@ std::vector<std::uint64_t> ntt_root_powers(std::size_t slots, const Modulus &pla
     }
     powers[0] = 1;
     return powers;
-}
-
-std::map<int, std::vector<std::uint64_t>>
-build_dwt_layer_diag(std::size_t slots, std::size_t gap, std::size_t m,
-                     std::uint64_t &root_index,
-                     const std::vector<std::uint64_t> &roots,
-                     const Modulus &plain_modulus, bool inverse)
-{
-    std::map<int, std::vector<std::uint64_t>> diag;
-
-    std::size_t offset = 0;
-    for (std::size_t i = 0; i < m; ++i)
-    {
-        const auto r = roots[++root_index];
-        for (std::size_t j = 0; j < gap; ++j)
-        {
-            const auto x = offset + j;
-            const auto y = x + gap;
-            if (!inverse)
-            {
-                add_bfv_diag_entry(diag, x, x, slots, 1, plain_modulus);
-                add_bfv_diag_entry(diag, x, y, slots, r, plain_modulus);
-                add_bfv_diag_entry(diag, y, x, slots, 1, plain_modulus);
-                add_bfv_diag_entry(diag, y, y, slots, negate_mod(r, plain_modulus),
-                                   plain_modulus);
-            }
-            else
-            {
-                add_bfv_diag_entry(diag, x, x, slots, 1, plain_modulus);
-                add_bfv_diag_entry(diag, x, y, slots, 1, plain_modulus);
-                add_bfv_diag_entry(diag, y, x, slots, r, plain_modulus);
-                add_bfv_diag_entry(diag, y, y, slots, negate_mod(r, plain_modulus),
-                                   plain_modulus);
-            }
-        }
-        offset += gap << 1;
-    }
-    return diag;
 }
 
 std::map<int, std::vector<std::uint64_t>>
@@ -729,18 +309,6 @@ build_dwt_layer_rotated_rows(std::size_t slots, std::size_t gap, std::size_t m,
 }
 
 std::map<int, std::vector<std::uint64_t>>
-build_permutation_diag(std::size_t slots, const std::vector<std::size_t> &source_for_row,
-                       const Modulus &plain_modulus)
-{
-    std::map<int, std::vector<std::uint64_t>> diag;
-    for (std::size_t row = 0; row < slots; ++row)
-    {
-        add_bfv_diag_entry(diag, row, source_for_row[row], slots, 1, plain_modulus);
-    }
-    return diag;
-}
-
-std::map<int, std::vector<std::uint64_t>>
 build_permutation_rotated_rows(std::size_t slots,
                                const std::vector<std::size_t> &source_for_row,
                                const Modulus &plain_modulus)
@@ -751,16 +319,6 @@ build_permutation_rotated_rows(std::size_t slots,
         add_bfv_rotated_matrix_entry(rows, row, source_for_row[row], slots, 1, plain_modulus);
     }
     return rows;
-}
-
-void append_diag_matrix(const BatchEncoder &encoder,
-                        const std::map<int, std::vector<std::uint64_t>> &diag,
-                        std::uint32_t level, std::uint32_t log_bsgs_ratio,
-                        LinearMatrixGroup &group)
-{
-    MatrixPlain matrix;
-    encode_bfv_diag_matrix(encoder, diag, level, log_bsgs_ratio, matrix, group.rot_index());
-    group.data().push_back(matrix);
 }
 
 void append_rotated_rows_matrix(const BatchEncoder &encoder,
@@ -1138,11 +696,10 @@ std::uint32_t bgv_effective_plain_exponent(const PoseidonContext &context,
     return bgv_effective_plain_exponent(context, ciph, plaintext_modulus_value(context));
 }
 
-std::uint32_t bgv_effective_plain_exponent(const PoseidonContext &context,
+std::uint32_t bgv_effective_plain_exponent(const PoseidonContext &,
                                            const Ciphertext &ciph,
                                            std::uint64_t plain_base)
 {
-    (void)context;
     const auto p = plain_base;
     auto p_power = std::uint64_t{1};
     for (std::uint32_t exponent = 0; exponent < 64; ++exponent)
@@ -1231,7 +788,6 @@ void bgv_multiply_by_plain_base(const PoseidonContext &context, EvaluatorBase &e
                                 Ciphertext &ciph, std::uint64_t plain_base,
                                 std::uint32_t exponent)
 {
-    (void)evaluator;
     const auto scheme = context.parameters_literal()->scheme();
     if (scheme != BFV && scheme != BGV)
     {
@@ -1249,25 +805,9 @@ void bgv_multiply_by_plain_base(const PoseidonContext &context, EvaluatorBase &e
 
     const auto p = plain_base;
     auto multiplier = checked_power_u64(p, exponent);
-    auto context_data = context.crt_context()->get_context_data(ciph.parms_id());
-    if (!context_data)
-    {
-        POSEIDON_THROW(invalid_argument_error, "ciphertext has invalid parms_id");
-    }
-
-    const auto &coeff_modulus = context_data->coeff_modulus();
-    const auto coeff_count = ciph.poly_modulus_degree();
-    const auto coeff_modulus_size = ciph.coeff_modulus_size();
-    for (std::size_t part = 0; part < ciph.size(); ++part)
-    {
-        RNSIter part_iter(ciph.data(part), coeff_count);
-        for (std::size_t mod_index = 0; mod_index < coeff_modulus_size; ++mod_index)
-        {
-            const auto scalar = multiplier % coeff_modulus[mod_index].value();
-            util::multiply_poly_scalar_coeffmod(part_iter[mod_index], coeff_count, scalar,
-                                                coeff_modulus[mod_index], part_iter[mod_index]);
-        }
-    }
+    Plaintext scalar_plain(1);
+    scalar_plain.data()[0] = multiplier % context.parameters_literal()->plain_modulus().value();
+    evaluator.multiply_plain(ciph, scalar_plain, ciph);
 
     for (std::uint32_t i = 0; i < exponent; ++i)
     {
@@ -1340,16 +880,6 @@ void bgv_extract_digits_thin_basic(const PoseidonContext &context, EvaluatorBase
 }
 
 void Recryptor::recrypt(const Ciphertext &ciph, Ciphertext &result,
-                        const KSwitchKeys &recryption_key) const
-{
-    (void)result;
-    auto preprocessed = preprocess(ciph, recryption_key);
-    (void)preprocessed;
-    POSEIDON_THROW(invalid_argument_error,
-                   "public BGV recryption requires RecryptionKey with encrypted bootstrap secret");
-}
-
-void Recryptor::recrypt(const Ciphertext &ciph, Ciphertext &result,
                         const RecryptionKey &recryption_key) const
 {
     if (!recryption_key.has_encrypted_bootstrap_secret())
@@ -1404,27 +934,6 @@ void Recryptor::recrypt(const Ciphertext &ciph, Ciphertext &result,
     result = std::move(digit_extracted);
 }
 
-void Recryptor::thin_recrypt(const Ciphertext &ciph, Ciphertext &result,
-                             const KSwitchKeys &recryption_key) const
-{
-    (void)result;
-    auto preprocessed = preprocess(ciph, recryption_key);
-    (void)preprocessed;
-    throw_public_bootstrap_not_implemented();
-}
-
-void Recryptor::thin_recrypt(const Ciphertext &ciph, Ciphertext &result,
-                             const RecryptionKey &recryption_key) const
-{
-    if (!recryption_key.has_encrypted_bootstrap_secret())
-    {
-        POSEIDON_THROW(invalid_argument_error,
-                       "recryption key must contain encrypted_bootstrap_secret");
-    }
-
-    recrypt(ciph, result, recryption_key);
-}
-
 RecryptionPreprocessResult
 Recryptor::preprocess(const Ciphertext &ciph, const KSwitchKeys &recryption_key) const
 {
@@ -1449,8 +958,7 @@ Recryptor::preprocess(const Ciphertext &ciph, const KSwitchKeys &recryption_key)
         evaluator_.drop_modulus(working, working, target->second);
     }
 
-    auto switcher = create_switcher(context_);
-    switcher->switch_key(working, recryption_key, working);
+    evaluator_.switch_key(working, working, recryption_key);
 
     if (context_.parameters_literal()->scheme() == BGV && working.is_ntt_form())
     {
@@ -1627,8 +1135,6 @@ void Recryptor::validate_context() const
     {
         POSEIDON_THROW(invalid_argument_error, "recryption.cpp is for BFV/BGV bootstrapping");
     }
-
-    (void)evaluator_;
 }
 
 void Recryptor::ensure_ciphertext_can_bootstrap(const Ciphertext &ciph) const
@@ -1946,24 +1452,4 @@ void Recryptor::bgv_modulus_raise_to_top(const Ciphertext &ciph, Ciphertext &res
     }
 }
 
-void Recryptor::throw_public_bootstrap_not_implemented() const
-{
-    const std::string message =
-        "BGV public recryption stopped after the HElib-style preprocess copied from HElib "
-        "recryption.cpp "
-        "(level reduction, bootstrapping key-switch, rawModSwitch to q=p^e+1, "
-        "makeDivisible, and division by p^e'). Still missing for a full public "
-        "bootstrap: (1) a Poseidon context/plaintext-space path for the "
-        "bootstrapping ciphertext plaintext modulus p^(e-e'+r), not the normal "
-        "BGV batching modulus; Poseidon's default BGV plain_modulus is a batching "
-        "prime such as 786433, while HElib bootstrapping uses a small base p and "
-        "per-ciphertext p^r plaintext spaces; (2) full encrypted p-adic digit "
-        "extraction equivalent to HElib extractDigitsPacked/extractDigitsThin "
-        "(only the basic already-unpacked p=2/p=3 thin primitive is present); "
-        "(3) generated BGV EvalMap/ThinEvalMap matrices between coefficient/"
-        "powerful representation and plaintext slots; (4) packed slot unpack/"
-        "repack constants for nontrivial extension degree. CKKS coeff_to_slot/"
-        "slot_to_coeff is not a substitute.";
-    POSEIDON_THROW(poseidon_logic_error, message);
-}
 }  // namespace poseidon

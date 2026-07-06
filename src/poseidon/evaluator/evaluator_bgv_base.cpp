@@ -1,6 +1,8 @@
 #include "evaluator_bgv_base.h"
 #include "poseidon/basics/util/scalingvariant.h"
+#include "poseidon/recryption.h"
 #include <numeric>
+#include <tuple>
 
 namespace poseidon
 {
@@ -19,6 +21,36 @@ EvaluatorBgvBase::EvaluatorBgvBase(const PoseidonContext &context) : Base(contex
     {
         kswitch_ = make_shared<KSwitchHybrid>(context);
     }
+}
+
+void EvaluatorBgvBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
+                                 const RecryptionKey &recryption_key)
+{
+    recrypt(ciph, result, recryption_key);
+}
+
+void EvaluatorBgvBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
+                                 const RecryptionKey &recryption_key,
+                                 const RecryptionData &recryption_data)
+{
+    recrypt(ciph, result, recryption_key, recryption_data);
+}
+
+void EvaluatorBgvBase::recrypt(const Ciphertext &ciph, Ciphertext &result,
+                               const RecryptionKey &recryption_key)
+{
+    RecryptionData recryption_data(context_);
+    recryption_data.set_plain_base(2, 1);
+    recryption_data.set_auxiliary_exponents(2, 1);
+    recrypt(ciph, result, recryption_key, recryption_data);
+}
+
+void EvaluatorBgvBase::recrypt(const Ciphertext &ciph, Ciphertext &result,
+                               const RecryptionKey &recryption_key,
+                               const RecryptionData &recryption_data)
+{
+    Recryptor recryptor(context_, *this, recryption_data);
+    recryptor.recrypt(ciph, result, recryption_key);
 }
 
 void EvaluatorBgvBase::rotate(const Ciphertext &ciph, Ciphertext &result, int step,
@@ -95,6 +127,12 @@ void EvaluatorBgvBase::multiply_relin(const Ciphertext &ciph1, const Ciphertext 
 {
     multiply(ciph1, ciph2, result);
     relinearize(result, result, relin_keys);
+}
+
+void EvaluatorBgvBase::switch_key(const Ciphertext &ciph, Ciphertext &result,
+                                  const KSwitchKeys &switch_keys) const
+{
+    kswitch_->switch_key(ciph, switch_keys, result);
 }
 
 void EvaluatorBgvBase::ntt_fwd(const Plaintext &plain, Plaintext &result, parms_id_type id) const
@@ -863,8 +901,9 @@ void EvaluatorBgvBase::multiply_by_diag_matrix_bsgs(const Ciphertext &ciph,
     auto poly_modulus_degree = ciph.poly_modulus_degree();
     auto poly_modulus_degree_div2 = poly_modulus_degree >> 1;
     auto slot_mask = (1 << plain_mat.log_slots) - 1;
-    auto [index, _, rot_n2] =
-        bsgs_index(plain_mat.plain_vec, 1 << plain_mat.log_slots, plain_mat.n1);
+    auto bsgs = bsgs_index(plain_mat.plain_vec, 1 << plain_mat.log_slots, plain_mat.n1);
+    const auto &index = std::get<0>(bsgs);
+    const auto &rot_n2 = std::get<2>(bsgs);
     map<int, Ciphertext> rot_ciph;
     Ciphertext ciph_inner_sum, ciph_inner, ciph_inner_tmp;
     auto rotate_full_slot = [&](const Ciphertext &src, Ciphertext &dst, int step)
@@ -911,7 +950,7 @@ void EvaluatorBgvBase::multiply_by_diag_matrix_bsgs(const Ciphertext &ciph,
     for (const auto &j : index)
     {
         int cnt1 = 0;
-        for (auto i : index[j.first])
+        for (auto i : index.at(j.first))
         {
             const Ciphertext &source = (i == 0) ? ciph : rot_ciph[i];
             const auto &plain = plain_at(i + j.first);
