@@ -120,7 +120,30 @@ KSwitchKeys KSwitchGenBase::create_switch_key(const SecretKey &prev_secret_key,
 KSwitchKeys KSwitchGenBase::create_switch_key(const SecretKey &prev_key,
                                               const PublicKey &new_key) const
 {
-    return {};
+    if (!prev_key.data().is_ntt_form())
+    {
+        POSEIDON_THROW(invalid_argument_error, "prev_key is not ntt form!");
+    }
+
+    if (!new_key.data().is_valid())
+    {
+        POSEIDON_THROW(invalid_argument_error, "new_key is empty!");
+    }
+
+    auto global_context_data = context_.crt_context();
+    auto key_context_data = global_context_data->key_context_data();
+    auto prev_poly_degree = prev_key.poly().poly_degree();
+    auto degree = key_context_data->parms().degree();
+    if (prev_poly_degree != degree)
+    {
+        POSEIDON_THROW(invalid_argument_error, "Different degree switch key is not supported!");
+    }
+
+    KSwitchKeys destination;
+    generate_kswitch_keys(new_key, prev_key.poly().const_poly_iter(), 1, destination);
+    destination.parms_id() = key_context_data->parms().parms_id();
+
+    return destination;
 }
 
 // encrypt power new_keys with prev_secret_key
@@ -341,9 +364,30 @@ void KSwitchGenBase::generate_kswitch_keys(const SecretKey &prev_secret_key, Con
                      { this->generate_one_kswitch_key(prev_secret_key, get<0>(I), get<1>(I)); });
 }
 
+void KSwitchGenBase::generate_kswitch_keys(const PublicKey &new_public_key,
+                                           ConstPolyIter keys_to_switch, size_t num_keys,
+                                           KSwitchKeys &destination) const
+{
+    size_t coeff_count = context_.crt_context()->key_context_data()->parms().degree();
+    auto &key_context_data = *context_.crt_context()->key_context_data();
+    size_t coeff_modulus_size = key_context_data.coeff_modulus().size();
+
+    if (!product_fits_in(coeff_count, coeff_modulus_size, num_keys))
+    {
+        POSEIDON_THROW_LOGIC_ERROR("invalid parameters");
+    }
+
+    destination.data().resize(num_keys);
+    POSEIDON_ITERATE(iter(keys_to_switch, destination.data()), num_keys,
+                     [&](auto I)
+                     { this->generate_one_kswitch_key(new_public_key, get<0>(I), get<1>(I)); });
+}
+
 void KSwitchBase::switch_key(const Ciphertext &encrypted, const KSwitchKeys &switch_keys,
                              Ciphertext &destination) const
 {
+    destination = encrypted;
+    switch_key_internal(destination, switch_keys, pool_);
 }
 
 void KSwitchBase::rotate(const Ciphertext &encrypted, Ciphertext &destination, int steps,

@@ -43,6 +43,42 @@ void KSwitchGenHybrid::generate_one_kswitch_key(const SecretKey &prev_secret_key
     }
 }
 
+void KSwitchGenHybrid::generate_one_kswitch_key(const PublicKey &new_public_key,
+                                                ConstRNSIter key_to_switch,
+                                                vector<PublicKey> &destination) const
+{
+    auto global_context_data = context_.crt_context();
+    size_t coeff_count = global_context_data->key_context_data()->parms().degree();
+    auto &key_context_data = *global_context_data->key_context_data();
+    auto key_rns_qp = key_context_data.qp_rns_tool();
+    auto base_q = key_rns_qp->base_q();
+    auto base_q_size = key_rns_qp->base_q()->size();
+    auto base_p_size = key_rns_qp->base_p()->size();
+    auto p_mod_qi = key_context_data.qp_rns_tool()->p_mod_qi();
+    auto decomp_count = ceil(static_cast<double>(base_q_size) / static_cast<double>(base_p_size));
+
+    destination.resize(decomp_count);
+    POSEIDON_ALLOCATE_GET_COEFF_ITER(temp, coeff_count, pool_);
+    for (size_t i = 0; i < decomp_count; ++i)
+    {
+        auto &ct = destination[i];
+        encrypt_zero_asymmetric(new_public_key, context_, key_context_data.parms().parms_id(),
+                                true, ct.data());
+        for (size_t k = 0; k < base_p_size; ++k)
+        {
+            auto idx = i * base_p_size + k;
+            if (idx >= base_q_size)
+            {
+                break;
+            }
+            multiply_poly_scalar_coeffmod(key_to_switch[idx], coeff_count, p_mod_qi[idx].operand,
+                                          base_q->base()[idx], temp);
+            add_poly_coeffmod(ct[0][idx].begin(), temp, coeff_count, base_q->base()[idx],
+                              ct[0][idx].begin());
+        }
+    }
+}
+
 void KSwitchHybrid::apply_galois_inplace(Ciphertext &encrypted, uint32_t galois_elt,
                                          const GaloisKeys &galois_keys, MemoryPoolHandle pool) const
 {
@@ -186,6 +222,42 @@ void KSwitchHybrid::relinearize_internal(Ciphertext &encrypted, const RelinKeys 
                                  RelinKeys::get_index(encrypted_size - 1 - i), pool);
     }
     encrypted.resize(context_, context_data_ptr->parms().parms_id(), destination_size);
+}
+
+void KSwitchHybrid::switch_key_internal(Ciphertext &encrypted, const KSwitchKeys &switch_keys,
+                                        MemoryPoolHandle pool) const
+{
+    auto context_data_ptr = context_.crt_context()->get_context_data(encrypted.parms_id());
+    if (!context_data_ptr)
+    {
+        POSEIDON_THROW(invalid_argument_error, "encrypted is not valid for encryption parameters");
+    }
+    if (encrypted.size() != 2)
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "switch_key currently supports only size-2 ciphertexts");
+    }
+    if (switch_keys.parms_id() != context_.crt_context()->key_parms_id())
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "switch_keys is not valid for encryption parameters");
+    }
+    if (switch_keys.data().empty() || switch_keys.data()[0].empty())
+    {
+        POSEIDON_THROW(invalid_argument_error, "switch key is empty");
+    }
+
+    auto &context_data = *context_data_ptr;
+    auto &parms = context_data.parms();
+    auto &coeff_modulus = context_data.coeff_modulus();
+    size_t coeff_count = parms.degree();
+    size_t coeff_modulus_size = coeff_modulus.size();
+
+    RNSPoly target(context_, encrypted.parms_id());
+    target.copy(encrypted[1]);
+    set_zero_poly(coeff_count, coeff_modulus_size, encrypted.data(1));
+
+    switch_key_inplace(encrypted, target, switch_keys, 0, std::move(pool));
 }
 
 void KSwitchHybrid::switch_key_inplace(Ciphertext &encrypted, RNSPoly &poly,
