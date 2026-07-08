@@ -14,8 +14,8 @@ int main()
     std::cout << "POSEIDON SOFTWARE VERSION:" << POSEIDON_VERSION << std::endl;
     std::cout << "" << std::endl;
 
-    ParametersLiteralDefault ckks_param_literal(CKKS, 4096, poseidon::sec_level_type::tc128);
-    PoseidonFactory::get_instance()->set_device_type(DEVICE_HARDWARE);
+    ParametersLiteralDefault ckks_param_literal(CKKS, 32768, poseidon::sec_level_type::tc128);
+    PoseidonFactory::get_instance()->set_device_type(DEVICE_SOFTWARE);
     auto context = PoseidonFactory::get_instance()->create_poseidon_context(ckks_param_literal);
     auto ckks_eva = PoseidonFactory::get_instance()->create_ckks_evaluator(context);
 
@@ -98,19 +98,20 @@ int main()
     util::GetPrecisionStats(msg_expect, msg_res);
 
     // MULTIPLY
-    print_example_banner("Example: MULTIPLY / MULTIPLY in CKKS");
+    print_example_banner("Example: MULTIPLY_RELIN / MULTIPLY_RELIN in CKKS");
     timestacs.start();
     ckks_eva->multiply(ct1, ct2, ct_res);
-    timestacs.end();
-    timestacs.print_time("MULTIPLY TIME: ");
+    // timestacs.end();
+    // timestacs.print_time("MULTIPLY TIME: ");
     
 
     // RELINEARIZE
-    print_example_banner("Example: RELINEARIZE / RELINEARIZE in CKKS");
-    timestacs.start();
+    // print_example_banner("Example: RELINEARIZE / RELINEARIZE in CKKS");
+    // timestacs.start();
     ckks_eva->relinearize(ct_res, ct_res, relin_keys);
     timestacs.end();
-    timestacs.print_time("RELINEARIZE TIME: ");
+    timestacs.print_time("MULTIPLY_RELIN TIME: ");
+    // timestacs.print_time("RELINEARIZE TIME: ");
     ckks_eva->rescale(ct_res, ct_res);
     decryptor.decrypt(ct_res, plt_res);
     encoder.decode(plt_res, msg_res);

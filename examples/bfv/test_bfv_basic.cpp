@@ -13,7 +13,7 @@ int main()
     cout << BANNER << std::endl;
     cout << "POSEIDON SOFTWARE VERSION:" << POSEIDON_VERSION << std::endl;
     cout << "" << std::endl;
-    size_t poly_modulus_degree = 4096;
+    size_t poly_modulus_degree = 32768;
     PoseidonFactory::get_instance()->set_device_type(DEVICE_HARDWARE);
     ParametersLiteralDefault bfv_param_literal(BFV, poly_modulus_degree, poseidon::sec_level_type::tc128);
     PoseidonContext context =
@@ -73,11 +73,11 @@ int main()
 
     // MULTIPLY
     {
-        print_example_banner("Example: MULTIPLY / MULTIPLY in bfv");
+        print_example_banner("Example: MULTIPLY_RELIN / MULTIPLY_RELIN in bfv");
         timestacs.start();
         bfv_eva->multiply(ct1, ct2, ct_res);
-        timestacs.end();
-        timestacs.print_time("TIME : ");
+        // timestacs.end();
+        // timestacs.print_time("TIME : ");
         dec.decrypt(ct_res, plt_res);
         encoder.decode(plt_res, msg_res);
 
@@ -86,20 +86,20 @@ int main()
             msg_expect[i] = msg1[i] * msg2[i];
             msg_expect[i] %= plain_mod;
         }
-        for (auto i = 0; i < msg_expect.size(); i++)
-        {
-            printf("source_data[%d] : %ld\n", i, msg_expect[i]);
-            printf("result_data[%d] : %ld\n", i, msg_res[i]);
-        }
+        // for (auto i = 0; i < msg_expect.size(); i++)
+        // {
+        //     printf("source_data[%d] : %ld\n", i, msg_expect[i]);
+        //     printf("result_data[%d] : %ld\n", i, msg_res[i]);
+        // }
     }
 
     //Relinearize
     {
-        print_example_banner("Example: RELIN / RELIN in bfv");
-        timestacs.start();
+        // print_example_banner("Example: RELIN / RELIN in bfv");
+        // timestacs.start();
         bfv_eva->relinearize(ct_res, ct_res, relin_keys);
         timestacs.end();
-        timestacs.print_time("TIME : ");
+        timestacs.print_time("MULTIPLY_RELIN TIME: ");
         dec.decrypt(ct_res, plt_res);
         encoder.decode(plt_res, msg_res);
 
