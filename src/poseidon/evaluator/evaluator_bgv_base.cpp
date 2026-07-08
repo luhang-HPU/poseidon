@@ -1,5 +1,8 @@
 #include "evaluator_bgv_base.h"
 #include "poseidon/basics/util/scalingvariant.h"
+#include "poseidon/recryption.h"
+#include <numeric>
+#include <tuple>
 
 namespace poseidon
 {
@@ -18,6 +21,36 @@ EvaluatorBgvBase::EvaluatorBgvBase(const PoseidonContext &context) : Base(contex
     {
         kswitch_ = make_shared<KSwitchHybrid>(context);
     }
+}
+
+void EvaluatorBgvBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
+                                 const RecryptionKey &recryption_key)
+{
+    recrypt(ciph, result, recryption_key);
+}
+
+void EvaluatorBgvBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
+                                 const RecryptionKey &recryption_key,
+                                 const RecryptionData &recryption_data)
+{
+    recrypt(ciph, result, recryption_key, recryption_data);
+}
+
+void EvaluatorBgvBase::recrypt(const Ciphertext &ciph, Ciphertext &result,
+                               const RecryptionKey &recryption_key)
+{
+    RecryptionData recryption_data(context_);
+    recryption_data.set_plain_base(2, 1);
+    recryption_data.set_auxiliary_exponents(2, 1);
+    recrypt(ciph, result, recryption_key, recryption_data);
+}
+
+void EvaluatorBgvBase::recrypt(const Ciphertext &ciph, Ciphertext &result,
+                               const RecryptionKey &recryption_key,
+                               const RecryptionData &recryption_data)
+{
+    Recryptor recryptor(context_, *this, recryption_data);
+    recryptor.recrypt(ciph, result, recryption_key);
 }
 
 void EvaluatorBgvBase::rotate(const Ciphertext &ciph, Ciphertext &result, int step,
@@ -97,6 +130,12 @@ void EvaluatorBgvBase::multiply_relin(const Ciphertext &ciph1, const Ciphertext 
     relinearize(result, result, relin_keys);
 }
 
+void EvaluatorBgvBase::switch_key(const Ciphertext &ciph, Ciphertext &result,
+                                  const KSwitchKeys &switch_keys) const
+{
+    kswitch_->switch_key(ciph, switch_keys, result);
+}
+
 void EvaluatorBgvBase::ntt_fwd(const Plaintext &plain, Plaintext &result, parms_id_type id) const
 {
     if (id == parms_id_zero && plain.parms_id() != parms_id_zero)
@@ -161,6 +200,8 @@ void EvaluatorBgvBase::rescale(Ciphertext &ciph) const
     result.is_ntt_form() = ciphertext.is_ntt_form();
     result.correction_factor() = multiply_uint_mod(
         ciphertext.correction_factor(), rns_tool->inv_q_last_mod_t(), next_parms.plain_modulus());
+    result.bgv_plaintext_space() = ciphertext.bgv_plaintext_space();
+    result.bgv_int_factor() = ciphertext.bgv_int_factor();
 }
 
 void EvaluatorBgvBase::apply_galois(const Ciphertext &ciph, Ciphertext &destination,
@@ -229,8 +270,10 @@ void EvaluatorBgvBase::sub(const Ciphertext &ciph1, const Ciphertext &ciph2,
     }
 
     // Prepare result
-    result.resize(context_, ciph1.parms_id(), ciph1.size());
+    result.resize(context_, ciph1.parms_id(), max_count);
     result.is_ntt_form() = ciph1.is_ntt_form();
+    result.bgv_plaintext_space() = ciph1.bgv_plaintext_space();
+    result.bgv_int_factor() = ciph1.bgv_int_factor();
     for (auto i = 0; i < min_count; i++)
     {
         ciph1[i].sub(ciph2[i], result[i]);
@@ -241,6 +284,14 @@ void EvaluatorBgvBase::sub(const Ciphertext &ciph1, const Ciphertext &ciph2,
         for (auto i = min_count; i < max_count; ++i)
         {
             result[i].copy(ciph2[i]);
+            result[i].negate();
+        }
+    }
+    else if (ciph2_size < ciph1_size)
+    {
+        for (auto i = min_count; i < max_count; ++i)
+        {
+            result[i].copy(ciph1[i]);
         }
     }
 }
@@ -567,6 +618,12 @@ void EvaluatorBgvBase::bgv_multiply(Ciphertext &ciph1, const Ciphertext &ciph2,
     // Set the correction factor
     ciph1.correction_factor() = multiply_uint_mod(ciph1.correction_factor(),
                                                   ciph2.correction_factor(), parms.plain_modulus());
+    if (ciph1.bgv_plaintext_space() != 0 && ciph2.bgv_plaintext_space() != 0)
+    {
+        ciph1.bgv_plaintext_space() =
+            std::gcd(ciph1.bgv_plaintext_space(), ciph2.bgv_plaintext_space());
+        ciph1.bgv_int_factor() %= ciph1.bgv_plaintext_space();
+    }
 }
 
 void EvaluatorBgvBase::multiply_inplace(Ciphertext &ciph1, const Ciphertext &ciph2,
@@ -804,6 +861,94 @@ void EvaluatorBgvBase::multiply_by_diag_matrix_bsgs(const Ciphertext &ciph,
                                                     Ciphertext &result,
                                                     const GaloisKeys &rot_key) const
 {
+    auto poly_modulus_degree = ciph.poly_modulus_degree();
+    auto poly_modulus_degree_div2 = poly_modulus_degree >> 1;
+    auto slot_mask = (1 << plain_mat.log_slots) - 1;
+    auto bsgs = bsgs_index(plain_mat.plain_vec, 1 << plain_mat.log_slots, plain_mat.n1);
+    const auto &index = std::get<0>(bsgs);
+    const auto &rot_n2 = std::get<2>(bsgs);
+    map<int, Ciphertext> rot_ciph;
+    Ciphertext ciph_inner_sum, ciph_inner, ciph_inner_tmp;
+    auto rotate_full_slot = [&](const Ciphertext &src, Ciphertext &dst, int step)
+    {
+        if (step == 0)
+        {
+            dst = src;
+        }
+        else if (step == static_cast<int>(poly_modulus_degree_div2))
+        {
+            rotate_col(src, dst, rot_key);
+        }
+        else if (step > static_cast<int>(poly_modulus_degree_div2))
+        {
+            Ciphertext tmp;
+            rotate_col(src, tmp, rot_key);
+            rotate_row(tmp, dst, step - static_cast<int>(poly_modulus_degree_div2), rot_key);
+        }
+        else
+        {
+            rotate_row(src, dst, step, rot_key);
+        }
+    };
+    auto plain_at = [&](int index) -> const Plaintext &
+    {
+        index &= slot_mask;
+        auto found = plain_mat.plain_vec.find(index);
+        if (found == plain_mat.plain_vec.end())
+        {
+            POSEIDON_THROW(invalid_argument_error,
+                           "BGV BSGS diagonal plaintext is missing");
+        }
+        return found->second;
+    };
+    for (auto j : rot_n2)
+    {
+        if (j != 0)
+        {
+            rotate_full_slot(ciph, rot_ciph[j], j);
+        }
+    }
+
+    int cnt0 = 0;
+    for (const auto &j : index)
+    {
+        int cnt1 = 0;
+        for (auto i : index.at(j.first))
+        {
+            const Ciphertext &source = (i == 0) ? ciph : rot_ciph[i];
+            const auto &plain = plain_at(i + j.first);
+            if (cnt1 == 0)
+            {
+                if (cnt0 == 0)
+                {
+                    multiply_plain(source, plain, result);
+                }
+                else
+                {
+                    multiply_plain(source, plain, ciph_inner_sum);
+                }
+            }
+            else
+            {
+                multiply_plain(source, plain, ciph_inner);
+                if (cnt0 == 0)
+                {
+                    add(result, ciph_inner, result);
+                }
+                else
+                {
+                    add(ciph_inner_sum, ciph_inner, ciph_inner_sum);
+                }
+            }
+            cnt1++;
+        }
+        if (cnt0 != 0)
+        {
+            rotate_full_slot(ciph_inner_sum, ciph_inner, j.first);
+            add(result, ciph_inner, result);
+        }
+        cnt0++;
+    }
 }
 
 void EvaluatorBgvBase::drop_modulus(const Ciphertext &ciph, Ciphertext &result,
@@ -850,6 +995,8 @@ void EvaluatorBgvBase::drop_modulus_to_next(const Ciphertext &ciph, Ciphertext &
     result.is_ntt_form() = ciph.is_ntt_form();
     result.correction_factor() = multiply_uint_mod(
         ciph.correction_factor(), rns_tool->inv_q_last_mod_t(), next_parms.plain_modulus());
+    result.bgv_plaintext_space() = ciph.bgv_plaintext_space();
+    result.bgv_int_factor() = ciph.bgv_int_factor();
 }
 
 }  // namespace poseidon

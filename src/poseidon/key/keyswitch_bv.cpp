@@ -39,6 +39,38 @@ void KSwitchGenBV::generate_one_kswitch_key(const SecretKey &prev_secret_key, Co
         });
 }
 
+void KSwitchGenBV::generate_one_kswitch_key(const PublicKey &new_public_key,
+                                            ConstRNSIter key_to_switch,
+                                            vector<PublicKey> &destination) const
+{
+    auto global_context_data = context_.crt_context();
+    size_t coeff_count = global_context_data->key_context_data()->parms().degree();
+    size_t decomp_mod_count = global_context_data->first_context_data()->coeff_modulus().size();
+    auto &key_context_data = *global_context_data->key_context_data();
+    auto &key_modulus = key_context_data.coeff_modulus();
+
+    if (!product_fits_in(coeff_count, decomp_mod_count))
+    {
+        POSEIDON_THROW_LOGIC_ERROR("invalid parameters");
+    }
+
+    destination.resize(decomp_mod_count);
+
+    POSEIDON_ITERATE(
+        iter(key_to_switch, key_modulus, destination, size_t(0)), decomp_mod_count,
+        [&](auto I)
+        {
+            POSEIDON_ALLOCATE_GET_COEFF_ITER(temp, coeff_count, pool_);
+            encrypt_zero_asymmetric(new_public_key, context_, key_context_data.parms().parms_id(),
+                                    true, get<2>(I).data());
+            uint64_t factor = barrett_reduce_64(key_modulus.back().value(), get<1>(I));
+            multiply_poly_scalar_coeffmod(get<0>(I), coeff_count, factor, get<1>(I), temp);
+
+            CoeffIter destination_iter = (*iter(get<2>(I).data()))[get<3>(I)];
+            add_poly_coeffmod(destination_iter, temp, coeff_count, get<1>(I), destination_iter);
+        });
+}
+
 void KSwitchBV::relinearize_internal(Ciphertext &encrypted, const RelinKeys &relin_keys,
                                      size_t destination_size, MemoryPoolHandle pool) const
 {
@@ -193,6 +225,42 @@ void KSwitchBV::apply_galois_inplace(Ciphertext &encrypted, uint32_t galois_elt,
         throw logic_error("result ciphertext is transparent");
     }
 #endif
+}
+
+void KSwitchBV::switch_key_internal(Ciphertext &encrypted, const KSwitchKeys &switch_keys,
+                                    MemoryPoolHandle pool) const
+{
+    auto context_data_ptr = context_.crt_context()->get_context_data(encrypted.parms_id());
+    if (!context_data_ptr)
+    {
+        POSEIDON_THROW(invalid_argument_error, "encrypted is not valid for encryption parameters");
+    }
+    if (encrypted.size() != 2)
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "switch_key currently supports only size-2 ciphertexts");
+    }
+    if (switch_keys.parms_id() != context_.crt_context()->key_parms_id())
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "switch_keys is not valid for encryption parameters");
+    }
+    if (switch_keys.data().empty() || switch_keys.data()[0].empty())
+    {
+        POSEIDON_THROW(invalid_argument_error, "switch key is empty");
+    }
+
+    auto &context_data = *context_data_ptr;
+    auto &parms = context_data.parms();
+    auto &coeff_modulus = context_data.coeff_modulus();
+    size_t coeff_count = parms.degree();
+    size_t coeff_modulus_size = coeff_modulus.size();
+
+    POSEIDON_ALLOCATE_GET_RNS_ITER(target, coeff_count, coeff_modulus_size, pool);
+    set_uint(encrypted[1].const_poly_iter()[0], coeff_modulus_size * coeff_count, target);
+    set_zero_poly(coeff_count, coeff_modulus_size, encrypted.data(1));
+
+    switch_key_inplace(encrypted, target, switch_keys, 0, std::move(pool));
 }
 
 void KSwitchBV::switch_key_inplace(Ciphertext &encrypted, ConstRNSIter target_iter,

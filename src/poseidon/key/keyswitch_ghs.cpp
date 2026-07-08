@@ -35,6 +35,36 @@ void KSwitchGenGHS::generate_one_kswitch_key(const SecretKey &prev_secret_key, C
     }
 }
 
+void KSwitchGenGHS::generate_one_kswitch_key(const PublicKey &new_public_key,
+                                             ConstRNSIter key_to_switch,
+                                             vector<PublicKey> &destination) const
+{
+    auto global_context_data = context_.crt_context();
+    size_t coeff_count = global_context_data->key_context_data()->parms().degree();
+    size_t decomp_mod_count = 1;
+    auto &key_context_data = *global_context_data->key_context_data();
+
+    if (!product_fits_in(coeff_count, decomp_mod_count))
+    {
+        POSEIDON_THROW_LOGIC_ERROR("invalid parameters");
+    }
+
+    auto p_mod_qi = key_context_data.qp_rns_tool()->p_mod_qi();
+    auto base_q = key_context_data.qp_rns_tool()->base_q();
+    auto base_q_size = base_q->size();
+
+    destination.resize(1);
+    auto &ct = destination[0].data();
+    encrypt_zero_asymmetric(new_public_key, context_, key_context_data.parms().parms_id(), true, ct);
+    for (auto i = 0; i < base_q_size; i++)
+    {
+        POSEIDON_ALLOCATE_GET_COEFF_ITER(temp, coeff_count, pool_);
+        multiply_poly_scalar_coeffmod(key_to_switch[i], coeff_count, p_mod_qi[i].operand,
+                                      base_q->base()[i], temp);
+        add_poly_coeffmod(ct[0][i].begin(), temp, coeff_count, base_q->base()[i], ct[0][i].begin());
+    }
+}
+
 void KSwitchGHS::relinearize_internal(Ciphertext &encrypted, const RelinKeys &relin_keys,
                                       size_t destination_size, MemoryPoolHandle pool) const
 {
@@ -83,6 +113,42 @@ void KSwitchGHS::relinearize_internal(Ciphertext &encrypted, const RelinKeys &re
                                  RelinKeys::get_index(encrypted_size - 1 - i), pool);
     }
     encrypted.resize(context_, context_data_ptr->parms().parms_id(), destination_size);
+}
+
+void KSwitchGHS::switch_key_internal(Ciphertext &encrypted, const KSwitchKeys &switch_keys,
+                                     MemoryPoolHandle pool) const
+{
+    auto context_data_ptr = context_.crt_context()->get_context_data(encrypted.parms_id());
+    if (!context_data_ptr)
+    {
+        POSEIDON_THROW(invalid_argument_error, "encrypted is not valid for encryption parameters");
+    }
+    if (encrypted.size() != 2)
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "switch_key currently supports only size-2 ciphertexts");
+    }
+    if (switch_keys.parms_id() != context_.crt_context()->key_parms_id())
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "switch_keys is not valid for encryption parameters");
+    }
+    if (switch_keys.data().empty() || switch_keys.data()[0].empty())
+    {
+        POSEIDON_THROW(invalid_argument_error, "switch key is empty");
+    }
+
+    auto &context_data = *context_data_ptr;
+    auto &parms = context_data.parms();
+    auto &coeff_modulus = context_data.coeff_modulus();
+    size_t coeff_count = parms.degree();
+    size_t coeff_modulus_size = coeff_modulus.size();
+
+    RNSPoly target(context_, encrypted.parms_id());
+    target.copy(encrypted[1]);
+    set_zero_poly(coeff_count, coeff_modulus_size, encrypted.data(1));
+
+    switch_key_inplace(encrypted, target, switch_keys, 0, std::move(pool));
 }
 
 void KSwitchGHS::switch_key_inplace(Ciphertext &encrypted, RNSPoly &poly,
