@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.12)
 add_executable(test_ckks_basic test_ckks_basic.cpp)
 target_link_libraries(test_ckks_basic poseidon_shared)
 
+add_executable(test_ckks_basic_feiteng test_ckks_basic_feiteng.cpp)
+target_link_libraries(test_ckks_basic_feiteng poseidon_shared)
+
 add_executable(test_ckks_bootstrap test_ckks_bootstrap.cpp)
 target_link_libraries(test_ckks_bootstrap poseidon_shared)
 

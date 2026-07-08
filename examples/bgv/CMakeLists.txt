@@ -4,5 +4,8 @@ cmake_minimum_required(VERSION 3.12)
 add_executable(test_bgv_basic test_bgv_basic.cpp)
 target_link_libraries(test_bgv_basic poseidon_shared)
 
+add_executable(test_bgv_basic_feiteng test_bgv_basic_feiteng.cpp)
+target_link_libraries(test_bgv_basic_feiteng poseidon_shared)
+
 add_executable(test_bgv_load test_bgv_load.cpp)
 target_link_libraries(test_bgv_load poseidon_shared)
