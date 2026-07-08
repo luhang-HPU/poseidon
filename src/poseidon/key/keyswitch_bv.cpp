@@ -51,7 +51,7 @@ void KSwitchGenBV::generate_one_kswitch_key(const PublicKey &new_public_key,
 
     if (!product_fits_in(coeff_count, decomp_mod_count))
     {
-        POSEIDON_THROW_LOGIC_ERROR("invalid parameters");
+        throw logic_error("invalid parameters");
     }
 
     destination.resize(decomp_mod_count);

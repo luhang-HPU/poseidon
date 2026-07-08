@@ -67,7 +67,7 @@ std::int64_t checked_mpz_to_int64(const mpz_class &value, const char *name)
     {
         std::ostringstream ss;
         ss << name << " does not fit in signed 64 bits";
-        POSEIDON_THROW(poseidon_logic_error, ss.str());
+        POSEIDON_THROW(invalid_argument_error, ss.str());
     }
     return static_cast<std::int64_t>(value.get_si());
 }
@@ -90,7 +90,7 @@ std::int64_t checked_add_mul(std::int64_t value, std::int64_t multiplier,
     if (wide > std::numeric_limits<std::int64_t>::max() ||
         wide < std::numeric_limits<std::int64_t>::min())
     {
-        POSEIDON_THROW(poseidon_logic_error, "recryption coefficient overflow");
+        POSEIDON_THROW(invalid_argument_error, "recryption coefficient overflow");
     }
     return static_cast<std::int64_t>(wide);
 }
@@ -901,21 +901,21 @@ void Recryptor::recrypt(const Ciphertext &ciph, Ciphertext &result,
         ss << scheme_name(context_)
            << " public recryption has preprocess+compose and thin digit extraction, "
               "but RecryptionData does not contain HElib-style first/second EvalMap matrices";
-        POSEIDON_THROW(poseidon_logic_error, ss.str());
+        POSEIDON_THROW(invalid_argument_error, ss.str());
     }
     if (!recryption_key.has_linear_map_galois_keys())
     {
         std::ostringstream ss;
         ss << scheme_name(context_)
            << " public recryption needs Galois keys for first/second EvalMap matrices";
-        POSEIDON_THROW(poseidon_logic_error, ss.str());
+        POSEIDON_THROW(invalid_argument_error, ss.str());
     }
     if (!recryption_key.has_relin_keys())
     {
         std::ostringstream ss;
         ss << scheme_name(context_)
            << " public recryption needs relinearization keys after encrypted digit extraction";
-        POSEIDON_THROW(poseidon_logic_error, ss.str());
+        POSEIDON_THROW(invalid_argument_error, ss.str());
     }
 
     Ciphertext coeffs;
@@ -990,7 +990,7 @@ void Recryptor::preprocess_and_compose(const Ciphertext &ciph,
     auto preprocessed = preprocess(ciph, recryption_key.bootstrap_switch_key);
     if (preprocessed.divided_parts.size() != 2)
     {
-        POSEIDON_THROW(poseidon_logic_error,
+        POSEIDON_THROW(invalid_argument_error,
                        "recryption compose expects exactly two preprocessed parts");
     }
 
@@ -1058,7 +1058,7 @@ void Recryptor::thin_digit_extract_after_compose(const Ciphertext &composed,
     bgv_extract_digits_thin_basic(context_, evaluator_, composed, p, digits, top_high + 1);
     if (digits.empty())
     {
-        POSEIDON_THROW(poseidon_logic_error, "digit extraction produced no digits");
+        POSEIDON_THROW(invalid_argument_error, "digit extraction produced no digits");
     }
 
     if (top_high >= digits.size())
@@ -1067,7 +1067,7 @@ void Recryptor::thin_digit_extract_after_compose(const Ciphertext &composed,
     }
     if (bot_high > top_high)
     {
-        POSEIDON_THROW(poseidon_logic_error, "digit extraction did not produce requested digits");
+        POSEIDON_THROW(invalid_argument_error, "digit extraction did not produce requested digits");
     }
 
     result = digits[top_high];
@@ -1091,7 +1091,7 @@ void Recryptor::thin_digit_extract_after_compose(const Ciphertext &composed,
         const auto top_low = params.r - 1 - params.e_prime;
         if (top_low >= digits.size())
         {
-            POSEIDON_THROW(poseidon_logic_error,
+            POSEIDON_THROW(invalid_argument_error,
                            "digit extraction did not produce low digits");
         }
         Ciphertext low = digits[top_low];
@@ -1300,7 +1300,7 @@ void Recryptor::make_divisible(std::vector<RecryptionRawPart> &parts,
             parts[i].coeffs[j] = checked_add_mul(parts[i].coeffs[j], v, q);
             if (positive_mod(parts[i].coeffs[j], p2e_prime) != 0)
             {
-                POSEIDON_THROW(poseidon_logic_error, "make_divisible failed sanity check");
+                POSEIDON_THROW(invalid_argument_error, "make_divisible failed sanity check");
             }
             v_parts[i].coeffs[j] = v;
         }
@@ -1321,7 +1321,7 @@ void Recryptor::divide_by_p_power_e_prime(std::vector<RecryptionRawPart> &parts)
         {
             if (coeff % divisor != 0)
             {
-                POSEIDON_THROW(poseidon_logic_error, "coefficient is not divisible by p^e'");
+                POSEIDON_THROW(invalid_argument_error, "coefficient is not divisible by p^e'");
             }
             coeff /= divisor;
         }

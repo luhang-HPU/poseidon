@@ -46,7 +46,7 @@ void KSwitchGenGHS::generate_one_kswitch_key(const PublicKey &new_public_key,
 
     if (!product_fits_in(coeff_count, decomp_mod_count))
     {
-        POSEIDON_THROW_LOGIC_ERROR("invalid parameters");
+        throw logic_error("invalid parameters");
     }
 
     auto p_mod_qi = key_context_data.qp_rns_tool()->p_mod_qi();

@@ -368,7 +368,7 @@ void KSwitchGenBase::generate_kswitch_keys(const PublicKey &new_public_key,
 
     if (!product_fits_in(coeff_count, coeff_modulus_size, num_keys))
     {
-        POSEIDON_THROW_LOGIC_ERROR("invalid parameters");
+        throw logic_error("invalid parameters");
     }
 
     destination.data().resize(num_keys);
