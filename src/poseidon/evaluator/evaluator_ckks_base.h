@@ -86,10 +86,17 @@ public:
 
     void eval_mod(const Ciphertext &ciph, Ciphertext &result, const EvalModPoly &eva_poly,
                   const RelinKeys &relin_keys, const CKKSEncoder &encoder);
+    void eval_mod_high_precision(const Ciphertext &ciph, Ciphertext &result,
+                                 const EvalModPoly &eva_poly, const RelinKeys &relin_keys,
+                                 const CKKSEncoder &encoder);
 
     void bootstrap(const Ciphertext &ciph, Ciphertext &result, const RelinKeys &relin_keys,
                    const GaloisKeys &galois_keys, const CKKSEncoder &encoder,
                    EvalModPoly &eval_mod_poly);
+    void bootstrap_high_precision(const Ciphertext &ciph, Ciphertext &result,
+                                  const RelinKeys &relin_keys,
+                                  const GaloisKeys &galois_keys,
+                                  const CKKSEncoder &encoder, EvalModPoly &eval_mod_poly);
 
     void multiply_const_direct(const Ciphertext &ciph, int const_data, Ciphertext &result,
                                const CKKSEncoder &encoder) const;
@@ -163,6 +170,10 @@ public:
 
 private:
     inline void set_min_scale(double scale) { min_scale_ = scale; }
+
+    void bootstrap_core(const Ciphertext &ciph, Ciphertext &result, const RelinKeys &relin_keys,
+                        const GaloisKeys &galois_keys, const CKKSEncoder &encoder,
+                        EvalModPoly &eval_mod_poly, bool high_precision_eval_mod);
 
     void rescale_for_bootstrap(Ciphertext &ciph1);
 

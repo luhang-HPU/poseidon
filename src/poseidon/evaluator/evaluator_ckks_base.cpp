@@ -5,7 +5,6 @@
 
 namespace poseidon
 {
-
 EvaluatorCkksBase::EvaluatorCkksBase(const PoseidonContext &context)
     : min_scale_(std::pow(2.0, context.parameters_literal()->log_scale())), Base(context)
 {
@@ -284,7 +283,6 @@ void EvaluatorCkksBase::multiply_by_diag_matrix_bsgs_with_mutex(
             {
                 plain_mat.cv_write.notify_one();
             }
-            // std::cout << "READ " << plain_mat.read_cnt++ << " END" << std::endl;
         }
     }
     rescale_dynamic(result_tmp, result, ciph.scale());
@@ -573,6 +571,18 @@ void EvaluatorCkksBase::recurse(const map<uint32_t, Ciphertext> &monomial_basis,
     printf("1:res level: %zu,  target scale: %0.lf\n", res.level(), res.scale());
 #endif
 
+    if (!res.is_valid())
+    {
+        Ciphertext tmp;
+        recurse(monomial_basis, relin_keys, target_level, target_scale, coeffsr, log_split,
+                log_degree, tmp, encoder, is_odd, is_even, num);
+        if (tmp.is_valid())
+        {
+            destination = tmp;
+        }
+        return;
+    }
+
     if (!pol.polys()[0].lead())
     {
         rescale_dynamic(res, res, pow_scale);
@@ -599,6 +609,12 @@ void EvaluatorCkksBase::recurse(const map<uint32_t, Ciphertext> &monomial_basis,
 #ifdef DEBUG
     printf("########### title[%zu]\n", coeffsr.polys()[0].degree());
 #endif
+
+    if (!tmp.is_valid())
+    {
+        destination = res;
+        return;
+    }
 
     rescale_dynamic(tmp, tmp, res.scale());
 #ifdef DEBUG
@@ -716,7 +732,13 @@ void EvaluatorCkksBase::evaluate_poly_from_poly_nomial_basis(
     auto minimum_degree_non_zero_coefficient = pol.polys()[0].data().size() - 1;
     auto min_scale = min_scale_;
     auto &id_level_map = context_.crt_context()->parms_id_map();
-    auto &parms_id = id_level_map.at(target_level);
+    auto target_parms_id_iter = id_level_map.find(target_level);
+    if (target_parms_id_iter == id_level_map.end())
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "evaluate_poly_from_poly_nomial_basis: target_level is invalid");
+    }
+    auto &parms_id = target_parms_id_iter->second;
     auto slots = context_.parameters_literal()->slot();
     vector<complex<double>> values(slots);
 
@@ -767,9 +789,21 @@ void EvaluatorCkksBase::evaluate_poly_from_poly_nomial_basis(
             {
                 to_encode = false;
                 Plaintext tmp;
-                auto level = destination.level();
-                auto degree = destination.poly_modulus_degree();
-                auto &parms_id_tmp = id_level_map.at(level);
+                auto destination_context_data =
+                    context_.crt_context()->get_context_data(destination.parms_id());
+                if (!destination_context_data)
+                {
+                    POSEIDON_THROW(invalid_argument_error,
+                                   "evaluate_poly_from_poly_nomial_basis: destination parms_id is invalid");
+                }
+                auto level = destination_context_data->level();
+                auto parms_id_iter = id_level_map.find(level);
+                if (parms_id_iter == id_level_map.end())
+                {
+                    POSEIDON_THROW(invalid_argument_error,
+                                   "evaluate_poly_from_poly_nomial_basis: destination level is invalid");
+                }
+                auto &parms_id_tmp = parms_id_iter->second;
                 encoder.encode(values, parms_id_tmp, destination.scale(), tmp);
                 add_plain(destination, tmp, destination);
             }
@@ -806,20 +840,39 @@ void EvaluatorCkksBase::evaluate_poly_from_poly_nomial_basis(
                 if (to_encode)
                 {
                     Plaintext tmp;
-                    auto level = x[key].level();
-                    auto degree = x[key].poly_modulus_degree();
+                    auto basis_iter = x.find(key);
+                    if (basis_iter == x.end() || !basis_iter->second.is_valid())
+                    {
+                        POSEIDON_THROW(invalid_argument_error,
+                                       "evaluate_poly_from_poly_nomial_basis: missing monomial basis");
+                    }
+                    const auto &basis_cipher = basis_iter->second;
+                    auto basis_context_data =
+                        context_.crt_context()->get_context_data(basis_cipher.parms_id());
+                    if (!basis_context_data)
+                    {
+                        POSEIDON_THROW(invalid_argument_error,
+                                       "evaluate_poly_from_poly_nomial_basis: monomial basis parms_id is invalid");
+                    }
+                    auto level = basis_context_data->level();
                     double scale;
-                    scale = target_scale / x[key].scale();
-                    auto &parms_id_tmp = id_level_map.at(level);
+                    scale = target_scale / basis_cipher.scale();
+                    auto parms_id_iter = id_level_map.find(level);
+                    if (parms_id_iter == id_level_map.end())
+                    {
+                        POSEIDON_THROW(invalid_argument_error,
+                                       "evaluate_poly_from_poly_nomial_basis: basis level is invalid");
+                    }
+                    auto &parms_id_tmp = parms_id_iter->second;
                     encoder.encode(values, parms_id_tmp, scale, tmp);
                     if (!destination.is_valid())
                     {
-                        multiply_plain(x.at(key), tmp, destination);
+                        multiply_plain(basis_cipher, tmp, destination);
                     }
                     else
                     {
                         Ciphertext ciph;
-                        multiply_plain(x.at(key), tmp, ciph);
+                        multiply_plain(basis_cipher, tmp, ciph);
                         add_dynamic(ciph, destination, destination, encoder);
                     }
                     to_encode = false;
@@ -848,11 +901,35 @@ void EvaluatorCkksBase::evaluate_poly_from_poly_nomial_basis(
             if (to_encode)
             {
                 Plaintext tmp;
-                auto level = destination.level();
+                if (!destination.is_valid())
+                {
+                    destination.resize(context_, parms_id, 2);
+                    destination.is_ntt_form() = true;
+                    destination.scale() = target_scale;
+                }
+                auto destination_context_data =
+                    context_.crt_context()->get_context_data(destination.parms_id());
+                if (!destination_context_data)
+                {
+                    POSEIDON_THROW(invalid_argument_error,
+                                   "evaluate_poly_from_poly_nomial_basis: destination parms_id is invalid");
+                }
+                auto level = destination_context_data->level();
+                auto parms_id_iter = id_level_map.find(level);
+                if (parms_id_iter == id_level_map.end())
+                {
+                    POSEIDON_THROW(invalid_argument_error,
+                                   "evaluate_poly_from_poly_nomial_basis: destination level is invalid");
+                }
 
-                auto &parms_id_tmp = id_level_map.at(level);
+                auto &parms_id_tmp = parms_id_iter->second;
                 encoder.encode(values, parms_id_tmp, target_scale, tmp);
                 add_plain(destination, tmp, destination);
+            }
+
+            if (!destination.is_valid())
+            {
+                return;
             }
 
             destination.scale() = target_scale;
@@ -945,6 +1022,68 @@ void EvaluatorCkksBase::eval_mod(const Ciphertext &ciph, Ciphertext &result,
     set_min_scale(pre_min_scale);
 }
 
+void EvaluatorCkksBase::eval_mod_high_precision(const Ciphertext &ciph, Ciphertext &result,
+                                                const EvalModPoly &eva_poly,
+                                                const RelinKeys &relin_keys,
+                                                const CKKSEncoder &encoder)
+{
+    if (!ciph.is_valid())
+    {
+        POSEIDON_THROW(invalid_argument_error, "eval_mod_high_precision : ciph is empty!");
+    }
+
+    if (ciph.level() != eva_poly.level_start())
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "eval_mod_high_precision : level start not match!");
+    }
+    result = ciph;
+
+    auto context_data = context_.crt_context()->get_context_data(ciph.parms_id());
+    auto poly_modulus_degree = context_data->parms().degree();
+    auto slot_num = poly_modulus_degree >> 1;
+
+    double prev_scale_ct = result.scale();
+    result.scale() = eva_poly.scaling_factor();
+
+    double pre_min_scale = min_scale_;
+    set_min_scale(eva_poly.scaling_factor());
+    auto target_scale = eva_poly.scaling_factor();
+    vector<Polynomial> poly_sin{eva_poly.sine_poly()};
+
+    vector<int> idx(slot_num);
+    for (int i = 0; i < slot_num; i++)
+    {
+        idx[i] = i;
+    }
+    vector<vector<int>> slots_index(1, vector<int>(slot_num, 0));
+    slots_index[0] = idx;
+
+    if (eva_poly.type() == CosDiscrete || eva_poly.type() == CosContinuous)
+    {
+        double const_data =
+            -0.5 / (eva_poly.sc_fac() * (eva_poly.sine_poly_b() - eva_poly.sine_poly_a()));
+        add_const(result, const_data, result, encoder);
+    }
+
+    PolynomialVector polys_sin(poly_sin, slots_index);
+    Ciphertext tmp = result;
+    evaluate_poly_vector(tmp, result, polys_sin, target_scale, relin_keys, encoder);
+
+    auto sqrt2pi = eva_poly.sqrt_2pi();
+    for (auto i = 0; i < eva_poly.double_angle(); i++)
+    {
+        sqrt2pi *= sqrt2pi;
+        multiply_relin_dynamic(result, result, result, relin_keys);
+        add(result, result, result);
+        add_const(result, -sqrt2pi, result, encoder);
+        rescale_dynamic(result, result, target_scale);
+    }
+
+    result.scale() = prev_scale_ct;
+    set_min_scale(pre_min_scale);
+}
+
 void EvaluatorCkksBase::rescale_for_bootstrap(Ciphertext &ciph)
 {
     auto context_data = context_.crt_context()->get_context_data(ciph.parms_id());
@@ -969,6 +1108,25 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
                                   const RelinKeys &relin_keys, const GaloisKeys &galois_keys,
                                   const CKKSEncoder &encoder, EvalModPoly &eval_mod_poly)
 {
+    bootstrap_core(ciph, result, relin_keys, galois_keys, encoder, eval_mod_poly, false);
+}
+
+void EvaluatorCkksBase::bootstrap_high_precision(const Ciphertext &ciph, Ciphertext &result,
+                                                 const RelinKeys &relin_keys,
+                                                 const GaloisKeys &galois_keys,
+                                                 const CKKSEncoder &encoder,
+                                                 EvalModPoly &eval_mod_poly)
+{
+    bootstrap_core(ciph, result, relin_keys, galois_keys, encoder, eval_mod_poly, true);
+}
+
+void EvaluatorCkksBase::bootstrap_core(const Ciphertext &ciph, Ciphertext &result,
+                                       const RelinKeys &relin_keys,
+                                       const GaloisKeys &galois_keys,
+                                       const CKKSEncoder &encoder,
+                                       EvalModPoly &eval_mod_poly,
+                                       bool high_precision_eval_mod)
+{
     auto tmp = ciph;
     rescale_for_bootstrap(tmp);
 
@@ -992,8 +1150,19 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
     scale = round(scale);
     if (scale > 1)
     {
-        multiply_const_direct(result, safe_cast<int>(scale), result, encoder);
-        result.scale() *= scale;
+        auto remaining_scale = scale;
+        while (remaining_scale > 1)
+        {
+            double factor = remaining_scale;
+            if (factor > static_cast<double>(0x7FFFFFFF))
+            {
+                factor = static_cast<double>(1ULL << 30);
+            }
+            factor = round(factor);
+            multiply_const_direct(result, safe_cast<int>(factor), result, encoder);
+            result.scale() *= factor;
+            remaining_scale = round(remaining_scale / factor);
+        }
     }
 
     auto parms_id = context_.crt_context()->parms_id_map().at(q0_level);
@@ -1002,6 +1171,11 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
     Ciphertext ciph_raise;
     read(result);
     raise_modulus(result, ciph_raise);
+    if (high_precision_eval_mod)
+    {
+        auto first_context_data = context_.crt_context()->first_context_data();
+        ciph_raise.scale() = static_cast<double>(first_context_data->coeff_modulus()[0].value());
+    }
 
     auto scale_raise = eval_mod_poly.scaling_factor() / ciph_raise.scale();
     scale_raise /= eval_mod_poly.message_ratio();
@@ -1030,12 +1204,29 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
     LinearMatrixGroup coeff_to_slot_dft_matrix;
     tmp_matrix.create(coeff_to_slot_dft_matrix, const_cast<CKKSEncoder &>(encoder), 2);
 
-    coeff_to_slot(ciph_raise, coeff_to_slot_dft_matrix, ciph_real, ciph_imag, galois_keys, encoder);
+    coeff_to_slot(ciph_raise, coeff_to_slot_dft_matrix, ciph_real, ciph_imag, galois_keys,
+                  encoder);
 
     eval_mod_poly.set_level_start(static_cast<uint32_t>(
         context_.crt_context()->get_context_data(ciph_real.parms_id())->level()));
-    eval_mod(ciph_imag, ciph_imag_mod, eval_mod_poly, relin_keys, encoder);
-    eval_mod(ciph_real, ciph_real_mod, eval_mod_poly, relin_keys, encoder);
+    if (high_precision_eval_mod)
+    {
+        eval_mod_high_precision(ciph_imag, ciph_imag_mod, eval_mod_poly, relin_keys,
+                                encoder);
+    }
+    else
+    {
+        eval_mod(ciph_imag, ciph_imag_mod, eval_mod_poly, relin_keys, encoder);
+    }
+    if (high_precision_eval_mod)
+    {
+        eval_mod_high_precision(ciph_real, ciph_real_mod, eval_mod_poly, relin_keys,
+                                encoder);
+    }
+    else
+    {
+        eval_mod(ciph_real, ciph_real_mod, eval_mod_poly, relin_keys, encoder);
+    }
 
     ciph_imag_mod.scale() = context_.parameters_literal()->scale();
     ciph_real_mod.scale() = context_.parameters_literal()->scale();
@@ -1605,6 +1796,12 @@ void EvaluatorCkksBase::rescale_dynamic(const Ciphertext &ciph, Ciphertext &resu
         {
             break;
         }
+    }
+
+    if (rescale_times == 0)
+    {
+        result = ciph;
+        return;
     }
 
     for (int i = 0; i < rescale_times; i++)
