@@ -32,6 +32,10 @@ public:
 
     inline vector<complex<double>> &data() noexcept { return data_; }
     inline const vector<complex<double>> &data() const noexcept { return data_; }
+
+    inline complex<double> &operator[](int i) noexcept { return data_[i]; }
+    inline const complex<double> &operator[](int i) const noexcept { return data_[i]; }
+
     inline auto &a() noexcept { return a_; }
     inline const auto a() const noexcept { return a_; }
     inline auto &b() noexcept { return b_; }

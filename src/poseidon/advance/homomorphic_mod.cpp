@@ -116,40 +116,5 @@ bool is_not_negligible(complex<double> c)
         return false;
     }
 }
-pair<bool, bool> is_odd_or_even_polynomial(Polynomial &poly)
-{
-    bool even = true;
-    bool odd = true;
-    auto poly_degree = poly.max_degree();
-    auto &data = poly.data();
-
-    for (int i = 0; i < poly_degree; i++)
-    {
-        auto isnotnegligible = is_not_negligible(data[i]);
-
-        auto state = i & 1;
-
-        odd = odd && (state != 0 && isnotnegligible);
-        even = even && (state != 1 && isnotnegligible);
-        if (!odd && !even)
-        {
-            break;
-        }
-    }
-    // If even or odd, then sets the expected zero coefficients to zero
-    if (even || odd)
-    {
-        int start = 0;
-        if (even)
-        {
-            start = 1;
-        }
-        for (int i = start; i < poly_degree; i += 2)
-        {
-            poly.data()[i] = complex<double>(0, 0);
-        }
-    }
-    return make_pair(odd, even);
-}
 
 }  // namespace poseidon
