@@ -6,8 +6,22 @@
 #include "poseidon/encryptor.h"
 #include "poseidon/key/keyswitch.h"
 
+#include <string>
+
 namespace poseidon
 {
+struct BootstrapConfig
+{
+    uint32_t boundary_k = 25;
+    uint32_t log_message_ratio = 5;
+    uint32_t double_angle = 2;
+    uint32_t scaling_log = 51;
+    uint32_t output_ratio = 32;
+    bool project_real = true;
+    double inverse_coeff = 0.0;
+    std::string cosine_heap_path;
+};
+
 class EvaluatorCkksBase : public EvaluatorBase
 {
     using Base = EvaluatorBase;
@@ -93,6 +107,9 @@ public:
     void bootstrap(const Ciphertext &ciph, Ciphertext &result, const RelinKeys &relin_keys,
                    const GaloisKeys &galois_keys, const CKKSEncoder &encoder,
                    EvalModPoly &eval_mod_poly);
+    void bootstrap(const Ciphertext &ciph, Ciphertext &result, const RelinKeys &relin_keys,
+                   const GaloisKeys &galois_keys, const CKKSEncoder &encoder,
+                   const BootstrapConfig &config = BootstrapConfig{});
     void bootstrap_high_precision(const Ciphertext &ciph, Ciphertext &result,
                                   const RelinKeys &relin_keys,
                                   const GaloisKeys &galois_keys,

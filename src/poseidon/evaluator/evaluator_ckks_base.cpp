@@ -1,4 +1,5 @@
 #include "evaluator_ckks_base.h"
+#include "poseidon/advance/bootstrapper.h"
 #include "poseidon/advance/homomorphic_dft.h"
 #include "poseidon/encryptor.h"
 #include "poseidon/util/debug.h"
@@ -1109,6 +1110,138 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
                                   const CKKSEncoder &encoder, EvalModPoly &eval_mod_poly)
 {
     bootstrap_core(ciph, result, relin_keys, galois_keys, encoder, eval_mod_poly, false);
+}
+
+void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
+                                  const RelinKeys &relin_keys,
+                                  const GaloisKeys &galois_keys,
+                                  const CKKSEncoder &encoder,
+                                  const BootstrapConfig &config)
+{
+    if (config.boundary_k == 0)
+    {
+        throw invalid_argument("bootstrap boundary_k must be positive");
+    }
+    if (config.log_message_ratio >= 31)
+    {
+        throw invalid_argument("bootstrap log_message_ratio must be less than 31");
+    }
+    if (config.double_angle >= 31)
+    {
+        throw invalid_argument("bootstrap double_angle must be less than 31");
+    }
+    if (config.scaling_log >= 63)
+    {
+        throw invalid_argument("bootstrap scaling_log must be less than 63");
+    }
+    if (config.output_ratio == 0 ||
+        (config.project_real && (config.output_ratio & 1U) != 0))
+    {
+        throw invalid_argument(
+            "bootstrap output_ratio must be positive and even for real projection");
+    }
+
+    Ciphertext prepared = ciph;
+    auto input_context_data = context_.crt_context()->get_context_data(prepared.parms_id());
+    if (!input_context_data)
+    {
+        throw invalid_argument("bootstrap input has invalid parms_id");
+    }
+
+    const auto q0_level = input_context_data->parms().q0_level();
+    if (prepared.level() < q0_level)
+    {
+        throw invalid_argument("bootstrap input is below q0 level");
+    }
+    if (prepared.level() - q0_level > 1)
+    {
+        drop_modulus(prepared, prepared,
+                     context_.crt_context()->parms_id_map().at(q0_level + 1));
+    }
+
+    const double message_ratio =
+        std::ldexp(1.0, static_cast<int>(config.log_message_ratio));
+    double q0_over_message_ratio = context_.crt_context()->q0() / message_ratio;
+    q0_over_message_ratio = std::exp2(std::round(std::log2(q0_over_message_ratio)));
+    double remaining_scale = std::round(q0_over_message_ratio / prepared.scale());
+    while (remaining_scale > 1.0)
+    {
+        double factor = std::min(remaining_scale, static_cast<double>(1ULL << 30));
+        factor = std::round(factor);
+        multiply_const_direct(prepared, static_cast<int>(factor), prepared, encoder);
+        prepared.scale() *= factor;
+        remaining_scale = std::round(remaining_scale / factor);
+    }
+
+    drop_modulus(prepared, prepared,
+                 context_.crt_context()->parms_id_map().at(q0_level));
+
+    Bootstrapper bootstrapper(
+        context_, *this, encoder, context_.parameters_literal()->log_slots(),
+        config.boundary_k, ciph.scale(), context_.parameters_literal()->scale(),
+        config.cosine_heap_path);
+    bootstrapper.generate_linear_coefficients();
+
+    Ciphertext raised;
+    bootstrapper.mod_raise(prepared, raised);
+    const auto first_context_data = context_.crt_context()->first_context_data();
+    raised.scale() =
+        static_cast<double>(first_context_data->coeff_modulus().front().value());
+
+    const double eval_mod_scale =
+        std::ldexp(1.0, static_cast<int>(config.scaling_log));
+    const double raise_factor = eval_mod_scale / (raised.scale() * message_ratio);
+    if (raise_factor > 1.0 && raise_factor < static_cast<double>(0x7FFFFFFF))
+    {
+        const auto integer_factor = static_cast<int>(std::round(raise_factor));
+        multiply_const_direct(raised, integer_factor, raised, encoder);
+        raised.scale() *= integer_factor;
+    }
+    else if (raise_factor >= static_cast<double>(0x7FFFFFFF))
+    {
+        multiply_const(raised, 1.0, raise_factor, raised, encoder);
+    }
+
+    Ciphertext real_slots;
+    Ciphertext imag_slots;
+    bootstrapper.coeff_to_slot(raised, real_slots, imag_slots, galois_keys);
+
+    const double real_scale_adjust = eval_mod_scale / real_slots.scale();
+    const double imag_scale_adjust = eval_mod_scale / imag_slots.scale();
+    if (std::abs(real_scale_adjust - 1.0) > 1e-6 ||
+        std::abs(imag_scale_adjust - 1.0) > 1e-6)
+    {
+        multiply_const(real_slots, real_scale_adjust, eval_mod_scale, real_slots, encoder);
+        multiply_const(imag_slots, imag_scale_adjust, eval_mod_scale, imag_slots, encoder);
+        rescale(real_slots, real_slots);
+        rescale(imag_slots, imag_slots);
+        real_slots.scale() = eval_mod_scale;
+        imag_slots.scale() = eval_mod_scale;
+    }
+
+    const double inverse_coeff = config.inverse_coeff > 0.0
+                                     ? config.inverse_coeff
+                                     : bootstrapper.inverse_coefficient(config.double_angle);
+    Ciphertext real_mod;
+    Ciphertext imag_mod;
+    bootstrapper.eval_mod(real_slots, real_mod, relin_keys, config.double_angle,
+                          inverse_coeff, eval_mod_scale);
+    bootstrapper.eval_mod(imag_slots, imag_mod, relin_keys, config.double_angle,
+                          inverse_coeff, eval_mod_scale);
+
+    Ciphertext output;
+    bootstrapper.slot_to_coeff(real_mod, imag_mod, output, galois_keys);
+    if (config.project_real)
+    {
+        Ciphertext conjugated;
+        conjugate(output, galois_keys, conjugated);
+        add(output, conjugated, output);
+    }
+
+    const uint32_t effective_ratio =
+        config.project_real ? config.output_ratio / 2 : config.output_ratio;
+    multiply_const_direct(output, static_cast<int>(effective_ratio), output, encoder);
+    result = std::move(output);
 }
 
 void EvaluatorCkksBase::bootstrap_high_precision(const Ciphertext &ciph, Ciphertext &result,
