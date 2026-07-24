@@ -565,7 +565,7 @@ POSEIDON_NODISCARD inline bool are_close(T value1, T value2) noexcept
 }
 
 template <typename T, typename = std::enable_if_t<std::is_floating_point<T>::value>>
-POSEIDON_NODISCARD inline bool are_approximate(T value1, T value2) noexcept
+POSEIDON_NODISCARD inline bool is_approximate(T value1, T value2) noexcept
 {
     double scale_factor = std::max<T>({value1, value2, T{1.0}});
     if (scale_factor < T{1e9})

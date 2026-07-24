@@ -115,7 +115,7 @@ void EvaluatorBfvBase::sub(const Ciphertext &ciph1, const Ciphertext &ciph2,
     {
         POSEIDON_THROW(invalid_argument_error, "sub : NTT form mismatch");
     }
-    if (!util::are_approximate<double>(ciph1.scale(), ciph2.scale()))
+    if (!util::is_approximate<double>(ciph1.scale(), ciph2.scale()))
     {
         POSEIDON_THROW(invalid_argument_error, "sub : scale mismatch");
     }

@@ -1,4 +1,3 @@
-
 #include "poseidon/advance/homomorphic_dft.h"
 #include "poseidon/decryptor.h"
 #include "poseidon/encryptor.h"
@@ -7,7 +6,6 @@
 #include "poseidon/util/debug.h"
 #include "poseidon/util/random_sample.h"
 #include <csignal>
-#include <cstdlib>
 #include <exception>
 #include <execinfo.h>
 #include <unistd.h>
@@ -55,12 +53,12 @@ int run_bootstrap_test()
     std::cout << "POSEIDON SOFTWARE VERSION:" << POSEIDON_VERSION << std::endl;
     std::cout << "" << std::endl;
 
-    ParametersLiteral ckks_param_literal{CKKS, 15, 15 - 1, 40, 1, 1, 0, {}, {}};
+    ParametersLiteral ckks_param_literal{CKKS, 13, 13 - 1, 40, 1, 1, 0, {}, {}};
     /*vector<uint32_t> log_q_tmp{32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32,
                                32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32};
     vector<uint32_t> log_p_tmp{32};*/
 
-    ckks_param_literal.set_log_modulus(std::vector<uint32_t>(30, 40), std::vector<uint32_t>{40});
+    ckks_param_literal.set_log_modulus(std::vector<uint32_t>(25, 40), std::vector<uint32_t>{40});
 
     PoseidonFactory::get_instance()->set_device_type(DEVICE_SOFTWARE);
     auto context = PoseidonFactory::get_instance()->create_poseidon_context(ckks_param_literal);
@@ -71,11 +69,16 @@ int run_bootstrap_test()
 
     // create message
     vector<complex<double>> message1;
-    sample_random_complex_vector(message1, mat_size);
-    for (auto &m : message1)
-    {
-        m = sin(m);
-    }
+    // sample_random_complex_vector(message1, mat_size);
+    // for (auto &m : message1)
+    // {
+    //     m = sin(m);
+    // }
+    message1.resize(4);
+    message1[0] = complex(0.9238795325112867, 0.3826834323650898);
+    message1[1] = complex(0.9238795325112867, 0.3826834323650898);
+    message1[2] = complex(0.9238795325112867, 0.3826834323650898);
+    message1[3] = complex(0.9238795325112867, 0.3826834323650898);
 
     // init Plaintext and Ciphertext
     Plaintext plain, plain_res;
@@ -93,14 +96,16 @@ int run_bootstrap_test()
     Encryptor enc(context, public_key, kgen.secret_key());
     Decryptor dec(context, kgen.secret_key());
 
+    ckks_eva->set_decryptor(&dec);
+    ckks_eva->set_encoder(&ckks_encoder);
+    ckks_eva->set_encryptor(&enc);
+
     // encode && encrypt
     ckks_encoder.encode(message1, (int64_t)1 << 40, plain);
     enc.encrypt(plain, cipher);
 
     // evaluate
     auto start = chrono::high_resolution_clock::now();
-    ckks_eva->multiply_relin(cipher, cipher, cipher, relin_keys);
-    ckks_eva->rescale_dynamic(cipher, cipher, (int64_t)1 << 40);
 
     spdlog::debug("bootstrap start, level = {}", cipher.level());
 

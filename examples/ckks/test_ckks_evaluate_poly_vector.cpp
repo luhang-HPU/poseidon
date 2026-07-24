@@ -94,7 +94,9 @@ int main()
     ckks_eva->read(ct1);
     Timestacs time;
     time.start();
-    ckks_eva->evaluate_poly_vector(ct1, ct2, polys, ct1.scale(), relin_keys, ckks_encoder);
+    //ckks_eva->evaluate_poly_vector(ct1, ct2, polys, ct1.scale(), relin_keys, ckks_encoder);
+    ckks_eva->evaluate_polynomial(polys, ct1, ct2, polys[0].basis_type() == Chebyshev,
+        false, ct1.scale(), (double)(1 << 30), relin_keys, ckks_encoder);
     time.end();
     printf("ct1 scale : %.10lf\n", ct1.scale());
     time.print_time("evaluate_poly_vector time :");
