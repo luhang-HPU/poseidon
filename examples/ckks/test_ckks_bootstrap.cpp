@@ -21,6 +21,12 @@ using namespace poseidon;
 
 namespace
 {
+struct ErrorStats
+{
+    double max_error;
+    double rmse;
+    std::size_t max_error_slot;
+};
 
 std::vector<uint32_t> bootstrap_modulus_chain()
 {
@@ -30,9 +36,15 @@ std::vector<uint32_t> bootstrap_modulus_chain()
     return chain;
 }
 
-void print_error(const std::vector<std::complex<double>> &actual,
-                 const std::vector<std::complex<double>> &expected)
+ErrorStats calculate_error(const std::vector<std::complex<double>> &actual,
+                           const std::vector<std::complex<double>> &expected)
 {
+    if (actual.size() != expected.size() || expected.empty())
+    {
+        throw std::invalid_argument(
+            "bootstrap error calculation requires equally sized non-empty vectors");
+    }
+
     double max_error = 0.0;
     double squared_error_sum = 0.0;
     std::size_t max_error_slot = 0;
@@ -50,8 +62,7 @@ void print_error(const std::vector<std::complex<double>> &actual,
 
     const double rmse =
         std::sqrt(squared_error_sum / static_cast<double>(expected.size()));
-    std::cout << "max abs error : " << max_error << " at slot " << max_error_slot << '\n';
-    std::cout << "rmse          : " << rmse << '\n';
+    return {max_error, rmse, max_error_slot};
 }
 
 int run_legacy_bootstrap()
@@ -178,7 +189,8 @@ int run_new_bootstrap()
     const auto elapsed =
         std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count();
     const auto raised_level = context.crt_context()->first_context_data()->level();
-    std::cout << "bootstrap levels : " << raised_level - output.level() << " ("
+    const auto consumed_levels = raised_level - output.level();
+    std::cout << "bootstrap levels : " << consumed_levels << " ("
               << raised_level << " -> " << output.level() << ")\n";
     std::cout << "bootstrap time   : " << elapsed << " ms\n";
 
@@ -199,8 +211,20 @@ int run_new_bootstrap()
         std::cout << ' ' << result[i].real();
     }
     std::cout << '\n';
-    print_error(result, source);
+    const auto error = calculate_error(result, source);
+    std::cout << "max abs error : " << error.max_error
+              << " at slot " << error.max_error_slot << '\n';
+    std::cout << "rmse          : " << error.rmse << '\n';
 
+    constexpr uint32_t expected_level_consumption = 14;
+    constexpr double max_error_limit = 2e-4;
+    constexpr double rmse_limit = 1e-4;
+    if (consumed_levels != expected_level_consumption ||
+        error.max_error > max_error_limit || error.rmse > rmse_limit)
+    {
+        std::cerr << "new bootstrap regression check failed\n";
+        return 1;
+    }
     return 0;
 }
 

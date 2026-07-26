@@ -2,8 +2,10 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstdint>
 #include <cstring>
 #include <fstream>
+#include <limits>
 #include <map>
 #include <mutex>
 #include <sstream>
@@ -14,6 +16,17 @@ namespace poseidon
 namespace
 {
 constexpr double kPi = 3.141592653589793238462643383279502884;
+constexpr std::size_t kMaxCosineHeapNodes = 1U << 20;
+constexpr std::size_t kMaxCosineHeapCoefficients = 1U << 20;
+
+long checked_slot_count(long log_slots)
+{
+    if (log_slots <= 0 || log_slots >= std::numeric_limits<long>::digits)
+    {
+        throw std::invalid_argument("bootstrap log_slots is out of range");
+    }
+    return 1L << log_slots;
+}
 
 struct CosineHeapNode
 {
@@ -23,23 +36,78 @@ struct CosineHeapNode
 
 std::vector<CosineHeapNode> read_cosine_heap(std::istream &input)
 {
-    int heap_len = 0;
-    input >> heap_len;
-    std::vector<CosineHeapNode> heap(static_cast<std::size_t>(heap_len));
-    int index = 0;
-    int degree = 0;
-    while (input >> index >> degree)
+    std::int64_t heap_len_value = 0;
+    if (!(input >> heap_len_value) || heap_len_value <= 0 ||
+        static_cast<std::uint64_t>(heap_len_value) > kMaxCosineHeapNodes)
     {
-        if (index < 0 || index >= heap_len)
+        throw std::runtime_error("invalid bootstrap cosine heap length");
+    }
+
+    const auto heap_len = static_cast<std::size_t>(heap_len_value);
+    if ((heap_len & (heap_len + 1)) != 0)
+    {
+        throw std::runtime_error(
+            "bootstrap cosine heap length must describe a complete binary tree");
+    }
+
+    std::vector<CosineHeapNode> heap(heap_len);
+    std::vector<bool> populated(heap_len, false);
+    std::size_t coefficient_count = 0;
+    while (true)
+    {
+        input >> std::ws;
+        if (input.eof())
+        {
+            break;
+        }
+
+        std::int64_t index_value = 0;
+        std::int64_t degree_value = 0;
+        if (!(input >> index_value >> degree_value))
+        {
+            throw std::runtime_error("malformed bootstrap cosine heap node");
+        }
+        if (index_value < 0 ||
+            static_cast<std::uint64_t>(index_value) >= heap_len)
         {
             throw std::runtime_error("invalid bootstrap cosine heap index");
         }
-        heap[static_cast<std::size_t>(index)].degree = degree;
-        heap[static_cast<std::size_t>(index)].cheb.resize(static_cast<std::size_t>(degree + 1));
-        for (int i = 0; i <= degree; ++i)
+        if (degree_value < 0 ||
+            static_cast<std::uint64_t>(degree_value) >= kMaxCosineHeapCoefficients)
         {
-            input >> heap[static_cast<std::size_t>(index)].cheb[static_cast<std::size_t>(i)];
+            throw std::runtime_error("invalid bootstrap cosine polynomial degree");
         }
+
+        const auto index = static_cast<std::size_t>(index_value);
+        if (populated[index])
+        {
+            throw std::runtime_error("duplicate bootstrap cosine heap index");
+        }
+
+        const auto node_size = static_cast<std::size_t>(degree_value) + 1;
+        if (node_size > kMaxCosineHeapCoefficients - coefficient_count)
+        {
+            throw std::runtime_error("bootstrap cosine heap has too many coefficients");
+        }
+        coefficient_count += node_size;
+
+        auto &node = heap[index];
+        node.degree = static_cast<int>(degree_value);
+        node.cheb.resize(node_size);
+        for (double &coefficient : node.cheb)
+        {
+            if (!(input >> coefficient) || !std::isfinite(coefficient))
+            {
+                throw std::runtime_error(
+                    "invalid bootstrap cosine heap coefficient");
+            }
+        }
+        populated[index] = true;
+    }
+
+    if (!populated[0])
+    {
+        throw std::runtime_error("bootstrap cosine heap has no root polynomial");
     }
     return heap;
 }
@@ -359,9 +427,19 @@ Bootstrapper::Bootstrapper(const PoseidonContext &context,
                            long log_slots, long boundary_k, double initial_scale,
                            double final_scale, std::string cosine_heap_path)
     : context_(context), evaluator_(evaluator), encoder_(encoder), log_slots_(log_slots),
-      slots_(1L << log_slots), boundary_k_(boundary_k), initial_scale_(initial_scale),
-      final_scale_(final_scale), cosine_heap_path_(std::move(cosine_heap_path))
+      slots_(checked_slot_count(log_slots)), boundary_k_(boundary_k),
+      initial_scale_(initial_scale), final_scale_(final_scale),
+      cosine_heap_path_(std::move(cosine_heap_path))
 {
+    if (boundary_k_ <= 0)
+    {
+        throw std::invalid_argument("bootstrap boundary_k must be positive");
+    }
+    if (!std::isfinite(initial_scale_) || initial_scale_ <= 0.0 ||
+        !std::isfinite(final_scale_) || final_scale_ <= 0.0)
+    {
+        throw std::invalid_argument("bootstrap scales must be finite and positive");
+    }
 }
 
 int Bootstrapper::giant_step(int count)
@@ -813,13 +891,11 @@ void Bootstrapper::rotate_allow_transparent(const Ciphertext &cipher,
 }
 
 void Bootstrapper::eval_mod(const Ciphertext &cipher,
-                                          Ciphertext &destination,
-                                          const RelinKeys &relin_keys,
-                                          uint32_t double_angle,
-                                          double inverse_coeff,
-                                          double target_scale) const
+                            Ciphertext &destination,
+                            const RelinKeys &relin_keys,
+                            uint32_t double_angle,
+                            double inverse_coeff) const
 {
-    (void)target_scale;
     const auto &heap = cosine_heap(cosine_heap_path_);
     const int heap_m =
         static_cast<int>(std::llround(std::log2(static_cast<double>(heap.size() + 1)))) - 1;

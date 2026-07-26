@@ -4,6 +4,8 @@
 #include "poseidon/encryptor.h"
 #include "poseidon/util/debug.h"
 
+#include <limits>
+
 namespace poseidon
 {
 EvaluatorCkksBase::EvaluatorCkksBase(const PoseidonContext &context)
@@ -1140,12 +1142,30 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
         throw invalid_argument(
             "bootstrap output_ratio must be positive and even for real projection");
     }
+    if (config.output_ratio >
+        static_cast<uint32_t>(std::numeric_limits<int>::max()))
+    {
+        throw invalid_argument("bootstrap output_ratio exceeds the supported range");
+    }
+    if (!std::isfinite(config.inverse_coeff) || config.inverse_coeff < 0.0)
+    {
+        throw invalid_argument(
+            "bootstrap inverse_coeff must be zero or a finite positive value");
+    }
+    if (ciph.size() != 2)
+    {
+        throw invalid_argument("bootstrap supports size-2 ciphertexts only");
+    }
 
     Ciphertext prepared = ciph;
     auto input_context_data = context_.crt_context()->get_context_data(prepared.parms_id());
     if (!input_context_data)
     {
         throw invalid_argument("bootstrap input has invalid parms_id");
+    }
+    if (!std::isfinite(prepared.scale()) || prepared.scale() <= 0.0)
+    {
+        throw invalid_argument("bootstrap input scale must be finite and positive");
     }
 
     const auto q0_level = input_context_data->parms().q0_level();
@@ -1163,6 +1183,16 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
         std::ldexp(1.0, static_cast<int>(config.log_message_ratio));
     double q0_over_message_ratio = context_.crt_context()->q0() / message_ratio;
     q0_over_message_ratio = std::exp2(std::round(std::log2(q0_over_message_ratio)));
+    if (!std::isfinite(q0_over_message_ratio) || q0_over_message_ratio <= 0.0)
+    {
+        throw invalid_argument("bootstrap target input scale is invalid");
+    }
+    if (prepared.scale() > q0_over_message_ratio &&
+        !util::are_approximate<double>(prepared.scale(), q0_over_message_ratio))
+    {
+        throw invalid_argument("bootstrap input scale exceeds the supported target scale");
+    }
+
     double remaining_scale = std::round(q0_over_message_ratio / prepared.scale());
     while (remaining_scale > 1.0)
     {
@@ -1171,6 +1201,11 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
         multiply_const_direct(prepared, static_cast<int>(factor), prepared, encoder);
         prepared.scale() *= factor;
         remaining_scale = std::round(remaining_scale / factor);
+    }
+    if (!util::are_approximate<double>(prepared.scale(), q0_over_message_ratio))
+    {
+        throw invalid_argument(
+            "bootstrap input scale cannot be aligned to the supported target scale");
     }
 
     drop_modulus(prepared, prepared,
@@ -1225,9 +1260,9 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
     Ciphertext real_mod;
     Ciphertext imag_mod;
     bootstrapper.eval_mod(real_slots, real_mod, relin_keys, config.double_angle,
-                          inverse_coeff, eval_mod_scale);
+                          inverse_coeff);
     bootstrapper.eval_mod(imag_slots, imag_mod, relin_keys, config.double_angle,
-                          inverse_coeff, eval_mod_scale);
+                          inverse_coeff);
 
     Ciphertext output;
     bootstrapper.slot_to_coeff(real_mod, imag_mod, output, galois_keys);

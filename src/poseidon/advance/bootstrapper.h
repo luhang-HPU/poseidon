@@ -7,6 +7,7 @@
 #include "poseidon/key/relinkeys.h"
 
 #include <complex>
+#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -30,7 +31,7 @@ public:
                        Ciphertext &destination, const GaloisKeys &galois_keys) const;
     void eval_mod(const Ciphertext &cipher, Ciphertext &destination,
                   const RelinKeys &relin_keys, uint32_t double_angle,
-                  double inverse_coeff, double target_scale) const;
+                  double inverse_coeff) const;
     double inverse_coefficient(uint32_t double_angle) const;
 
 private:
