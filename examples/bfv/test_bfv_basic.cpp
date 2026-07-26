@@ -150,45 +150,6 @@ int main()
         }
     }
 
-    // NTT
-    {
-        print_example_banner("Example: NTT / NTT in bfv");
-        timestacs.start();
-        bfv_eva->ntt_fwd(ct1, ct1);
-        bfv_eva->ntt_inv(ct1, ct1);
-        timestacs.end();
-        bfv_eva->read(ct1);
-        timestacs.print_time("TIME : ");
-        dec.decrypt(ct1, plt_res);
-        encoder.decode(plt_res, msg_res);
-
-        for (auto i = 0; i < msg_expect.size(); i++)
-        {
-            printf("source_data[%d] : %ld\n", i, msg_expect[i]);
-            printf("result_data[%d] : %ld\n", i, msg_res[i]);
-        }
-    }
-
-    // Mod Switch
-    {
-        print_example_banner("Example: Mod Switch / Mod Switch in bfv");
-        cout << "Before Mod Switch level : " << ct1.level() << std::endl;
-        timestacs.start();
-        bfv_eva->drop_modulus_to_next(ct1, ct1);
-        timestacs.end();
-        bfv_eva->read(ct1);
-        cout << "After  Mod Switch level : " << ct1.level() << std::endl;
-        timestacs.print_time("TIME : ");
-        dec.decrypt(ct1, plt_res);
-        encoder.decode(plt_res, msg_res);
-
-        for (auto i = 0; i < msg_expect.size(); i++)
-        {
-            printf("source_data[%d] : %ld\n", i, msg_expect[i]);
-            printf("result_data[%d] : %ld\n", i, msg_res[i]);
-        }
-    }
-
     // MULTIPLY_PLAIN
     {
         print_example_banner("Example: MULTIPLY_PLAIN / MULTIPLY_PLAIN in bfv");

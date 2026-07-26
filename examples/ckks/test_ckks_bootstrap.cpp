@@ -69,9 +69,9 @@ int run_legacy_bootstrap()
 {
     std::cout << "\nLegacy bootstrap test\n";
 
-    ParametersLiteral parameters{CKKS, 15, 14, 32, 1, 1, 0, {}, {}};
-    std::vector<uint32_t> log_q(30, 32);
-    parameters.set_log_modulus(log_q, {32});
+    ParametersLiteral parameters{CKKS, 15, 14, 40, 1, 1, 0, {}, {}};
+    std::vector<uint32_t> log_q(30, 40);
+    parameters.set_log_modulus(log_q, {40});
 
     PoseidonFactory::get_instance()->set_device_type(DEVICE_SOFTWARE);
     auto context = PoseidonFactory::get_instance()->create_poseidon_context(parameters);
@@ -103,7 +103,7 @@ int run_legacy_bootstrap()
 
     const auto start = std::chrono::high_resolution_clock::now();
     evaluator->multiply_relin(cipher, cipher, cipher, relin_keys);
-    evaluator->rescale_dynamic(cipher, cipher, static_cast<int64_t>(1) << 45);
+    evaluator->rescale_dynamic(cipher, cipher, static_cast<int64_t>(1) << 40);
 
     EvalModPoly eval_mod_poly(context, CosDiscrete, static_cast<uint64_t>(1) << 40,
                               1, 9, 3, 16, 0, 30);
