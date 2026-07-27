@@ -251,6 +251,27 @@ void KSwitchBV::switch_key_inplace(Ciphertext &encrypted, ConstRNSIter target_it
 
     // Prepare input
     auto &key_vector = kswitch_keys.data()[kswitch_keys_index];
+    if (key_vector.empty())
+    {
+        POSEIDON_THROW(invalid_argument_error, "keyswitch key vector is empty");
+    }
+    if (key_vector.size() < decomp_modulus_size)
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "keyswitch key vector is smaller than ciphertext modulus size");
+    }
+    for (size_t J = 0; J < decomp_modulus_size; ++J)
+    {
+        if (key_vector[J].data().size() == 0)
+        {
+            POSEIDON_THROW(invalid_argument_error, "keyswitch key component is empty");
+        }
+        if (key_vector[J].data().coeff_modulus_size() < key_modulus_size)
+        {
+            POSEIDON_THROW(invalid_argument_error,
+                           "keyswitch key component has too few modulus limbs");
+        }
+    }
     size_t key_component_count = key_vector[0].data().size();
 
     // Create a copy of target_iter

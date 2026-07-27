@@ -19,7 +19,7 @@ class Polynomial
 public:
     Polynomial() = default;
 
-    inline Polynomial(const vector<complex<double>> &data, int a, int b, int max_deg,
+    inline Polynomial(const vector<complex<double>> &data, double a, double b, int max_deg,
                       PolynomialBasisType basis_type, bool lead = false)
         : data_(std::move(data)), a_(a), b_(b), max_deg_(max_deg), basis_type_(basis_type),
           lead_(lead){};
@@ -52,8 +52,8 @@ public:
 
 private:
     vector<complex<double>> data_{};
-    int a_ = 0;
-    int b_ = 0;
+    double a_ = 0;
+    double b_ = 0;
     int max_deg_ = 0;
     PolynomialBasisType basis_type_ = Monomial;
     bool lead_ = false;

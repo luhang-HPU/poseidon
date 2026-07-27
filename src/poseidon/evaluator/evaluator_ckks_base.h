@@ -6,8 +6,31 @@
 #include "poseidon/encryptor.h"
 #include "poseidon/key/keyswitch.h"
 
+#include <cstdint>
+#include <string>
+
 namespace poseidon
 {
+struct BootstrapConfig
+{
+    // Approximation interval [-boundary_k, boundary_k].
+    uint32_t boundary_k = 25;
+    // Base-2 logarithm of the message ratio used during modulus raising.
+    uint32_t log_message_ratio = 5;
+    // Number of double-angle iterations after cosine approximation.
+    uint32_t double_angle = 2;
+    // Working scale used by the modular-reduction polynomial.
+    uint32_t scaling_log = 51;
+    // Integer compensation applied to the final bootstrap result.
+    uint32_t output_ratio = 32;
+    // Return the real projection instead of preserving a complex message.
+    bool project_real = true;
+    // Zero selects the inverse coefficient derived from the cosine heap.
+    double inverse_coeff = 0.0;
+    // Empty uses the embedded cosine heap.
+    std::string cosine_heap_path;
+};
+
 class EvaluatorCkksBase : public EvaluatorBase
 {
     using Base = EvaluatorBase;
@@ -86,10 +109,22 @@ public:
 
     void eval_mod(const Ciphertext &ciph, Ciphertext &result, const EvalModPoly &eva_poly,
                   const RelinKeys &relin_keys, const CKKSEncoder &encoder);
+    void eval_mod_high_precision(const Ciphertext &ciph, Ciphertext &result,
+                                 const EvalModPoly &eva_poly, const RelinKeys &relin_keys,
+                                 const CKKSEncoder &encoder);
 
     void bootstrap(const Ciphertext &ciph, Ciphertext &result, const RelinKeys &relin_keys,
                    const GaloisKeys &galois_keys, const CKKSEncoder &encoder,
                    EvalModPoly &eval_mod_poly);
+    // The refreshed result keeps the q0-derived scale. Callers that require the
+    // context's default scale must normalize it with one additional rescale.
+    void bootstrap(const Ciphertext &ciph, Ciphertext &result, const RelinKeys &relin_keys,
+                   const GaloisKeys &galois_keys, const CKKSEncoder &encoder,
+                   const BootstrapConfig &config = BootstrapConfig{});
+    void bootstrap_high_precision(const Ciphertext &ciph, Ciphertext &result,
+                                  const RelinKeys &relin_keys,
+                                  const GaloisKeys &galois_keys,
+                                  const CKKSEncoder &encoder, EvalModPoly &eval_mod_poly);
 
     void multiply_const_direct(const Ciphertext &ciph, int const_data, Ciphertext &result,
                                const CKKSEncoder &encoder) const;
@@ -163,6 +198,10 @@ public:
 
 private:
     inline void set_min_scale(double scale) { min_scale_ = scale; }
+
+    void bootstrap_core(const Ciphertext &ciph, Ciphertext &result, const RelinKeys &relin_keys,
+                        const GaloisKeys &galois_keys, const CKKSEncoder &encoder,
+                        EvalModPoly &eval_mod_poly, bool high_precision_eval_mod);
 
     void rescale_for_bootstrap(Ciphertext &ciph1);
 

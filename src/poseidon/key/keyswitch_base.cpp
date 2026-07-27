@@ -382,10 +382,20 @@ void KSwitchBase::conjugate_internal(Ciphertext &encrypted, const GaloisKeys &ga
     // Extract encryption parameters.
     auto &context_data = *context_data_ptr;
     auto galois_tool = context_.crt_context()->galois_tool();
+    auto galois_elt = galois_tool->get_elt_from_step(0);
+
+    if (galois_keys.parms_id() != context_.crt_context()->key_parms_id())
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "galois_keys is not valid for encryption parameters");
+    }
+    if (!galois_keys.has_key(galois_elt))
+    {
+        POSEIDON_THROW(invalid_argument_error, "conjugation Galois key not present");
+    }
 
     // Perform rotation and key switching
-    apply_galois_inplace(encrypted, galois_tool->get_elt_from_step(0), galois_keys,
-                         std::move(pool));
+    apply_galois_inplace(encrypted, galois_elt, galois_keys, std::move(pool));
 }
 
 void KSwitchBase::rotate_internal(Ciphertext &encrypted, int steps, const GaloisKeys &galois_keys,
