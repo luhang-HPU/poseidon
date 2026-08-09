@@ -283,6 +283,8 @@ public:
         coeff_modulus_size_ = 0;
         scale_ = 1.0;
         correction_factor_ = 1;
+        bgv_plaintext_space_ = 0;
+        bgv_int_factor_ = 1;
         data_.release();
     }
 
@@ -678,6 +680,26 @@ public:
         return correction_factor_;
     }
 
+    POSEIDON_NODISCARD inline std::uint64_t &bgv_plaintext_space() noexcept
+    {
+        return bgv_plaintext_space_;
+    }
+
+    POSEIDON_NODISCARD inline const std::uint64_t &bgv_plaintext_space() const noexcept
+    {
+        return bgv_plaintext_space_;
+    }
+
+    POSEIDON_NODISCARD inline std::uint64_t &bgv_int_factor() noexcept
+    {
+        return bgv_int_factor_;
+    }
+
+    POSEIDON_NODISCARD inline const std::uint64_t &bgv_int_factor() const noexcept
+    {
+        return bgv_int_factor_;
+    }
+
     /**
     Returns the currently used MemoryPoolHandle.
     */
@@ -725,6 +747,10 @@ private:
     double scale_ = 1.0;
 
     std::uint64_t correction_factor_ = 1;
+
+    std::uint64_t bgv_plaintext_space_ = 0;
+
+    std::uint64_t bgv_int_factor_ = 1;
 
     DynArray<ct_coeff_type> data_;
     vector<RNSPoly> polys_;

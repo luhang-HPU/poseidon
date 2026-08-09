@@ -253,6 +253,8 @@ void Encryptor::encrypt_internal(const Plaintext &plain, bool is_asymmetric, boo
         RNSIter destination_iter = *iter(destination);
         add_poly_coeffmod(destination_iter, plain_iter, coeff_modulus_size, coeff_modulus,
                           destination_iter);
+        destination.bgv_plaintext_space() = parms.plain_modulus().value();
+        destination.bgv_int_factor() = 1;
     }
     else
     {

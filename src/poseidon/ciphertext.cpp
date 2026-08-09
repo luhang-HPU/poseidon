@@ -23,6 +23,8 @@ Ciphertext &Ciphertext::operator=(const Ciphertext &assign)
     is_ntt_form_ = assign.is_ntt_form_;
     scale_ = assign.scale_;
     correction_factor_ = assign.correction_factor_;
+    bgv_plaintext_space_ = assign.bgv_plaintext_space_;
+    bgv_int_factor_ = assign.bgv_int_factor_;
     crt_context_ = assign.crt_context_;
 
     // Then resize
@@ -180,6 +182,8 @@ streamoff Ciphertext::save_size(compr_mode_type compr_mode) const
                                                   sizeof(uint64_t),       // coeff_modulus_size_
                                                   sizeof(double),         // scale_
                                                   sizeof(uint64_t),       // correction_factor_
+                                                  sizeof(uint64_t),       // bgv_plaintext_space_
+                                                  sizeof(uint64_t),       // bgv_int_factor_
                                                   data_size),
                                          compr_mode);
 
@@ -205,6 +209,8 @@ void Ciphertext::save_members(ostream &stream) const
         stream.write(reinterpret_cast<const char *>(&coeff_modulus_size64), sizeof(uint64_t));
         stream.write(reinterpret_cast<const char *>(&scale_), sizeof(double));
         stream.write(reinterpret_cast<const char *>(&correction_factor_), sizeof(uint64_t));
+        stream.write(reinterpret_cast<const char *>(&bgv_plaintext_space_), sizeof(uint64_t));
+        stream.write(reinterpret_cast<const char *>(&bgv_int_factor_), sizeof(uint64_t));
 
         if (has_seed_marker())
         {
@@ -272,6 +278,10 @@ void Ciphertext::load_members(const PoseidonContext &context, istream &stream,
         stream.read(reinterpret_cast<char *>(&scale), sizeof(double));
         uint64_t correction_factor = 1;
         stream.read(reinterpret_cast<char *>(&correction_factor), sizeof(uint64_t));
+        uint64_t bgv_plaintext_space = 0;
+        uint64_t bgv_int_factor = 1;
+        stream.read(reinterpret_cast<char *>(&bgv_plaintext_space), sizeof(uint64_t));
+        stream.read(reinterpret_cast<char *>(&bgv_int_factor), sizeof(uint64_t));
         // Set values already at this point for the metadata validity check
         new_data.parms_id_ = parms_id;
         new_data.is_ntt_form_ = (is_ntt_form_byte == poseidon_byte{}) ? false : true;
@@ -280,6 +290,8 @@ void Ciphertext::load_members(const PoseidonContext &context, istream &stream,
         new_data.coeff_modulus_size_ = safe_cast<size_t>(coeff_modulus_size64);
         new_data.scale_ = scale;
         new_data.correction_factor_ = correction_factor;
+        new_data.bgv_plaintext_space_ = bgv_plaintext_space;
+        new_data.bgv_int_factor_ = bgv_int_factor;
         // TODO too many shared_ptr<context> poseidon data structure to remove
         new_data.crt_context_ = context.crt_context();
 

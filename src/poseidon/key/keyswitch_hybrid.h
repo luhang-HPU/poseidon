@@ -30,6 +30,8 @@ public:
 protected:
     void generate_one_kswitch_key(const SecretKey &prev_secret_key, ConstRNSIter new_key,
                                   vector<PublicKey> &destination) const override;
+    void generate_one_kswitch_key(const PublicKey &new_public_key, ConstRNSIter key_to_switch,
+                                  vector<PublicKey> &destination) const override;
 };
 
 class KSwitchHybrid : public KSwitchBase
@@ -40,6 +42,8 @@ public:
                               const GaloisKeys &galois_keys, MemoryPoolHandle pool) const override;
     void relinearize_internal(Ciphertext &encrypted, const RelinKeys &relin_keys,
                               size_t destination_size, MemoryPoolHandle pool) const override;
+    void switch_key_internal(Ciphertext &encrypted, const KSwitchKeys &switch_keys,
+                             MemoryPoolHandle pool) const override;
 
 private:
     void switch_key_inplace(Ciphertext &encrypted, RNSPoly &poly, const KSwitchKeys &kswitch_keys,

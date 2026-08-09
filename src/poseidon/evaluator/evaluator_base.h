@@ -3,6 +3,7 @@
 #include "poseidon/advance/homomorphic_linear_transform.h"
 #include "poseidon/ciphertext.h"
 #include "poseidon/key/galoiskeys.h"
+#include "poseidon/key/kswitchkeys.h"
 #include "poseidon/key/relinkeys.h"
 #include "poseidon/plaintext.h"
 
@@ -37,6 +38,8 @@ public:
                                 MemoryPoolHandle pool = MemoryManager::GetPool()) const = 0;
     virtual void relinearize(const Ciphertext &ciph, Ciphertext &result,
                              const RelinKeys &relin_keys) const = 0;
+    virtual void switch_key(const Ciphertext &ciph, Ciphertext &result,
+                            const KSwitchKeys &switch_keys) const;
     virtual void multiply_relin(const Ciphertext &ciph1, const Ciphertext &ciph2,
                                 Ciphertext &result, const RelinKeys &relin_keys) const = 0;
     virtual void rotate(const Ciphertext &ciph, Ciphertext &result, int step,

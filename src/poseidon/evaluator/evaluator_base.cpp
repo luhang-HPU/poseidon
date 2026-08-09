@@ -16,6 +16,11 @@ void EvaluatorBase::multiply_plain(const Ciphertext &ciph, const Plaintext &plai
     multiply_plain_inplace(result, plain, pool);
 }
 
+void EvaluatorBase::switch_key(const Ciphertext &, Ciphertext &, const KSwitchKeys &) const
+{
+    POSEIDON_THROW(invalid_argument_error, "switch_key is not supported by this evaluator");
+}
+
 void EvaluatorBase::drop_modulus(const Ciphertext &ciph, Ciphertext &result, uint32_t level) const
 {
     auto parms_id = context_.crt_context()->parms_id_map().at(level);
