@@ -4,6 +4,8 @@
 #include "poseidon/encryptor.h"
 #include "poseidon/util/debug.h"
 
+#include <cstdlib>
+#include <iostream>
 #include <limits>
 
 namespace poseidon
@@ -1120,6 +1122,14 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
                                   const CKKSEncoder &encoder,
                                   const BootstrapConfig &config)
 {
+    const bool trace_bootstrap = std::getenv("POSEIDON_BOOTSTRAP_TRACE") != nullptr;
+    auto trace_state = [&](const char *label, const Ciphertext &cipher) {
+        if (trace_bootstrap)
+        {
+            std::cerr << "[bootstrap trace] " << label << ": level=" << cipher.level()
+                      << ", log2(scale)=" << std::log2(cipher.scale()) << '\n';
+        }
+    };
     if (config.boundary_k == 0)
     {
         throw invalid_argument("bootstrap boundary_k must be positive");
@@ -1135,6 +1145,10 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
     if (config.scaling_log >= 63)
     {
         throw invalid_argument("bootstrap scaling_log must be less than 63");
+    }
+    if (config.output_scaling_log >= 63)
+    {
+        throw invalid_argument("bootstrap output_scaling_log must be less than 63");
     }
     if (config.output_ratio == 0 ||
         (config.project_real && (config.output_ratio & 1U) != 0))
@@ -1210,10 +1224,24 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
 
     drop_modulus(prepared, prepared,
                  context_.crt_context()->parms_id_map().at(q0_level));
+    trace_state("prepared", prepared);
+
+    double slot_to_coeff_final_scale = context_.parameters_literal()->scale();
+    if (config.output_scaling_log != 0)
+    {
+        const double requested_output_scale =
+            std::ldexp(1.0, static_cast<int>(config.output_scaling_log));
+        slot_to_coeff_final_scale = requested_output_scale * ciph.scale() /
+                                    static_cast<double>(context_.crt_context()->q0());
+    }
+    if (!std::isfinite(slot_to_coeff_final_scale) || slot_to_coeff_final_scale <= 0.0)
+    {
+        throw invalid_argument("bootstrap output scale produces an invalid SlotToCoeff scale");
+    }
 
     Bootstrapper bootstrapper(
         context_, *this, encoder, context_.parameters_literal()->log_slots(),
-        config.boundary_k, ciph.scale(), context_.parameters_literal()->scale(),
+        config.boundary_k, ciph.scale(), slot_to_coeff_final_scale,
         config.cosine_heap_path);
     bootstrapper.generate_linear_coefficients();
 
@@ -1222,6 +1250,7 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
     const auto first_context_data = context_.crt_context()->first_context_data();
     raised.scale() =
         static_cast<double>(first_context_data->coeff_modulus().front().value());
+    trace_state("mod_raise", raised);
 
     const double eval_mod_scale =
         std::ldexp(1.0, static_cast<int>(config.scaling_log));
@@ -1236,15 +1265,22 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
     {
         multiply_const(raised, 1.0, raise_factor, raised, encoder);
     }
+    trace_state("raise_scale_aligned", raised);
 
     Ciphertext real_slots;
     Ciphertext imag_slots;
     bootstrapper.coeff_to_slot(raised, real_slots, imag_slots, galois_keys);
+    trace_state("coeff_to_slot.real", real_slots);
 
     const double real_scale_adjust = eval_mod_scale / real_slots.scale();
     const double imag_scale_adjust = eval_mod_scale / imag_slots.scale();
-    if (std::abs(real_scale_adjust - 1.0) > 1e-6 ||
-        std::abs(imag_scale_adjust - 1.0) > 1e-6)
+    // Generated NTT primes are close to, but not exactly, powers of two. For
+    // a 45-bit q0 the relative difference from 2^45 is about 1.2e-6. Treat
+    // that tiny difference as metadata-only scale drift; correcting it with
+    // a plaintext multiply and rescale would waste one bootstrap level.
+    constexpr double metadata_scale_tolerance = 1e-5;
+    if (std::abs(real_scale_adjust - 1.0) > metadata_scale_tolerance ||
+        std::abs(imag_scale_adjust - 1.0) > metadata_scale_tolerance)
     {
         multiply_const(real_slots, real_scale_adjust, eval_mod_scale, real_slots, encoder);
         multiply_const(imag_slots, imag_scale_adjust, eval_mod_scale, imag_slots, encoder);
@@ -1253,6 +1289,7 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
         real_slots.scale() = eval_mod_scale;
         imag_slots.scale() = eval_mod_scale;
     }
+    trace_state("eval_mod_input.real", real_slots);
 
     const double inverse_coeff = config.inverse_coeff > 0.0
                                      ? config.inverse_coeff
@@ -1263,9 +1300,11 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
                           inverse_coeff);
     bootstrapper.eval_mod(imag_slots, imag_mod, relin_keys, config.double_angle,
                           inverse_coeff);
+    trace_state("eval_mod_output.real", real_mod);
 
     Ciphertext output;
     bootstrapper.slot_to_coeff(real_mod, imag_mod, output, galois_keys);
+    trace_state("slot_to_coeff", output);
     if (config.project_real)
     {
         Ciphertext conjugated;

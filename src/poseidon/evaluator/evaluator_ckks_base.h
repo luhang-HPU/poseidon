@@ -21,6 +21,9 @@ struct BootstrapConfig
     uint32_t double_angle = 2;
     // Working scale used by the modular-reduction polynomial.
     uint32_t scaling_log = 51;
+    // Requested ciphertext scale after SlotToCoeff. Zero preserves the
+    // legacy output scale derived from q0 and the context scale.
+    uint32_t output_scaling_log = 0;
     // Integer compensation applied to the final bootstrap result.
     uint32_t output_ratio = 32;
     // Return the real projection instead of preserving a complex message.
