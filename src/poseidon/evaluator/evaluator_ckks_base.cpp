@@ -366,9 +366,13 @@ void EvaluatorCkksBase::dft(const Ciphertext &ciph, const LinearMatrixGroup &mat
 {
 
     multiply_by_diag_matrix_bsgs(ciph, matrix_group.data()[0], result, rot_key);
+    spdlog::debug("[dft] stage 0: in scale = 2^{}, out scale = 2^{}, out level = {}",
+                  std::log2(ciph.scale()), std::log2(result.scale()), result.level());
     for (int i = 1; i < matrix_group.data().size(); i++)
     {
         multiply_by_diag_matrix_bsgs(result, matrix_group.data()[i], result, rot_key);
+        spdlog::debug("[dft] stage {}: out scale = 2^{}, out level = {}", i,
+                      std::log2(result.scale()), result.level());
     }
 }
 
@@ -804,22 +808,6 @@ void EvaluatorCkksBase::evaluate_polynomial(const PolynomialVector& poly_vec, co
         }
     }
 
-    // // power basis result right
-    // {
-    //     std::vector<std::complex<double>> msg_tmp = decrypt_and_decode(ct_basis);
-    //     std::complex<double> msg_res;
-    //     evaluate_polynomial_message(poly_vec, msg_tmp[0], msg_res, is_chev, is_lazy);
-    //
-    //     spdlog::debug("CHECK power basis --------------------------");
-    //     auto msg_basis = decrypt_and_decode(ct_basis);
-    //     for (auto& [i, ct] : power_basis)
-    //     {
-    //         auto msg_tmp = decrypt_and_decode(power_basis[i]);
-    //         spdlog::debug("power basis ciphertext[{}] = ({}, {})", i, msg_tmp.data()[0].real(), msg_tmp.data()[0].imag());
-    //     }
-    //     spdlog::debug("--------------------------");
-    // }
-
     // origin polynomial right
     // {
     //     spdlog::debug("CHECK origin polynomial ====================================");
@@ -963,8 +951,11 @@ void EvaluatorCkksBase::get_paterson_stockmeyer_polynomial(const Polynomial& pol
 
     SimPower sim_op;
     std::vector<Polynomial> ps_res;
-    recurse_ps(poly, log_split, input_level - bit_len(level_consumed_per_rescale * (poly.degree()-1)),
-        output_scale, power_basis_sim, ps_res, sim_op);
+    // lattigo: inputLevel - eval.PolynomialDepth(degree), where PolynomialDepth(degree) =
+    // levelsConsumedPerRescaling * (bits.Len64(degree) - 1) = lcpr * floor(log2(degree))
+    recurse_ps(poly, log_split,
+               input_level - level_consumed_per_rescale * (bit_len(poly.degree()) - 1),
+               output_scale, power_basis_sim, ps_res, sim_op);
 
     ps_poly.degree_ = poly.degree();
     ps_poly.base_ = 1 << log_split;
@@ -1088,11 +1079,13 @@ void EvaluatorCkksBase::evaluate_paterson_stockmeyer_polynomial_vector_message(
 {
     auto split = ps_polys_vec.polys_[0].polys_.size();
 
+    // mirrors the ciphertext path: polynomial piece i is stored in baby_steps[split-i-1],
+    // with its degree, so that the giant-step pairing logic sees the same layout
     vector<BabyStepMessage> baby_steps(split);
     for (auto i = 0; i < baby_steps.size(); i++)
     {
-        evaluate_baby_step_message(ps_polys_vec, power_basis, split - i - 1,
-                                   baby_steps[split - i - 1].value);
+        evaluate_baby_step_message(ps_polys_vec, power_basis, i, baby_steps[split - i - 1].value);
+        baby_steps[split - i - 1].degree = ps_polys_vec[0][i].degree();
     }
 
     while (baby_steps.size() != 1)
@@ -1159,57 +1152,52 @@ void EvaluatorCkksBase::evaluate_polynomial_vector_from_power_basis_optimized(co
     }
     else
     {
-        if (minimum_degree_non_zero_coefficient == 0)
-        {
-            // TODO should init ciphertext
-            ciph_res = power_basis.at(1);
-            if (ciph_res.level() > target_level)
-            {
-                drop_modulus(ciph_res, ciph_res, target_level);
-            }
-            if (!is_approximate(ciph_res.scale(), target_scale))
-            {
-                ciph_res.scale() = target_scale;
-                // spdlog::error("ciph.scale = {}, target.scale = {}", ciph_res.scale(), target_scale);
-                // POSEIDON_THROW_LOGIC_ERROR("ciph scale dismatch");
-            }
+        // Allocates a zero ciphertext at (target_level, target_scale) — note that X^0 is not
+        // stored in the power basis, so the result must start from zero (see lattigo
+        // EvaluatePolynomialVectorFromPowerBasis: rlwe.NewCiphertext).
+        auto &parms_id = context_.crt_context()->parms_id_map().at(target_level);
+        ciph_res.resize(context_, parms_id, 2);
+        ciph_res.is_ntt_form() = true;
+        ciph_res.scale() = target_scale;
 
-            if (is_even)
-            {
-                add_const(ciph_res, poly_vec.polys()[0][0], ciph_res, encoder);
-            }
-
-            return;
-        }
-
-        // TODO should init ciphertext
-        {
-            ciph_res = power_basis.at(1);
-            if (ciph_res.level() > target_level)
-            {
-                drop_modulus(ciph_res, ciph_res, target_level);
-            }
-            if (!is_approximate(ciph_res.scale(), target_scale))
-            {
-                ciph_res.scale() = target_scale;
-                // spdlog::error("ciph.scale = {}, target.scale = {}", ciph_res.scale(), target_scale);
-                // POSEIDON_THROW_LOGIC_ERROR("ciph scale dismatch");
-            }
-        }
-
+        // Constant term c_0 (encoded at target scale; only even polynomials have one)
         if (is_even)
         {
             add_const(ciph_res, poly_vec[0][0], ciph_res, encoder);
         }
 
+        if (minimum_degree_non_zero_coefficient == 0)
+        {
+            return;
+        }
+
+        // Loops from the highest degree coefficient down to 1.
+        // Encodes c_k at scale target_scale / X^k.scale so that the product lands exactly on
+        // target_scale (equivalent to lattigo MulThenAdd scalar path).
         for (auto key = poly_vec[0].degree(); key > 0; key--)
         {
             if ((key != 0) && ((!(is_even || is_odd)) || ((key & 1) == 0 && is_even) || ((key & 1) == 1 && is_odd)))
             {
+                auto &x_key = power_basis.at(key);
+                double scale_k = ciph_res.scale() / x_key.scale();
+                if (util::is_approximate<double>(scale_k, 1.0))
+                {
+                    // lattigo MulThenAdd: when the accumulator and X^k share the same scale the
+                    // quotient would be 1.0 and round(c_k * 1.0) would destroy the coefficient.
+                    // Lift the accumulator by the prime at its level instead and encode c_k at
+                    // that prime (value-preserving).
+                    auto lift = context_.crt_context()
+                                    ->get_context_data(ciph_res.parms_id())
+                                    ->coeff_modulus()[ciph_res.level()]
+                                    .value();
+                    multiply_const_direct(ciph_res, safe_cast<int64_t>(lift), ciph_res, encoder);
+                    ciph_res.scale() *= lift;
+                    scale_k = lift;
+                }
+                Plaintext plain_tmp;
+                encoder.encode(poly_vec[0][key], x_key.parms_id(), scale_k, plain_tmp);
                 Ciphertext ciph_tmp;
-                multiply_const(power_basis.at(key), poly_vec[0][key], 1.0, ciph_tmp, encoder);
-                // spdlog::debug("target_level = {}, ciph_res.level = {}, ciph_tmp.level = {}, ciph_res.scale = {}, ciph_tmp.scale = {}",
-                //     target_level, ciph_res.level(), ciph_tmp.level(), ciph_res.scale(), ciph_tmp.scale());
+                multiply_plain(x_key, plain_tmp, ciph_tmp);
                 add_dynamic(ciph_res, ciph_tmp, ciph_res, encoder);
             }
         }
@@ -1244,20 +1232,16 @@ void EvaluatorCkksBase::evaluate_polynomial_vector_from_power_basis_message(
     }
     else
     {
-        if (minimum_degree_non_zero_coefficient == 0)
-        {
-            res = power_basis.at(1);
-            if (is_even)
-            {
-                res += poly_vec.polys()[0][0];
-            }
-            return;
-        }
-
-        res = power_basis.at(1);
+        // starts from zero: X^0 is not stored in the power basis
+        res = complex<double>(0.0, 0.0);
         if (is_even)
         {
             res += poly_vec.polys()[0][0];
+        }
+
+        if (minimum_degree_non_zero_coefficient == 0)
+        {
+            return;
         }
 
         for (auto key = poly_vec[0].degree(); key > 0; key--)
@@ -1280,9 +1264,6 @@ void EvaluatorCkksBase::evaluate_monomial(const Ciphertext& a, Ciphertext& b, co
     rescale(b, b);
     spdlog::debug("b.level = {}, xpow.level = {}", b.level(), xpow.level());
     multiply_relin_dynamic(b, xpow, b, relin_key);
-
-    // TODO  特殊条件判断
-    // if (a.scale())
 
     add_dynamic(a, b, b, encoder);
 }
@@ -1327,21 +1308,6 @@ void EvaluatorCkksBase::evaluate_baby_step(const PatersonStockmeyerPolynomialVec
 
     baby_step.degree = ps_poly_vec[0][j].degree();
     evaluate_polynomial_vector_from_power_basis_optimized(poly_vec_tmp, power_basis, baby_step.value, level, scale, encoder);
-
-    // CHECK evaluate_polynomial_vector_from_power_basis_message
-    {
-        complex<double> res;
-        map<uint32_t, complex<double>> pb_msg;
-        for (auto [i, ct] : power_basis)
-        {
-            pb_msg[i] = decrypt_and_decode(power_basis.at(i))[0];
-        }
-        evaluate_polynomial_vector_from_power_basis_message(poly_vec_tmp, pb_msg, res);
-        spdlog::debug("BABY STEP[{}] ciphertext ({}, {})", j, res.real(), res.imag());
-
-        auto msg_tmp = decrypt_and_decode(baby_step.value);
-        spdlog::debug("BABY STEP[{}] message ({}, {})", j, msg_tmp[0].real(), msg_tmp[0].imag());
-    }
 }
 
 void EvaluatorCkksBase::evaluate_baby_step_message(
@@ -1504,7 +1470,7 @@ void EvaluatorCkksBase::factorize_inner(const Polynomial& poly, int n, Polynomia
     case Monomial:
         for (auto i = n + 1; i < poly.degree()+1; i++)
         {
-            if (poly.is_valid(i) && (!(is_even || is_odd)) || (((i&1) == 0) && is_even) || (((i&1) == 1) && is_odd))
+            if (poly.is_valid(i) && (!(is_even || is_odd) || (((i&1) == 0) && is_even) || (((i&1) == 1) && is_odd)))
             {
                 pq.data()[i-n] = poly.data()[i];
             }
@@ -1513,7 +1479,7 @@ void EvaluatorCkksBase::factorize_inner(const Polynomial& poly, int n, Polynomia
     case Chebyshev:
         for (int i = n + 1, j = 1; i < poly.degree() + 1; i++, j++)
         {
-            if (poly.is_valid(i) && (!(is_even || is_odd)) || (((i&1) == 0) && is_even) || (((i&1) == 1) && is_odd))
+            if (poly.is_valid(i) && (!(is_even || is_odd) || (((i&1) == 0) && is_even) || (((i&1) == 1) && is_odd)))
             {
                 pq.data()[i-n] = poly.data()[i];
                 pq.data()[i-n] = pq.data()[i-n] + pq.data()[i-n];
@@ -1603,7 +1569,12 @@ void EvaluatorCkksBase::recurse_ps(Polynomial poly, int log_split, int target_le
 
     recurse_ps(coeffsr, log_split, target_level, op_res_recurse_sq.scale_, pb, poly_vec_res_recurse_sr, op_res_recurse_sr);
 
-    if (!scale_in_delta_lattigo(op_res_recurse_sr.scale_, op_res_recurse_sq.scale_, 116.0))
+    // Lattigo uses InDelta(ScalePrecision-12) on exact big.Float scales (delta is literally 0
+    // unless the decomposition is wrong). Poseidon tracks scales in double, so the invariant
+    // only holds up to accumulated floating point rounding (~2^-46 relative per operation).
+    // A 30-bit tolerance still separates real decomposition errors (~q_i, i.e. ~2^40) from
+    // double rounding noise.
+    if (!scale_in_delta_lattigo(op_res_recurse_sr.scale_, op_res_recurse_sq.scale_, 30.0))
     {
         POSEIDON_THROW(invalid_argument_error, "recursePS: res.Scale != tmp.Scale");
     }
@@ -1993,6 +1964,12 @@ void EvaluatorCkksBase::eval_mod(const Ciphertext &ciph, Ciphertext &result,
     auto &coeff_modulus = context_data->coeff_modulus();
 
     double prev_scale_ct = result.scale();
+
+    // NOTE (mirrors lattigo Mod1Evaluator.EvaluateNew): setting the scale to the scaling factor
+    // is not a metadata fix-up, it is a deliberate change of unit. The ciphertext comes out of
+    // CoeffsToSlots at q0/message_ratio; reinterpreting the same raw polynomial at
+    // eva_poly.scaling_factor() divides the slot values by message_ratio, which brings them from
+    // the ~q0/ratio magnitude into the [-k, k] Chebyshev interpolation interval.
     result.scale() = eva_poly.scaling_factor();
 
     double pre_min_scale = min_scale_;
@@ -2864,8 +2841,9 @@ void EvaluatorCkksBase::sub_dynamic(const Ciphertext &ciph1, const Ciphertext &c
     {
         scaling_factor_ratio = ciph1.scale() / ciph2.scale();
         scaling_factor_ratio += 0.5;
-        if (scaling_factor_ratio < min_scale_)
+        if ((scaling_factor_ratio < min_scale_) && !util::is_approximate<double>(scaling_factor_ratio, min_scale_))
         {
+            spdlog::debug("scaling_factor_ratio = ", scaling_factor_ratio, " min_scale_ = ", min_scale_);
             POSEIDON_THROW(invalid_argument_error, "sub_dynamic : ciph scale don't support! ");
         }
         multiply_const(ciph2, scaling_factor_ratio, 1.0, tmp_scale, encoder);
@@ -2876,7 +2854,7 @@ void EvaluatorCkksBase::sub_dynamic(const Ciphertext &ciph1, const Ciphertext &c
     {
         scaling_factor_ratio = ciph2.scale() / ciph1.scale();
         scaling_factor_ratio += 0.5;
-        if (scaling_factor_ratio < min_scale_)
+        if ((scaling_factor_ratio < min_scale_) && !util::is_approximate<double>(scaling_factor_ratio, min_scale_))
         {
             POSEIDON_THROW(invalid_argument_error, "sub_dynamic : ciph scale don't support! ");
         }
