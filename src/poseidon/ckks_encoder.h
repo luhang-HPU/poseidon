@@ -4,6 +4,7 @@
 #include "basics/util/uintcore.h"
 #include "plaintext.h"
 #include "poseidon_context.h"
+#include "spdlog/spdlog.h"
 #include "util/fft.h"
 #include <cmath>
 #include <complex>
@@ -422,6 +423,7 @@ private:
         if (scale <= 0 ||
             (static_cast<int>(log2(scale)) + 1 >= context_data.total_coeff_modulus_bit_count()))
         {
+            spdlog::error("scale out of bounds, scale = {}", scale);
             POSEIDON_THROW(invalid_argument_error, "scale out of bounds");
         }
 

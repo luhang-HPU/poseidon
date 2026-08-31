@@ -11,6 +11,25 @@
 
 namespace poseidon
 {
+
+#ifdef DEBUG
+class CKKSEncoder;
+class Decryptor;
+#endif
+
+struct BabyStep
+{
+    Ciphertext value;
+    int degree = 0;
+};
+
+struct BabyStepMessage
+{
+    std::complex<double> value = 0.0;
+    int degree = 0;
+    bool valid = true;
+};
+
 struct BootstrapConfig
 {
     // Approximation interval [-boundary_k, boundary_k].
@@ -106,9 +125,6 @@ public:
                        const LinearMatrixGroup &matrix_group, Ciphertext &result,
                        const GaloisKeys &galois_keys, const CKKSEncoder &encoder) const;
 
-    void evaluate_poly_vector(const Ciphertext &ciph, Ciphertext &destination,
-                              const PolynomialVector &polys, double scale,
-                              const RelinKeys &relin_keys, const CKKSEncoder &encoder) const;
 
     void eval_mod(const Ciphertext &ciph, Ciphertext &result, const EvalModPoly &eva_poly,
                   const RelinKeys &relin_keys, const CKKSEncoder &encoder);
@@ -129,7 +145,7 @@ public:
                                   const GaloisKeys &galois_keys,
                                   const CKKSEncoder &encoder, EvalModPoly &eval_mod_poly);
 
-    void multiply_const_direct(const Ciphertext &ciph, int const_data, Ciphertext &result,
+    void multiply_const_direct(const Ciphertext &ciph, int64_t const_data, Ciphertext &result,
                                const CKKSEncoder &encoder) const;
 
     template <typename T, typename = std::enable_if_t<
@@ -187,18 +203,6 @@ public:
     virtual void add_dynamic(const Ciphertext &ciph1, const Ciphertext &ciph2, Ciphertext &result,
                              const CKKSEncoder &encoder) const;
 
-    void sigmoid_approx(const Ciphertext &ciph, Ciphertext &result, const CKKSEncoder &encoder,
-                        const RelinKeys &relin_keys);
-
-    void accumulate_top_n(const Ciphertext &ciph, Ciphertext &result, int n,
-                          const CKKSEncoder &encoder, const Encryptor &enc,
-                          const GaloisKeys &rot_keys) const;
-
-    // result = conv(ciph_f, ciph_g_rev)
-    void conv(const Ciphertext &ciph_f, const Ciphertext &ciph_g_rev, Ciphertext &result,
-              const uint size, const CKKSEncoder &encoder, const Encryptor &enc,
-              const GaloisKeys &galois_keys, const RelinKeys &relin_keys) const;
-
 private:
     inline void set_min_scale(double scale) { min_scale_ = scale; }
 
@@ -207,29 +211,6 @@ private:
                         EvalModPoly &eval_mod_poly, bool high_precision_eval_mod);
 
     void rescale_for_bootstrap(Ciphertext &ciph1);
-
-    void gen_power(map<uint32_t, Ciphertext> &monomial_basis, uint32_t n, bool lazy, bool is_chev,
-                   double min_scale, const RelinKeys &relin_keys, const CKKSEncoder &encoder) const;
-    void gen_power_inner(map<uint32_t, Ciphertext> &monomial_basis, uint32_t n, bool lazy,
-                         bool is_chev, double min_scale, const RelinKeys &relin_keys,
-                         const CKKSEncoder &encoder) const;
-
-    void recurse(const map<uint32_t, Ciphertext> &monomial_basis, const RelinKeys &relin_keys,
-                 uint32_t target_level, double target_scale, const PolynomialVector &pol,
-                 uint32_t log_split, uint32_t log_degree, Ciphertext &destination,
-                 const CKKSEncoder &encoder, bool is_odd, bool is_even, uint32_t &num) const;
-    POSEIDON_NODISCARD tuple<uint32_t, double>
-    pre_scalar_level(bool is_even, bool is_odd, const map<uint32_t, Ciphertext> &monomial_basis,
-                     double current_scale, uint32_t current_level, const PolynomialVector &pol,
-                     uint32_t log_split, uint32_t log_degree) const;
-
-    void evaluate_poly_from_poly_nomial_basis(bool is_even, bool is_odd,
-                                              const map<uint32_t, Ciphertext> &monomial_basis,
-                                              const RelinKeys &relin_keys, uint32_t target_level,
-                                              double target_scale, const PolynomialVector &pol,
-                                              uint32_t log_split, uint32_t log_degree,
-                                              Ciphertext &destination,
-                                              const CKKSEncoder &encoder) const;
 
     void add_plain_inplace(Ciphertext &ciph, const Plaintext &plain) const;
     void add_inplace(Ciphertext &ciph1, const Ciphertext &ciph2) const;
@@ -241,8 +222,182 @@ private:
 
     std::shared_ptr<KSwitchBase> kswitch_{nullptr};
 
+
+
+    // TODO public-->private
+public:
+    struct PatersonStockmeyerPolynomial
+    {
+        size_t size() const
+        {
+            return polys_.size();
+        }
+
+        Polynomial& operator[](size_t idx)
+        {
+            return polys_[idx];
+        }
+
+        const Polynomial& operator[](size_t idx) const
+        {
+            return polys_[idx];
+        }
+
+        int degree_;
+        int base_;
+        int level_;
+        double scale_;
+        std::vector<Polynomial> polys_;
+    };
+
+    struct PatersonStockmeyerPolynomialVector
+    {
+        size_t size() const
+        {
+            return polys_.size();
+        }
+
+        PatersonStockmeyerPolynomial& operator[](size_t idx)
+        {
+            return polys_[idx];
+        }
+
+        const PatersonStockmeyerPolynomial& operator[](size_t idx) const
+        {
+            return polys_[idx];
+        }
+
+        std::vector<PatersonStockmeyerPolynomial> polys_;
+    };
+
+    // 用于模拟power_basis在多项式评估中的level和scale
+    struct SimPower
+    {
+        int level_;
+        double scale_;
+    };
+
+
+    /*  多项式计算流程
+     *  evaluate_polynomial
+     *  |
+     *  |----- gen_power
+     *  |
+     *  |----- get_paterson_stockmeyer_polynomial
+     *  |
+     *  |----- evaluate_paterson_stockmeyer_polynomial_vector
+     *                  |
+     *                  |----- evaluate_baby_step
+     *                  |       |
+     *                  |       |----- evaluate_polynomial_vector_from_power_basis
+     *                  |
+     *                  |----- evaluate_giant_step
+     *                          |
+     *                          |----- evaluate_monomial
+     */
+
+
+    void evaluate_polynomial(const PolynomialVector& poly_vec, const Ciphertext& ct_basis, Ciphertext& ct_res,
+        bool is_chev, bool is_lazy, double target_scale, double min_scale, const RelinKeys& relin_key, const CKKSEncoder& encoder);
+
+    void get_paterson_stockmeyer_polynomial(const Polynomial& poly, int input_level,
+        double input_scale, double output_scale, PatersonStockmeyerPolynomial& ps_polys);
+
+    void get_paterson_stockmeyer_polynomial_vector(const PolynomialVector& poly_vec,
+        int input_level, double intput_scale, double output_scale, PatersonStockmeyerPolynomialVector& ps_poly_vec);
+
+    void evaluate_paterson_stockmeyer_polynomial_vector(const PatersonStockmeyerPolynomialVector &ps_polys_vec,
+        const map<uint32_t, Ciphertext> &power_basis, Ciphertext& ct_res, const RelinKeys& relin_key, const CKKSEncoder& encoder) /*const*/;
+
+    // Paterson-Stockmeyer: evaluates a baby-step PolynomialVector from precomputed monomial basis.
+    // 计算coeff[c0, c1, ... ,cn]与powerbasis[1, pb^1, pb^2, ..., pb^n]的内积
+    void evaluate_baby_step(const PatersonStockmeyerPolynomialVector &ps_poly_vec,
+                            const map<uint32_t, Ciphertext> &monomial_basis, int j, BabyStep& baby_step,
+                            const CKKSEncoder &encoder) /*const*/;
+
+    // Paterson-Stockmeyer: combines consecutive baby steps using a giant-step monomial power.
+    // giant_steps[i] == 2: updates baby_steps[i].degree to match baby_steps[i-1].degree.
+    // giant_steps[i] == 1: baby_steps[i+1] = baby_steps[i] * monomial_basis[deg] + baby_steps[i+1],
+    // then clears baby_steps[i].
+    void evaluate_giant_step(int i, const vector<int> &giant_steps, vector<BabyStep> &baby_steps,
+        const map<uint32_t, Ciphertext> &power_basis, const CKKSEncoder& encoder, const RelinKeys &relin_keys) const;
+
+    void evaluate_monomial(const Ciphertext& a, Ciphertext& b, const Ciphertext& power_basis,
+        const CKKSEncoder& encoder, const RelinKeys& relin_key) const;
+
+    void evaluate_monomial_message(const std::complex<double>& a, std::complex<double>& b,
+                                   const std::complex<double>& xpow) const;
+
+    void evaluate_polynomial_vector_from_power_basis_optimized(const PolynomialVector &poly_vec, const map<uint32_t, Ciphertext> &power_basis, Ciphertext &ciph_res,
+                                                                int target_level, double target_scale, const CKKSEncoder &encoder) const;
+
+    void gen_power_sim(std::map<int, SimPower> &power_basis_sim, int n, int level_consumed_per_rescale);
+
+    // Optimized gen_power with lazy relinearization and rescale tracking.
+    // When lazy=true, the result is NOT relinearized (caller must handle).
+    // Non-relinearized sub-powers are automatically relinearized before reuse.
+    void gen_power_optimized(map<uint32_t, Ciphertext> &monomial_basis, uint32_t n, bool lazy,
+                             bool is_chev, double min_scale, const RelinKeys &relin_keys,
+                             const CKKSEncoder &encoder) const;
+    // Returns true if the caller should rescale monomial_basis[n].
+    bool gen_power_optimized_inner(map<uint32_t, Ciphertext> &monomial_basis, uint32_t n, bool lazy,
+                                   bool is_chev, double min_scale, const RelinKeys &relin_keys,
+                                   const CKKSEncoder &encoder) const;
+
+    void recurse_ps(Polynomial poly, int log_split, int target_level, double output_scale,
+        std::map<int, SimPower> pb, std::vector<Polynomial>& poly_vec_res, SimPower& op_res);
+
+    void update_level_and_scale_baby_step(bool lead, int level_old,
+        double scale_old, int& level_new, double& scale_new, int level_consumed_per_rescale = 1);
+
+    void update_level_and_scale_giant_step(bool lead, int level_old, double scale_old,
+        double x_pow_scale, int& level_new, double& scale_new, int level_consumed_per_rescale = 1);
+
+    void factorize(const Polynomial& poly, int n, Polynomial& pq, Polynomial& pr);
+
+    void factorize_inner(const Polynomial& poly, int n, Polynomial& pq, Polynomial& pr);
+
 protected:
     double min_scale_;
+
+#ifdef DEBUG
+public:
+    void set_decryptor(Decryptor* decryptor)
+    {
+        ptr_dec_ = decryptor;
+    }
+
+    Decryptor* get_decryptor()
+    {
+        return ptr_dec_;
+    }
+
+    void set_encoder(CKKSEncoder* encoder)
+    {
+        ptr_encoder_ = encoder;
+    }
+
+    CKKSEncoder* get_encoder()
+    {
+        return ptr_encoder_;
+    }
+
+    void set_encryptor(Encryptor* encryptor)
+    {
+        ptr_enc_ = encryptor;
+    }
+
+    Encryptor* get_encryptor()
+    {
+        return ptr_enc_;
+    }
+
+    std::vector<std::complex<double>> decrypt_and_decode(const Ciphertext& ciph);
+
+    CKKSEncoder* ptr_encoder_ = nullptr;
+    Encryptor* ptr_enc_ = nullptr;
+    Decryptor* ptr_dec_ = nullptr;
+#endif
 };
 
 }  // namespace poseidon
