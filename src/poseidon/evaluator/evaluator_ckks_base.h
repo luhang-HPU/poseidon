@@ -101,9 +101,6 @@ public:
                        const LinearMatrixGroup &matrix_group, Ciphertext &result,
                        const GaloisKeys &galois_keys, const CKKSEncoder &encoder) const;
 
-    void evaluate_poly_vector(const Ciphertext &ciph, Ciphertext &destination,
-                              const PolynomialVector &polys, double scale,
-                              const RelinKeys &relin_keys, const CKKSEncoder &encoder) const;
 
     void eval_mod(const Ciphertext &ciph, Ciphertext &result, const EvalModPoly &eva_poly,
                   const RelinKeys &relin_keys, const CKKSEncoder &encoder);
@@ -170,46 +167,10 @@ public:
     virtual void add_dynamic(const Ciphertext &ciph1, const Ciphertext &ciph2, Ciphertext &result,
                              const CKKSEncoder &encoder) const;
 
-    void sigmoid_approx(const Ciphertext &ciph, Ciphertext &result, const CKKSEncoder &encoder,
-                        const RelinKeys &relin_keys);
-
-    void accumulate_top_n(const Ciphertext &ciph, Ciphertext &result, int n,
-                          const CKKSEncoder &encoder, const Encryptor &enc,
-                          const GaloisKeys &rot_keys) const;
-
-    // result = conv(ciph_f, ciph_g_rev)
-    void conv(const Ciphertext &ciph_f, const Ciphertext &ciph_g_rev, Ciphertext &result,
-              const uint size, const CKKSEncoder &encoder, const Encryptor &enc,
-              const GaloisKeys &galois_keys, const RelinKeys &relin_keys) const;
-
 private:
     inline void set_min_scale(double scale) { min_scale_ = scale; }
 
     void rescale_for_bootstrap(Ciphertext &ciph1);
-
-    void gen_power(map<uint32_t, Ciphertext> &monomial_basis, uint32_t n, bool lazy, bool is_chev,
-                   double min_scale, const RelinKeys &relin_keys, const CKKSEncoder &encoder) const;
-    void gen_power_inner(map<uint32_t, Ciphertext> &monomial_basis, uint32_t n, bool lazy,
-                         bool is_chev, double min_scale, const RelinKeys &relin_keys,
-                         const CKKSEncoder &encoder) const;
-
-    void recurse(const map<uint32_t, Ciphertext> &monomial_basis, const RelinKeys &relin_keys,
-                 uint32_t target_level, double target_scale, const PolynomialVector &pol,
-                 uint32_t log_split, uint32_t log_degree, Ciphertext &destination,
-                 const CKKSEncoder &encoder, bool is_odd, bool is_even, uint32_t &num) const;
-
-    POSEIDON_NODISCARD tuple<uint32_t, double>
-    pre_scalar_level(bool is_even, bool is_odd, const map<uint32_t, Ciphertext> &monomial_basis,
-                     double current_scale, uint32_t current_level, const PolynomialVector &pol,
-                     uint32_t log_split, uint32_t log_degree) const;
-
-    void evaluate_poly_from_poly_nomial_basis(bool is_even, bool is_odd,
-                                              const map<uint32_t, Ciphertext> &monomial_basis,
-                                              const RelinKeys &relin_keys, uint32_t target_level,
-                                              double target_scale, const PolynomialVector &pol,
-                                              uint32_t log_split, uint32_t log_degree,
-                                              Ciphertext &destination,
-                                              const CKKSEncoder &encoder) const;
 
     void add_plain_inplace(Ciphertext &ciph, const Plaintext &plain) const;
     void add_inplace(Ciphertext &ciph1, const Ciphertext &ciph2) const;
@@ -299,30 +260,14 @@ public:
     void evaluate_polynomial(const PolynomialVector& poly_vec, const Ciphertext& ct_basis, Ciphertext& ct_res,
         bool is_chev, bool is_lazy, double target_scale, double min_scale, const RelinKeys& relin_key, const CKKSEncoder& encoder);
 
-    // Message-level (complex<double>) polynomial evaluation — same PS decomposition, no level/scale tracking.
-    void evaluate_polynomial_message(const PolynomialVector& poly_vec,
-                                     const std::complex<double>& message_basis,
-                                     std::complex<double>& message_res, bool is_chev, bool is_lazy);
-
     void get_paterson_stockmeyer_polynomial(const Polynomial& poly, int input_level,
         double input_scale, double output_scale, PatersonStockmeyerPolynomial& ps_polys);
 
     void get_paterson_stockmeyer_polynomial_vector(const PolynomialVector& poly_vec,
         int input_level, double intput_scale, double output_scale, PatersonStockmeyerPolynomialVector& ps_poly_vec);
 
-    // Message-level PS decomposition — same structure, no level/scale simulation.
-    void get_paterson_stockmeyer_polynomial_message(const Polynomial& poly,
-                                                    PatersonStockmeyerPolynomial& ps_poly);
-    void get_paterson_stockmeyer_polynomial_vector_message(
-        const PolynomialVector& poly_vec, PatersonStockmeyerPolynomialVector& ps_poly_vec);
-
     void evaluate_paterson_stockmeyer_polynomial_vector(const PatersonStockmeyerPolynomialVector &ps_polys_vec,
         const map<uint32_t, Ciphertext> &power_basis, Ciphertext& ct_res, const RelinKeys& relin_key, const CKKSEncoder& encoder) /*const*/;
-
-    void evaluate_paterson_stockmeyer_polynomial_vector_message(
-        const PatersonStockmeyerPolynomialVector &ps_polys_vec,
-        const std::map<uint32_t, std::complex<double>> &power_basis,
-        std::complex<double>& res);
 
     // Paterson-Stockmeyer: evaluates a baby-step PolynomialVector from precomputed monomial basis.
     // 计算coeff[c0, c1, ... ,cn]与powerbasis[1, pb^1, pb^2, ..., pb^n]的内积
@@ -330,20 +275,12 @@ public:
                             const map<uint32_t, Ciphertext> &monomial_basis, int j, BabyStep& baby_step,
                             const CKKSEncoder &encoder) /*const*/;
 
-    void evaluate_baby_step_message(const PatersonStockmeyerPolynomialVector &ps_poly_vec,
-                                    const std::map<uint32_t, std::complex<double>> &power_basis,
-                                    int j, std::complex<double>& res);
-
     // Paterson-Stockmeyer: combines consecutive baby steps using a giant-step monomial power.
     // giant_steps[i] == 2: updates baby_steps[i].degree to match baby_steps[i-1].degree.
     // giant_steps[i] == 1: baby_steps[i+1] = baby_steps[i] * monomial_basis[deg] + baby_steps[i+1],
     // then clears baby_steps[i].
     void evaluate_giant_step(int i, const vector<int> &giant_steps, vector<BabyStep> &baby_steps,
         const map<uint32_t, Ciphertext> &power_basis, const CKKSEncoder& encoder, const RelinKeys &relin_keys) const;
-
-    void evaluate_giant_step_message(int i, const std::vector<int> &giant_steps,
-                                     std::vector<BabyStepMessage> &baby_steps,
-                                     const std::map<uint32_t, std::complex<double>> &power_basis) const;
 
     void evaluate_monomial(const Ciphertext& a, Ciphertext& b, const Ciphertext& power_basis,
         const CKKSEncoder& encoder, const RelinKeys& relin_key) const;
@@ -353,12 +290,6 @@ public:
 
     void evaluate_polynomial_vector_from_power_basis_optimized(const PolynomialVector &poly_vec, const map<uint32_t, Ciphertext> &power_basis, Ciphertext &ciph_res,
                                                                 int target_level, double target_scale, const CKKSEncoder &encoder) const;
-
-    void evaluate_polynomial_vector_from_power_basis_message(
-        const PolynomialVector &poly_vec,
-        const std::map<uint32_t, std::complex<double>> &power_basis,
-        std::complex<double>& res);
-
 
     void gen_power_sim(std::map<int, SimPower> &power_basis_sim, int n, int level_consumed_per_rescale);
 
@@ -373,18 +304,8 @@ public:
                                    bool is_chev, double min_scale, const RelinKeys &relin_keys,
                                    const CKKSEncoder &encoder) const;
 
-    // Message-level power basis generation: computes x^n (or T_n(x) for Chebyshev) via split_degree.
-    void gen_power_message(std::map<uint32_t, std::complex<double>> &monomial_basis, uint32_t n,
-                           bool is_chev) const;
-    void gen_power_message_inner(std::map<uint32_t, std::complex<double>> &monomial_basis, uint32_t n,
-                                 bool is_chev) const;
-
     void recurse_ps(Polynomial poly, int log_split, int target_level, double output_scale,
         std::map<int, SimPower> pb, std::vector<Polynomial>& poly_vec_res, SimPower& op_res);
-
-    // Message-level recurse_ps — same decomposition, no level/scale tracking.
-    void recurse_ps_message(Polynomial poly, int log_split,
-                            std::vector<Polynomial>& poly_vec_res);
 
     void update_level_and_scale_baby_step(bool lead, int level_old,
         double scale_old, int& level_new, double& scale_new, int level_consumed_per_rescale = 1);
