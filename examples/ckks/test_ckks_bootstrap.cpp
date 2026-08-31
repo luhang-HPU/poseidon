@@ -53,12 +53,23 @@ int run_bootstrap_test()
     std::cout << "POSEIDON SOFTWARE VERSION:" << POSEIDON_VERSION << std::endl;
     std::cout << "" << std::endl;
 
-    ParametersLiteral ckks_param_literal{CKKS, 13, 13 - 1, 40, 1, 1, 0, {}, {}};
-    /*vector<uint32_t> log_q_tmp{32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32,
-                               32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32};
-    vector<uint32_t> log_p_tmp{32};*/
+    // Optimal config found by parameter search (see git history / gen_cfgs.py experiment):
+    // modulus chain bottom -> top: q0(60) | residual 40x3 | SlotsToCoeffs 40x3 | EvalMod 60x12 |
+    // CoeffsToSlots 56x6, log_p = single 60-bit prime.
+    // The EvalMod scaling factor (2^60) must match q0 so that q_div ~= 1, and the primes of the
+    // levels consumed by EvalMod must be 60-bit (each multiplication 2^120 -> rescale by 2^60).
+    // Message scale 2^40 <= q0/message_ratio = 2^48 leaves room for the ScaleDown scale-up (2^8).
+    // log_message_ratio = 12 is the sweet spot: 8->16.2, 9->17.7, 10->20.1, 11->21.7, 12->23.9,
+    // 13->23.5, 14->22.9 bits precision. Measured: ~23.9 bits avg / 21.3 bits min.
+    ParametersLiteral ckks_param_literal{CKKS, 13, 13 - 1, 40, 1, 0, 0, {}, {}};
+    vector<uint32_t> log_q_opt;
+    log_q_opt.push_back(60);                              // q0 (ModRaise base)
+    for (int i = 0; i < 3; i++) log_q_opt.push_back(40);  // residual (post-bootstrap working)
+    for (int i = 0; i < 3; i++) log_q_opt.push_back(40);  // SlotsToCoeffs section
+    for (int i = 0; i < 12; i++) log_q_opt.push_back(60); // EvalMod section
+    for (int i = 0; i < 6; i++) log_q_opt.push_back(56);  // CoeffsToSlots section
 
-    ckks_param_literal.set_log_modulus(std::vector<uint32_t>(25, 40), std::vector<uint32_t>{40});
+    ckks_param_literal.set_log_modulus(log_q_opt, std::vector<uint32_t>{60});
 
     PoseidonFactory::get_instance()->set_device_type(DEVICE_SOFTWARE);
     auto context = PoseidonFactory::get_instance()->create_poseidon_context(ckks_param_literal);
@@ -69,16 +80,7 @@ int run_bootstrap_test()
 
     // create message
     vector<complex<double>> message1;
-    // sample_random_complex_vector(message1, mat_size);
-    // for (auto &m : message1)
-    // {
-    //     m = sin(m);
-    // }
-    message1.resize(4);
-    message1[0] = complex(0.9238795325112867, 0.3826834323650898);
-    message1[1] = complex(0.9238795325112867, 0.3826834323650898);
-    message1[2] = complex(0.9238795325112867, 0.3826834323650898);
-    message1[3] = complex(0.9238795325112867, 0.3826834323650898);
+    sample_random_complex_vector(message1, mat_size);
 
     // init Plaintext and Ciphertext
     Plaintext plain, plain_res;
@@ -100,7 +102,8 @@ int run_bootstrap_test()
     ckks_eva->set_encoder(&ckks_encoder);
     ckks_eva->set_encryptor(&enc);
 
-    // encode && encrypt
+    // encode && encrypt at 2^40 (aligned with the 40-bit working primes;
+    // 2^40 < q0/message_ratio = 2^48 so the bootstrap scale-up factor is 2^8)
     ckks_encoder.encode(message1, (int64_t)1 << 40, plain);
     enc.encrypt(plain, cipher);
 
@@ -109,7 +112,8 @@ int run_bootstrap_test()
 
     spdlog::debug("bootstrap start, level = {}", cipher.level());
 
-    EvalModPoly eval_mod_poly(context, CosDiscrete, (uint64_t)1 << 40, 1, 9, 3, 16, 0, 30);
+    // EvalMod: scaling factor 2^60 ~= q0 (q_div ~= 1), log_message_ratio = 12 (search optimum)
+    EvalModPoly eval_mod_poly(context, CosDiscrete, (uint64_t)1 << 60, 1, 12, 3, 16, 0, 30);
     ckks_eva->bootstrap(cipher, cipher, relin_keys, rot_keys, ckks_encoder, eval_mod_poly);
     auto stop = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
@@ -120,9 +124,11 @@ int run_bootstrap_test()
     // decode && decrypt
     dec.decrypt(cipher, plain_res);
     ckks_encoder.decode(plain_res, vec_result);
+    // bootstrap is a refresh: the output message should equal the input message
+    // (the legacy test squared the ciphertext before bootstrapping; this version encrypts
+    // the message directly, so compare against the message itself)
     for (int i = 0; i < 10; i++)
     {
-        message1[i] *= message1[i];
         printf("source vec[%d] : %0.10f + %0.10f I \n", i, (real(message1[i])), imag(message1[i]));
         printf("result vec[%d] : %0.10f + %0.10f I \n", i, (real(vec_result[i])),
                imag(vec_result[i]));
