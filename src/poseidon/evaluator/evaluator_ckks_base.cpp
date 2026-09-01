@@ -1076,14 +1076,17 @@ void EvaluatorCkksBase::eval_mod(const Ciphertext &ciph, Ciphertext &result,
         rescale_dynamic(result, result, target_scale);
     }
 
-    double diff_scale = eva_poly.scaling_factor() / result.scale();
-    if (diff_scale < coeff_modulus.back().value())
+    if (!util::is_approximate(result.scale(), eva_poly.scaling_factor()))
     {
-        diff_scale *= coeff_modulus[result.level()].value();
-        diff_scale *= coeff_modulus[result.level() - 1].value();
+        double diff_scale = eva_poly.scaling_factor() / result.scale();
+        if (diff_scale < coeff_modulus.back().value())
+        {
+            diff_scale *= coeff_modulus[result.level()].value();
+            diff_scale *= coeff_modulus[result.level() - 1].value();
+        }
+        multiply_const(result, 1.0, diff_scale, result, encoder);
+        rescale_dynamic(result, result, eva_poly.scaling_factor());
     }
-    multiply_const(result, 1.0, diff_scale, result, encoder);
-    rescale_dynamic(result, result, eva_poly.scaling_factor());
 
     result.scale() = prev_scale_ct;
 
