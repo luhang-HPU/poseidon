@@ -101,6 +101,17 @@ public:
     virtual void
     multiply_plain_inplace(Ciphertext &ciph, const Plaintext &plain,
                            MemoryPoolHandle pool = MemoryManager::GetPool()) const override;
+    // Accumulate an NTT ciphertext/plaintext product directly into an existing
+    // ciphertext. This avoids materializing and copying a full temporary
+    // ciphertext in linear-algebra hot paths.
+    void multiply_plain_accumulate(const Ciphertext &ciph, const Plaintext &plain,
+                                   Ciphertext &accumulator) const;
+    // Fast path for a real scalar plaintext. A constant CKKS slot vector is a
+    // degree-zero polynomial, so its NTT representation is one residue repeated
+    // across each limb; no full plaintext allocation or FFT is required.
+    void multiply_const_accumulate(const Ciphertext &ciph, double coefficient,
+                                   double plain_scale,
+                                   Ciphertext &accumulator) const;
     virtual void multiply_by_diag_matrix_bsgs(const Ciphertext &ciph, const MatrixPlain &plain_mat,
                                               Ciphertext &result,
                                               const GaloisKeys &rot_key) const override;

@@ -167,7 +167,7 @@ void EvaluatorCkksBase::multiply_by_diag_matrix_bsgs(const Ciphertext &ciph,
     auto [index, _, rotn2] =
         bsgs_index(plain_mat.plain_vec, 1 << plain_mat.log_slots, plain_mat.n1);
     map<int, Ciphertext> rot_ciph;
-    Ciphertext ciph_inner_sum, ciph_inner, result_tmp;
+    Ciphertext result_tmp;
     for (auto j : rotn2)
     {
         if (j != 0)
@@ -176,76 +176,37 @@ void EvaluatorCkksBase::multiply_by_diag_matrix_bsgs(const Ciphertext &ciph,
         }
     }
 
-    int cnt0 = 0;
     for (const auto &j : index)
     {
-        int cnt1 = 0;
+        Ciphertext group_sum;
         for (auto i : index[j.first])
         {
-            if (i == 0)
+            const Ciphertext &baby = i == 0 ? ciph : rot_ciph.at(i);
+            multiply_plain_accumulate(
+                baby, plain_mat.plain_vec.at(i + j.first), group_sum);
+        }
+
+        if (j.first != 0)
+        {
+            Ciphertext rotated_group;
+            rotate(group_sum, rotated_group, j.first, rot_key);
+            if (!result_tmp.is_valid())
             {
-                if (cnt1 == 0)
-                {
-                    if (cnt0 == 0)
-                    {
-                        multiply_plain(ciph, plain_mat.plain_vec.at(j.first), result_tmp);
-                    }
-                    else
-                    {
-                        multiply_plain(ciph, plain_mat.plain_vec.at(j.first), ciph_inner_sum);
-                    }
-                }
-                else
-                {
-                    multiply_plain(ciph, plain_mat.plain_vec.at(j.first), ciph_inner);
-                    if (cnt0 == 0)
-                    {
-                        add(result_tmp, ciph_inner, result_tmp);
-                    }
-                    else
-                    {
-                        add(ciph_inner_sum, ciph_inner, ciph_inner_sum);
-                    }
-                }
+                result_tmp = std::move(rotated_group);
             }
             else
             {
-                if (cnt1 == 0)
-                {
-                    if (cnt0 == 0)
-                    {
-                        multiply_plain(rot_ciph[i], plain_mat.plain_vec.at(i + j.first),
-                                       result_tmp);
-                    }
-                    else
-                    {
-                        multiply_plain(rot_ciph[i], plain_mat.plain_vec.at(i + j.first),
-                                       ciph_inner_sum);
-                    }
-                }
-                else
-                {
-
-                    multiply_plain(rot_ciph[i], plain_mat.plain_vec.at(i + j.first), ciph_inner);
-                    if (cnt0 == 0)
-                    {
-                        add(result_tmp, ciph_inner, result_tmp);
-                    }
-                    else
-                    {
-                        add(ciph_inner_sum, ciph_inner, ciph_inner_sum);
-                    }
-                }
+                add(result_tmp, rotated_group, result_tmp);
             }
-            cnt1++;
         }
-        if (cnt0 != 0)
+        else if (!result_tmp.is_valid())
         {
-            auto step_src = j.first;
-            rotate(ciph_inner_sum, ciph_inner, j.first, rot_key);
-            add(result_tmp, ciph_inner, result_tmp);
+            result_tmp = std::move(group_sum);
         }
-        cnt0++;
+        else
+        {
+            add(result_tmp, group_sum, result_tmp);
+        }
     }
     rescale_dynamic(result_tmp, result, ciph.scale());
 }
@@ -1582,6 +1543,154 @@ void EvaluatorCkksBase::multiply_plain_inplace(Ciphertext &ciph, const Plaintext
     if (ciph.scale() <= 0 || (static_cast<uint32_t>(log2(ciph.scale())) >= scale_bit_count_bound))
     {
         POSEIDON_THROW(invalid_argument_error, "scale out of bounds");
+    }
+}
+
+void EvaluatorCkksBase::multiply_plain_accumulate(
+    const Ciphertext &ciph, const Plaintext &plain, Ciphertext &accumulator) const
+{
+    if (!accumulator.is_valid())
+    {
+        multiply_plain(ciph, plain, accumulator);
+        return;
+    }
+    if (!ciph.is_valid())
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "multiply_plain_accumulate : Ciphertext is empty!");
+    }
+    if (!ciph.is_ntt_form() || !accumulator.is_ntt_form())
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "multiply_plain_accumulate : CKKS ciphertext must be in NTT form");
+    }
+    if (!plain.is_ntt_form())
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "multiply_plain_accumulate : CKKS plaintext must be in NTT form");
+    }
+    if (ciph.parms_id() != plain.parms_id() ||
+        ciph.parms_id() != accumulator.parms_id())
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "multiply_plain_accumulate : parameter mismatch");
+    }
+
+    const double product_scale = ciph.scale() * plain.scale();
+    if (!util::are_approximate<double>(accumulator.scale(), product_scale))
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "multiply_plain_accumulate : scale mismatch");
+    }
+
+    auto context_data = context_.crt_context()->get_context_data(ciph.parms_id());
+    if (!context_data)
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "multiply_plain_accumulate : unknown parms_id");
+    }
+
+    const size_t accumulator_size = accumulator.size();
+    const size_t source_size = ciph.size();
+    const size_t common_size = std::min(accumulator_size, source_size);
+    if (accumulator_size < source_size)
+    {
+        accumulator.resize(context_, ciph.parms_id(), source_size);
+    }
+
+    RNSPoly product(context_, ciph.parms_id());
+    for (size_t component = 0; component < common_size; ++component)
+    {
+        ciph[component].multiply(plain.poly(), product);
+        accumulator[component].add(product, accumulator[component]);
+    }
+    for (size_t component = common_size; component < source_size; ++component)
+    {
+        ciph[component].multiply(plain.poly(), accumulator[component]);
+    }
+}
+
+void EvaluatorCkksBase::multiply_const_accumulate(
+    const Ciphertext &ciph, double coefficient, double plain_scale,
+    Ciphertext &accumulator) const
+{
+    if (!ciph.is_valid() || !ciph.is_ntt_form())
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "multiply_const_accumulate : invalid CKKS ciphertext");
+    }
+    if (!(plain_scale > 0.0) || !std::isfinite(plain_scale) ||
+        !std::isfinite(coefficient))
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "multiply_const_accumulate : invalid scalar or scale");
+    }
+
+    const long double scaled =
+        static_cast<long double>(coefficient) * static_cast<long double>(plain_scale);
+    if (scaled > static_cast<long double>(std::numeric_limits<std::int64_t>::max()) ||
+        scaled < static_cast<long double>(std::numeric_limits<std::int64_t>::min()))
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "multiply_const_accumulate : encoded scalar exceeds int64 range");
+    }
+    const std::int64_t encoded = static_cast<std::int64_t>(std::llround(scaled));
+
+    auto context_data = context_.crt_context()->get_context_data(ciph.parms_id());
+    if (!context_data)
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "multiply_const_accumulate : unknown parms_id");
+    }
+    const auto &moduli = context_data->coeff_modulus();
+    const size_t degree = context_data->parms().degree();
+    const double product_scale = ciph.scale() * plain_scale;
+    const bool initialize = !accumulator.is_valid();
+    if (initialize)
+    {
+        accumulator = ciph;
+        accumulator.scale() = product_scale;
+    }
+    else
+    {
+        if (!accumulator.is_ntt_form() ||
+            accumulator.parms_id() != ciph.parms_id() ||
+            accumulator.size() != ciph.size() ||
+            !util::are_approximate<double>(accumulator.scale(), product_scale))
+        {
+            POSEIDON_THROW(invalid_argument_error,
+                           "multiply_const_accumulate : accumulator mismatch");
+        }
+    }
+
+    const std::uint64_t magnitude = encoded < 0
+        ? static_cast<std::uint64_t>(-(encoded + 1)) + 1
+        : static_cast<std::uint64_t>(encoded);
+    for (size_t modulus_index = 0; modulus_index < moduli.size(); ++modulus_index)
+    {
+        const Modulus &modulus = moduli[modulus_index];
+        std::uint64_t scalar = magnitude % modulus.value();
+        if (encoded < 0)
+        {
+            scalar = util::negate_uint_mod(scalar, modulus);
+        }
+        for (size_t component = 0; component < ciph.size(); ++component)
+        {
+            const std::uint64_t *source =
+                ciph[component].data() + modulus_index * degree;
+            std::uint64_t *destination =
+                accumulator[component].data() + modulus_index * degree;
+            for (size_t coefficient_index = 0;
+                 coefficient_index < degree; ++coefficient_index)
+            {
+                const std::uint64_t product = util::multiply_uint_mod(
+                    source[coefficient_index], scalar, modulus);
+                destination[coefficient_index] = initialize
+                    ? product
+                    : util::add_uint_mod(
+                          destination[coefficient_index], product, modulus);
+            }
+        }
     }
 }
 
