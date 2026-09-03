@@ -79,7 +79,9 @@ bool check_equal(const std::string &label, const std::vector<std::uint64_t> &exp
         {
             std::cerr << label << " mismatch at " << i << ": expected=" << expected[i]
                       << " actual=" << actual[i] << std::endl;
-            return false;     }
+            return false;
+        }
+    }
     std::cout << label << " passed" << std::endl;
     return true;
 }

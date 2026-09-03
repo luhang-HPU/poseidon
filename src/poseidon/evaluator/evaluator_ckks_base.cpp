@@ -1037,6 +1037,18 @@ void EvaluatorCkksBase::eval_mod(const Ciphertext &ciph, Ciphertext &result,
         rescale_dynamic(result, result, target_scale);
     }
 
+    // Arcsine (lattigo mod1_evaluator.go "ArcSine" step): when arcsine_degree > 0 the EvalModPoly
+    // is built in the "inverse polynomial" mode (sqrt_2pi = 1, so the double angle above computes
+    // the Chebyshev 2y^2-1); evaluating the arcsine series linearizes it back, which is the
+    // higher-precision alternative to the sqrt(1/2pi) scaling trick (lattigo N16QP1547: +5 bits).
+    if (!poly_asin[0].data().empty())
+    {
+        PolynomialVector polys_asin(poly_asin, slots_index);
+        evaluate_polynomial(polys_asin, result, result,
+            polys_asin.polys()[0].basis_type() == Chebyshev, false, result.scale(),
+            min_scale_, relin_keys, encoder);
+    }
+
     if (!util::is_approximate(result.scale(), eva_poly.scaling_factor()))
     {
         double diff_scale = eva_poly.scaling_factor() / result.scale();
@@ -1051,69 +1063,6 @@ void EvaluatorCkksBase::eval_mod(const Ciphertext &ciph, Ciphertext &result,
 
     result.scale() = prev_scale_ct;
 
-    set_min_scale(pre_min_scale);
-}
-
-void EvaluatorCkksBase::eval_mod_high_precision(const Ciphertext &ciph, Ciphertext &result,
-                                                const EvalModPoly &eva_poly,
-                                                const RelinKeys &relin_keys,
-                                                const CKKSEncoder &encoder)
-{
-    if (!ciph.is_valid())
-    {
-        POSEIDON_THROW(invalid_argument_error, "eval_mod_high_precision : ciph is empty!");
-    }
-
-    if (ciph.level() != eva_poly.level_start())
-    {
-        POSEIDON_THROW(invalid_argument_error,
-                       "eval_mod_high_precision : level start not match!");
-    }
-    result = ciph;
-
-    auto context_data = context_.crt_context()->get_context_data(ciph.parms_id());
-    auto poly_modulus_degree = context_data->parms().degree();
-    auto slot_num = poly_modulus_degree >> 1;
-
-    double prev_scale_ct = result.scale();
-    result.scale() = eva_poly.scaling_factor();
-
-    double pre_min_scale = min_scale_;
-    set_min_scale(eva_poly.scaling_factor());
-    auto target_scale = eva_poly.scaling_factor();
-    vector<Polynomial> poly_sin{eva_poly.sine_poly()};
-
-    vector<int> idx(slot_num);
-    for (int i = 0; i < slot_num; i++)
-    {
-        idx[i] = i;
-    }
-    vector<vector<int>> slots_index(1, vector<int>(slot_num, 0));
-    slots_index[0] = idx;
-
-    if (eva_poly.type() == CosDiscrete || eva_poly.type() == CosContinuous)
-    {
-        double const_data =
-            -0.5 / (eva_poly.sc_fac() * (eva_poly.sine_poly_b() - eva_poly.sine_poly_a()));
-        add_const(result, const_data, result, encoder);
-    }
-
-    PolynomialVector polys_sin(poly_sin, slots_index);
-    Ciphertext tmp = result;
-    // TODO is_chev, is_lazy noknown
-    evaluate_polynomial(polys_sin, tmp, result, true, false, target_scale, min_scale_, relin_keys, encoder);
-
-    auto sqrt2pi = eva_poly.sqrt_2pi();
-    for (auto i = 0; i < eva_poly.double_angle(); i++)
-    {
-        sqrt2pi *= sqrt2pi;
-        multiply_relin_dynamic(result, result, result, relin_keys);
-        add(result, result, result);
-        add_const(result, -sqrt2pi, result, encoder);
-        rescale_dynamic(result, result, target_scale);
-    }
-
-    result.scale() = prev_scale_ct;
     set_min_scale(pre_min_scale);
 }
 
@@ -1141,7 +1090,7 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
                                   const RelinKeys &relin_keys, const GaloisKeys &galois_keys,
                                   const CKKSEncoder &encoder, EvalModPoly &eval_mod_poly)
 {
-    bootstrap_core(ciph, result, relin_keys, galois_keys, encoder, eval_mod_poly, false);
+    bootstrap_core(ciph, result, relin_keys, galois_keys, encoder, eval_mod_poly);
 }
 
 void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
@@ -1346,21 +1295,11 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
     result = std::move(output);
 }
 
-void EvaluatorCkksBase::bootstrap_high_precision(const Ciphertext &ciph, Ciphertext &result,
-                                                 const RelinKeys &relin_keys,
-                                                 const GaloisKeys &galois_keys,
-                                                 const CKKSEncoder &encoder,
-                                                 EvalModPoly &eval_mod_poly)
-{
-    bootstrap_core(ciph, result, relin_keys, galois_keys, encoder, eval_mod_poly, true);
-}
-
 void EvaluatorCkksBase::bootstrap_core(const Ciphertext &ciph, Ciphertext &result,
                                        const RelinKeys &relin_keys,
                                        const GaloisKeys &galois_keys,
                                        const CKKSEncoder &encoder,
-                                       EvalModPoly &eval_mod_poly,
-                                       bool high_precision_eval_mod)
+                                       EvalModPoly &eval_mod_poly)
 {
     auto tmp = ciph;
     rescale_for_bootstrap(tmp);
@@ -1395,11 +1334,6 @@ void EvaluatorCkksBase::bootstrap_core(const Ciphertext &ciph, Ciphertext &resul
     Ciphertext ciph_raise;
     read(result);
     raise_modulus(result, ciph_raise);
-    if (high_precision_eval_mod)
-    {
-        auto first_context_data = context_.crt_context()->first_context_data();
-        ciph_raise.scale() = static_cast<double>(first_context_data->coeff_modulus()[0].value());
-    }
 
     auto scale_raise = eval_mod_poly.scaling_factor() / ciph_raise.scale();
     scale_raise /= eval_mod_poly.message_ratio();
@@ -1426,30 +1360,16 @@ void EvaluatorCkksBase::bootstrap_core(const Ciphertext &ciph, Ciphertext &resul
         static_cast<uint32_t>(context_.parameters_literal()->q().size() - 1),
         vector<uint32_t>(3, 1), true, coeffs_to_slots_scaling, false, 1);
     LinearMatrixGroup coeff_to_slot_dft_matrix;
-    tmp_matrix.create(coeff_to_slot_dft_matrix, const_cast<CKKSEncoder &>(encoder), 2);
+    // step=1 (single prime per matrix, like lattigo's CoeffsToSlots factorization): each matrix
+    // multiply is followed by exactly one rescale, consuming one level instead of two.
+    tmp_matrix.create(coeff_to_slot_dft_matrix, const_cast<CKKSEncoder &>(encoder), 1);
 
     coeff_to_slot(ciph_raise, coeff_to_slot_dft_matrix, ciph_real, ciph_imag, galois_keys, encoder);
 
     eval_mod_poly.set_level_start(static_cast<uint32_t>(
         context_.crt_context()->get_context_data(ciph_real.parms_id())->level()));
-    if (high_precision_eval_mod)
-    {
-        eval_mod_high_precision(ciph_imag, ciph_imag_mod, eval_mod_poly, relin_keys,
-                                encoder);
-    }
-    else
-    {
-        eval_mod(ciph_imag, ciph_imag_mod, eval_mod_poly, relin_keys, encoder);
-    }
-    if (high_precision_eval_mod)
-    {
-        eval_mod_high_precision(ciph_real, ciph_real_mod, eval_mod_poly, relin_keys,
-                                encoder);
-    }
-    else
-    {
-        eval_mod(ciph_real, ciph_real_mod, eval_mod_poly, relin_keys, encoder);
-    }
+    eval_mod(ciph_imag, ciph_imag_mod, eval_mod_poly, relin_keys, encoder);
+    eval_mod(ciph_real, ciph_real_mod, eval_mod_poly, relin_keys, encoder);
 
     ciph_imag_mod.scale() = context_.parameters_literal()->scale();
     ciph_real_mod.scale() = context_.parameters_literal()->scale();

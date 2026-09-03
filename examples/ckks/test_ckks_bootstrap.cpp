@@ -7,6 +7,8 @@
 #include "poseidon/util/debug.h"
 #include "poseidon/util/random_sample.h"
 
+#include "spdlog/spdlog.h"
+
 #include <chrono>
 #include <cmath>
 #include <complex>
@@ -67,11 +69,19 @@ ErrorStats calculate_error(const std::vector<std::complex<double>> &actual,
 
 int run_legacy_bootstrap()
 {
-    std::cout << "\nLegacy bootstrap test\n";
+    std::cout << "\nLegacy bootstrap test "
+              << "\n";
 
-    ParametersLiteral parameters{CKKS, 15, 14, 40, 1, 1, 0, {}, {}};
-    std::vector<uint32_t> log_q(30, 40);
-    parameters.set_log_modulus(log_q, {40});
+    // Uniform 22x40 chain. Parameter self-consistency rules for a uniform p-bit chain
+    // (q0_level = 0, so q0 = one p-bit prime):
+    //   1) EvalMod scaling factor must equal 2^p (so q_div = sf/2^p ~= 1);
+    //   2) message scale <= q0/message_ratio, and after the pre-bootstrap square the scale must
+    //      still rescale safely (scale/q >= ~2^24) -> encode 2^33 with ratio 2^7.
+    ParametersLiteral parameters{CKKS, 15, 14, 40, 1, 0, 0, {}, {}};
+    std::vector<uint32_t> log_q;
+    log_q.push_back(60);
+    for (int i = 0; i < 20; i++) log_q.push_back(40);
+    parameters.set_log_modulus(log_q, {60});
 
     PoseidonFactory::get_instance()->set_device_type(DEVICE_SOFTWARE);
     auto context = PoseidonFactory::get_instance()->create_poseidon_context(parameters);
@@ -106,8 +116,10 @@ int run_legacy_bootstrap()
     evaluator->rescale_dynamic(cipher, cipher, static_cast<int64_t>(1) << 40);
 
     EvalModPoly eval_mod_poly(context, CosDiscrete, static_cast<uint64_t>(1) << 40,
-                              1, 9, 3, 16, 0, 30);
+                              1, 7, 3, 16, 0, 30);
+    spdlog::debug("before bootstrap, cipher level = {}", cipher.level());
     evaluator->bootstrap(cipher, cipher, relin_keys, galois_keys, encoder, eval_mod_poly);
+    spdlog::debug("after bootstrap, cipher level = {}", cipher.level());
     const auto stop = std::chrono::high_resolution_clock::now();
     const auto elapsed =
         std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count();
@@ -183,7 +195,9 @@ int run_new_bootstrap()
 
     Ciphertext output;
     const auto start = std::chrono::high_resolution_clock::now();
+    spdlog::debug("after bootstrap, input level = {}", input.level());
     evaluator->bootstrap(input, output, relin_keys, galois_keys, encoder, config);
+    spdlog::debug("after bootstrap, output level = {}", output.level());
     const auto stop = std::chrono::high_resolution_clock::now();
 
     const auto elapsed =
@@ -232,6 +246,7 @@ int run_new_bootstrap()
 
 int main(int argc, char **argv)
 {
+    spdlog::set_level(spdlog::level::debug);  // enable [level] traces from the evaluator
     std::cout << BANNER << '\n';
     std::cout << "POSEIDON SOFTWARE VERSION: " << POSEIDON_VERSION << "\n";
 
