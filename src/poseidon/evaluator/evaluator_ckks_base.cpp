@@ -1497,7 +1497,7 @@ void EvaluatorCkksBase::multiply_plain_accumulate(
     }
 
     const double product_scale = ciph.scale() * plain.scale();
-    if (!util::are_approximate<double>(accumulator.scale(), product_scale))
+    if (!util::is_approximate<double>(accumulator.scale(), product_scale))
     {
         POSEIDON_THROW(invalid_argument_error,
                        "multiply_plain_accumulate : scale mismatch");
@@ -1576,7 +1576,7 @@ void EvaluatorCkksBase::multiply_const_accumulate(
         if (!accumulator.is_ntt_form() ||
             accumulator.parms_id() != ciph.parms_id() ||
             accumulator.size() != ciph.size() ||
-            !util::are_approximate<double>(accumulator.scale(), product_scale))
+            !util::is_approximate<double>(accumulator.scale(), product_scale))
         {
             POSEIDON_THROW(invalid_argument_error,
                            "multiply_const_accumulate : accumulator mismatch");
