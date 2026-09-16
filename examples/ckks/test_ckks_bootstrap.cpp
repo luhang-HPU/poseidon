@@ -77,7 +77,7 @@ int run_legacy_bootstrap()
     //   1) EvalMod scaling factor must equal 2^p (so q_div = sf/2^p ~= 1);
     //   2) message scale <= q0/message_ratio, and after the pre-bootstrap square the scale must
     //      still rescale safely (scale/q >= ~2^24) -> encode 2^33 with ratio 2^7.
-    ParametersLiteral parameters{CKKS, 15, 14, 40, 1, 0, 0, {}, {}};
+    ParametersLiteral parameters{CKKS, 15, 14, 51, 1, 1, 0, {}, {}};
     std::vector<uint32_t> log_q;
     log_q.push_back(60);
     for (int i = 0; i < 20; i++) log_q.push_back(40);

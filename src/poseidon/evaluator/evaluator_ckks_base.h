@@ -139,9 +139,12 @@ public:
     void eval_mod(const Ciphertext &ciph, Ciphertext &result, const EvalModPoly &eva_poly,
                   const RelinKeys &relin_keys, const CKKSEncoder &encoder);
 
+    // old version
     void bootstrap(const Ciphertext &ciph, Ciphertext &result, const RelinKeys &relin_keys,
                    const GaloisKeys &galois_keys, const CKKSEncoder &encoder,
                    EvalModPoly &eval_mod_poly);
+
+    // new version
     // The refreshed result keeps the q0-derived scale. Callers that require the
     // context's default scale must normalize it with one additional rescale.
     void bootstrap(const Ciphertext &ciph, Ciphertext &result, const RelinKeys &relin_keys,
