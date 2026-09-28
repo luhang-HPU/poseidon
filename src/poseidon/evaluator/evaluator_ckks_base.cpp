@@ -1093,6 +1093,27 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
     bootstrap_core(ciph, result, relin_keys, galois_keys, encoder, eval_mod_poly);
 }
 
+void EvaluatorCkksBase::bootstrap_real(const Ciphertext &ciph, Ciphertext &result,
+                                      const RelinKeys &relin_keys,
+                                      const GaloisKeys &galois_keys,
+                                      const CKKSEncoder &encoder, EvalModPoly &eval_mod_poly)
+{
+    const auto data = context_.crt_context()->get_context_data(ciph.parms_id());
+    if (!data || ciph.size() != 2 || !std::isfinite(ciph.scale()) || ciph.scale() <= 0.0)
+        throw invalid_argument("real CtS-first bootstrap requires a valid size-2 ciphertext");
+    if (context_.parameters_literal()->q0_level() != 0 || ciph.level() < 1)
+        throw invalid_argument("real CtS-first bootstrap requires q0_level=0 and input level >= 1");
+    if ((1ULL << context_.parameters_literal()->log_slots()) != encoder.slot_count())
+        throw invalid_argument("real CtS-first bootstrap currently requires full slots");
+    const double target = std::exp2(std::round(std::log2(
+        static_cast<double>(context_.crt_context()->q0()) / eval_mod_poly.message_ratio())));
+    const double factor = target / ciph.scale();
+    if (!std::isfinite(factor) || factor < 1.0 || factor > static_cast<double>(1ULL << 30) ||
+        std::abs(factor / std::round(factor) - 1.0) > 1e-5)
+        throw invalid_argument("real CtS-first bootstrap input scale cannot be aligned");
+    bootstrap_core(ciph, result, relin_keys, galois_keys, encoder, eval_mod_poly, true);
+}
+
 void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
                                   const RelinKeys &relin_keys,
                                   const GaloisKeys &galois_keys,
@@ -1299,8 +1320,15 @@ void EvaluatorCkksBase::bootstrap_core(const Ciphertext &ciph, Ciphertext &resul
                                        const RelinKeys &relin_keys,
                                        const GaloisKeys &galois_keys,
                                        const CKKSEncoder &encoder,
-                                       EvalModPoly &eval_mod_poly)
+                                       EvalModPoly &eval_mod_poly, bool real_only)
 {
+    const bool trace = real_only && std::getenv("POSEIDON_BOOTSTRAP_TRACE") != nullptr;
+    auto trace_state = [&](const char *label, const Ciphertext &cipher) {
+        if (trace)
+            std::cerr << "[bootstrap trace] cf_real." << label << ": level=" << cipher.level()
+                      << ", log2(scale)=" << std::log2(cipher.scale()) << '\n';
+    };
+    trace_state("input", ciph);
     auto tmp = ciph;
     rescale_for_bootstrap(tmp);
 
@@ -1334,6 +1362,7 @@ void EvaluatorCkksBase::bootstrap_core(const Ciphertext &ciph, Ciphertext &resul
     Ciphertext ciph_raise;
     read(result);
     raise_modulus(result, ciph_raise);
+    trace_state("mod_raise", ciph_raise);
 
     auto scale_raise = eval_mod_poly.scaling_factor() / ciph_raise.scale();
     scale_raise /= eval_mod_poly.message_ratio();
@@ -1349,7 +1378,6 @@ void EvaluatorCkksBase::bootstrap_core(const Ciphertext &ciph, Ciphertext &resul
 
     Ciphertext ciph_real, ciph_imag;
     Ciphertext ciph_real_mod, ciph_imag_mod;
-    Ciphertext res;
 
     auto coeffs_to_slots_scaling =
         eval_mod_poly.q_div() /
@@ -1364,14 +1392,26 @@ void EvaluatorCkksBase::bootstrap_core(const Ciphertext &ciph, Ciphertext &resul
     // multiply is followed by exactly one rescale, consuming one level instead of two.
     tmp_matrix.create(coeff_to_slot_dft_matrix, const_cast<CKKSEncoder &>(encoder), 1);
 
-    coeff_to_slot(ciph_raise, coeff_to_slot_dft_matrix, ciph_real, ciph_imag, galois_keys, encoder);
+    if (real_only)
+    {
+        Ciphertext transformed, conjugated;
+        dft(ciph_raise, coeff_to_slot_dft_matrix, transformed, galois_keys);
+        conjugate(transformed, galois_keys, conjugated);
+        add(transformed, conjugated, ciph_real);
+    }
+    else
+        coeff_to_slot(ciph_raise, coeff_to_slot_dft_matrix, ciph_real, ciph_imag, galois_keys, encoder);
+    trace_state("eval_mod_input", ciph_real);
 
     eval_mod_poly.set_level_start(static_cast<uint32_t>(
         context_.crt_context()->get_context_data(ciph_real.parms_id())->level()));
-    eval_mod(ciph_imag, ciph_imag_mod, eval_mod_poly, relin_keys, encoder);
+    if (!real_only)
+        eval_mod(ciph_imag, ciph_imag_mod, eval_mod_poly, relin_keys, encoder);
     eval_mod(ciph_real, ciph_real_mod, eval_mod_poly, relin_keys, encoder);
+    trace_state("eval_mod_output", ciph_real_mod);
 
-    ciph_imag_mod.scale() = context_.parameters_literal()->scale();
+    if (!real_only)
+        ciph_imag_mod.scale() = context_.parameters_literal()->scale();
     ciph_real_mod.scale() = context_.parameters_literal()->scale();
 
     auto slots_to_coeffs_scaling =
@@ -1383,10 +1423,29 @@ void EvaluatorCkksBase::bootstrap_core(const Ciphertext &ciph, Ciphertext &resul
             context_.crt_context()->get_context_data(ciph_real_mod.parms_id())->level()),
         vector<uint32_t>(3, 1), true, slots_to_coeffs_scaling, false, 1);
     LinearMatrixGroup slot_to_coeff_dft_matrix;
-    tmp_matrix_inverse.create(slot_to_coeff_dft_matrix, const_cast<CKKSEncoder &>(encoder), 1);
-
-    slot_to_coeff(ciph_real_mod, ciph_imag_mod, slot_to_coeff_dft_matrix, result, galois_keys,
-                  encoder);
+    if (real_only)
+    {
+        // For a real slot message m(X)=conj(m(X)), a[N-j]=-a[j], a[N/2]=0.
+        // Only the lower coefficient half is needed. Halve its constant term
+        // BEFORE StC: h=a[0]/2+sum_{j=1}^{N/2-1} a[j]X^j, then h+conj(h)=m.
+        // Slot 0 of the CtS real lane carries a[0]. Fold this weight into StC
+        // rather than introducing an extra plaintext multiplication/rescale.
+        vector<double> weights(encoder.slot_count(), 1.0);
+        weights[0] = 0.5;
+        tmp_matrix_inverse.create(slot_to_coeff_dft_matrix,
+                                  const_cast<CKKSEncoder &>(encoder), 1, weights);
+        Ciphertext half, conjugated;
+        dft(ciph_real_mod, slot_to_coeff_dft_matrix, half, galois_keys);
+        conjugate(half, galois_keys, conjugated);
+        add(half, conjugated, result);
+    }
+    else
+    {
+        tmp_matrix_inverse.create(slot_to_coeff_dft_matrix, const_cast<CKKSEncoder &>(encoder), 1);
+        slot_to_coeff(ciph_real_mod, ciph_imag_mod, slot_to_coeff_dft_matrix, result, galois_keys,
+                      encoder);
+    }
+    trace_state("output", result);
 }
 
 void EvaluatorCkksBase::ntt_fwd(const Plaintext &plain, Plaintext &result,

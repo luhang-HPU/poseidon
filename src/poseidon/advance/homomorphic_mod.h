@@ -52,6 +52,17 @@ public:
 
     inline const Polynomial &arcsine_poly() const { return this->arcsine_poly_; }
 
+    // Experimental coefficient replacement for the current CosDiscrete fit.
+    // Supply UNSCALED Chebyshev coefficients in the existing normalized basis
+    // (input to EvalMod is (t-1/4)/K). The coefficient count must stay unchanged.
+    // Applies sqrt_2pi internally and enables every nonzero parity, including
+    // odd terms that the legacy CosDiscrete evaluator skipped.
+    void set_cosine_coefficients(const std::vector<double> &coefficients);
+
+    // Keep the generated coefficients unchanged, but evaluate all of them.
+    // Opt-in: the legacy constructor's even-only behavior is preserved.
+    void enable_full_cosine_coefficients();
+
     void set_level_start(uint32_t level) { level_start_ = level; }
 
 private:

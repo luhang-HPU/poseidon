@@ -84,6 +84,35 @@ EvalModPoly::EvalModPoly(const PoseidonContext &context, SineType type, double s
     }
 }
 
+void EvalModPoly::set_cosine_coefficients(const std::vector<double> &coefficients)
+{
+    if (type_ != CosDiscrete || coefficients.size() != sine_poly_.data().size() ||
+        coefficients.empty() || coefficients.back() == 0.0)
+        throw std::invalid_argument("cosine coefficients must preserve the existing nonzero degree");
+    for (std::size_t i = 0; i < coefficients.size(); ++i)
+    {
+        if (!std::isfinite(coefficients[i]) || !std::isfinite(coefficients[i] * sqrt_2pi_))
+            throw std::invalid_argument("cosine coefficients must be finite");
+    }
+    for (std::size_t i = 0; i < coefficients.size(); ++i)
+        sine_poly_.data()[i] = coefficients[i] * sqrt_2pi_;
+    enable_full_cosine_coefficients();
+}
+
+void EvalModPoly::enable_full_cosine_coefficients()
+{
+    if (type_ != CosDiscrete)
+        throw std::invalid_argument("full cosine coefficients require CosDiscrete");
+    bool has_even = false, has_odd = false;
+    for (std::size_t i = 0; i < sine_poly_.data().size(); ++i)
+        if (sine_poly_.data()[i] != std::complex<double>{})
+            (i % 2 ? has_odd : has_even) = true;
+    // These flags select which coefficient parities the PS evaluator visits.
+    // Both true means a general polynomial, including its constant term.
+    sine_poly_.is_even() = has_even;
+    sine_poly_.is_odd() = has_odd;
+}
+
 int optimal_split(int log_degree)
 {
     int log_split = log_degree >> 1;

@@ -144,6 +144,19 @@ public:
                    const GaloisKeys &galois_keys, const CKKSEncoder &encoder,
                    EvalModPoly &eval_mod_poly);
 
+    // Experimental full-slot REAL-message CtS-first bootstrap, one EvalMod.
+    // ModRaise -> CtS(real half) -> EvalMod -> weighted StC -> conjugate-add.
+    // Requires q0_level=0, input level >= 1 and scale <= q0/message_ratio
+    // (up to rounding to a power of two), with an integer scale-up factor.
+    // The caller must guarantee real messages; arbitrary complex input is NOT
+    // supported and cannot be detected without decryption. Output uses the
+    // context scale, like the EvalModPoly overload. In-place use is supported.
+    // Example polynomial: CosDiscrete, scale=2^51, log_ratio=7, DA=3, K=12,
+    // arcsine_degree=0, sine_degree=22. This is not a security parameter preset.
+    void bootstrap_real(const Ciphertext &ciph, Ciphertext &result,
+                        const RelinKeys &relin_keys, const GaloisKeys &galois_keys,
+                        const CKKSEncoder &encoder, EvalModPoly &eval_mod_poly);
+
     // new version
     // The refreshed result keeps the q0-derived scale. Callers that require the
     // context's default scale must normalize it with one additional rescale.
@@ -214,7 +227,7 @@ private:
 
     void bootstrap_core(const Ciphertext &ciph, Ciphertext &result, const RelinKeys &relin_keys,
                         const GaloisKeys &galois_keys, const CKKSEncoder &encoder,
-                        EvalModPoly &eval_mod_poly);
+                        EvalModPoly &eval_mod_poly, bool real_only = false);
 
     void rescale_for_bootstrap(Ciphertext &ciph1);
 

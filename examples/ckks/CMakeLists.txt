@@ -26,3 +26,6 @@ target_link_libraries(test_ckks_hybrid_decomp_count poseidon_shared)
 
 add_executable(test_ckks_bootstrap_cmp test_ckks_bootstrap_cmp.cpp)
 target_link_libraries(test_ckks_bootstrap_cmp poseidon_shared)
+
+add_executable(test_ckks_bootstrap_cf_real test_ckks_bootstrap_cf_real.cpp)
+target_link_libraries(test_ckks_bootstrap_cf_real poseidon_shared)

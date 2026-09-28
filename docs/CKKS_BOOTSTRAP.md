@@ -20,8 +20,13 @@ EvaluatorCkksBase::bootstrap(
 - [`src/poseidon/advance/bootstrapper.h`](../src/poseidon/advance/bootstrapper.h)
 - [`src/poseidon/advance/bootstrapper.cpp`](../src/poseidon/advance/bootstrapper.cpp)
 
-旧版 `EvalModPoly` 接口仍然保留，但它的参数体系、模数链配置和输出处理方式与
-新版不同。除非正在维护旧代码，否则新程序建议使用 `BootstrapConfig` 接口。
+双路自举保留 `BootstrapConfig` 和 `EvalModPoly` 两种参数接口；它们的参数体系、
+模数链配置和输出处理方式不同，不要混用。本文以下说明 `BootstrapConfig` 双路接口。
+当前开发的 22 阶实数单路使用独立的 `bootstrap_real(..., EvalModPoly&)`，见下文链接。
+
+保留 **level=1 入口、先升模**的实数单路版本见
+[CKKS_BOOTSTRAP_CF_REAL.md](CKKS_BOOTSTRAP_CF_REAL.md)：独立接口 `bootstrap_real`，
+使用 `EvalModPoly`，支持实验配置 22 阶 + 倍角 ×3，不要求前置 StC。
 
 ## 1. 新版 Bootstrap 做了什么
 
