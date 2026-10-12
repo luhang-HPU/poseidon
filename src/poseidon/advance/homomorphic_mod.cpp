@@ -41,6 +41,7 @@ EvalModPoly::EvalModPoly(const PoseidonContext &context, SineType type, double s
         arcsine_poly_.a() = 0;
         arcsine_poly_.b() = 0;
         arcsine_poly_.max_degree() = arcsine_degree;
+        arcsine_poly_.is_even() = false;
     }
     else
     {
@@ -50,12 +51,13 @@ EvalModPoly::EvalModPoly(const PoseidonContext &context, SineType type, double s
     switch (type_)
     {
     case SinContinuous:
-        sine_poly_ = approximate(sin2pi2pi, -k, k, sine_degree);
+        sine_poly_ = approximate(sin_2pi_x, -k, k, sine_degree);
         sine_poly_.lead() = true;
         sine_poly_a_ = -k_;
         sine_poly_b_ = k_;
-
+        sine_poly_.is_even() = false;
         break;
+
     case CosDiscrete:
         sine_poly_.lead() = true;
         sine_poly_a_ = -k_;
@@ -68,9 +70,11 @@ EvalModPoly::EvalModPoly(const PoseidonContext &context, SineType type, double s
         sine_poly_.data() = ApproximateCos(k, sine_degree, (double)(1 << log_message_ratio),
                                            double_angle);  // this k is total size
         sine_poly_.max_degree() = sine_poly_.data().size() - 1;
+        sine_poly_.is_odd() = false;
         break;
 
     case CosContinuous:
+        // TODO
         exit(0);
     }
 
@@ -80,11 +84,51 @@ EvalModPoly::EvalModPoly(const PoseidonContext &context, SineType type, double s
     }
 }
 
+void EvalModPoly::set_cosine_coefficients(const std::vector<double> &coefficients)
+{
+    if (type_ != CosDiscrete || coefficients.size() != sine_poly_.data().size() ||
+        coefficients.empty() || coefficients.back() == 0.0)
+        throw std::invalid_argument("cosine coefficients must preserve the existing nonzero degree");
+    for (std::size_t i = 0; i < coefficients.size(); ++i)
+    {
+        if (!std::isfinite(coefficients[i]) || !std::isfinite(coefficients[i] * sqrt_2pi_))
+            throw std::invalid_argument("cosine coefficients must be finite");
+    }
+    for (std::size_t i = 0; i < coefficients.size(); ++i)
+        sine_poly_.data()[i] = coefficients[i] * sqrt_2pi_;
+    enable_full_cosine_coefficients();
+}
+
+void EvalModPoly::enable_full_cosine_coefficients()
+{
+    if (type_ != CosDiscrete)
+        throw std::invalid_argument("full cosine coefficients require CosDiscrete");
+    bool has_even = false, has_odd = false;
+    for (std::size_t i = 0; i < sine_poly_.data().size(); ++i)
+        if (sine_poly_.data()[i] != std::complex<double>{})
+            (i % 2 ? has_odd : has_even) = true;
+    // These flags select which coefficient parities the PS evaluator visits.
+    // Both true means a general polynomial, including its constant term.
+    sine_poly_.is_even() = has_even;
+    sine_poly_.is_odd() = has_odd;
+}
+
 int optimal_split(int log_degree)
 {
     int log_split = log_degree >> 1;
     if (log_degree - log_split > log_split)
     {
+        log_split++;
+    }
+    return log_split;
+}
+
+int optimal_split_optimized(int log_degree)
+{
+    auto log_split = log_degree >> 1;
+    auto a = (1 << log_split) + (1 << (log_degree - log_split)) + log_degree - log_split - 3;
+    auto b = (1 << (log_split + 1)) + (1 << (log_degree - log_split - 1)) + log_degree - log_split - 4;
+    if (a > b) {
         log_split++;
     }
     return log_split;
@@ -100,41 +144,6 @@ bool is_not_negligible(complex<double> c)
     {
         return false;
     }
-}
-pair<bool, bool> is_odd_or_even_polynomial(Polynomial &poly)
-{
-    bool even = true;
-    bool odd = true;
-    auto poly_degree = poly.max_degree();
-    auto &data = poly.data();
-
-    for (int i = 0; i < poly_degree; i++)
-    {
-        auto isnotnegligible = is_not_negligible(data[i]);
-
-        auto state = i & 1;
-
-        odd = odd && (state != 0 && isnotnegligible);
-        even = even && (state != 1 && isnotnegligible);
-        if (!odd && !even)
-        {
-            break;
-        }
-    }
-    // If even or odd, then sets the expected zero coefficients to zero
-    if (even || odd)
-    {
-        int start = 0;
-        if (even)
-        {
-            start = 1;
-        }
-        for (int i = start; i < poly_degree; i += 2)
-        {
-            poly.data()[i] = complex<double>(0, 0);
-        }
-    }
-    return make_pair(odd, even);
 }
 
 }  // namespace poseidon

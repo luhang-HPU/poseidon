@@ -40,9 +40,29 @@ uint32_t HomomorphicDFTMatrixLiteral::get_depth(bool actual)
 void HomomorphicDFTMatrixLiteral::create(LinearMatrixGroup &mat_group, CKKSEncoder &encoder,
                                          uint32_t step)
 {
+    create(mat_group, encoder, step, {});
+}
+
+void HomomorphicDFTMatrixLiteral::create(LinearMatrixGroup &mat_group, CKKSEncoder &encoder,
+                                         uint32_t step,
+                                         const std::vector<double> &input_weights)
+{
     auto context_data = encoder.context().crt_context()->first_context_data();
     auto &modulus = context_data->parms().q();
     auto x = this->gen_matrices();
+    if (!input_weights.empty())
+    {
+        if (x.empty() || x.front().empty() ||
+            input_weights.size() != x.front().begin()->second.size())
+            throw std::invalid_argument("DFT input weights have the wrong slot count");
+        for (double weight : input_weights)
+            if (!std::isfinite(weight))
+                throw std::invalid_argument("DFT input weights must be finite");
+        const auto slots = input_weights.size();
+        for (auto &[rotation, diagonal] : x.front())
+            for (std::size_t row = 0; row < diagonal.size(); ++row)
+                diagonal[row] *= input_weights[(row + rotation) & (slots - 1)];
+    }
     mat_group.data().resize(x.size());
     mat_group.set_step(step);
     auto leveld = level_start_;

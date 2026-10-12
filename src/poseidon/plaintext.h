@@ -468,7 +468,7 @@ public:
                            util::is_zero<pt_coeff_type>) &&
                std::all_of(compare.data_.cbegin() + sig_coeff_count, compare.data_.cend(),
                            util::is_zero<pt_coeff_type>) &&
-               util::are_approximate(scale_, compare.scale_);
+               util::is_approximate(scale_, compare.scale_);
     }
 
     /**

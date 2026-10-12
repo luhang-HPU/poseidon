@@ -65,6 +65,10 @@ public:
     POSEIDON_NODISCARD uint32_t get_log_bsgs_ratio() const;
     std::vector<std::map<int, std::vector<std::complex<double>>>> gen_matrices();
     void create(LinearMatrixGroup &mat_group, CKKSEncoder &encoder, uint32_t step);
+    // Input weights are folded into the first matrix's columns, so
+    // applying a plaintext mask does not require a separate multiply/rescale.
+    void create(LinearMatrixGroup &mat_group, CKKSEncoder &encoder, uint32_t step,
+                const std::vector<double> &input_weights);
 
 private:
     LinearType type_;

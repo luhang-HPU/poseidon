@@ -82,7 +82,7 @@ protected:
     template <typename T, typename S>
     POSEIDON_NODISCARD inline bool are_same_scale(const T &value1, const S &value2) noexcept
     {
-        return util::are_approximate<double>(value1.scale(), value2.scale());
+        return util::is_approximate<double>(value1.scale(), value2.scale());
     }
 
 protected:

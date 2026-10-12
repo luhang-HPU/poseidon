@@ -1,13 +1,86 @@
 #include "evaluator_ckks_base.h"
 #include "poseidon/advance/bootstrapper.h"
 #include "poseidon/advance/homomorphic_dft.h"
+#include "poseidon/decryptor.h"
 #include "poseidon/encryptor.h"
 #include "poseidon/util/debug.h"
+#include <algorithm>
+#include <cmath>
 
+#include "spdlog/spdlog.h"
+
+#ifdef DEBUG
+#include "poseidon/decryptor.h"
+#endif
+
+#include <cstdlib>
+#include <iostream>
 #include <limits>
 
 namespace poseidon
 {
+
+namespace
+{
+int bit_len(uint n)
+{
+    int len = 0;
+    while (n)
+    {
+        n = n >> 1;
+        len++;
+    }
+    return len;
+}
+
+std::pair<int, int> split_degree(int n)
+{
+    int a, b;
+    if ((n & (n-1)) == 0)
+    {
+        a = n/2;
+        b = n/2;
+    }
+    else
+    {
+        int k = bit_len(n) - 1;
+        a = (1 << k) - 1;
+        b = n + 1 - (1 << k);
+    }
+    return {a, b};
+}
+
+bool scale_in_delta_lattigo(double scale0, double scale1, double log2_delta)
+{
+    // 对应 Lattigo core/rlwe/scale.go:135-148。
+    // Scale.InDelta 判断的是相对误差的 -log2 是否达到阈值，不等价于
+    // Poseidon util::is_approximate 的默认近似判断。
+    auto diff = std::fabs(scale0 - scale1);
+    auto scale_max = std::max(scale0, scale1);
+    if (diff == 0)
+    {
+        return true;
+    }
+    if (scale_max <= 0)
+    {
+        return false;
+    }
+    return -std::log2(diff / scale_max) >= log2_delta;
+}
+
+}
+
+#ifdef DEBUG
+std::vector<std::complex<double>> EvaluatorCkksBase::decrypt_and_decode(const Ciphertext& ciph)
+{
+    std::vector<std::complex<double>> result;
+    Plaintext plt_tmp;
+    ptr_dec_->decrypt(ciph, plt_tmp);
+    ptr_encoder_->decode(plt_tmp, result);
+    return result;
+}
+#endif
+
 EvaluatorCkksBase::EvaluatorCkksBase(const PoseidonContext &context)
     : min_scale_(std::pow(2.0, context.parameters_literal()->log_scale())), Base(context)
 {
@@ -39,7 +112,7 @@ void EvaluatorCkksBase::drop_modulus_to_next(const Ciphertext &ciph, Ciphertext 
     drop_modulus(ciph, result, parms_id);
 }
 
-void EvaluatorCkksBase::multiply_const_direct(const Ciphertext &ciph, int const_data,
+void EvaluatorCkksBase::multiply_const_direct(const Ciphertext &ciph, int64_t const_data,
                                               Ciphertext &result, const CKKSEncoder &encoder) const
 {
     Plaintext tmp;
@@ -94,7 +167,7 @@ void EvaluatorCkksBase::multiply_by_diag_matrix_bsgs(const Ciphertext &ciph,
     auto [index, _, rotn2] =
         bsgs_index(plain_mat.plain_vec, 1 << plain_mat.log_slots, plain_mat.n1);
     map<int, Ciphertext> rot_ciph;
-    Ciphertext ciph_inner_sum, ciph_inner, result_tmp;
+    Ciphertext result_tmp;
     for (auto j : rotn2)
     {
         if (j != 0)
@@ -103,76 +176,37 @@ void EvaluatorCkksBase::multiply_by_diag_matrix_bsgs(const Ciphertext &ciph,
         }
     }
 
-    int cnt0 = 0;
     for (const auto &j : index)
     {
-        int cnt1 = 0;
+        Ciphertext group_sum;
         for (auto i : index[j.first])
         {
-            if (i == 0)
+            const Ciphertext &baby = i == 0 ? ciph : rot_ciph.at(i);
+            multiply_plain_accumulate(
+                baby, plain_mat.plain_vec.at(i + j.first), group_sum);
+        }
+
+        if (j.first != 0)
+        {
+            Ciphertext rotated_group;
+            rotate(group_sum, rotated_group, j.first, rot_key);
+            if (!result_tmp.is_valid())
             {
-                if (cnt1 == 0)
-                {
-                    if (cnt0 == 0)
-                    {
-                        multiply_plain(ciph, plain_mat.plain_vec.at(j.first), result_tmp);
-                    }
-                    else
-                    {
-                        multiply_plain(ciph, plain_mat.plain_vec.at(j.first), ciph_inner_sum);
-                    }
-                }
-                else
-                {
-                    multiply_plain(ciph, plain_mat.plain_vec.at(j.first), ciph_inner);
-                    if (cnt0 == 0)
-                    {
-                        add(result_tmp, ciph_inner, result_tmp);
-                    }
-                    else
-                    {
-                        add(ciph_inner_sum, ciph_inner, ciph_inner_sum);
-                    }
-                }
+                result_tmp = std::move(rotated_group);
             }
             else
             {
-                if (cnt1 == 0)
-                {
-                    if (cnt0 == 0)
-                    {
-                        multiply_plain(rot_ciph[i], plain_mat.plain_vec.at(i + j.first),
-                                       result_tmp);
-                    }
-                    else
-                    {
-                        multiply_plain(rot_ciph[i], plain_mat.plain_vec.at(i + j.first),
-                                       ciph_inner_sum);
-                    }
-                }
-                else
-                {
-
-                    multiply_plain(rot_ciph[i], plain_mat.plain_vec.at(i + j.first), ciph_inner);
-                    if (cnt0 == 0)
-                    {
-                        add(result_tmp, ciph_inner, result_tmp);
-                    }
-                    else
-                    {
-                        add(ciph_inner_sum, ciph_inner, ciph_inner_sum);
-                    }
-                }
+                add(result_tmp, rotated_group, result_tmp);
             }
-            cnt1++;
         }
-        if (cnt0 != 0)
+        else if (!result_tmp.is_valid())
         {
-            auto step_src = j.first;
-            rotate(ciph_inner_sum, ciph_inner, j.first, rot_key);
-            add(result_tmp, ciph_inner, result_tmp);
+            result_tmp = std::move(group_sum);
         }
-        cnt0++;
+        else
+        {
+            add(result_tmp, group_sum, result_tmp);
+        }
     }
     rescale_dynamic(result_tmp, result, ciph.scale());
 }
@@ -330,627 +364,607 @@ void EvaluatorCkksBase::slot_to_coeff(const Ciphertext &ciph_real, const Ciphert
     dft(result, matrix_group, result, galois_keys);
 }
 
-void EvaluatorCkksBase::evaluate_poly_vector(const Ciphertext &ciph, Ciphertext &destination,
-                                             const PolynomialVector &polys, double scale,
-                                             const RelinKeys &relin_keys,
-                                             const CKKSEncoder &encoder) const
+void EvaluatorCkksBase::evaluate_polynomial(const PolynomialVector& poly_vec, const Ciphertext& ct_basis, Ciphertext& ct_res,
+    bool is_chev, bool is_lazy, double target_scale, double min_scale, const RelinKeys& relin_key, const CKKSEncoder& encoder)
 {
-    map<uint32_t, Ciphertext> monomial_basis;
-    monomial_basis[1] = ciph;
+    map<uint32_t, Ciphertext> power_basis;
+    power_basis[1] = ct_basis;
 
-    int log_degree = ceil(log2(polys.polys()[0].degree()));
-    int log_split = optimal_split(log_degree);
+    auto log_degree = bit_len(poly_vec[0].degree());
+    auto log_split = optimal_split_optimized(log_degree);
 
-    bool odd = true;
-    bool even = true;
-
-    for (auto p : polys.polys())
+    bool is_odd = false;
+    bool is_even = false;
+    for (auto i = 0; i < poly_vec.polys().size(); i++)
     {
-        auto [tmp0, tmp1] = is_odd_or_even_polynomial(p);
-        odd = odd && tmp0;
-        even = even && tmp1;
+        const auto& poly = poly_vec.polys()[i];
+        is_odd = is_odd || poly.is_odd();
+        is_even = is_even || poly.is_even();
     }
 
-    bool is_chebyshev = false;
-    if (polys.polys()[0].basis_type() == Chebyshev)
-    {
-        is_chebyshev = true;
-    }
-    else
-    {
-        is_chebyshev = false;
-    }
+    gen_power_optimized(power_basis, 1 << (log_degree - 1), is_lazy, is_chev, min_scale, relin_key, encoder);
 
-    gen_power(monomial_basis, 1 << log_degree, false, is_chebyshev, scale, relin_keys, encoder);
-    for (int i = ((int64_t)1 << log_split) - 1; i > 2; i--)
+    for (auto i = (1 << log_split) - 1; i > 2; i--)
     {
-        auto state = i & 1;
-        if (!(even || odd) || (state == 0 && even) || ((state == 1 && odd)))
+        if (!(is_even || is_odd) || (((i&1) == 0) && is_even) || (((i&1) == 1) && is_odd))
         {
-            gen_power(monomial_basis, i, false, is_chebyshev, scale, relin_keys, encoder);
+            gen_power_optimized(power_basis, i, is_lazy, is_chev, min_scale, relin_key, encoder);
         }
     }
 
-    for (auto &[first, second] : monomial_basis)
+    PatersonStockmeyerPolynomialVector ps_polys_vec;
+    int input_level = ct_basis.level();
+    double input_scale = ct_basis.scale();
+    get_paterson_stockmeyer_polynomial_vector(poly_vec, input_level, input_scale, target_scale, ps_polys_vec);
+
+    evaluate_paterson_stockmeyer_polynomial_vector(ps_polys_vec, power_basis, ct_res, relin_key, encoder);
+}
+
+void EvaluatorCkksBase::get_paterson_stockmeyer_polynomial(const Polynomial& poly, int input_level,
+    double input_scale, double output_scale, PatersonStockmeyerPolynomial& ps_poly)
+{
+    auto log_degree = bit_len(poly.degree());
+    auto log_split = optimal_split_optimized(log_degree);
+
+    std::map<int, SimPower> power_basis_sim;
+    power_basis_sim[1] = {input_level, input_scale};
+
+    auto level_consumed_per_rescale = 1;
+    gen_power_sim(power_basis_sim, 1 << log_degree, level_consumed_per_rescale);
+    for (auto i = (1 << log_split) - 1; i > 2; i--)
     {
-        read(second);
+        gen_power_sim(power_basis_sim, i, level_consumed_per_rescale);
     }
 
-    auto index = pow(2, log_degree);
-    double target_scale = scale;
-    auto target_level = monomial_basis.at(index).level();
+    SimPower sim_op;
+    std::vector<Polynomial> ps_res;
+    // lattigo: inputLevel - eval.PolynomialDepth(degree), where PolynomialDepth(degree) =
+    // levelsConsumedPerRescaling * (bits.Len64(degree) - 1) = lcpr * floor(log2(degree))
+    recurse_ps(poly, log_split,
+               input_level - level_consumed_per_rescale * (bit_len(poly.degree()) - 1),
+               output_scale, power_basis_sim, ps_res, sim_op);
 
-    uint32_t num = 0;
-    recurse(monomial_basis, relin_keys, target_level, target_scale, polys, log_split, log_degree,
-            destination, encoder, odd, even, num);
-    rescale_dynamic(destination, destination, target_scale);
-    destination.scale() = target_scale;
+    ps_poly.degree_ = poly.degree();
+    ps_poly.base_ = 1 << log_split;
+    ps_poly.level_ = input_level;
+    ps_poly.scale_ = output_scale;
+    ps_poly.polys_ = ps_res;
 }
 
-void EvaluatorCkksBase::gen_power(map<uint32_t, Ciphertext> &monomial_basis, uint32_t n, bool lazy,
-                                  bool is_chev, double min_scale, const RelinKeys &relin_keys,
-                                  const CKKSEncoder &encoder) const
+void EvaluatorCkksBase::get_paterson_stockmeyer_polynomial_vector(const PolynomialVector& poly_vec,
+    int input_level, double intput_scale, double output_scale, PatersonStockmeyerPolynomialVector& ps_poly_vec)
 {
-    gen_power_inner(monomial_basis, n, lazy, is_chev, min_scale, relin_keys, encoder);
-    rescale_dynamic(monomial_basis[n], monomial_basis[n], min_scale);
-}
+    ps_poly_vec.polys_.clear();
+    ps_poly_vec.polys_.resize(poly_vec.size());
 
-void EvaluatorCkksBase::gen_power_inner(map<uint32_t, Ciphertext> &monomial_basis, uint32_t n,
-                                        bool lazy, bool is_chev, double min_scale,
-                                        const RelinKeys &relin_keys,
-                                        const CKKSEncoder &encoder) const
-{
-
-    if (!monomial_basis[n].is_valid())
+    for (auto i = 0; i < poly_vec.size(); ++i)
     {
-        bool is_pow2 = ((n & (n - 1)) == 0);
-        int a, b, c = 0;
-        if (is_pow2)
+        get_paterson_stockmeyer_polynomial(poly_vec[i], input_level, intput_scale, output_scale, ps_poly_vec.polys_[i]);
+    }
+}
+
+void EvaluatorCkksBase::evaluate_paterson_stockmeyer_polynomial_vector(const PatersonStockmeyerPolynomialVector &ps_polys_vec,
+    const map<uint32_t, Ciphertext> &power_basis, Ciphertext& ct_res, const RelinKeys& relin_key, const CKKSEncoder& encoder) /*const*/
+{
+    auto split = ps_polys_vec.polys_[0].polys_.size();
+
+    std::vector<BabyStep> baby_steps(split);
+
+    // baby steps: polynomial piece i is evaluated from the power basis into baby_steps[split-i-1]
+    for (auto i = 0; i < baby_steps.size(); i++)
+    {
+        evaluate_baby_step(ps_polys_vec, power_basis, i, baby_steps[split - i - 1], encoder);
+    }
+
+    // giant steps: merge the baby steps pairwise until one remains
+    while (baby_steps.size() != 1)
+    {
+        std::vector<int> giant_steps(baby_steps.size());
+        for (auto i = 0; i < baby_steps.size(); i++)
         {
-            a = n / 2;
-            b = a;
-        }
-        else
-        {
-            int k = ceil(log2((float)n)) - 1;
-            a = (1 << k) - 1;
-            b = n + 1 - (1 << k);
-            if (is_chev)
+            if (i == baby_steps.size() - 1)
             {
-                c = (int)(abs(a - b));
+                giant_steps[i] = 2;
+            }
+            else if (baby_steps[i].degree == baby_steps[i+1].degree)
+            {
+                giant_steps[i] = 1;
+                ++i;
             }
         }
 
-        gen_power_inner(monomial_basis, a, lazy && !is_pow2, is_chev, min_scale, relin_keys,
-                        encoder);
-        gen_power_inner(monomial_basis, b, lazy && !is_pow2, is_chev, min_scale, relin_keys,
-                        encoder);
-
-        if (lazy)
+        for (auto i = 0; i < baby_steps.size(); i++)
         {
-            POSEIDON_THROW(invalid_argument_error, "gen_power_inner: lazy should be false!");
-        }
-        else
-        {
-            rescale_dynamic(monomial_basis[a], monomial_basis[a], min_scale);
-            rescale_dynamic(monomial_basis[b], monomial_basis[b], min_scale);
-            multiply_relin_dynamic(monomial_basis[a], monomial_basis[b], monomial_basis[n],
-                                   relin_keys);
+            evaluate_giant_step(i, giant_steps, baby_steps, power_basis, encoder, relin_key);
         }
 
-        if (is_chev)
+        for (auto iter = baby_steps.begin(); iter != baby_steps.end();)
         {
-            add(monomial_basis[n], monomial_basis[n], monomial_basis[n]);
-            if (c == 0)
+            // TODO 使用is_valid()来判断baby_steps[i]已经被合并，是否可行？
+            if (!iter->value.is_valid())
             {
-                add_const(monomial_basis[n], -1.0, monomial_basis[n], encoder);
+                iter = baby_steps.erase(iter);
             }
             else
             {
-                // Since C[0] is not stored (but rather seen as the constant 1), only recurses on c
-                gen_power_inner(monomial_basis, c, lazy && !is_pow2, is_chev, min_scale, relin_keys,
-                                encoder);
-                Ciphertext ciph_tmp;
-                auto scale_tmp = monomial_basis[c].scale();
-                scale_tmp = monomial_basis[n].scale() / scale_tmp;
-                multiply_const(monomial_basis[c], 1.0, scale_tmp, ciph_tmp, encoder);
-                sub_dynamic(monomial_basis[n], ciph_tmp, monomial_basis[n], encoder);
+                ++iter;
             }
         }
     }
+
+    if (baby_steps[0].value.size() == 3)
+    {
+        relinearize(baby_steps[0].value, baby_steps[0].value, relin_key);
+    }
+
+    rescale(baby_steps[0].value, baby_steps[0].value);
+    ct_res = baby_steps[0].value;
 }
 
-void EvaluatorCkksBase::recurse(const map<uint32_t, Ciphertext> &monomial_basis,
-                                const RelinKeys &relin_keys, uint32_t target_level,
-                                double target_scale, const PolynomialVector &pol,
-                                uint32_t log_split, uint32_t log_degree, Ciphertext &destination,
-                                const CKKSEncoder &encoder, bool is_odd, bool is_even,
-                                uint32_t &num) const
+void EvaluatorCkksBase::evaluate_polynomial_vector_from_power_basis_optimized(const PolynomialVector &poly_vec,
+    const map<uint32_t, Ciphertext> &power_basis, Ciphertext &ciph_res, int target_level, double target_scale, const CKKSEncoder &encoder) const
 {
-    double min_target_scale = min_scale_;
-    double pow_scale;
-    auto log_split_tmp = log_split;
-    auto log_degree_tmp = log_degree;
-    auto pol_deg = pol.polys()[0].degree();
-    auto parms = context_.parameters_literal();
-    auto &modulus = parms->q();
-    if (pol_deg < (1 << log_split))
+    auto is_even = poly_vec.is_even();
+    auto is_odd = poly_vec.is_odd();
+
+    auto minimum_degree_non_zero_coefficient = poly_vec.polys()[0].data().size() - 1;
+    if (is_even && !is_odd)
     {
-        if (pol.polys()[0].lead() && (log_split > 1) &&
-            (pol.polys()[0].max_degree() % (1 << (log_split + 1))) > (1 << (log_split - 1)))
-        {
-            log_degree = log2(pol.polys()[0].degree() + 1);
-            log_split = log_degree >> 1;
-            recurse(monomial_basis, relin_keys, target_level, target_scale, pol, log_split,
-                    log_degree, destination, encoder, is_odd, is_even, num);
-            return;
-        }
-        auto target_scale_new = target_scale;
-        auto [tag_level, tag_scale] =
-            pre_scalar_level(is_even, is_odd, monomial_basis, target_scale_new, target_level, pol,
-                             log_split_tmp, log_degree_tmp);
-#ifdef DEBUG
-        gmp_printf("inside target level: %d,  target scale: %0.7lf\n", tag_level, tag_scale);
-#endif
-
-        evaluate_poly_from_poly_nomial_basis(is_even, is_odd, monomial_basis, relin_keys, tag_level,
-                                             tag_scale, pol, log_split, log_degree, destination,
-                                             encoder);
-
-        return;
-    }
-    auto next_power = 1 << log_split;
-    while (next_power < ((pol.polys()[0].degree() >> 1) + 1))
-    {
-        next_power <<= 1;
-    }
-    PolynomialVector coeffsq, coeffsr;
-    coeffsq.index() = pol.index();
-    coeffsr.index() = pol.index();
-    split_coeffs_poly_vector(pol, coeffsq, coeffsr, next_power);
-    auto x_pow = monomial_basis.at(next_power);
-
-    auto target_scale_new = target_scale;
-    double tmp_scale;
-    auto target_scale_pass = false;
-    int new_target_level = target_level;
-
-    if (num == 0 && pol.polys()[0].lead())
-    {
-
-        while (!target_scale_pass)
-        {
-            auto current_qi = safe_cast<double>(modulus[new_target_level - num].value());
-            num++;
-            target_scale_new *= current_qi;
-            tmp_scale = target_scale_new / x_pow.scale();
-            if (tmp_scale + 1000000000 >= min_target_scale)
-            {
-                target_scale_new = tmp_scale;
-                target_scale_pass = true;
-            }
-        }
-    }
-    else if (pol.polys()[0].lead())
-    {
-
-        while (!target_scale_pass)
-        {
-            new_target_level++;
-            auto current_qi = safe_cast<double>(modulus[new_target_level].value());
-            target_scale_new *= current_qi;
-            tmp_scale = target_scale_new / x_pow.scale();
-            if (tmp_scale + 1000000000 >= min_target_scale)
-            {
-                target_scale_new = tmp_scale;
-                target_scale_pass = true;
-            }
-        }
-    }
-    else
-    {
-        target_scale_new /= x_pow.scale();
-        pow_scale = target_scale_new;
-        while (!target_scale_pass)
-        {
-            new_target_level++;
-            auto current_qi = safe_cast<double>(modulus[new_target_level].value());
-            target_scale_new *= current_qi;
-            tmp_scale = target_scale_new / x_pow.scale();
-            if (tmp_scale + 1000000000 >= min_target_scale)
-            {
-                target_scale_pass = true;
-            }
-        }
-    }
-#ifdef DEBUG
-    printf("outside target level: %d,  target scale: %0.7lf\n", new_target_level, target_scale_new);
-#endif
-
-    Ciphertext res;
-    recurse(monomial_basis, relin_keys, new_target_level, target_scale_new, coeffsq, log_split,
-            log_degree, res, encoder, is_odd, is_even, num);
-#ifdef DEBUG
-    printf("1:res level: %zu,  target scale: %0.lf\n", res.level(), res.scale());
-#endif
-
-    if (!res.is_valid())
-    {
-        Ciphertext tmp;
-        recurse(monomial_basis, relin_keys, target_level, target_scale, coeffsr, log_split,
-                log_degree, tmp, encoder, is_odd, is_even, num);
-        if (tmp.is_valid())
-        {
-            destination = tmp;
-        }
-        return;
-    }
-
-    if (!pol.polys()[0].lead())
-    {
-        rescale_dynamic(res, res, pow_scale);
-    }
-    else
-    {
-        rescale_dynamic(res, res, context_.parameters_literal()->scale());
-    }
-#ifdef DEBUG
-    printf("2:res level: %zu,  target scale: %0.7lf\n", res.level(), res.scale());
-    printf("3:x_pow level: %zu,  target scale: %0.7lf\n", x_pow.level(), x_pow.scale());
-#endif
-
-    multiply_relin_dynamic(res, x_pow, res, relin_keys);
-#ifdef DEBUG
-    printf("3:MUL level: %zu,  target scale: %0.7lf\n", res.level(), res.scale());
-    printf("4:new_target_level level: %d,  target scale: %0.7lf\n", new_target_level,
-           target_scale_new);
-#endif
-
-    Ciphertext tmp;
-    recurse(monomial_basis, relin_keys, res.level(), res.scale(), coeffsr, log_split, log_degree,
-            tmp, encoder, is_odd, is_even, num);
-#ifdef DEBUG
-    printf("########### title[%zu]\n", coeffsr.polys()[0].degree());
-#endif
-
-    if (!tmp.is_valid())
-    {
-        destination = res;
-        return;
-    }
-
-    rescale_dynamic(tmp, tmp, res.scale());
-#ifdef DEBUG
-    gmp_printf("5:tmp level: %d,  target scale: %0.7lf\n", tmp.level(), tmp.scale());
-    gmp_printf("5:res level: %d,  target scale: %0.7lf\n", res.level(), res.scale());
-#endif
-    add_dynamic(res, tmp, destination, encoder);
-}
-
-tuple<uint32_t, double> EvaluatorCkksBase::pre_scalar_level(
-    bool is_even, bool is_odd, const map<uint32_t, Ciphertext> &monomial_basis,
-    double current_scale, uint32_t current_level, const PolynomialVector &pol, uint32_t log_split,
-    uint32_t log_degree) const
-{
-
-    auto x = monomial_basis;
-    auto &slots_index = pol.index();
-    auto minimum_degree_non_zero_coefficient = pol.polys()[0].data().size() - 1;
-
-    auto target_scale = current_scale;
-    auto target_level = current_level;
-    auto params = context_.parameters_literal();
-    auto &modulus = params->q();
-    auto degree = params->degree();
-    auto slots = degree >> 1;
-    if (is_even)
         minimum_degree_non_zero_coefficient--;
+    }
 
-    size_t maximum_ciphertext_degree = 0;
-    for (int i = pol.polys()[0].degree(); i > 0; i--)
+    auto maximum_ciphertext_degree = 0;
+    for (auto i = poly_vec.polys()[0].degree(); i > 0; i--)
     {
-        if (x.count(i))
+        if (power_basis.count(i))
         {
-            maximum_ciphertext_degree = max(maximum_ciphertext_degree, x.at(i).level());
+            maximum_ciphertext_degree = max(maximum_ciphertext_degree, (int)power_basis.at(i).size() - 1);
         }
     }
-    // If an index slot is given (either multiply polynomials or masking)
-    if (!slots_index.empty())
+
+    if (poly_vec.index().size() > 0)
     {
-        bool to_encode = false;
-        // Allocates temporary buffer for coefficients encoding
-        // If the degree of the poly is zero
+        // TODO 暂时不存在通过slot来计算的情况，可暂时忽略该if分支
+    }
+    else
+    {
+        // Allocates a zero ciphertext at (target_level, target_scale) — note that X^0 is not
+        // stored in the power basis, so the result must start from zero (see lattigo
+        // EvaluatePolynomialVectorFromPowerBasis: rlwe.NewCiphertext).
+        auto &parms_id = context_.crt_context()->parms_id_map().at(target_level);
+        ciph_res.resize(context_, parms_id, 2);
+        ciph_res.is_ntt_form() = true;
+        ciph_res.scale() = target_scale;
+
+        // Constant term c_0 (encoded at target scale; only even polynomials have one)
+        if (is_even)
+        {
+            add_const(ciph_res, poly_vec[0][0], ciph_res, encoder);
+        }
+
         if (minimum_degree_non_zero_coefficient == 0)
         {
-            while (1)
+            return;
+        }
+
+        // Loops from the highest degree coefficient down to 1.
+        // Encodes c_k at scale target_scale / X^k.scale so that the product lands exactly on
+        // target_scale (equivalent to lattigo MulThenAdd scalar path).
+        for (auto key = poly_vec[0].degree(); key > 0; key--)
+        {
+            if ((key != 0) && ((!(is_even || is_odd)) || ((key & 1) == 0 && is_even) || ((key & 1) == 1 && is_odd)))
             {
-                if (target_scale + 1000000000 >= min_scale_)
+                auto &x_key = power_basis.at(key);
+                double scale_k = ciph_res.scale() / x_key.scale();
+                if (util::is_approximate<double>(scale_k, 1.0))
                 {
-                    break;
+                    // lattigo MulThenAdd: when the accumulator and X^k share the same scale the
+                    // quotient would be 1.0 and round(c_k * 1.0) would destroy the coefficient.
+                    // Lift the accumulator by the prime at its level instead and encode c_k at
+                    // that prime (value-preserving).
+                    auto lift = context_.crt_context()
+                                    ->get_context_data(ciph_res.parms_id())
+                                    ->coeff_modulus()[ciph_res.level()]
+                                    .value();
+                    multiply_const_direct(ciph_res, safe_cast<int64_t>(lift), ciph_res, encoder);
+                    ciph_res.scale() *= lift;
+                    scale_k = lift;
+                }
+                Plaintext plain_tmp;
+                encoder.encode(poly_vec[0][key], x_key.parms_id(), scale_k, plain_tmp);
+                Ciphertext ciph_tmp;
+                multiply_plain(x_key, plain_tmp, ciph_tmp);
+                add_dynamic(ciph_res, ciph_tmp, ciph_res, encoder);
+            }
+        }
+    }
+}
+
+void EvaluatorCkksBase::evaluate_monomial(const Ciphertext& a, Ciphertext& b, const Ciphertext& xpow,
+    const CKKSEncoder& encoder, const RelinKeys& relin_key) const
+{
+    if (b.size() == 3)
+    {
+        relinearize(b, b, relin_key);
+    }
+    rescale(b, b);
+    multiply_relin_dynamic(b, xpow, b, relin_key);
+
+    add_dynamic(a, b, b, encoder);
+}
+
+void EvaluatorCkksBase::evaluate_baby_step(const PatersonStockmeyerPolynomialVector &ps_poly_vec,
+                                            const map<uint32_t, Ciphertext> &power_basis,
+                                            int j, BabyStep& baby_step, const CKKSEncoder &encoder) /*const*/
+{
+    auto num_poly = ps_poly_vec.size();
+
+    PolynomialVector poly_vec_tmp;
+    poly_vec_tmp.resize(num_poly);
+    // PatersonStockmeyerPolynomialVector可能有多组PatersonStockmeyerPolynomial
+    // 只选取PatersonStockmeyerPolynomialVector[][j]
+    for (auto i = 0; i < num_poly; i++)
+    {
+        poly_vec_tmp[i] = ps_poly_vec[i][j];
+    }
+
+    // TODO level & scale 这样取值是否准确
+    auto level = ps_poly_vec[0][j].level();
+    auto scale = ps_poly_vec[0][j].scale();
+
+    baby_step.degree = ps_poly_vec[0][j].degree();
+    evaluate_polynomial_vector_from_power_basis_optimized(poly_vec_tmp, power_basis, baby_step.value, level, scale, encoder);
+}
+
+void EvaluatorCkksBase::evaluate_giant_step(int i, const vector<int> &giant_steps, vector<BabyStep> &baby_steps,
+    const map<uint32_t, Ciphertext> &power_basis, const CKKSEncoder& encoder, const RelinKeys &relin_keys) const
+{
+    // giant_step
+    // = 0: no operation
+    // = 1: merge
+    // = 2: last element, do not merge, rescale to the same degree
+    if (giant_steps[i] == 2)
+    {
+        baby_steps[i].degree = baby_steps[i - 1].degree;
+    }
+    else if (giant_steps[i] == 1)
+    {
+        BabyStep &even = baby_steps[i];
+        BabyStep &odd = baby_steps[i + 1];
+
+        int deg = 1 << bit_len(baby_steps[i].degree);
+
+        evaluate_monomial(even.value, odd.value, power_basis.at(deg), encoder, relin_keys);
+
+        odd.degree = 2 * deg - 1;
+        // TODO even reset to invalid value
+        even = BabyStep{};
+    }
+}
+
+void EvaluatorCkksBase::update_level_and_scale_baby_step(bool lead, int level_old,
+    double scale_old, int& level_new, double& scale_new, int level_consumed_per_rescale)
+{
+    level_new = level_old;
+    scale_new = scale_old;
+
+    if (lead)
+    {
+        for (auto i = 0; i < level_consumed_per_rescale; i++)
+        {
+            scale_new = scale_new * context_.parameters_literal()->q().at(level_new - i).value();
+        }
+    }
+}
+
+void EvaluatorCkksBase::update_level_and_scale_giant_step(bool lead, int level_old, double scale_old,
+    double x_pow_scale, int& level_new, double& scale_new, int level_consumed_per_rescale)
+{
+    auto q = context_.parameters_literal()->q();
+
+    uint128_t qi;
+    if (lead)
+    {
+        qi = q.at(level_old).value();
+        for (auto i = 1; i < level_consumed_per_rescale; ++i)
+        {
+            qi = qi * q[level_old-i].value();
+        }
+    }
+    else
+    {
+        qi = q.at(level_old + level_consumed_per_rescale).value();
+        for (auto i = 1; i < level_consumed_per_rescale; ++i)
+        {
+            qi = qi * q[level_old+level_consumed_per_rescale-i].value();
+        }
+    }
+
+    level_new = level_old + level_consumed_per_rescale;
+    scale_new = scale_old * qi / x_pow_scale;
+}
+
+void EvaluatorCkksBase::factorize(const Polynomial& poly, int n, Polynomial& pq, Polynomial& pr)
+{
+    factorize_inner(poly, n, pq, pr);
+    pq.max_degree() = poly.max_degree();
+
+    if (poly.max_degree() == poly.degree())
+    {
+        pr.max_degree() = n - 1;
+    }
+    else
+    {
+        pr.max_degree() = poly.max_degree() - (poly.degree() - n + 1);
+    }
+
+    if (poly.lead())
+    {
+        pq.lead() = true;
+    }
+}
+
+void EvaluatorCkksBase::factorize_inner(const Polynomial& poly, int n, Polynomial& pq, Polynomial& pr)
+{
+    if (n < (poly.degree() >> 1))
+    {
+        POSEIDON_THROW_LOGIC_ERROR("error");
+    }
+
+    pr.data().resize(n);
+    for (auto i = 0; i < n; ++i)
+    {
+        if (poly.is_valid(i))
+        {
+            pr.data()[i] = poly.data()[i];
+        }
+        else
+        {
+            pr.is_valid(i) = false;
+        }
+    }
+
+    pq.data().resize(poly.degree()-n+1);
+    if (poly.is_valid(n))
+    {
+        pq.data()[0] = poly.data()[n];
+    }
+
+    bool is_odd = poly.is_odd();
+    bool is_even = poly.is_even();
+
+    switch (poly.basis_type())
+    {
+    case Monomial:
+        for (auto i = n + 1; i < poly.degree()+1; i++)
+        {
+            if (poly.is_valid(i) && (!(is_even || is_odd) || (((i&1) == 0) && is_even) || (((i&1) == 1) && is_odd)))
+            {
+                pq.data()[i-n] = poly.data()[i];
+            }
+        }
+        break;
+    case Chebyshev:
+        for (int i = n + 1, j = 1; i < poly.degree() + 1; i++, j++)
+        {
+            if (poly.is_valid(i) && (!(is_even || is_odd) || (((i&1) == 0) && is_even) || (((i&1) == 1) && is_odd)))
+            {
+                pq.data()[i-n] = poly.data()[i];
+                pq.data()[i-n] = pq.data()[i-n] + pq.data()[i-n];
+                if (pr.is_valid(n-j))
+                {
+                    pr.data()[n-j] = pr.data()[n-j] - poly.data()[i];
                 }
                 else
                 {
-                    POSEIDON_THROW(invalid_argument_error, "why!");
+                    pr.data()[n-j] = poly.data()[i];
+                    pr.data()[n-j].real(-pr.data()[n-j].real());
+                    pr.data()[n-j].imag(-pr.data()[n-j].imag());
                 }
             }
         }
-        else
-        {
-            // mult_plain
-            for (int key = pol.polys()[0].degree(); key > 0; key--)
-            {
-                auto reset = false;
-                // Loops over the polynomials
-                for (int i = 0; i < pol.polys().size(); i++)
-                {
-                    auto is_not_zero = is_not_negligible(pol.polys()[i].data()[key]);
-                    // Looks for a non-zero coefficient
-                    if (is_not_zero)
-                    {
-                        to_encode = true;
-                    }
-                }
-
-                if (to_encode)
-                {
-                    Plaintext tmp;
-                    double scale;
-                    while (1)
-                    {
-                        scale = target_scale / x[key].scale();
-                        if (scale >= min_scale_)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            target_level++;
-
-                            target_scale *= safe_cast<double>(modulus[target_level].value());
-                        }
-                    }
-
-                    to_encode = false;
-                }
-            }
-        }
-    }
-    else
-    {
-        POSEIDON_THROW(invalid_argument_error, "slots_index is zero");
+        break;
+    default:
+        break;
     }
 
-    return make_tuple(target_level, target_scale);
+    pq.basis_type() = poly.basis_type();
+    pr.basis_type() = poly.basis_type();
+    pq.is_odd() = poly.is_odd();
+    pr.is_odd() = poly.is_odd();
+    pq.is_even() = poly.is_even();
+    pr.is_even() = poly.is_even();
+    pq.a() = poly.a();
+    pq.b() = poly.b();
+    pr.a() = poly.a();
+    pr.b() = poly.b();
 }
 
-void EvaluatorCkksBase::evaluate_poly_from_poly_nomial_basis(
-    bool is_even, bool is_odd, const map<uint32_t, Ciphertext> &monomial_basis,
-    const RelinKeys &relin_keys, uint32_t target_level, double target_scale,
-    const PolynomialVector &pol, uint32_t log_split, uint32_t log_degree, Ciphertext &destination,
-    const CKKSEncoder &encoder) const
+void EvaluatorCkksBase::recurse_ps(Polynomial poly, int log_split, int target_level,
+    double output_scale, std::map<int, SimPower> pb, std::vector<Polynomial>& poly_vec_res, SimPower& op_res)
 {
-
-    auto x = monomial_basis;
-    auto &slots_index = pol.index();
-    auto minimum_degree_non_zero_coefficient = pol.polys()[0].data().size() - 1;
-    auto min_scale = min_scale_;
-    auto &id_level_map = context_.crt_context()->parms_id_map();
-    auto target_parms_id_iter = id_level_map.find(target_level);
-    if (target_parms_id_iter == id_level_map.end())
+    if (poly.degree() < (1 << log_split))
     {
-        POSEIDON_THROW(invalid_argument_error,
-                       "evaluate_poly_from_poly_nomial_basis: target_level is invalid");
-    }
-    auto &parms_id = target_parms_id_iter->second;
-    auto slots = context_.parameters_literal()->slot();
-    vector<complex<double>> values(slots);
+        if (poly.lead() && log_split > 1 && poly.max_degree() > (1 << bit_len(poly.max_degree())) - (1 << (log_split - 1)))
+        {
+            auto log_degree = bit_len(poly.degree());
+            log_split = optimal_split(log_degree);
+            recurse_ps(poly, log_split, target_level, output_scale, pb, poly_vec_res, op_res);
+            return;
+        }
 
-    if (is_even)
-    {
-        minimum_degree_non_zero_coefficient--;
+        update_level_and_scale_baby_step(poly.lead(), target_level, output_scale, poly.level(), poly.scale());
+        poly_vec_res.push_back(poly);
+        op_res.level_ = poly.level();
+        op_res.scale_ = poly.scale();
+        return;
     }
 
-    size_t maximum_ciphertext_degree = 0;
-    for (int i = pol.polys()[0].degree(); i > 0; i--)
+    auto next_power = 1 << log_split;
+    while (next_power < (poly.degree() >> 1) + 1)
     {
-        if (x.count(i))
-        {
-            maximum_ciphertext_degree = max(maximum_ciphertext_degree, x.at(i).level());
-        }
+        next_power <<= 1;
     }
 
-    // If an index slot is given (either multiply polynomials or masking)
-    if (!slots_index.empty())
+    auto x_pow = pb[next_power];
+
+    Polynomial coeffsq, coeffsr;
+    factorize(poly, next_power, coeffsq, coeffsr);
+
+    int level_new;
+    double scale_new;
+    update_level_and_scale_giant_step(poly.lead(), target_level, output_scale, x_pow.scale_, level_new, scale_new);
+
+    SimPower op_res_recurse_sq{};
+    SimPower op_res_recurse_sr{};
+    std::vector<Polynomial> poly_vec_res_recurse_sq, poly_vec_res_recurse_sr;
+    recurse_ps(coeffsq, log_split, level_new, scale_new, pb, poly_vec_res_recurse_sq, op_res_recurse_sq);
+
+    // rescale simulation
     {
-        bool to_encode = false;
-        // Allocates temporary buffer for coefficients encoding
-        // If the degree of the poly is zero
-        if (minimum_degree_non_zero_coefficient == 0)
+        auto level_consumed_per_rescale = 1;
+        for (auto i = 0; i < level_consumed_per_rescale; i++)
         {
-            if (!destination.is_valid())
-            {
-                destination.resize(context_, parms_id, 2);
-                destination.is_ntt_form() = true;
-                destination.scale() = target_scale;
-            }
-
-            for (int i = 0; i < pol.polys().size(); i++)
-            {
-                auto aa = pol.polys()[i].data()[0];
-                bool is_not_zero = is_not_negligible(aa);
-                if (is_not_zero)
-                {
-                    to_encode = true;
-                    for (auto j : slots_index[i])
-                    {
-                        values[j] = aa;
-                    }
-                }
-            }
-
-            if (to_encode)
-            {
-                to_encode = false;
-                Plaintext tmp;
-                auto destination_context_data =
-                    context_.crt_context()->get_context_data(destination.parms_id());
-                if (!destination_context_data)
-                {
-                    POSEIDON_THROW(invalid_argument_error,
-                                   "evaluate_poly_from_poly_nomial_basis: destination parms_id is invalid");
-                }
-                auto level = destination_context_data->level();
-                auto parms_id_iter = id_level_map.find(level);
-                if (parms_id_iter == id_level_map.end())
-                {
-                    POSEIDON_THROW(invalid_argument_error,
-                                   "evaluate_poly_from_poly_nomial_basis: destination level is invalid");
-                }
-                auto &parms_id_tmp = parms_id_iter->second;
-                encoder.encode(values, parms_id_tmp, destination.scale(), tmp);
-                add_plain(destination, tmp, destination);
-            }
+            op_res_recurse_sq.scale_ = op_res_recurse_sq.scale_ / context_.parameters_literal()->q()[op_res_recurse_sq.level_].value();
+            op_res_recurse_sq.level_--;
         }
-        else
+    }
+    // multiply simulation
+    {
+        op_res_recurse_sq.level_ = op_res_recurse_sq.level_ < x_pow.level_ ? op_res_recurse_sq.level_ : x_pow.level_;
+        op_res_recurse_sq.scale_ = op_res_recurse_sq.scale_ * x_pow.scale_;
+    }
+
+    recurse_ps(coeffsr, log_split, target_level, op_res_recurse_sq.scale_, pb, poly_vec_res_recurse_sr, op_res_recurse_sr);
+
+    // Lattigo uses InDelta(ScalePrecision-12) on exact big.Float scales (delta is literally 0
+    // unless the decomposition is wrong). Poseidon tracks scales in double, so the invariant
+    // only holds up to accumulated floating point rounding (~2^-46 relative per operation).
+    // A 30-bit tolerance still separates real decomposition errors (~q_i, i.e. ~2^40) from
+    // double rounding noise.
+    if (!scale_in_delta_lattigo(op_res_recurse_sr.scale_, op_res_recurse_sq.scale_, 30.0))
+    {
+        POSEIDON_THROW(invalid_argument_error, "recursePS: res.Scale != tmp.Scale");
+    }
+
+    poly_vec_res.insert(poly_vec_res.end(), poly_vec_res_recurse_sq.begin(), poly_vec_res_recurse_sq.end());
+    poly_vec_res.insert(poly_vec_res.end(), poly_vec_res_recurse_sr.begin(), poly_vec_res_recurse_sr.end());
+    op_res = op_res_recurse_sq;
+}
+
+void EvaluatorCkksBase::gen_power_sim(std::map<int, SimPower> &power_basis_sim, int n, int level_consumed_per_rescale)
+{
+    if (n < 2)
+    {
+        return;
+    }
+
+    auto [a, b] = split_degree(n);
+    gen_power_sim(power_basis_sim, a, level_consumed_per_rescale);
+    gen_power_sim(power_basis_sim, b, level_consumed_per_rescale);
+
+    // multiplication simulation
+    power_basis_sim[n].level_ =
+        (power_basis_sim[a].level_ < power_basis_sim[b].level_) ? power_basis_sim[a].level_ : power_basis_sim[b].level_;
+    power_basis_sim[n].scale_ = power_basis_sim[a].scale_ * power_basis_sim[b].scale_;
+    // rescale simulation
+    for (auto i = 0; i < level_consumed_per_rescale; i++)
+    {
+        power_basis_sim[n].scale_ = power_basis_sim[n].scale_ / context_.parameters_literal()->q()[power_basis_sim[n].level_].value();
+        power_basis_sim[n].level_--;
+    }
+}
+
+void EvaluatorCkksBase::gen_power_optimized(map<uint32_t, Ciphertext> &monomial_basis, uint32_t n,
+                                            bool lazy, bool is_chev, double min_scale,
+                                            const RelinKeys &relin_keys,
+                                            const CKKSEncoder &encoder) const
+{
+    if (!monomial_basis[n].is_valid())
+    {
+        bool need_rescale =
+            gen_power_optimized_inner(monomial_basis, n, lazy, is_chev, min_scale, relin_keys, encoder);
+        if (need_rescale)
         {
-            for (int key = pol.polys()[0].degree(); key > 0; key--)
-            {
-                auto reset = false;
-                // Loops over the polynomials
-                for (int i = 0; i < pol.polys().size(); i++)
-                {
-                    auto is_not_zero = is_not_negligible(pol.polys()[i].data()[key]);
-                    // Looks for a non-zero coefficient
-                    if (is_not_zero)
-                    {
-                        to_encode = true;
-
-                        if (!reset)
-                        {
-                            for (int j = 0; j < values.size(); j++)
-                            {
-                                values[j] = 0.0;
-                            }
-                        }
-
-                        for (auto j : slots_index[i])
-                        {
-                            values[j] = pol.polys()[i].data()[key];
-                        }
-                    }
-                }
-
-                if (to_encode)
-                {
-                    Plaintext tmp;
-                    auto basis_iter = x.find(key);
-                    if (basis_iter == x.end() || !basis_iter->second.is_valid())
-                    {
-                        POSEIDON_THROW(invalid_argument_error,
-                                       "evaluate_poly_from_poly_nomial_basis: missing monomial basis");
-                    }
-                    const auto &basis_cipher = basis_iter->second;
-                    auto basis_context_data =
-                        context_.crt_context()->get_context_data(basis_cipher.parms_id());
-                    if (!basis_context_data)
-                    {
-                        POSEIDON_THROW(invalid_argument_error,
-                                       "evaluate_poly_from_poly_nomial_basis: monomial basis parms_id is invalid");
-                    }
-                    auto level = basis_context_data->level();
-                    double scale;
-                    scale = target_scale / basis_cipher.scale();
-                    auto parms_id_iter = id_level_map.find(level);
-                    if (parms_id_iter == id_level_map.end())
-                    {
-                        POSEIDON_THROW(invalid_argument_error,
-                                       "evaluate_poly_from_poly_nomial_basis: basis level is invalid");
-                    }
-                    auto &parms_id_tmp = parms_id_iter->second;
-                    encoder.encode(values, parms_id_tmp, scale, tmp);
-                    if (!destination.is_valid())
-                    {
-                        multiply_plain(basis_cipher, tmp, destination);
-                    }
-                    else
-                    {
-                        Ciphertext ciph;
-                        multiply_plain(basis_cipher, tmp, ciph);
-                        add_dynamic(ciph, destination, destination, encoder);
-                    }
-                    to_encode = false;
-                }
-            }
-
-            for (int j = 0; j < values.size(); j++)
-            {
-                values[j] = 0.0;
-            }
-
-            for (int i = 0; i < pol.polys().size(); i++)
-            {
-                auto aa = pol.polys()[i].data()[0];
-                bool is_not_zero = is_not_negligible(aa);
-                if (is_not_zero)
-                {
-                    to_encode = true;
-                    for (auto j : slots_index[i])
-                    {
-                        values[j] = aa;
-                    }
-                }
-            }
-
-            if (to_encode)
-            {
-                Plaintext tmp;
-                if (!destination.is_valid())
-                {
-                    destination.resize(context_, parms_id, 2);
-                    destination.is_ntt_form() = true;
-                    destination.scale() = target_scale;
-                }
-                auto destination_context_data =
-                    context_.crt_context()->get_context_data(destination.parms_id());
-                if (!destination_context_data)
-                {
-                    POSEIDON_THROW(invalid_argument_error,
-                                   "evaluate_poly_from_poly_nomial_basis: destination parms_id is invalid");
-                }
-                auto level = destination_context_data->level();
-                auto parms_id_iter = id_level_map.find(level);
-                if (parms_id_iter == id_level_map.end())
-                {
-                    POSEIDON_THROW(invalid_argument_error,
-                                   "evaluate_poly_from_poly_nomial_basis: destination level is invalid");
-                }
-
-                auto &parms_id_tmp = parms_id_iter->second;
-                encoder.encode(values, parms_id_tmp, target_scale, tmp);
-                add_plain(destination, tmp, destination);
-            }
-
-            if (!destination.is_valid())
-            {
-                return;
-            }
-
-            destination.scale() = target_scale;
-            if (destination.level() < target_level)
-            {
-                POSEIDON_THROW_LOGIC_ERROR(
-                               "destination : destination level is small than target_level level!");
-            }
-            else if (target_level < destination.level())
-            {
-                drop_modulus(destination, destination, parms_id);
-            }
+            rescale_dynamic(monomial_basis[n], monomial_basis[n], min_scale);
         }
+    }
+}
+
+bool EvaluatorCkksBase::gen_power_optimized_inner(
+    map<uint32_t, Ciphertext> &monomial_basis, uint32_t n, bool lazy, bool is_chev, double min_scale,
+    const RelinKeys &relin_keys, const CKKSEncoder &encoder) const
+{
+    if (monomial_basis[n].is_valid())
+    {
+        return false;
+    }
+
+    bool is_pow2 = ((n & (n - 1)) == 0);
+    auto [a, b] = split_degree(n);
+
+    bool need_rescale_a =
+        gen_power_optimized_inner(monomial_basis, a, lazy && !is_pow2, is_chev, min_scale, relin_keys,
+                                  encoder);
+    bool need_rescale_b =
+        gen_power_optimized_inner(monomial_basis, b, lazy && !is_pow2, is_chev, min_scale, relin_keys,
+                                  encoder);
+
+    if (lazy)
+    {
+        if (monomial_basis[a].size() > 2)
+        {
+            relinearize(monomial_basis[a], monomial_basis[a], relin_keys);
+        }
+        if (monomial_basis[b].size() > 2)
+        {
+            relinearize(monomial_basis[b], monomial_basis[b], relin_keys);
+        }
+
+        if (need_rescale_a)
+        {
+            rescale_dynamic(monomial_basis[a], monomial_basis[a], min_scale);
+        }
+        if (need_rescale_b)
+        {
+            rescale_dynamic(monomial_basis[b], monomial_basis[b], min_scale);
+        }
+
+        multiply_relin(monomial_basis[a], monomial_basis[b], monomial_basis[n], relin_keys);
     }
     else
     {
-        POSEIDON_THROW(invalid_argument_error, "slots_index is zero");
+        if (need_rescale_a)
+        {
+            rescale_dynamic(monomial_basis[a], monomial_basis[a], min_scale);
+        }
+        if (need_rescale_b)
+        {
+            rescale_dynamic(monomial_basis[b], monomial_basis[b], min_scale);
+        }
+
+        multiply_relin_dynamic(monomial_basis[a], monomial_basis[b], monomial_basis[n], relin_keys);
     }
+
+    if (is_chev)
+    {
+        int c = std::abs(a - b);
+
+        add(monomial_basis[n], monomial_basis[n], monomial_basis[n]);
+
+        if (c == 0)
+        {
+            add_const(monomial_basis[n], -1.0, monomial_basis[n], encoder);
+        }
+        else
+        {
+            gen_power_optimized(monomial_basis, c, false, is_chev, min_scale, relin_keys, encoder);
+
+            sub_dynamic(monomial_basis[n], monomial_basis[c], monomial_basis[n], encoder);
+        }
+    }
+
+    return true;
 }
 
 void EvaluatorCkksBase::eval_mod(const Ciphertext &ciph, Ciphertext &result,
@@ -974,6 +988,12 @@ void EvaluatorCkksBase::eval_mod(const Ciphertext &ciph, Ciphertext &result,
     auto &coeff_modulus = context_data->coeff_modulus();
 
     double prev_scale_ct = result.scale();
+
+    // NOTE (mirrors lattigo Mod1Evaluator.EvaluateNew): setting the scale to the scaling factor
+    // is not a metadata fix-up, it is a deliberate change of unit. The ciphertext comes out of
+    // CoeffsToSlots at q0/message_ratio; reinterpreting the same raw polynomial at
+    // eva_poly.scaling_factor() divides the slot values by message_ratio, which brings them from
+    // the ~q0/ratio magnitude into the [-k, k] Chebyshev interpolation interval.
     result.scale() = eva_poly.scaling_factor();
 
     double pre_min_scale = min_scale_;
@@ -999,7 +1019,13 @@ void EvaluatorCkksBase::eval_mod(const Ciphertext &ciph, Ciphertext &result,
 
     PolynomialVector polys_sin(poly_sin, slots_index);
     Ciphertext tmp = result;
-    evaluate_poly_vector(tmp, result, polys_sin, target_scale, relin_keys, encoder);
+
+    spdlog::debug("before evaluate_polynomial level = {}", tmp.level());
+    evaluate_polynomial(polys_sin, tmp, result,
+        polys_sin.polys()[0].basis_type() == Chebyshev, false, target_scale,
+        min_scale_, relin_keys, encoder);
+    spdlog::debug("after evaluate_polynomial level = {}", result.level());
+
     // Double angle
     auto sqrt2pi = eva_poly.sqrt_2pi();
     for (auto i = 0; i < eva_poly.double_angle(); i++)
@@ -1011,79 +1037,32 @@ void EvaluatorCkksBase::eval_mod(const Ciphertext &ciph, Ciphertext &result,
         rescale_dynamic(result, result, target_scale);
     }
 
-    double diff_scale = eva_poly.scaling_factor() / result.scale();
-    if (diff_scale < coeff_modulus.back().value())
+    // Arcsine (lattigo mod1_evaluator.go "ArcSine" step): when arcsine_degree > 0 the EvalModPoly
+    // is built in the "inverse polynomial" mode (sqrt_2pi = 1, so the double angle above computes
+    // the Chebyshev 2y^2-1); evaluating the arcsine series linearizes it back, which is the
+    // higher-precision alternative to the sqrt(1/2pi) scaling trick (lattigo N16QP1547: +5 bits).
+    if (!poly_asin[0].data().empty())
     {
-        diff_scale *= coeff_modulus[result.level()].value();
-        diff_scale *= coeff_modulus[result.level() - 1].value();
-    }
-    multiply_const(result, 1.0, diff_scale, result, encoder);
-    rescale_dynamic(result, result, eva_poly.scaling_factor());
-
-    result.scale() = prev_scale_ct;
-
-    set_min_scale(pre_min_scale);
-}
-
-void EvaluatorCkksBase::eval_mod_high_precision(const Ciphertext &ciph, Ciphertext &result,
-                                                const EvalModPoly &eva_poly,
-                                                const RelinKeys &relin_keys,
-                                                const CKKSEncoder &encoder)
-{
-    if (!ciph.is_valid())
-    {
-        POSEIDON_THROW(invalid_argument_error, "eval_mod_high_precision : ciph is empty!");
+        PolynomialVector polys_asin(poly_asin, slots_index);
+        evaluate_polynomial(polys_asin, result, result,
+            polys_asin.polys()[0].basis_type() == Chebyshev, false, result.scale(),
+            min_scale_, relin_keys, encoder);
     }
 
-    if (ciph.level() != eva_poly.level_start())
+    if (!util::is_approximate(result.scale(), eva_poly.scaling_factor()))
     {
-        POSEIDON_THROW(invalid_argument_error,
-                       "eval_mod_high_precision : level start not match!");
-    }
-    result = ciph;
-
-    auto context_data = context_.crt_context()->get_context_data(ciph.parms_id());
-    auto poly_modulus_degree = context_data->parms().degree();
-    auto slot_num = poly_modulus_degree >> 1;
-
-    double prev_scale_ct = result.scale();
-    result.scale() = eva_poly.scaling_factor();
-
-    double pre_min_scale = min_scale_;
-    set_min_scale(eva_poly.scaling_factor());
-    auto target_scale = eva_poly.scaling_factor();
-    vector<Polynomial> poly_sin{eva_poly.sine_poly()};
-
-    vector<int> idx(slot_num);
-    for (int i = 0; i < slot_num; i++)
-    {
-        idx[i] = i;
-    }
-    vector<vector<int>> slots_index(1, vector<int>(slot_num, 0));
-    slots_index[0] = idx;
-
-    if (eva_poly.type() == CosDiscrete || eva_poly.type() == CosContinuous)
-    {
-        double const_data =
-            -0.5 / (eva_poly.sc_fac() * (eva_poly.sine_poly_b() - eva_poly.sine_poly_a()));
-        add_const(result, const_data, result, encoder);
-    }
-
-    PolynomialVector polys_sin(poly_sin, slots_index);
-    Ciphertext tmp = result;
-    evaluate_poly_vector(tmp, result, polys_sin, target_scale, relin_keys, encoder);
-
-    auto sqrt2pi = eva_poly.sqrt_2pi();
-    for (auto i = 0; i < eva_poly.double_angle(); i++)
-    {
-        sqrt2pi *= sqrt2pi;
-        multiply_relin_dynamic(result, result, result, relin_keys);
-        add(result, result, result);
-        add_const(result, -sqrt2pi, result, encoder);
-        rescale_dynamic(result, result, target_scale);
+        double diff_scale = eva_poly.scaling_factor() / result.scale();
+        if (diff_scale < coeff_modulus.back().value())
+        {
+            diff_scale *= coeff_modulus[result.level()].value();
+            diff_scale *= coeff_modulus[result.level() - 1].value();
+        }
+        multiply_const(result, 1.0, diff_scale, result, encoder);
+        rescale_dynamic(result, result, eva_poly.scaling_factor());
     }
 
     result.scale() = prev_scale_ct;
+
     set_min_scale(pre_min_scale);
 }
 
@@ -1111,7 +1090,28 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
                                   const RelinKeys &relin_keys, const GaloisKeys &galois_keys,
                                   const CKKSEncoder &encoder, EvalModPoly &eval_mod_poly)
 {
-    bootstrap_core(ciph, result, relin_keys, galois_keys, encoder, eval_mod_poly, false);
+    bootstrap_core(ciph, result, relin_keys, galois_keys, encoder, eval_mod_poly);
+}
+
+void EvaluatorCkksBase::bootstrap_real(const Ciphertext &ciph, Ciphertext &result,
+                                      const RelinKeys &relin_keys,
+                                      const GaloisKeys &galois_keys,
+                                      const CKKSEncoder &encoder, EvalModPoly &eval_mod_poly)
+{
+    const auto data = context_.crt_context()->get_context_data(ciph.parms_id());
+    if (!data || ciph.size() != 2 || !std::isfinite(ciph.scale()) || ciph.scale() <= 0.0)
+        throw invalid_argument("real CtS-first bootstrap requires a valid size-2 ciphertext");
+    if (context_.parameters_literal()->q0_level() != 0 || ciph.level() < 1)
+        throw invalid_argument("real CtS-first bootstrap requires q0_level=0 and input level >= 1");
+    if ((1ULL << context_.parameters_literal()->log_slots()) != encoder.slot_count())
+        throw invalid_argument("real CtS-first bootstrap currently requires full slots");
+    const double target = std::exp2(std::round(std::log2(
+        static_cast<double>(context_.crt_context()->q0()) / eval_mod_poly.message_ratio())));
+    const double factor = target / ciph.scale();
+    if (!std::isfinite(factor) || factor < 1.0 || factor > static_cast<double>(1ULL << 30) ||
+        std::abs(factor / std::round(factor) - 1.0) > 1e-5)
+        throw invalid_argument("real CtS-first bootstrap input scale cannot be aligned");
+    bootstrap_core(ciph, result, relin_keys, galois_keys, encoder, eval_mod_poly, true);
 }
 
 void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
@@ -1120,6 +1120,14 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
                                   const CKKSEncoder &encoder,
                                   const BootstrapConfig &config)
 {
+    const bool trace_bootstrap = std::getenv("POSEIDON_BOOTSTRAP_TRACE") != nullptr;
+    auto trace_state = [&](const char *label, const Ciphertext &cipher) {
+        if (trace_bootstrap)
+        {
+            std::cerr << "[bootstrap trace] " << label << ": level=" << cipher.level()
+                      << ", log2(scale)=" << std::log2(cipher.scale()) << '\n';
+        }
+    };
     if (config.boundary_k == 0)
     {
         throw invalid_argument("bootstrap boundary_k must be positive");
@@ -1135,6 +1143,10 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
     if (config.scaling_log >= 63)
     {
         throw invalid_argument("bootstrap scaling_log must be less than 63");
+    }
+    if (config.output_scaling_log >= 63)
+    {
+        throw invalid_argument("bootstrap output_scaling_log must be less than 63");
     }
     if (config.output_ratio == 0 ||
         (config.project_real && (config.output_ratio & 1U) != 0))
@@ -1188,7 +1200,7 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
         throw invalid_argument("bootstrap target input scale is invalid");
     }
     if (prepared.scale() > q0_over_message_ratio &&
-        !util::are_approximate<double>(prepared.scale(), q0_over_message_ratio))
+        !util::is_approximate<double>(prepared.scale(), q0_over_message_ratio))
     {
         throw invalid_argument("bootstrap input scale exceeds the supported target scale");
     }
@@ -1202,7 +1214,7 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
         prepared.scale() *= factor;
         remaining_scale = std::round(remaining_scale / factor);
     }
-    if (!util::are_approximate<double>(prepared.scale(), q0_over_message_ratio))
+    if (!util::is_approximate<double>(prepared.scale(), q0_over_message_ratio))
     {
         throw invalid_argument(
             "bootstrap input scale cannot be aligned to the supported target scale");
@@ -1210,10 +1222,24 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
 
     drop_modulus(prepared, prepared,
                  context_.crt_context()->parms_id_map().at(q0_level));
+    trace_state("prepared", prepared);
+
+    double slot_to_coeff_final_scale = context_.parameters_literal()->scale();
+    if (config.output_scaling_log != 0)
+    {
+        const double requested_output_scale =
+            std::ldexp(1.0, static_cast<int>(config.output_scaling_log));
+        slot_to_coeff_final_scale = requested_output_scale * ciph.scale() /
+                                    static_cast<double>(context_.crt_context()->q0());
+    }
+    if (!std::isfinite(slot_to_coeff_final_scale) || slot_to_coeff_final_scale <= 0.0)
+    {
+        throw invalid_argument("bootstrap output scale produces an invalid SlotToCoeff scale");
+    }
 
     Bootstrapper bootstrapper(
         context_, *this, encoder, context_.parameters_literal()->log_slots(),
-        config.boundary_k, ciph.scale(), context_.parameters_literal()->scale(),
+        config.boundary_k, ciph.scale(), slot_to_coeff_final_scale,
         config.cosine_heap_path);
     bootstrapper.generate_linear_coefficients();
 
@@ -1222,6 +1248,7 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
     const auto first_context_data = context_.crt_context()->first_context_data();
     raised.scale() =
         static_cast<double>(first_context_data->coeff_modulus().front().value());
+    trace_state("mod_raise", raised);
 
     const double eval_mod_scale =
         std::ldexp(1.0, static_cast<int>(config.scaling_log));
@@ -1236,15 +1263,22 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
     {
         multiply_const(raised, 1.0, raise_factor, raised, encoder);
     }
+    trace_state("raise_scale_aligned", raised);
 
     Ciphertext real_slots;
     Ciphertext imag_slots;
     bootstrapper.coeff_to_slot(raised, real_slots, imag_slots, galois_keys);
+    trace_state("coeff_to_slot.real", real_slots);
 
     const double real_scale_adjust = eval_mod_scale / real_slots.scale();
     const double imag_scale_adjust = eval_mod_scale / imag_slots.scale();
-    if (std::abs(real_scale_adjust - 1.0) > 1e-6 ||
-        std::abs(imag_scale_adjust - 1.0) > 1e-6)
+    // Generated NTT primes are close to, but not exactly, powers of two. For
+    // a 45-bit q0 the relative difference from 2^45 is about 1.2e-6. Treat
+    // that tiny difference as metadata-only scale drift; correcting it with
+    // a plaintext multiply and rescale would waste one bootstrap level.
+    constexpr double metadata_scale_tolerance = 1e-5;
+    if (std::abs(real_scale_adjust - 1.0) > metadata_scale_tolerance ||
+        std::abs(imag_scale_adjust - 1.0) > metadata_scale_tolerance)
     {
         multiply_const(real_slots, real_scale_adjust, eval_mod_scale, real_slots, encoder);
         multiply_const(imag_slots, imag_scale_adjust, eval_mod_scale, imag_slots, encoder);
@@ -1253,6 +1287,7 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
         real_slots.scale() = eval_mod_scale;
         imag_slots.scale() = eval_mod_scale;
     }
+    trace_state("eval_mod_input.real", real_slots);
 
     const double inverse_coeff = config.inverse_coeff > 0.0
                                      ? config.inverse_coeff
@@ -1263,9 +1298,11 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
                           inverse_coeff);
     bootstrapper.eval_mod(imag_slots, imag_mod, relin_keys, config.double_angle,
                           inverse_coeff);
+    trace_state("eval_mod_output.real", real_mod);
 
     Ciphertext output;
     bootstrapper.slot_to_coeff(real_mod, imag_mod, output, galois_keys);
+    trace_state("slot_to_coeff", output);
     if (config.project_real)
     {
         Ciphertext conjugated;
@@ -1279,22 +1316,19 @@ void EvaluatorCkksBase::bootstrap(const Ciphertext &ciph, Ciphertext &result,
     result = std::move(output);
 }
 
-void EvaluatorCkksBase::bootstrap_high_precision(const Ciphertext &ciph, Ciphertext &result,
-                                                 const RelinKeys &relin_keys,
-                                                 const GaloisKeys &galois_keys,
-                                                 const CKKSEncoder &encoder,
-                                                 EvalModPoly &eval_mod_poly)
-{
-    bootstrap_core(ciph, result, relin_keys, galois_keys, encoder, eval_mod_poly, true);
-}
-
 void EvaluatorCkksBase::bootstrap_core(const Ciphertext &ciph, Ciphertext &result,
                                        const RelinKeys &relin_keys,
                                        const GaloisKeys &galois_keys,
                                        const CKKSEncoder &encoder,
-                                       EvalModPoly &eval_mod_poly,
-                                       bool high_precision_eval_mod)
+                                       EvalModPoly &eval_mod_poly, bool real_only)
 {
+    const bool trace = real_only && std::getenv("POSEIDON_BOOTSTRAP_TRACE") != nullptr;
+    auto trace_state = [&](const char *label, const Ciphertext &cipher) {
+        if (trace)
+            std::cerr << "[bootstrap trace] cf_real." << label << ": level=" << cipher.level()
+                      << ", log2(scale)=" << std::log2(cipher.scale()) << '\n';
+    };
+    trace_state("input", ciph);
     auto tmp = ciph;
     rescale_for_bootstrap(tmp);
 
@@ -1318,19 +1352,8 @@ void EvaluatorCkksBase::bootstrap_core(const Ciphertext &ciph, Ciphertext &resul
     scale = round(scale);
     if (scale > 1)
     {
-        auto remaining_scale = scale;
-        while (remaining_scale > 1)
-        {
-            double factor = remaining_scale;
-            if (factor > static_cast<double>(0x7FFFFFFF))
-            {
-                factor = static_cast<double>(1ULL << 30);
-            }
-            factor = round(factor);
-            multiply_const_direct(result, safe_cast<int>(factor), result, encoder);
-            result.scale() *= factor;
-            remaining_scale = round(remaining_scale / factor);
-        }
+        multiply_const_direct(result, safe_cast<int64_t>(scale), result, encoder);
+        result.scale() *= scale;
     }
 
     auto parms_id = context_.crt_context()->parms_id_map().at(q0_level);
@@ -1339,11 +1362,7 @@ void EvaluatorCkksBase::bootstrap_core(const Ciphertext &ciph, Ciphertext &resul
     Ciphertext ciph_raise;
     read(result);
     raise_modulus(result, ciph_raise);
-    if (high_precision_eval_mod)
-    {
-        auto first_context_data = context_.crt_context()->first_context_data();
-        ciph_raise.scale() = static_cast<double>(first_context_data->coeff_modulus()[0].value());
-    }
+    trace_state("mod_raise", ciph_raise);
 
     auto scale_raise = eval_mod_poly.scaling_factor() / ciph_raise.scale();
     scale_raise /= eval_mod_poly.message_ratio();
@@ -1359,7 +1378,6 @@ void EvaluatorCkksBase::bootstrap_core(const Ciphertext &ciph, Ciphertext &resul
 
     Ciphertext ciph_real, ciph_imag;
     Ciphertext ciph_real_mod, ciph_imag_mod;
-    Ciphertext res;
 
     auto coeffs_to_slots_scaling =
         eval_mod_poly.q_div() /
@@ -1370,33 +1388,30 @@ void EvaluatorCkksBase::bootstrap_core(const Ciphertext &ciph, Ciphertext &resul
         static_cast<uint32_t>(context_.parameters_literal()->q().size() - 1),
         vector<uint32_t>(3, 1), true, coeffs_to_slots_scaling, false, 1);
     LinearMatrixGroup coeff_to_slot_dft_matrix;
-    tmp_matrix.create(coeff_to_slot_dft_matrix, const_cast<CKKSEncoder &>(encoder), 2);
+    // step=1 (single prime per matrix, like lattigo's CoeffsToSlots factorization): each matrix
+    // multiply is followed by exactly one rescale, consuming one level instead of two.
+    tmp_matrix.create(coeff_to_slot_dft_matrix, const_cast<CKKSEncoder &>(encoder), 1);
 
-    coeff_to_slot(ciph_raise, coeff_to_slot_dft_matrix, ciph_real, ciph_imag, galois_keys,
-                  encoder);
+    if (real_only)
+    {
+        Ciphertext transformed, conjugated;
+        dft(ciph_raise, coeff_to_slot_dft_matrix, transformed, galois_keys);
+        conjugate(transformed, galois_keys, conjugated);
+        add(transformed, conjugated, ciph_real);
+    }
+    else
+        coeff_to_slot(ciph_raise, coeff_to_slot_dft_matrix, ciph_real, ciph_imag, galois_keys, encoder);
+    trace_state("eval_mod_input", ciph_real);
 
     eval_mod_poly.set_level_start(static_cast<uint32_t>(
         context_.crt_context()->get_context_data(ciph_real.parms_id())->level()));
-    if (high_precision_eval_mod)
-    {
-        eval_mod_high_precision(ciph_imag, ciph_imag_mod, eval_mod_poly, relin_keys,
-                                encoder);
-    }
-    else
-    {
+    if (!real_only)
         eval_mod(ciph_imag, ciph_imag_mod, eval_mod_poly, relin_keys, encoder);
-    }
-    if (high_precision_eval_mod)
-    {
-        eval_mod_high_precision(ciph_real, ciph_real_mod, eval_mod_poly, relin_keys,
-                                encoder);
-    }
-    else
-    {
-        eval_mod(ciph_real, ciph_real_mod, eval_mod_poly, relin_keys, encoder);
-    }
+    eval_mod(ciph_real, ciph_real_mod, eval_mod_poly, relin_keys, encoder);
+    trace_state("eval_mod_output", ciph_real_mod);
 
-    ciph_imag_mod.scale() = context_.parameters_literal()->scale();
+    if (!real_only)
+        ciph_imag_mod.scale() = context_.parameters_literal()->scale();
     ciph_real_mod.scale() = context_.parameters_literal()->scale();
 
     auto slots_to_coeffs_scaling =
@@ -1408,10 +1423,29 @@ void EvaluatorCkksBase::bootstrap_core(const Ciphertext &ciph, Ciphertext &resul
             context_.crt_context()->get_context_data(ciph_real_mod.parms_id())->level()),
         vector<uint32_t>(3, 1), true, slots_to_coeffs_scaling, false, 1);
     LinearMatrixGroup slot_to_coeff_dft_matrix;
-    tmp_matrix_inverse.create(slot_to_coeff_dft_matrix, const_cast<CKKSEncoder &>(encoder), 1);
-
-    slot_to_coeff(ciph_real_mod, ciph_imag_mod, slot_to_coeff_dft_matrix, result, galois_keys,
-                  encoder);
+    if (real_only)
+    {
+        // For a real slot message m(X)=conj(m(X)), a[N-j]=-a[j], a[N/2]=0.
+        // Only the lower coefficient half is needed. Halve its constant term
+        // BEFORE StC: h=a[0]/2+sum_{j=1}^{N/2-1} a[j]X^j, then h+conj(h)=m.
+        // Slot 0 of the CtS real lane carries a[0]. Fold this weight into StC
+        // rather than introducing an extra plaintext multiplication/rescale.
+        vector<double> weights(encoder.slot_count(), 1.0);
+        weights[0] = 0.5;
+        tmp_matrix_inverse.create(slot_to_coeff_dft_matrix,
+                                  const_cast<CKKSEncoder &>(encoder), 1, weights);
+        Ciphertext half, conjugated;
+        dft(ciph_real_mod, slot_to_coeff_dft_matrix, half, galois_keys);
+        conjugate(half, galois_keys, conjugated);
+        add(half, conjugated, result);
+    }
+    else
+    {
+        tmp_matrix_inverse.create(slot_to_coeff_dft_matrix, const_cast<CKKSEncoder &>(encoder), 1);
+        slot_to_coeff(ciph_real_mod, ciph_imag_mod, slot_to_coeff_dft_matrix, result, galois_keys,
+                      encoder);
+    }
+    trace_state("output", result);
 }
 
 void EvaluatorCkksBase::ntt_fwd(const Plaintext &plain, Plaintext &result,
@@ -1491,6 +1525,154 @@ void EvaluatorCkksBase::multiply_plain_inplace(Ciphertext &ciph, const Plaintext
     }
 }
 
+void EvaluatorCkksBase::multiply_plain_accumulate(
+    const Ciphertext &ciph, const Plaintext &plain, Ciphertext &accumulator) const
+{
+    if (!accumulator.is_valid())
+    {
+        multiply_plain(ciph, plain, accumulator);
+        return;
+    }
+    if (!ciph.is_valid())
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "multiply_plain_accumulate : Ciphertext is empty!");
+    }
+    if (!ciph.is_ntt_form() || !accumulator.is_ntt_form())
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "multiply_plain_accumulate : CKKS ciphertext must be in NTT form");
+    }
+    if (!plain.is_ntt_form())
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "multiply_plain_accumulate : CKKS plaintext must be in NTT form");
+    }
+    if (ciph.parms_id() != plain.parms_id() ||
+        ciph.parms_id() != accumulator.parms_id())
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "multiply_plain_accumulate : parameter mismatch");
+    }
+
+    const double product_scale = ciph.scale() * plain.scale();
+    if (!util::is_approximate<double>(accumulator.scale(), product_scale))
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "multiply_plain_accumulate : scale mismatch");
+    }
+
+    auto context_data = context_.crt_context()->get_context_data(ciph.parms_id());
+    if (!context_data)
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "multiply_plain_accumulate : unknown parms_id");
+    }
+
+    const size_t accumulator_size = accumulator.size();
+    const size_t source_size = ciph.size();
+    const size_t common_size = std::min(accumulator_size, source_size);
+    if (accumulator_size < source_size)
+    {
+        accumulator.resize(context_, ciph.parms_id(), source_size);
+    }
+
+    RNSPoly product(context_, ciph.parms_id());
+    for (size_t component = 0; component < common_size; ++component)
+    {
+        ciph[component].multiply(plain.poly(), product);
+        accumulator[component].add(product, accumulator[component]);
+    }
+    for (size_t component = common_size; component < source_size; ++component)
+    {
+        ciph[component].multiply(plain.poly(), accumulator[component]);
+    }
+}
+
+void EvaluatorCkksBase::multiply_const_accumulate(
+    const Ciphertext &ciph, double coefficient, double plain_scale,
+    Ciphertext &accumulator) const
+{
+    if (!ciph.is_valid() || !ciph.is_ntt_form())
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "multiply_const_accumulate : invalid CKKS ciphertext");
+    }
+    if (!(plain_scale > 0.0) || !std::isfinite(plain_scale) ||
+        !std::isfinite(coefficient))
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "multiply_const_accumulate : invalid scalar or scale");
+    }
+
+    const long double scaled =
+        static_cast<long double>(coefficient) * static_cast<long double>(plain_scale);
+    if (scaled > static_cast<long double>(std::numeric_limits<std::int64_t>::max()) ||
+        scaled < static_cast<long double>(std::numeric_limits<std::int64_t>::min()))
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "multiply_const_accumulate : encoded scalar exceeds int64 range");
+    }
+    const std::int64_t encoded = static_cast<std::int64_t>(std::llround(scaled));
+
+    auto context_data = context_.crt_context()->get_context_data(ciph.parms_id());
+    if (!context_data)
+    {
+        POSEIDON_THROW(invalid_argument_error,
+                       "multiply_const_accumulate : unknown parms_id");
+    }
+    const auto &moduli = context_data->coeff_modulus();
+    const size_t degree = context_data->parms().degree();
+    const double product_scale = ciph.scale() * plain_scale;
+    const bool initialize = !accumulator.is_valid();
+    if (initialize)
+    {
+        accumulator = ciph;
+        accumulator.scale() = product_scale;
+    }
+    else
+    {
+        if (!accumulator.is_ntt_form() ||
+            accumulator.parms_id() != ciph.parms_id() ||
+            accumulator.size() != ciph.size() ||
+            !util::is_approximate<double>(accumulator.scale(), product_scale))
+        {
+            POSEIDON_THROW(invalid_argument_error,
+                           "multiply_const_accumulate : accumulator mismatch");
+        }
+    }
+
+    const std::uint64_t magnitude = encoded < 0
+        ? static_cast<std::uint64_t>(-(encoded + 1)) + 1
+        : static_cast<std::uint64_t>(encoded);
+    for (size_t modulus_index = 0; modulus_index < moduli.size(); ++modulus_index)
+    {
+        const Modulus &modulus = moduli[modulus_index];
+        std::uint64_t scalar = magnitude % modulus.value();
+        if (encoded < 0)
+        {
+            scalar = util::negate_uint_mod(scalar, modulus);
+        }
+        for (size_t component = 0; component < ciph.size(); ++component)
+        {
+            const std::uint64_t *source =
+                ciph[component].data() + modulus_index * degree;
+            std::uint64_t *destination =
+                accumulator[component].data() + modulus_index * degree;
+            for (size_t coefficient_index = 0;
+                 coefficient_index < degree; ++coefficient_index)
+            {
+                const std::uint64_t product = util::multiply_uint_mod(
+                    source[coefficient_index], scalar, modulus);
+                destination[coefficient_index] = initialize
+                    ? product
+                    : util::add_uint_mod(
+                          destination[coefficient_index], product, modulus);
+            }
+        }
+    }
+}
+
 void EvaluatorCkksBase::add_plain_inplace(Ciphertext &ciph, const Plaintext &plain) const
 {
     if (!ciph.is_valid())
@@ -1510,7 +1692,7 @@ void EvaluatorCkksBase::add_plain_inplace(Ciphertext &ciph, const Plaintext &pla
     {
         POSEIDON_THROW(invalid_argument_error, "ciph and plain parameter mismatch");
     }
-    if (!util::are_approximate<double>(ciph.scale(), plain.scale()))
+    if (!util::is_approximate<double>(ciph.scale(), plain.scale()))
     {
         POSEIDON_THROW(invalid_argument_error, "add_plain_inplace : scale mismatch");
     }
@@ -1550,7 +1732,7 @@ void EvaluatorCkksBase::sub(const Ciphertext &ciph1, const Ciphertext &ciph2,
     {
         POSEIDON_THROW(invalid_argument_error, "sub : NTT form mismatch");
     }
-    if (!util::are_approximate<double>(ciph1.scale(), ciph2.scale()))
+    if (!util::is_approximate<double>(ciph1.scale(), ciph2.scale()))
     {
         POSEIDON_THROW(invalid_argument_error, "sub : scale mismatch");
     }
@@ -1601,7 +1783,7 @@ void EvaluatorCkksBase::add_inplace(poseidon::Ciphertext &ciph1,
     {
         POSEIDON_THROW(invalid_argument_error, "NTT form mismatch");
     }
-    if (!util::are_approximate<double>(ciph1.scale(), ciph2.scale()))
+    if (!util::is_approximate<double>(ciph1.scale(), ciph2.scale()))
     {
         POSEIDON_THROW(invalid_argument_error, "add_inplace : scale mismatch");
     }
@@ -1966,12 +2148,6 @@ void EvaluatorCkksBase::rescale_dynamic(const Ciphertext &ciph, Ciphertext &resu
         }
     }
 
-    if (rescale_times == 0)
-    {
-        result = ciph;
-        return;
-    }
-
     for (int i = 0; i < rescale_times; i++)
     {
         if (i == 0)
@@ -2104,14 +2280,14 @@ void EvaluatorCkksBase::sub_dynamic(const Ciphertext &ciph1, const Ciphertext &c
     bool has_tmp_scale_ciph1 = false;
     bool has_tmp_scale_ciph2 = false;
 
-    if (util::are_approximate<double>(ciph1.scale(), ciph2.scale()))
+    if (util::is_approximate<double>(ciph1.scale(), ciph2.scale()))
     {
     }
     else if (ciph1.scale() > ciph2.scale())
     {
         scaling_factor_ratio = ciph1.scale() / ciph2.scale();
         scaling_factor_ratio += 0.5;
-        if (scaling_factor_ratio < min_scale_)
+        if ((scaling_factor_ratio < min_scale_) && !util::is_approximate<double>(scaling_factor_ratio, min_scale_))
         {
             POSEIDON_THROW(invalid_argument_error, "sub_dynamic : ciph scale don't support! ");
         }
@@ -2123,7 +2299,7 @@ void EvaluatorCkksBase::sub_dynamic(const Ciphertext &ciph1, const Ciphertext &c
     {
         scaling_factor_ratio = ciph2.scale() / ciph1.scale();
         scaling_factor_ratio += 0.5;
-        if (scaling_factor_ratio < min_scale_)
+        if ((scaling_factor_ratio < min_scale_) && !util::is_approximate<double>(scaling_factor_ratio, min_scale_))
         {
             POSEIDON_THROW(invalid_argument_error, "sub_dynamic : ciph scale don't support! ");
         }
@@ -2222,7 +2398,7 @@ void EvaluatorCkksBase::add_dynamic(const Ciphertext &ciph1, const Ciphertext &c
     bool has_tmp_scale_ciph1 = false;
     bool has_tmp_scale_ciph2 = false;
 
-    if (util::are_approximate<double>(ciph1.scale(), ciph2.scale()))
+    if (util::is_approximate<double>(ciph1.scale(), ciph2.scale()))
     {
     }
     else if (ciph1.scale() > ciph2.scale())
@@ -2230,8 +2406,9 @@ void EvaluatorCkksBase::add_dynamic(const Ciphertext &ciph1, const Ciphertext &c
         scaling_factor_ratio = ciph1.scale() / ciph2.scale();
 
         scaling_factor_ratio += 0.5;
-        if ((scaling_factor_ratio < min_scale_) && !util::are_approximate<double>(scaling_factor_ratio, min_scale_))
+        if ((scaling_factor_ratio < min_scale_) && !util::is_approximate<double>(scaling_factor_ratio, min_scale_))
         {
+            spdlog::error("scaling_factor_ratio = {}, min_scale_ = {}", scaling_factor_ratio, min_scale_);
             POSEIDON_THROW(invalid_argument_error, "add_dynamic : ciph scale don't support! ");
         }
         multiply_const(ciph2, scaling_factor_ratio, 1.0, tmp_scale, encoder);
@@ -2242,8 +2419,9 @@ void EvaluatorCkksBase::add_dynamic(const Ciphertext &ciph1, const Ciphertext &c
     {
         scaling_factor_ratio = ciph2.scale() / ciph1.scale();
         scaling_factor_ratio += 0.5;
-        if ((scaling_factor_ratio < min_scale_) && !util::are_approximate<double>(scaling_factor_ratio, min_scale_))
+        if ((scaling_factor_ratio < min_scale_) && !util::is_approximate<double>(scaling_factor_ratio, min_scale_))
         {
+            spdlog::error("scaling_factor_ratio = {}, min_scale_ = {}", scaling_factor_ratio, min_scale_);
             POSEIDON_THROW(invalid_argument_error, "add_dynamic : ciph scale don't support! ");
         }
         multiply_const(ciph1, scaling_factor_ratio, 1.0, tmp_scale, encoder);
@@ -2334,107 +2512,5 @@ void EvaluatorCkksBase::add_dynamic(const Ciphertext &ciph1, const Ciphertext &c
 
 void EvaluatorCkksBase::read(Ciphertext &ciph) const {}
 void EvaluatorCkksBase::read(Plaintext &plain) const {}
-
-void EvaluatorCkksBase::accumulate_top_n(const Ciphertext &ciph, Ciphertext &result, int n,
-                                         const CKKSEncoder &encoder, const Encryptor &enc,
-                                         const GaloisKeys &rot_keys) const
-{
-    if (n <= 0)
-    {
-        POSEIDON_THROW(invalid_argument_error, "n cannot be negative");
-    }
-
-    Ciphertext ciph_rotate_sum = ciph;
-
-    std::vector<std::complex<double>> zero = {{0.0, 0.0}};
-    Plaintext plain_zero;
-    Ciphertext ciph_sum;
-    encoder.encode(zero, ciph.parms_id(), ciph.scale(), plain_zero);
-    enc.encrypt(plain_zero, ciph_sum);
-
-    int cnt = 0;
-    int bottom_nth = 0;
-    const int const_n = n;
-    while (n)
-    {
-        Ciphertext ciph_tmp;
-        if (n & 1 && n != 1)
-        {
-            bottom_nth += 1 << cnt;
-            rotate(ciph_rotate_sum, ciph_tmp, const_n - bottom_nth, rot_keys);
-            add(ciph_sum, ciph_tmp, ciph_sum);
-        }
-        n = n >> 1;
-        if (n)
-        {
-            rotate(ciph_rotate_sum, ciph_tmp, 1 << cnt, rot_keys);
-            add(ciph_rotate_sum, ciph_tmp, ciph_rotate_sum);
-        }
-        ++cnt;
-    }
-    add(ciph_sum, ciph_rotate_sum, ciph_sum);
-    result = ciph_sum;
-}
-
-void EvaluatorCkksBase::sigmoid_approx(const Ciphertext &ciph, Ciphertext &result,
-                                       const CKKSEncoder &encoder, const RelinKeys &relin_keys)
-{
-    vector<complex<double>> buffer(4, 0);
-    buffer[0] = 0.5;
-    buffer[1] = 0.197;
-    buffer[3] = -0.004;
-
-    Polynomial approxF(buffer, 0, 0, 4, Monomial);
-    approxF.lead() = true;
-    vector<Polynomial> poly_v{approxF};
-    vector<vector<int>> slots_index(1,
-                                    vector<int>(context_.parameters_literal()->degree() >> 1, 0));
-    vector<int> idxF(context_.parameters_literal()->degree() >> 1);
-    for (int i = 0; i < context_.parameters_literal()->degree() >> 1; i++)
-    {
-        idxF[i] = i;  // Index with all even slots
-    }
-    slots_index[0] = idxF;  // Assigns index of all even slots to poly[0] = f(x)
-
-    PolynomialVector polys(poly_v, slots_index);
-    evaluate_poly_vector(ciph, result, polys, ciph.scale(), relin_keys, encoder);
-}
-
-void EvaluatorCkksBase::conv(const Ciphertext &ciph_f, const Ciphertext &ciph_g_rev,
-                             Ciphertext &result, const uint size, const CKKSEncoder &encoder,
-                             const Encryptor &enc, const GaloisKeys &galois_keys,
-                             const RelinKeys &relin_keys) const
-{
-    Ciphertext ciph_res;
-    Ciphertext ciph_f_rotate = ciph_f;
-    for (auto i = 0; i < size; ++i)
-    {
-        rotate(ciph_f_rotate, ciph_f_rotate, 1, galois_keys);
-        Ciphertext ciph_tmp;
-        multiply_relin(ciph_f_rotate, ciph_g_rev, ciph_tmp, relin_keys);
-        accumulate_top_n(ciph_tmp, ciph_tmp, size, encoder, enc, galois_keys);
-
-        rotate(ciph_tmp, ciph_tmp, i, galois_keys);
-
-        std::vector<std::complex<double>> zero = {{0.0, 0.0}};
-        zero[i] = {1.0, 0.0};
-        Plaintext plain_zero;
-        encoder.encode(zero, ciph_tmp.parms_id(), ciph_tmp.scale(), plain_zero);
-
-        multiply_plain(ciph_tmp, plain_zero, ciph_tmp);
-        relinearize(ciph_tmp, ciph_tmp, relin_keys);
-
-        if (!ciph_res.is_valid())
-        {
-            ciph_res = ciph_tmp;
-        }
-        else
-        {
-            add(ciph_res, ciph_tmp, ciph_res);
-        }
-    }
-
-    result = ciph_res;
-}
 
 }  // namespace poseidon

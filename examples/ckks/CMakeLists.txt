@@ -9,9 +9,6 @@ target_link_libraries(test_ckks_basic_discontinuous poseidon_shared)
 add_executable(test_ckks_bootstrap test_ckks_bootstrap.cpp)
 target_link_libraries(test_ckks_bootstrap poseidon_shared)
 
-add_executable(test_ckks_evaluate_poly_vector test_ckks_evaluate_poly_vector.cpp)
-target_link_libraries(test_ckks_evaluate_poly_vector poseidon_shared)
-
 add_executable(test_ckks_heartstudy test_ckks_heartstudy.cpp)
 target_link_libraries(test_ckks_heartstudy poseidon_shared)
 
@@ -23,3 +20,12 @@ target_link_libraries(test_ckks_multiply_matrix_bsgs_multi_thread poseidon_share
 
 add_executable(test_ckks_slot_to_coeff test_ckks_slot_to_coeff.cpp)
 target_link_libraries(test_ckks_slot_to_coeff poseidon_shared)
+
+add_executable(test_ckks_hybrid_decomp_count test_ckks_hybrid_decomp_count.cpp)
+target_link_libraries(test_ckks_hybrid_decomp_count poseidon_shared)
+
+add_executable(test_ckks_bootstrap_cmp test_ckks_bootstrap_cmp.cpp)
+target_link_libraries(test_ckks_bootstrap_cmp poseidon_shared)
+
+add_executable(test_ckks_bootstrap_cf_real test_ckks_bootstrap_cf_real.cpp)
+target_link_libraries(test_ckks_bootstrap_cf_real poseidon_shared)

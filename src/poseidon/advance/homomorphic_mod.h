@@ -10,6 +10,7 @@
 namespace poseidon
 {
 int optimal_split(int log_degree);
+int optimal_split_optimized(int log_degree);
 bool is_not_negligible(complex<double> c);
 pair<bool, bool> is_odd_or_even_polynomial(Polynomial &coeffs);
 
@@ -20,7 +21,7 @@ public:
                 uint32_t level_start, uint32_t log_message_ratio, uint32_t double_angle, uint32_t k,
                 uint32_t arcsine_degree, uint32_t sine_degree);
 
-    inline static complex<double> sin2pi2pi(const complex<double> &x)
+    inline static complex<double> sin_2pi_x(const complex<double> &x)
     {
         return sin(6.283185307179586 * x);
     }
@@ -51,6 +52,17 @@ public:
 
     inline const Polynomial &arcsine_poly() const { return this->arcsine_poly_; }
 
+    // Experimental coefficient replacement for the current CosDiscrete fit.
+    // Supply UNSCALED Chebyshev coefficients in the existing normalized basis
+    // (input to EvalMod is (t-1/4)/K). The coefficient count must stay unchanged.
+    // Applies sqrt_2pi internally and enables every nonzero parity, including
+    // odd terms that the legacy CosDiscrete evaluator skipped.
+    void set_cosine_coefficients(const std::vector<double> &coefficients);
+
+    // Keep the generated coefficients unchanged, but evaluate all of them.
+    // Opt-in: the legacy constructor's even-only behavior is preserved.
+    void enable_full_cosine_coefficients();
+
     void set_level_start(uint32_t level) { level_start_ = level; }
 
 private:
@@ -64,11 +76,12 @@ private:
     double q_diff_;
     double sc_fac_;
     double sqrt_2pi_;
+
     Polynomial sine_poly_;
+    Polynomial arcsine_poly_;
+
     double sine_poly_a_;
     double sine_poly_b_;
-
-    Polynomial arcsine_poly_;
 };
 
 }  // namespace poseidon
